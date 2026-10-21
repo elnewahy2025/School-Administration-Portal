@@ -42,6 +42,7 @@ next-env.d.ts
 
 # AutoClaw workspace metadata
 .zwork/
+supabase/.temp/
 
 # Template is committed; real values live only in .env.local
 !.env.example
