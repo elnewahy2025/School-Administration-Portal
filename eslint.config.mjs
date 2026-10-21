@@ -79,7 +79,7 @@ const eslintConfig = defineConfig([
       "**/index.{ts,tsx,js,jsx,mjs,cjs,cts,mts}",
       "**/*.d.{ts,mts,cts}",
       "**/*.config.{js,ts,mjs,cjs}",
-      "**/*.{test,spec,stories}.{ts,tsx,js,jsx}",
+      "**/*.{test,spec,stories}.{ts,tsx,js,jsx,mjs,cjs}",
       "src/middleware.ts",
       "src/proxy.ts",
       "src/i18n/navigation.ts",
@@ -87,6 +87,12 @@ const eslintConfig = defineConfig([
       "src/components/ui/**/*.{ts,tsx}",
     ],
     rules: { "d11/single-export": "off" },
+  },
+  {
+    // Test suites aggregate many cases by design — exempt from size caps
+    // (single-export still governs them; see the test pattern above).
+    files: ["**/*.{test,spec,stories}.{js,jsx,mjs,cjs,ts,tsx}"],
+    rules: { "max-lines": "off", "max-lines-per-function": "off", complexity: "off" },
   },
   {
     // Exempt from size caps: tooling config files only.
