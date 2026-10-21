@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme";
 import { routing } from "@/i18n";
 import en from "../../messages/en.json";
@@ -19,10 +19,15 @@ const fontMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "School Administration Portal",
-  description: "Circulars, maintenance requests, school calendar, and reports — in one place.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "home" });
+  return { title: t("title"), description: t("subtitle") };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
