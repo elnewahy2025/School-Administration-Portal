@@ -7,5 +7,22 @@
   "theme": {
     "toDark": "Switch to dark mode",
     "toLight": "Switch to light mode"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "email": "Email",
+    "passwordLabel": "Password",
+    "signIn": "Sign in",
+    "error": "Invalid email or password"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "signOut": "Sign out",
+    "signedInAs": "Signed in as {name}",
+    "pendingAccount": "Your account is pending activation by the school administration.",
+    "claimIntro": "You are the first user — you can claim the platform owner role.",
+    "claimOwner": "Claim owner role",
+    "claimed": "You are now the platform owner.",
+    "claimError": "Claim failed."
   }
 }
