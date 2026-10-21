@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:rls": "node --env-file=.env.local supabase/tests/rls.harness.test.mjs && node --env-file=.env.local supabase/tests/rls.battery.test.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "scan:secrets": "node scripts/scan-secrets.mjs",
@@ -33,6 +34,7 @@
     "react-hook-form": "^7.90.0",
     "server-only": "^0.0.1",
     "shadcn": "^4.22.1",
+    "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",
     "tw-animate-css": "^1.4.0",
     "zod": "^4.6.7"

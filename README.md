@@ -30,6 +30,7 @@ npm run dev                         # http://localhost:3000 (Arabic default, /en
 | `npm run typecheck`               | `tsc --noEmit` (strict)                                          |
 | `npm run test`                    | Vitest unit + component tests                                    |
 | `npm run test:e2e`                | Playwright (build first; `npx playwright install chromium` once) |
+| `npm run test:rls`                | RLS/authorization battery against the linked Supabase project    |
 | `npm run format` / `format:check` | Prettier                                                         |
 | `npm run scan:secrets`            | Basic secret scan                                                |
 | `npm run verify`                  | format:check + lint + typecheck + test + scan + build            |
