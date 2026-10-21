@@ -1,0 +1,43 @@
+# Supabase local development configuration (skeleton — completed in WP2).
+project_id = "school-administration-portal"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+
+[auth.email]
+# No public sign-up: staff accounts are issued by school administrators (D3).
+enable_signup = false
+
+[storage]
+enabled = true
+file_size_limit = "10MiB"
+
+# Private buckets (doc §7). The public-assets bucket is added in WP6.
+[[storage.buckets]]
+name = "circular-attachments"
+public = false
+file_size_limit = "10MiB"
+
+[[storage.buckets]]
+name = "maintenance-photos"
+public = false
+file_size_limit = "10MiB"

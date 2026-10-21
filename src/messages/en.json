@@ -1,0 +1,11 @@
+{
+  "home": {
+    "title": "School Administration Portal",
+    "subtitle": "Circulars, maintenance requests, school calendar, and reports — in one place",
+    "comingSoon": "Core modules are being built according to the approved implementation plan."
+  },
+  "theme": {
+    "toDark": "Switch to dark mode",
+    "toLight": "Switch to light mode"
+  }
+}
