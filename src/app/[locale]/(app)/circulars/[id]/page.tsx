@@ -1,0 +1,75 @@
+import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n";
+import { ArrowLeftIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { getCircularById } from "@/lib/circulars/getCircularById";
+import { getCircularResponses } from "@/lib/circulars/getCircularResponses";
+import { hasPermission } from "@/lib/rbac/hasPermission";
+import {
+  CircularDetailCard,
+  CircularResponseBox,
+  CircularResponseTable,
+} from "@/components/circulars";
+
+export default async function CircularDetailPage({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  const { locale, id } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("circulars");
+
+  const [profile, circular, responses] = await Promise.all([
+    getCurrentProfile(),
+    getCircularById(id),
+    getCircularResponses(id).catch(() => []),
+  ]);
+
+  if (!circular) {
+    notFound();
+  }
+
+  const canPublish = profile?.school_id
+    ? await hasPermission("circular.publish", profile.school_id).catch(() => false)
+    : false;
+
+  const isTargeted =
+    circular.targets.length === 0 ||
+    circular.targets.some((tgt) => tgt.department_id === profile?.department_id);
+
+  const canRespond =
+    circular.status === "published" && isTargeted && Boolean(profile?.department_id);
+
+  const userDeptResponse = responses.find((res) => res.department_id === profile?.department_id);
+
+  return (
+    <div className="mx-auto flex max-w-4xl flex-col gap-6">
+      <div className="flex items-center gap-4">
+        <Link href="/circulars">
+          <Button variant="ghost" size="icon" aria-label={t("backToList")}>
+            <ArrowLeftIcon className="size-4 rtl:rotate-180" />
+          </Button>
+        </Link>
+        <span className="text-sm font-medium text-muted-foreground">{t("backToList")}</span>
+      </div>
+
+      <CircularDetailCard circular={circular} canPublish={canPublish} />
+
+      {canRespond ? (
+        <CircularResponseBox
+          circularId={circular.id}
+          responseType={circular.response_type}
+          existingResponse={userDeptResponse}
+        />
+      ) : null}
+
+      <div className="space-y-3">
+        <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("responses")}</h3>
+        <CircularResponseTable responses={responses} />
+      </div>
+    </div>
+  );
+}
