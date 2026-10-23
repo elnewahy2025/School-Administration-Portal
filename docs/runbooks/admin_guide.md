@@ -59,7 +59,6 @@
    - **Interactive Details**: Click any achievement card to view complete narrative, attributed department, date achieved, visibility, and recorder details.
    - **Filtering & Search**: Search by Arabic/English title or description keywords, and filter by category and department.
 
-
 ## 6. Reports & Data Exports
 
 1. **Operational Analytics** (`/reports`):

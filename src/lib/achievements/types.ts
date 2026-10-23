@@ -40,3 +40,15 @@ export interface CreateAchievementInput {
   imagePath?: string | null;
   createdBy: string;
 }
+
+export interface UpdateAchievementInput {
+  id: string;
+  departmentId?: string | null;
+  titleAr: string;
+  titleEn?: string | null;
+  description?: string | null;
+  category: AchievementCategory;
+  dateAchieved: string;
+  visibility: AchievementVisibility;
+  imagePath?: string | null;
+}

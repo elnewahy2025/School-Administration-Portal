@@ -1,24 +1,29 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { Trash2Icon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AchievementCategoryBadge } from "./AchievementCategoryBadge";
-import { AchievementDetailMetaGrid } from "./AchievementDetailMetaGrid";
+import { AchievementDetailView } from "./AchievementDetailView";
+import { EditAchievementForm } from "./EditAchievementForm";
 import { deleteAchievementAction } from "@/actions/achievements/deleteAchievementAction";
 import type { SchoolAchievementRow } from "@/lib/achievements/types";
+import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function AchievementDetailDialog({
   achievement,
+  departments,
   canManage,
   onClose,
 }: {
   achievement: SchoolAchievementRow | null;
+  departments: DepartmentRow[];
   canManage: boolean;
   onClose: () => void;
 }) {
   const t = useTranslations("achievements");
+  const [isEditing, setIsEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   if (!achievement) return null;
@@ -53,38 +58,26 @@ export function AchievementDetailDialog({
           </Button>
         </div>
 
-        <AchievementDetailMetaGrid achievement={achievement} />
-
-        {achievement.description && (
-          <div className="space-y-1.5">
-            <h4 className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
-              {t("description")}
-            </h4>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
-              {achievement.description}
-            </p>
-          </div>
+        {isEditing ? (
+          <EditAchievementForm
+            achievement={achievement}
+            departments={departments}
+            onSuccess={() => {
+              setIsEditing(false);
+              onClose();
+            }}
+            onCancel={() => setIsEditing(false)}
+          />
+        ) : (
+          <AchievementDetailView
+            achievement={achievement}
+            canManage={canManage}
+            isPending={isPending}
+            onDelete={handleDelete}
+            onEdit={() => setIsEditing(true)}
+            onClose={onClose}
+          />
         )}
-
-        <div className="flex items-center justify-between border-t border-border pt-4">
-          {canManage ? (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleDelete}
-              disabled={isPending}
-              className="gap-1.5 text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:hover:bg-rose-950/20"
-            >
-              <Trash2Icon className="size-4" />
-              <span>{t("delete")}</span>
-            </Button>
-          ) : (
-            <div />
-          )}
-          <Button variant="outline" size="sm" onClick={onClose}>
-            Close
-          </Button>
-        </div>
       </div>
     </div>
   );

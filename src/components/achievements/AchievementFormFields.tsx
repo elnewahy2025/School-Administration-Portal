@@ -6,8 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { AchievementCategoryFields } from "./AchievementCategoryFields";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
+import type { SchoolAchievementRow } from "@/lib/achievements/types";
 
-export function AchievementFormFields({ departments }: { departments: DepartmentRow[] }) {
+export function AchievementFormFields({
+  departments,
+  defaultValues,
+}: {
+  departments: DepartmentRow[];
+  defaultValues?: Partial<SchoolAchievementRow>;
+}) {
   const t = useTranslations("achievements");
 
   return (
@@ -18,6 +25,7 @@ export function AchievementFormFields({ departments }: { departments: Department
           <Input
             id="ach_title_ar"
             name="title_ar"
+            defaultValue={defaultValues?.title_ar ?? ""}
             required
             placeholder="مثال: المركز الأول في مسابقة الروبوت"
           />
@@ -27,12 +35,13 @@ export function AchievementFormFields({ departments }: { departments: Department
           <Input
             id="ach_title_en"
             name="title_en"
+            defaultValue={defaultValues?.title_en ?? ""}
             placeholder="e.g. 1st Place Robotics Competition"
           />
         </div>
       </div>
 
-      <AchievementCategoryFields departments={departments} />
+      <AchievementCategoryFields departments={departments} defaultValues={defaultValues} />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
@@ -40,7 +49,7 @@ export function AchievementFormFields({ departments }: { departments: Department
           <select
             id="ach_vis"
             name="visibility"
-            defaultValue="internal"
+            defaultValue={defaultValues?.visibility ?? "internal"}
             className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
           >
             <option value="internal">{t("internal")}</option>
@@ -58,6 +67,7 @@ export function AchievementFormFields({ departments }: { departments: Department
         <Textarea
           id="ach_desc"
           name="description"
+          defaultValue={defaultValues?.description ?? ""}
           rows={3}
           placeholder="تفاصيل الإنجاز ومضمونه..."
         />

@@ -5,13 +5,17 @@ import { useTranslations } from "next-intl";
 import { TrophyIcon } from "lucide-react";
 import { AchievementCard } from "./AchievementCard";
 import { AchievementDetailDialog } from "./AchievementDetailDialog";
+import { CreateAchievementDialog } from "./CreateAchievementDialog";
 import type { SchoolAchievementRow } from "@/lib/achievements/types";
+import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function AchievementList({
   achievements,
+  departments,
   canManage,
 }: {
   achievements: SchoolAchievementRow[];
+  departments: DepartmentRow[];
   canManage: boolean;
 }) {
   const t = useTranslations("achievements");
@@ -23,6 +27,11 @@ export function AchievementList({
         <TrophyIcon className="mb-3 size-12 text-muted-foreground/40" />
         <h3 className="text-base font-bold text-foreground">{t("empty")}</h3>
         <p className="mt-1 max-w-sm text-xs text-muted-foreground">{t("emptyDesc")}</p>
+        {canManage && (
+          <div className="mt-4">
+            <CreateAchievementDialog departments={departments} />
+          </div>
+        )}
       </div>
     );
   }
@@ -41,6 +50,7 @@ export function AchievementList({
 
       <AchievementDetailDialog
         achievement={selectedAchievement}
+        departments={departments}
         canManage={canManage}
         onClose={() => setSelectedAchievement(null)}
       />

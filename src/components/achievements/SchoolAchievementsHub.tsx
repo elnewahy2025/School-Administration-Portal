@@ -56,7 +56,7 @@ export function SchoolAchievementsHub({
         departments={departments}
       />
 
-      <AchievementList achievements={filtered} canManage={canManage} />
+      <AchievementList achievements={filtered} departments={departments} canManage={canManage} />
     </div>
   );
 }
