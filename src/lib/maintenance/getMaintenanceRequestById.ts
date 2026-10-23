@@ -13,7 +13,7 @@ export async function getMaintenanceRequestById(id: string): Promise<Maintenance
       first_response_at, resolved_at, closed_at, created_at, updated_at,
       reopen_reason, rejection_reason,
       location:locations(id, building, floor, room),
-      department:departments(id, name_ar, name_en),
+      department:departments!maintenance_requests_reporter_department_id_fkey(id, name_ar, name_en),
       reporter:profiles!maintenance_requests_reporter_id_fkey(id, full_name, email),
       assigned_operator:profiles!maintenance_requests_assigned_operator_id_fkey(id, full_name, email)
     `,

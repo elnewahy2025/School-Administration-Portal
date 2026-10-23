@@ -20,7 +20,7 @@ type ProfileQueryResult = {
   is_active: boolean;
   departments: { name_ar: string; name_en: string } | null;
   user_role_assignments: Array<{
-    roles: { key: string; name_ar: string; name_en: string } | null;
+    roles: { key: string; name: string } | null;
   }> | null;
 };
 
@@ -41,7 +41,7 @@ export async function getSchoolUsers(schoolId?: string | null): Promise<SchoolUs
   const { data, error } = await supabase
     .from("profiles")
     .select(
-      "id, full_name, email, job_title, department_id, is_active, departments(name_ar, name_en), user_role_assignments(roles(key, name_ar, name_en))",
+      "id, full_name, email, job_title, department_id, is_active, departments:departments!profiles_department_id_fkey(name_ar, name_en), user_role_assignments:user_role_assignments!user_role_assignments_user_id_fkey(roles(key, name))",
     )
     .eq("school_id", resolvedId)
     .order("full_name", { ascending: true });
