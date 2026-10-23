@@ -20,6 +20,18 @@ export function CircularSortSelect({
 }) {
   const t = useTranslations("circulars");
 
+  const sortLabels: Record<CircularSortField, string> = {
+    publish_at_desc: t("sortNewestPublished"),
+    publish_at_asc: t("sortOldestPublished"),
+    due_at_asc: t("sortDueSoonest"),
+    due_at_desc: t("sortDueFurthest"),
+    priority_desc: t("sortHighestPriority"),
+    priority_asc: t("sortLowestPriority"),
+    status: t("sortStatus"),
+    ref_number: t("sortRefNumber"),
+    title: t("sortTitle"),
+  };
+
   return (
     <Select
       value={sortBy}
@@ -27,7 +39,7 @@ export function CircularSortSelect({
     >
       <SelectTrigger className="w-48 gap-1.5">
         <ArrowUpDownIcon className="size-3.5 text-muted-foreground" />
-        <SelectValue placeholder={t("sortBy")} />
+        <SelectValue placeholder={t("sortBy")}>{sortLabels[sortBy] ?? t("sortBy")}</SelectValue>
       </SelectTrigger>
       <SelectContent align="end">
         <SelectItem value="publish_at_desc">{t("sortNewestPublished")}</SelectItem>

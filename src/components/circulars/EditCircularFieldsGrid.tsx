@@ -21,13 +21,30 @@ export function EditCircularFieldsGrid({
 }) {
   const t = useTranslations("circulars");
 
+  const priorityLabels: Record<CircularPriority, string> = {
+    low: t("low"),
+    normal: t("normal"),
+    high: t("high"),
+    urgent: t("urgent"),
+  };
+
+  const statusLabels: Record<CircularStatus, string> = {
+    draft: t("draft"),
+    published: t("published"),
+    in_progress: t("inProgress"),
+    completed: t("completed"),
+    overdue: t("overdue"),
+    archived: t("archived"),
+    cancelled: t("statusCancelled"),
+  };
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <div className="space-y-2">
         <Label htmlFor="priority">{t("priority")}</Label>
         <Select name="priority" defaultValue={priority}>
           <SelectTrigger id="priority" className="w-full">
-            <SelectValue />
+            <SelectValue>{priorityLabels[priority]}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="low">{t("low")}</SelectItem>
@@ -42,7 +59,7 @@ export function EditCircularFieldsGrid({
         <Label htmlFor="status">{t("status")}</Label>
         <Select name="status" defaultValue={status}>
           <SelectTrigger id="status" className="w-full">
-            <SelectValue />
+            <SelectValue>{statusLabels[status]}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="draft">{t("draft")}</SelectItem>
