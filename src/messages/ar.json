@@ -172,6 +172,8 @@
     "chooseFiles": "اختر ملفات أو اسحب وأفلت هنا",
     "uploadHint": "ملفات PDF، Word، Excel، أو صور حتى 25 ميجابايت",
     "download": "تحميل",
+    "delete": "حذف",
+    "deleteAttachment": "حذف المرفق",
     "attachmentDeleted": "تم حذف المرفق بنجاح",
     "confirmDeleteTitle": "حذف التعميم",
     "confirmDeleteDesc": "هل أنت متأكد من رغبتك في حذف هذا التعميم؟ سيتم حذف جميع الاستجابات والمرفقات المرتبطة به بشكل نهائي.",

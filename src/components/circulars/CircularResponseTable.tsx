@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   Table,
   TableBody,
@@ -8,11 +8,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { formatCircularDate } from "@/lib/circulars/formatCircularDate";
 import type { CircularResponseRow } from "@/lib/circulars/types";
 
 export function CircularResponseTable({ responses }: { responses: CircularResponseRow[] }) {
   const t = useTranslations("circulars");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
 
   if (responses.length === 0) {
     return (
@@ -36,7 +38,7 @@ export function CircularResponseTable({ responses }: { responses: CircularRespon
         </TableHeader>
         <TableBody>
           {responses.map((res) => {
-            const formattedDate = new Date(res.submitted_at).toLocaleDateString();
+            const formattedDate = formatCircularDate(res.submitted_at, locale);
 
             return (
               <TableRow key={res.id}>
@@ -60,7 +62,10 @@ export function CircularResponseTable({ responses }: { responses: CircularRespon
                 <TableCell className="max-w-xs truncate text-xs text-muted-foreground">
                   {res.reason ?? "—"}
                 </TableCell>
-                <TableCell className="text-end font-mono text-xs text-muted-foreground">
+                <TableCell
+                  suppressHydrationWarning
+                  className="text-end font-mono text-xs text-muted-foreground"
+                >
                   {formattedDate}
                 </TableCell>
               </TableRow>

@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { PaperclipIcon } from "lucide-react";
@@ -6,6 +6,7 @@ import { CircularPriorityBadge } from "./CircularPriorityBadge";
 import { CircularStatusBadge } from "./CircularStatusBadge";
 import { CircularTargetBadges } from "./CircularTargetBadges";
 import { CircularRowActions } from "./CircularRowActions";
+import { formatCircularDate } from "@/lib/circulars/formatCircularDate";
 import type { CircularRow } from "@/lib/circulars/types";
 
 export function CircularTableRow({
@@ -16,13 +17,10 @@ export function CircularTableRow({
   canManage: boolean;
 }) {
   const t = useTranslations("circulars");
-  const formattedPublishDate = circular.publish_at
-    ? new Date(circular.publish_at).toLocaleDateString()
-    : circular.created_at
-      ? new Date(circular.created_at).toLocaleDateString()
-      : "—";
-
-  const formattedDueDate = circular.due_at ? new Date(circular.due_at).toLocaleDateString() : "—";
+  const locale = useLocale();
+  const publishDateInput = circular.publish_at || circular.created_at;
+  const formattedPublishDate = formatCircularDate(publishDateInput, locale);
+  const formattedDueDate = formatCircularDate(circular.due_at, locale);
   const attachmentsCount = circular.attachments?.length ?? 0;
 
   return (
@@ -57,10 +55,16 @@ export function CircularTableRow({
       <TableCell>
         <CircularTargetBadges targets={circular.targets} />
       </TableCell>
-      <TableCell className="font-mono text-xs whitespace-nowrap text-muted-foreground">
+      <TableCell
+        suppressHydrationWarning
+        className="font-mono text-xs whitespace-nowrap text-muted-foreground"
+      >
         {formattedPublishDate}
       </TableCell>
-      <TableCell className="font-mono text-xs whitespace-nowrap text-muted-foreground">
+      <TableCell
+        suppressHydrationWarning
+        className="font-mono text-xs whitespace-nowrap text-muted-foreground"
+      >
         {formattedDueDate}
       </TableCell>
       <TableCell className="text-end">

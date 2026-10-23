@@ -1,4 +1,5 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { formatCircularDate } from "@/lib/circulars/formatCircularDate";
 
 export function CircularDetailMetaGrid({
   publishedAt,
@@ -10,19 +11,24 @@ export function CircularDetailMetaGrid({
   responseType: string;
 }) {
   const t = useTranslations("circulars");
+  const locale = useLocale();
 
-  const formattedDueDate = dueAt ? new Date(dueAt).toLocaleDateString() : "—";
-  const formattedPublishDate = publishedAt ? new Date(publishedAt).toLocaleDateString() : "—";
+  const formattedDueDate = formatCircularDate(dueAt, locale);
+  const formattedPublishDate = formatCircularDate(publishedAt, locale);
 
   return (
     <div className="grid grid-cols-1 gap-4 rounded-lg bg-muted/40 p-4 text-xs sm:grid-cols-3">
       <div>
         <span className="text-muted-foreground">{t("publishedAt")}: </span>
-        <span className="font-medium text-foreground">{formattedPublishDate}</span>
+        <span suppressHydrationWarning className="font-medium text-foreground">
+          {formattedPublishDate}
+        </span>
       </div>
       <div>
         <span className="text-muted-foreground">{t("dueDate")}: </span>
-        <span className="font-medium text-foreground">{formattedDueDate}</span>
+        <span suppressHydrationWarning className="font-medium text-foreground">
+          {formattedDueDate}
+        </span>
       </div>
       <div>
         <span className="text-muted-foreground">{t("responseType")}: </span>

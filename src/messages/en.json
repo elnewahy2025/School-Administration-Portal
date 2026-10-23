@@ -172,6 +172,8 @@
     "chooseFiles": "Choose files or drag & drop here",
     "uploadHint": "PDF, Word, Excel, or images up to 25MB",
     "download": "Download",
+    "delete": "Delete",
+    "deleteAttachment": "Delete attachment",
     "attachmentDeleted": "Attachment deleted successfully",
     "confirmDeleteTitle": "Delete Circular",
     "confirmDeleteDesc": "Are you sure you want to delete this circular? This will also remove all associated responses and attachments.",

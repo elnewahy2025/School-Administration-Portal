@@ -6,6 +6,7 @@ export { createCircularRecord } from "./createCircularRecord";
 export { updateCircularRecord } from "./updateCircularRecord";
 export { deleteCircularRecord } from "./deleteCircularRecord";
 export { uploadCircularDocument } from "./uploadCircularDocument";
+export { formatCircularDate } from "./formatCircularDate";
 export { assertCanManageCirculars } from "./assertCanManageCirculars";
 export { canRespondToCircular } from "./canRespondToCircular";
 export { sortCirculars, type CircularSortField } from "./sortCirculars";

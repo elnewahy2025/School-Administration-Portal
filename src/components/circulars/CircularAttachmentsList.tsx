@@ -75,7 +75,8 @@ export function CircularAttachmentsList({
                     className="size-8 text-destructive hover:bg-destructive/10"
                     disabled={isPending}
                     onClick={() => handleDelete(att.id)}
-                    title={t("delete")}
+                    title={t("deleteAttachment")}
+                    aria-label={t("deleteAttachment")}
                   >
                     {isPending ? (
                       <Loader2Icon className="size-3.5 animate-spin" />
