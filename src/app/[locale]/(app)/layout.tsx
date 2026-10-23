@@ -4,6 +4,7 @@ import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
+import { getUnreadNotificationCount } from "@/lib/notifications/getUnreadNotificationCount";
 import { AppShell } from "@/components/layout";
 
 export default async function AuthenticatedAppLayout({
@@ -24,6 +25,7 @@ export default async function AuthenticatedAppLayout({
   const profile = await getCurrentProfile();
   const school = await getCurrentSchool(profile?.school_id);
   const permissions: string[] = await getEffectivePermissions().catch(() => []);
+  const unreadNotifications = await getUnreadNotificationCount().catch(() => 0);
 
   const canViewReports = permissions.includes("reports.view");
   const canManageSettings =
@@ -41,6 +43,7 @@ export default async function AuthenticatedAppLayout({
       school={school}
       canManageSettings={canManageSettings}
       canViewReports={canViewReports}
+      unreadNotifications={unreadNotifications}
     >
       {children}
     </AppShell>

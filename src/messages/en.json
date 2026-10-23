@@ -270,6 +270,71 @@
     },
     "backToList": "Back to Calendar"
   },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Track important alerts, assigned tasks, and school updates",
+    "unreadCount": "{count} unread",
+    "markAllRead": "Mark all as read",
+    "markRead": "Mark as read",
+    "viewDetails": "View Details",
+    "empty": "No notifications yet",
+    "emptyDesc": "You are all caught up! New alerts and tasks will appear here.",
+    "types": {
+      "circular": "Circular",
+      "maintenance": "Maintenance",
+      "calendar": "Calendar",
+      "system": "System"
+    }
+  },
+  "reports": {
+    "title": "Reports & Analytics",
+    "subtitle": "Inspect operational compliance, maintenance SLA, and export verified datasets",
+    "circularsTab": "Circulars & Compliance",
+    "maintenanceTab": "Maintenance & SLA",
+    "filters": {
+      "from": "From Date",
+      "to": "To Date",
+      "department": "Department",
+      "allDepartments": "All Departments",
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "apply": "Filter",
+      "reset": "Reset"
+    },
+    "kpis": {
+      "totalCirculars": "Total Circulars",
+      "publishedCirculars": "Published Circulars",
+      "responseRate": "Response Rate",
+      "overdueResponses": "Overdue Responses",
+      "totalTickets": "Total Tickets",
+      "openTickets": "Open Tickets",
+      "resolvedTickets": "Resolved Tickets",
+      "avgResolutionTime": "Avg. Resolution Time"
+    },
+    "exportCsv": "Export CSV",
+    "exporting": "Exporting...",
+    "complianceTable": "Department Compliance Breakdown",
+    "table": {
+      "department": "Department",
+      "targeted": "Targeted",
+      "responded": "Responded",
+      "pending": "Pending",
+      "compliance": "Compliance %",
+      "ticket": "Ticket #",
+      "title": "Title",
+      "category": "Category",
+      "priority": "Priority",
+      "location": "Location",
+      "reporter": "Reporter",
+      "operator": "Operator",
+      "status": "Status",
+      "createdAt": "Created Date",
+      "resolvedAt": "Resolved Date",
+      "ref": "Reference #",
+      "dueDate": "Due Date"
+    },
+    "noData": "No data available for the selected filters."
+  },
   "common": {
     "save": "Save",
     "saved": "Saved successfully",

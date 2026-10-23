@@ -270,6 +270,71 @@
     },
     "backToList": "العودة للتقويم"
   },
+  "notifications": {
+    "title": "الإشعارات",
+    "subtitle": "متابعة التنبيهات والمهام الموجهة إليك وآخر التحديثات",
+    "unreadCount": "{count} غير مقروء",
+    "markAllRead": "تحديد الكل كمقروء",
+    "markRead": "تحديد كمقروء",
+    "viewDetails": "عرض التفاصيل",
+    "empty": "لا توجد إشعارات حالياً",
+    "emptyDesc": "لقد اطلعت على جميع الإشعارات! ستظهر التنبيهات الجديدة هنا فور ورودها.",
+    "types": {
+      "circular": "تعميم",
+      "maintenance": "صيانة",
+      "calendar": "التقويم",
+      "system": "النظام"
+    }
+  },
+  "reports": {
+    "title": "التقارير والإحصائيات",
+    "subtitle": "متابعة نسب استجابة الأقسام ومؤشرات إنجاز الصيانة وتصدير البيانات",
+    "circularsTab": "التعاميم ومعدلات الاستجابة",
+    "maintenanceTab": "طلبات الصيانة ومؤشرات الإنجاز",
+    "filters": {
+      "from": "من تاريخ",
+      "to": "إلى تاريخ",
+      "department": "القسم",
+      "allDepartments": "جميع الأقسام",
+      "status": "الحالة",
+      "allStatuses": "جميع الحالات",
+      "apply": "تطبيق التصفية",
+      "reset": "إعادة ضبط"
+    },
+    "kpis": {
+      "totalCirculars": "إجمالي التعاميم",
+      "publishedCirculars": "التعاميم النشطة",
+      "responseRate": "نسبة الاستجابة",
+      "overdueResponses": "استجابات متأخرة",
+      "totalTickets": "إجمالي البلاغات",
+      "openTickets": "بلاغات قيد المتابعة",
+      "resolvedTickets": "بلاغات منجزة",
+      "avgResolutionTime": "متوسط وقت الإنجاز"
+    },
+    "exportCsv": "تصدير كملف CSV",
+    "exporting": "جاري التصدير...",
+    "complianceTable": "تفاصيل استجابة الأقسام",
+    "table": {
+      "department": "القسم",
+      "targeted": "المستهدف",
+      "responded": "المكتمل",
+      "pending": "المعلق",
+      "compliance": "نسبة الالتزام",
+      "ticket": "رقم البلاغ",
+      "title": "العنوان",
+      "category": "التصنيف",
+      "priority": "الأولوية",
+      "location": "الموقع",
+      "reporter": "مقدم الطلب",
+      "operator": "الفني المسند",
+      "status": "الحالة",
+      "createdAt": "تاريخ الإنشاء",
+      "resolvedAt": "تاريخ الإنجاز",
+      "ref": "الرقم المرجعي",
+      "dueDate": "تاريخ الاستحقاق"
+    },
+    "noData": "لا توجد بيانات متوفرة لمعايير التصفية المحددة."
+  },
   "common": {
     "save": "حفظ",
     "saved": "تم الحفظ بنجاح",

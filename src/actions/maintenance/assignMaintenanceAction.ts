@@ -6,6 +6,7 @@ import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { parseMaintenanceAssignData } from "@/lib/validation/parseMaintenanceAssignData";
 import { saveMaintenanceAssignment } from "@/lib/maintenance/saveMaintenanceAssignment";
+import { dispatchModuleNotification } from "@/lib/notifications/dispatchModuleNotification";
 
 export async function assignMaintenanceAction(formData: FormData) {
   const profile = await getCurrentProfile();
@@ -47,6 +48,18 @@ export async function assignMaintenanceAction(formData: FormData) {
   });
 
   if (res.error) return { success: false, error: res.error };
+
+  if (operatorId && operatorId !== profile.id) {
+    void dispatchModuleNotification({
+      recipientUserIds: [operatorId],
+      schoolId: profile.school_id,
+      type: "maintenance",
+      title: "تم إسناد بلاغ صيانة جديد لك",
+      body: `تم إسناد البلاغ إليك للمتابعة والإنجاز`,
+      entityType: "maintenance_request",
+      entityId: requestId,
+    });
+  }
 
   revalidatePath("/[locale]/maintenance", "page");
   revalidatePath(`/[locale]/maintenance/${requestId}`, "page");
