@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolUsers } from "@/lib/school/getSchoolUsers";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { UserList } from "@/components/settings/UserList";
 
 export default async function UsersSettingsPage({
@@ -14,10 +15,16 @@ export default async function UsersSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
-  const users = await getSchoolUsers(profile?.school_id);
-  const canManage = profile?.school_id
-    ? await hasPermission("users.manage", profile.school_id).catch(() => false)
-    : false;
+  const [users, perms, hasPerm] = await Promise.all([
+    getSchoolUsers(profile?.school_id),
+    getEffectivePermissions().catch((): string[] => []),
+    profile?.school_id
+      ? hasPermission("users.manage", profile.school_id).catch(() => false)
+      : false,
+  ]);
+
+  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const canManage = isOwner || hasPerm;
 
   return (
     <div className="flex flex-col gap-6">

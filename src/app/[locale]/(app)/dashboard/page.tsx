@@ -1,36 +1,79 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
-import { ClaimOwnerButton } from "@/components/auth/ClaimOwnerButton";
-import { SignOutButton } from "@/components/auth/SignOutButton";
-import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSessionUser } from "@/lib/auth/getSessionUser";
-import { hasAnyPlatformOwner } from "@/lib/auth/hasAnyPlatformOwner";
+import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
+import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
+import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
+import { getSchoolMaintenanceRequests } from "@/lib/maintenance/getSchoolMaintenanceRequests";
+import { getSchoolCalendarEvents } from "@/lib/calendar/getSchoolCalendarEvents";
+import { getSchoolAchievements } from "@/lib/achievements/getSchoolAchievements";
+import {
+  DashboardHeader,
+  DashboardStatsGrid,
+  DashboardQuickActions,
+  DashboardRecentCirculars,
+  DashboardRecentMaintenance,
+  DashboardAchievementsWidget,
+} from "@/components/dashboard";
 
 export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const user = await getSessionUser();
-  if (!user) redirect({ href: "/login", locale });
 
-  const [profile, ownerExists] = await Promise.all([getCurrentProfile(), hasAnyPlatformOwner()]);
-  const t = await getTranslations("dashboard");
+  const user = await getSessionUser();
+  if (!user) {
+    redirect({ href: "/login", locale });
+    return null;
+  }
+
+  const profile = await getCurrentProfile();
+  if (!profile) {
+    redirect({ href: "/login", locale });
+    return null;
+  }
+
+  const schoolId = profile.school_id;
+  const [school, perms, circulars, maintenance, events, achievements] = await Promise.all([
+    getCurrentSchool(schoolId),
+    getEffectivePermissions().catch((): string[] => []),
+    getSchoolCirculars(schoolId),
+    getSchoolMaintenanceRequests(schoolId),
+    getSchoolCalendarEvents(schoolId),
+    getSchoolAchievements(schoolId),
+  ]);
+
+  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const canCircular = isOwner || perms.includes("circular.create");
+  const canMaintenance = isOwner || perms.includes("maintenance.create");
+  const canCalendar = isOwner || perms.includes("calendar.manage");
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8">
-      <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{t("title")}</h1>
-        <SignOutButton />
-      </header>
-      {profile ? (
-        <p>{t("signedInAs", { name: profile.full_name })}</p>
-      ) : ownerExists ? (
-        <p className="text-muted-foreground">{t("pendingAccount")}</p>
-      ) : (
-        <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
-          <p>{t("claimIntro")}</p>
-          <ClaimOwnerButton />
-        </section>
-      )}
-    </main>
+    <div className="mx-auto flex max-w-7xl flex-col gap-6">
+      <DashboardHeader profile={profile} school={school} />
+
+      <DashboardStatsGrid
+        circularsCount={circulars.length}
+        maintenanceCount={maintenance.length}
+        eventsCount={events.length}
+        achievementsCount={achievements.length}
+      />
+
+      <DashboardQuickActions
+        canCreateCircular={canCircular}
+        canCreateMaintenance={canMaintenance}
+        canCreateCalendar={canCalendar}
+      />
+
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="space-y-6">
+          <DashboardRecentCirculars circulars={circulars} />
+          <DashboardRecentMaintenance requests={maintenance} />
+        </div>
+        <div className="space-y-6">
+          <DashboardAchievementsWidget achievements={achievements} />
+        </div>
+      </div>
+    </div>
   );
 }

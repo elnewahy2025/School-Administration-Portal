@@ -27,7 +27,10 @@ export default async function AuthenticatedAppLayout({
   const permissions: string[] = await getEffectivePermissions().catch(() => []);
   const unreadNotifications = await getUnreadNotificationCount().catch(() => 0);
 
-  const canViewReports = permissions.includes("reports.view");
+  const canViewReports =
+    permissions.includes("reports.view") ||
+    permissions.includes("settings.platform.update") ||
+    permissions.includes("roles.manage");
   const canManageSettings =
     permissions.some(
       (p) =>

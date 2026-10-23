@@ -4,8 +4,19 @@ import type { CalendarEventRow } from "./types";
 export async function getSchoolCalendarEvents(
   schoolId?: string | null,
 ): Promise<CalendarEventRow[]> {
-  if (!schoolId) return [];
   const supabase = await createSupabaseServerClient();
+  let resolvedId = schoolId;
+  if (!resolvedId) {
+    const { data: firstSchool } = await supabase
+      .from("schools")
+      .select("id")
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+    resolvedId = firstSchool?.id ?? null;
+  }
+  if (!resolvedId) return [];
+
   const { data, error } = await supabase
     .from("calendar_events")
     .select(
@@ -16,7 +27,7 @@ export async function getSchoolCalendarEvents(
       creator:profiles!calendar_events_created_by_fkey(id, full_name)
     `,
     )
-    .eq("school_id", schoolId)
+    .eq("school_id", resolvedId)
     .order("starts_at", { ascending: true });
 
   if (error) {

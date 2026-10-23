@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { SchoolProfileForm } from "@/components/settings/SchoolProfileForm";
 
 export default async function SchoolSettingsPage({
@@ -15,10 +16,16 @@ export default async function SchoolSettingsPage({
   const tCommon = await getTranslations("common");
 
   const profile = await getCurrentProfile();
-  const school = await getSchoolFullDetails(profile?.school_id);
-  const canManage = profile?.school_id
-    ? await hasPermission("settings.school.update", profile.school_id).catch(() => false)
-    : false;
+  const [school, perms, hasPerm] = await Promise.all([
+    getSchoolFullDetails(profile?.school_id),
+    getEffectivePermissions().catch((): string[] => []),
+    profile?.school_id
+      ? hasPermission("settings.school.update", profile.school_id).catch(() => false)
+      : false,
+  ]);
+
+  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const canManage = isOwner || hasPerm;
 
   if (!school) {
     return (

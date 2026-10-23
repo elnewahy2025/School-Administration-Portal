@@ -12,12 +12,23 @@ export type LocationRow = {
 };
 
 export async function getSchoolLocations(schoolId?: string | null): Promise<LocationRow[]> {
-  if (!schoolId) return [];
   const supabase = await createSupabaseServerClient();
+  let resolvedId = schoolId;
+  if (!resolvedId) {
+    const { data: firstSchool } = await supabase
+      .from("schools")
+      .select("id")
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+    resolvedId = firstSchool?.id ?? null;
+  }
+  if (!resolvedId) return [];
+
   const { data, error } = await supabase
     .from("locations")
     .select("id, school_id, building, floor, room, kind, is_active, created_at")
-    .eq("school_id", schoolId)
+    .eq("school_id", resolvedId)
     .order("building", { ascending: true })
     .order("room", { ascending: true });
 

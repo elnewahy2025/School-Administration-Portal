@@ -9,10 +9,16 @@ export default async function MaintenancePage({ params }: { params: Promise<{ lo
   setRequestLocale(locale);
 
   const profile = await getCurrentProfile();
-  const tickets = await getSchoolMaintenanceRequests(profile?.school_id);
-  const canCreate = profile?.school_id
-    ? await hasPermission("maintenance.create", profile.school_id).catch(() => false)
-    : false;
+  const [tickets, isOwner, hasPerm] = await Promise.all([
+    getSchoolMaintenanceRequests(profile?.school_id),
+    hasPermission("settings.platform.update")
+      .catch(() => false)
+      .then(async (v) => v || (await hasPermission("roles.manage").catch(() => false))),
+    profile?.school_id
+      ? hasPermission("maintenance.create", profile.school_id).catch(() => false)
+      : false,
+  ]);
+  const canCreate = isOwner || hasPerm;
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6">

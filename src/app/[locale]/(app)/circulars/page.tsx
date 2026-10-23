@@ -13,10 +13,16 @@ export default async function CircularsPage({ params }: { params: Promise<{ loca
   const t = await getTranslations("circulars");
 
   const profile = await getCurrentProfile();
-  const circulars = await getSchoolCirculars(profile?.school_id);
-  const canCreate = profile?.school_id
-    ? await hasPermission("circular.create", profile.school_id).catch(() => false)
-    : false;
+  const [circulars, isOwner, hasPerm] = await Promise.all([
+    getSchoolCirculars(profile?.school_id),
+    hasPermission("settings.platform.update")
+      .catch(() => false)
+      .then(async (v) => v || (await hasPermission("roles.manage").catch(() => false))),
+    profile?.school_id
+      ? hasPermission("circular.create", profile.school_id).catch(() => false)
+      : false,
+  ]);
+  const canCreate = isOwner || hasPerm;
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6">

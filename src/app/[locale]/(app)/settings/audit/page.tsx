@@ -15,9 +15,13 @@ export default async function AuditSettingsPage({
   const tCommon = await getTranslations("common");
 
   const profile = await getCurrentProfile();
-  const canView = profile?.school_id
+  const isOwner =
+    (await hasPermission("settings.platform.update").catch(() => false)) ||
+    (await hasPermission("roles.manage").catch(() => false));
+  const hasPerm = profile?.school_id
     ? await hasPermission("audit.view", profile.school_id).catch(() => false)
-    : profile?.school_id === null;
+    : false;
+  const canView = isOwner || hasPerm;
 
   if (!canView) {
     return (

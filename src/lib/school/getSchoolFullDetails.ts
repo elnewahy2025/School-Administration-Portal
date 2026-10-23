@@ -11,18 +11,29 @@ export type SchoolFullDetails = SchoolRow & {
 export async function getSchoolFullDetails(
   schoolId?: string | null,
 ): Promise<SchoolFullDetails | null> {
-  if (!schoolId) return null;
   const supabase = await createSupabaseServerClient();
+  let resolvedId = schoolId;
+  if (!resolvedId) {
+    const { data: firstSchool } = await supabase
+      .from("schools")
+      .select("id")
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+    resolvedId = firstSchool?.id ?? null;
+  }
+  if (!resolvedId) return null;
+
   const [{ data: school }, { data: settings }] = await Promise.all([
     supabase
       .from("schools")
       .select("id, name_ar, name_en, slug, timezone, logo_path, is_active")
-      .eq("id", schoolId)
+      .eq("id", resolvedId)
       .maybeSingle(),
     supabase
       .from("school_settings")
       .select("academic_year, vision, mission, public_description")
-      .eq("school_id", schoolId)
+      .eq("school_id", resolvedId)
       .maybeSingle(),
   ]);
 

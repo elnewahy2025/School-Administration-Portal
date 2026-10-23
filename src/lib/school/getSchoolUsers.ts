@@ -25,14 +25,25 @@ type ProfileQueryResult = {
 };
 
 export async function getSchoolUsers(schoolId?: string | null): Promise<SchoolUserRow[]> {
-  if (!schoolId) return [];
   const supabase = await createSupabaseServerClient();
+  let resolvedId = schoolId;
+  if (!resolvedId) {
+    const { data: firstSchool } = await supabase
+      .from("schools")
+      .select("id")
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+    resolvedId = firstSchool?.id ?? null;
+  }
+  if (!resolvedId) return [];
+
   const { data, error } = await supabase
     .from("profiles")
     .select(
       "id, full_name, email, job_title, department_id, is_active, departments(name_ar, name_en), user_role_assignments(roles(key, name_ar, name_en))",
     )
-    .eq("school_id", schoolId)
+    .eq("school_id", resolvedId)
     .order("full_name", { ascending: true });
 
   if (error) {

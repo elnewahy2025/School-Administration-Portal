@@ -4,9 +4,18 @@ import type { SchoolAchievementRow } from "./types";
 export async function getSchoolAchievements(
   schoolId?: string | null,
 ): Promise<SchoolAchievementRow[]> {
-  if (!schoolId) return [];
-
   const supabase = await createSupabaseServerClient();
+  let resolvedId = schoolId;
+  if (!resolvedId) {
+    const { data: firstSchool } = await supabase
+      .from("schools")
+      .select("id")
+      .eq("is_active", true)
+      .limit(1)
+      .maybeSingle();
+    resolvedId = firstSchool?.id ?? null;
+  }
+  if (!resolvedId) return [];
   const { data, error } = await supabase
     .from("school_achievements")
     .select(

@@ -1,5 +1,6 @@
 import { getCurrentProfile, type ProfileRow } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
+import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 
 export type AssertCanViewReportsResult =
   | { authorized: false; error: string }
@@ -12,26 +13,29 @@ export type AssertCanViewReportsResult =
 
 export async function assertCanViewReports(): Promise<AssertCanViewReportsResult> {
   const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
+  if (!profile) {
+    return { authorized: false, error: "Unauthorized" };
+  }
+
+  const school = await getCurrentSchool(profile.school_id);
+  if (!school) {
     return { authorized: false, error: "No school associated with profile" };
   }
 
-  const allowed = await hasPermission("reports.view", profile.school_id);
+  const perms = await getEffectivePermissions().catch((): string[] => []);
+  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const allowed = isOwner || perms.includes("reports.view");
   if (!allowed) {
     return { authorized: false, error: "Unauthorized" };
   }
 
-  // Check if user has global school admin or audit privileges
   const canViewAll =
-    (await hasPermission("settings.school.update", profile.school_id)) ||
-    (await hasPermission("audit.view", profile.school_id));
-
-  const scopedDepartmentId = canViewAll ? null : profile.department_id;
+    isOwner || perms.includes("settings.school.update") || perms.includes("audit.view");
 
   return {
     authorized: true,
     profile,
-    schoolId: profile.school_id,
-    scopedDepartmentId,
+    schoolId: school.id,
+    scopedDepartmentId: canViewAll ? null : profile.department_id,
   };
 }
