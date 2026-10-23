@@ -7,6 +7,8 @@ export { CircularTargetBadges } from "./CircularTargetBadges";
 export { CircularRowActions } from "./CircularRowActions";
 export { CircularFileUpload } from "./CircularFileUpload";
 export { CircularAttachmentsList } from "./CircularAttachmentsList";
+export { CircularAttachmentItem } from "./CircularAttachmentItem";
+export { CircularAttachmentActions } from "./CircularAttachmentActions";
 export { CircularDeleteDialog } from "./CircularDeleteDialog";
 export { CircularDetailActions } from "./CircularDetailActions";
 export { CircularDetailMetaGrid } from "./CircularDetailMetaGrid";

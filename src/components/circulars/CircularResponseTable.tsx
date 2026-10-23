@@ -24,6 +24,15 @@ export function CircularResponseTable({ responses }: { responses: CircularRespon
     );
   }
 
+  const statusLabels: Record<string, string> = {
+    pending: t("pending"),
+    acknowledged: t("acknowledged"),
+    approved: t("approved"),
+    rejected: t("rejected"),
+    completed: t("completed"),
+    not_applicable: t("notApplicable"),
+  };
+
   return (
     <div className="rounded-lg border border-border bg-card">
       <Table>
@@ -56,7 +65,7 @@ export function CircularResponseTable({ responses }: { responses: CircularRespon
                           : "secondary"
                     }
                   >
-                    {res.status}
+                    {statusLabels[res.status] ?? res.status}
                   </Badge>
                 </TableCell>
                 <TableCell className="max-w-xs truncate text-xs text-muted-foreground">

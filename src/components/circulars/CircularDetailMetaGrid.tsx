@@ -16,6 +16,14 @@ export function CircularDetailMetaGrid({
   const formattedDueDate = formatCircularDate(dueAt, locale);
   const formattedPublishDate = formatCircularDate(publishedAt, locale);
 
+  const responseTypeLabels: Record<string, string> = {
+    acknowledgement: t("responseTypeAck"),
+    approval: t("responseTypeApproval"),
+    task: t("responseTypeTask"),
+  };
+
+  const responseTypeLabel = responseTypeLabels[responseType] ?? responseType;
+
   return (
     <div className="grid grid-cols-1 gap-4 rounded-lg bg-muted/40 p-4 text-xs sm:grid-cols-3">
       <div>
@@ -32,7 +40,7 @@ export function CircularDetailMetaGrid({
       </div>
       <div>
         <span className="text-muted-foreground">{t("responseType")}: </span>
-        <span className="font-medium text-foreground">{responseType}</span>
+        <span className="font-medium text-foreground">{responseTypeLabel}</span>
       </div>
     </div>
   );

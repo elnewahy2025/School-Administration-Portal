@@ -49,7 +49,7 @@ export function CircularDetailCard({
             <div className="flex flex-wrap gap-1.5">
               {circular.targets.map((tgt) => (
                 <Badge key={tgt.id} variant="secondary">
-                  {tgt.department_name ?? tgt.role_key ?? "All"}
+                  {tgt.department_name ?? tgt.role_key ?? t("allDepartments")}
                 </Badge>
               ))}
             </div>

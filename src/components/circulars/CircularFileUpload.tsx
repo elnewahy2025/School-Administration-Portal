@@ -52,7 +52,7 @@ export function CircularFileUpload() {
               <div className="flex items-center gap-2 truncate">
                 <FileTextIcon className="size-4 shrink-0 text-primary" />
                 <span className="truncate font-medium text-foreground">{file.name}</span>
-                <span className="shrink-0 text-muted-foreground">
+                <span className="shrink-0 font-mono text-muted-foreground" dir="ltr">
                   ({(file.size / (1024 * 1024)).toFixed(2)} MB)
                 </span>
               </div>
@@ -60,7 +60,7 @@ export function CircularFileUpload() {
                 type="button"
                 onClick={() => removeFile(idx)}
                 className="p-1 text-muted-foreground hover:text-destructive"
-                aria-label="Remove file"
+                aria-label={t("delete")}
               >
                 <XIcon className="size-3.5" />
               </button>

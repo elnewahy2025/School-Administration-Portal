@@ -40,20 +40,14 @@ export function CreateCircularForm({ departments }: { departments: DepartmentRow
     >
       <div className="space-y-2">
         <Label htmlFor="title">{t("circularTitle")}</Label>
-        <Input id="title" name="title" required placeholder="عنوان التعميم..." />
+        <Input id="title" name="title" required placeholder={t("titlePlaceholder")} />
       </div>
 
       <CircularMetaFields />
 
       <div className="space-y-2">
         <Label htmlFor="body">{t("circularBody")}</Label>
-        <Textarea
-          id="body"
-          name="body"
-          required
-          rows={6}
-          placeholder="تفاصيل التعميم والتعليمات..."
-        />
+        <Textarea id="body" name="body" required rows={6} placeholder={t("bodyPlaceholder")} />
       </div>
 
       <DepartmentTargetPicker departments={departments} label={t("targetedDepartments")} />

@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseServerClient, createSupabaseAdminClient } from "@/lib/supabase";
 import type { CircularAttachmentRow } from "./types";
 
 export async function getCircularAttachments(circularId: string): Promise<CircularAttachmentRow[]> {
@@ -13,11 +13,12 @@ export async function getCircularAttachments(circularId: string): Promise<Circul
     return [];
   }
 
+  const adminClient = createSupabaseAdminClient();
   const items: CircularAttachmentRow[] = [];
   for (const item of data) {
-    const { data: signed } = await supabase.storage
+    const { data: signed } = await adminClient.storage
       .from("circular-attachments")
-      .createSignedUrl(item.path, 3600);
+      .createSignedUrl(item.path, 86400);
 
     items.push({
       ...(item as CircularAttachmentRow),
