@@ -25,5 +25,46 @@
     "claimOwner": "Claim owner role",
     "claimed": "You are now the platform owner.",
     "claimError": "Claim failed."
+  },
+  "nav": {
+    "portal": "Admin Portal",
+    "dashboard": "Dashboard",
+    "circulars": "Circulars & Tasks",
+    "maintenance": "Maintenance",
+    "calendar": "Calendar",
+    "reports": "Reports",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage school details, departments, facilities, and users",
+    "school": "School Profile",
+    "departments": "Departments",
+    "locations": "Locations & Facilities",
+    "users": "Users & Roles",
+    "audit": "Audit Logs",
+    "platform": "Platform Settings"
+  },
+  "common": {
+    "save": "Save",
+    "saved": "Saved successfully",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Add New",
+    "search": "Search...",
+    "status": "Status",
+    "actions": "Actions",
+    "loading": "Loading...",
+    "noData": "No records found",
+    "active": "Active",
+    "inactive": "Deactivated",
+    "language": "Language",
+    "arabic": "العربية",
+    "english": "English",
+    "profile": "Profile"
   }
 }
