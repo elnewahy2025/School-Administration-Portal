@@ -35,9 +35,11 @@ export function AppUserMenu({ profile }: { profile: ProfileRow | null }) {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel className="font-normal">
-          <AppUserLabel profile={profile} />
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-normal">
+            <AppUserLabel profile={profile} />
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <form action={logoutAction} className="w-full">
