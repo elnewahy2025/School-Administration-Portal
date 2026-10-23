@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+/test-results
+/playwright-report
+/blob-report
+/.playwright
 
 # next.js
 /.next/
@@ -46,3 +50,4 @@ supabase/.temp/
 
 # Template is committed; real values live only in .env.local
 !.env.example
+supabase/.branches/

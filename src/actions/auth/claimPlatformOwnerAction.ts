@@ -1,5 +1,6 @@
 "use server";
 
+import { hasAnyPlatformOwner } from "@/lib/auth/hasAnyPlatformOwner";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 
 export async function claimPlatformOwnerAction(): Promise<{
@@ -11,12 +12,13 @@ export async function claimPlatformOwnerAction(): Promise<{
   if (!userData.user) return { ok: false, error: "unauthenticated" };
 
   const admin = createSupabaseAdminClient();
-  const { count } = await admin
-    .from("user_role_assignments")
-    .select("id", { count: "exact", head: true })
-    .eq("roles.key", "owner")
-    .is("school_id", null);
-  if ((count ?? 0) > 0) return { ok: false, error: "owner-exists" };
+  try {
+    // The broken query this replaces always reported `false`, letting any
+    // authenticated user self-provision a profile after bootstrap (finding C1).
+    if (await hasAnyPlatformOwner()) return { ok: false, error: "owner-exists" };
+  } catch {
+    return { ok: false, error: "check" };
+  }
 
   const email = userData.user.email ?? "";
   const fallbackName = email.split("@")[0] || "Owner";

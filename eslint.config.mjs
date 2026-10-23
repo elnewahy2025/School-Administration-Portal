@@ -67,7 +67,9 @@ const eslintConfig = defineConfig([
     plugins: { d11: { rules: { "single-export": singleExportRule } } },
     rules: {
       "d11/single-export": "error",
-      "max-lines": ["error", { max: 150, skipBlankLines: true, skipComments: true }],
+      // RULE #1 (AGENTS.md): one function per file, no big files. A file may
+      // stay as one unit up to ~300 lines (e.g. a component with its sub-parts).
+      "max-lines": ["error", { max: 300, skipBlankLines: true, skipComments: true }],
       "max-lines-per-function": ["error", { max: 80, skipBlankLines: true, skipComments: true }],
       complexity: ["error", 10],
     },

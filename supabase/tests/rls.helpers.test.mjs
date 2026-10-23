@@ -116,6 +116,7 @@ export async function seedFixture(admin) {
   const roleIds = Object.fromEntries(roles.map((r) => [r.key, r.id]));
 
   const defs = [
+    ["owner", "battery-owner", "owner", null, null],
     ["admin", "battery-admin", "school_admin", school.id, null],
     ["head", "battery-head", "department_head", school.id, d1.id],
     ["staff1", "battery-staff1", "staff", school.id, d1.id],

@@ -7,12 +7,12 @@
 
 ## 1. Current state
 
-| Item            | Status                                                                                                                |
-| --------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Repository      | Empty — no code yet. Greenfield; no legacy constraints.                                                               |
-| Requirements    | Complete (companion doc §1–§13, incl. test strategy and Definition of Done).                                          |
-| Stack decision  | Next.js + TypeScript + Tailwind on Vercel; Supabase (PostgreSQL, Auth, Storage, RLS). Confirmed per companion doc §2. |
-| Blocking inputs | School sign-off on §2 decisions; Supabase + Vercel accounts for environments.                                         |
+| Item            | Status                                                                                                                                                                                                         |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repository      | **Active.** Next.js 16 app (App Router, strict TS, Tailwind 4, `next-intl` ar/en), 26 Supabase migrations, 81-check RLS battery, unit + e2e tests, CI. See `INSPECTION_REPORT.md` for the current audit state. |
+| Requirements    | Complete (companion doc §1–§13, incl. test strategy and Definition of Done).                                                                                                                                   |
+| Stack decision  | Next.js + TypeScript + Tailwind on Vercel; Supabase (PostgreSQL, Auth, Storage, RLS). Confirmed per companion doc §2.                                                                                          |
+| Blocking inputs | School sign-off on §2 decisions; Supabase + Vercel accounts for environments.                                                                                                                                  |
 
 The root-level `school_administration_implementation_plan.md` is a byte-identical copy of the attached original (SHA-256 verified) — treat repo root as the canonical home.
 
@@ -104,7 +104,7 @@ The codebase is strictly modular: **every function lives in its own file. No big
 - Same rule for React components (one component per file), Zod schemas (one schema per file), constants, and helpers.
 - Shared logic is extracted until each file does exactly one thing: `lib/<domain>/<verb><Noun>.ts`.
 - Every folder exposes a barrel `index.ts`; imports go through barrels or the exact file. Tests follow the same rule — one unit under test per test file.
-- Hard caps enforced by ESLint and CI (build fails on violation): `max-lines` 150, `max-lines-per-function` 80, `complexity` ≤ 10, single export per file.
+- Hard caps enforced by ESLint and CI (build fails on violation): `max-lines` ~300 — a file may remain **one cohesive unit** (a component and its tightly-coupled sub-parts, e.g. a shadcn primitive) up to that bound, `max-lines-per-function` 80, `complexity` ≤ 10, single export per file.
 - Allowed exceptions: barrel files, type-only files, generated code, SQL migrations, config files.
 
 Example granularity:

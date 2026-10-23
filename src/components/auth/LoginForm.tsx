@@ -42,7 +42,11 @@ export function LoginForm() {
           className="h-9 rounded-md border border-input bg-background px-3"
         />
       </label>
-      {state.error ? <p className="text-sm text-destructive">{t("error")}</p> : null}
+      {state.error ? (
+        <p className="text-sm text-destructive">
+          {state.error === "disabled" ? t("disabled") : t("error")}
+        </p>
+      ) : null}
       <button
         type="submit"
         disabled={pending}

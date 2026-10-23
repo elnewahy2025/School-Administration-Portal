@@ -13,7 +13,8 @@
     "email": "Email",
     "passwordLabel": "Password",
     "signIn": "Sign in",
-    "error": "Invalid email or password"
+    "error": "Invalid email or password",
+    "disabled": "This account is deactivated. Contact the school administration."
   },
   "dashboard": {
     "title": "Dashboard",
