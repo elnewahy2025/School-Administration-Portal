@@ -2,7 +2,20 @@
   "home": {
     "title": "School Administration Portal",
     "subtitle": "Circulars, maintenance requests, school calendar, and reports — in one place",
-    "comingSoon": "Core modules are being built according to the approved implementation plan."
+    "vision": "Our Vision",
+    "mission": "Our Mission",
+    "achievements": "School Achievements",
+    "publicCalendar": "School Events & Activities",
+    "publicCalendarDesc": "Stay informed with key public dates, academic events, and school activities.",
+    "portalSignIn": "Staff & Portal Access",
+    "portalSignInDesc": "Authorized staff, department heads, and administrators may sign in to the administrative portal.",
+    "contact": "Contact & Location",
+    "phone": "Phone",
+    "email": "Email",
+    "website": "Official Website",
+    "address": "Address",
+    "learnMore": "Explore Portal",
+    "noPublicEvents": "No upcoming public events scheduled currently."
   },
   "theme": {
     "toDark": "Switch to dark mode",
@@ -206,6 +219,56 @@
     "reportPhoto": "Initial Report Photo",
     "evidencePhoto": "Completion Evidence",
     "backToList": "Back to Maintenance"
+  },
+  "calendar": {
+    "title": "School Calendar",
+    "description": "Manage school activities, academic deadlines, exams, and holidays.",
+    "newEvent": "New Event",
+    "newEventDesc": "Schedule a new event, activity, or academic deadline",
+    "titleAr": "Event Title (Arabic)",
+    "titleEn": "Event Title (English)",
+    "eventDescription": "Description",
+    "category": "Category",
+    "startsAt": "Starts At",
+    "endsAt": "Ends At",
+    "allDay": "All Day Event",
+    "visibility": "Visibility",
+    "location": "Location / Venue",
+    "bannerImage": "Banner Image (Optional)",
+    "bannerHelp": "JPG, PNG, WebP, or SVG up to 5MB",
+    "status": "Status",
+    "noEvents": "No events found in this view",
+    "monthView": "Month View",
+    "listView": "List View",
+    "today": "Today",
+    "creator": "Organizer",
+    "allDayBadge": "All Day",
+    "categories": {
+      "event": "General Event",
+      "academic": "Academic Schedule",
+      "exam": "Exams & Testing",
+      "holiday": "School Holiday",
+      "meeting": "Administrative Meeting",
+      "activity": "Student Activity",
+      "other": "Other"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "published": "Published",
+      "cancelled": "Cancelled",
+      "archived": "Archived"
+    },
+    "visibilities": {
+      "public": "Public (School Website)",
+      "internal": "Internal (School Portal Only)"
+    },
+    "actions": {
+      "publish": "Publish Event",
+      "cancel": "Cancel Event",
+      "archive": "Archive",
+      "edit": "Edit Event"
+    },
+    "backToList": "Back to Calendar"
   },
   "common": {
     "save": "Save",
