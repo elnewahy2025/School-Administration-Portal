@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getCircularById } from "@/lib/circulars/getCircularById";
 import { getCircularResponses } from "@/lib/circulars/getCircularResponses";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { canRespondToCircular } from "@/lib/circulars/canRespondToCircular";
+import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import {
   CircularDetailCard,
   CircularResponseBox,
@@ -22,26 +23,21 @@ export default async function CircularDetailPage({
   setRequestLocale(locale);
   const t = await getTranslations("circulars");
 
-  const [profile, circular, responses] = await Promise.all([
+  const [profile, circular, responses, perms] = await Promise.all([
     getCurrentProfile(),
     getCircularById(id),
     getCircularResponses(id).catch(() => []),
+    getEffectivePermissions().catch((): string[] => []),
   ]);
 
   if (!circular) {
     notFound();
   }
 
-  const canPublish = profile?.school_id
-    ? await hasPermission("circular.publish", profile.school_id).catch(() => false)
-    : false;
-
-  const isTargeted =
-    circular.targets.length === 0 ||
-    circular.targets.some((tgt) => tgt.department_id === profile?.department_id);
-
-  const canRespond =
-    circular.status === "published" && isTargeted && Boolean(profile?.department_id);
+  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const canPublish = isOwner || perms.includes("circular.publish");
+  const canManage = canPublish || perms.includes("circular.create");
+  const canRespond = canRespondToCircular(circular, profile);
 
   const userDeptResponse = responses.find((res) => res.department_id === profile?.department_id);
 
@@ -56,7 +52,7 @@ export default async function CircularDetailPage({
         <span className="text-sm font-medium text-muted-foreground">{t("backToList")}</span>
       </div>
 
-      <CircularDetailCard circular={circular} canPublish={canPublish} />
+      <CircularDetailCard circular={circular} canPublish={canPublish} canManage={canManage} />
 
       {canRespond ? (
         <CircularResponseBox

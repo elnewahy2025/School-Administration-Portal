@@ -2,22 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
 import { parseCircularFormData } from "@/lib/validation/parseCircularFormData";
 import { insertCircularTargets } from "@/lib/circulars/insertCircularTargets";
 import { createCircularRecord } from "@/lib/circulars/createCircularRecord";
+import { handleCircularDocumentsUpload } from "@/lib/circulars/handleCircularDocumentsUpload";
+import { assertCanManageCirculars } from "@/lib/circulars/assertCanManageCirculars";
 
 export async function createCircularAction(formData: FormData) {
-  const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
-    return { success: false, error: "No school associated with profile" };
-  }
-
-  const allowed = await hasPermission("circular.create", profile.school_id);
-  if (!allowed) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await assertCanManageCirculars();
+  if (!auth.authorized) return { success: false, error: auth.error };
 
   const { title, body, priority, responseType, dueAt, departmentIds } =
     parseCircularFormData(formData);
@@ -28,20 +21,26 @@ export async function createCircularAction(formData: FormData) {
 
   const supabase = await createSupabaseServerClient();
   const res = await createCircularRecord(supabase, {
-    schoolId: profile.school_id,
+    schoolId: auth.schoolId,
     title,
     body,
     priority,
     responseType,
     dueAt,
-    createdBy: profile.id,
+    createdBy: auth.profileId,
   });
 
   if (res.error || !res.circularId) {
     return { success: false, error: res.error || "Failed to create circular" };
   }
 
-  await insertCircularTargets(supabase, res.circularId, profile.school_id, departmentIds);
+  await insertCircularTargets(supabase, res.circularId, auth.schoolId, departmentIds);
+  await handleCircularDocumentsUpload(supabase, {
+    formData,
+    schoolId: auth.schoolId,
+    circularId: res.circularId,
+    uploadedBy: auth.profileId,
+  });
 
   revalidatePath("/[locale]/circulars", "page");
   return { success: true, circularId: res.circularId };

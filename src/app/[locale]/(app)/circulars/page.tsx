@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { CircularList } from "@/components/circulars";
 
 export default async function CircularsPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -13,8 +14,9 @@ export default async function CircularsPage({ params }: { params: Promise<{ loca
   const t = await getTranslations("circulars");
 
   const profile = await getCurrentProfile();
-  const [circulars, isOwner, hasPerm] = await Promise.all([
+  const [circulars, departments, isOwner, hasPerm] = await Promise.all([
     getSchoolCirculars(profile?.school_id),
+    getSchoolDepartments(profile?.school_id),
     hasPermission("settings.platform.update")
       .catch(() => false)
       .then(async (v) => v || (await hasPermission("roles.manage").catch(() => false))),
@@ -41,7 +43,7 @@ export default async function CircularsPage({ params }: { params: Promise<{ loca
         ) : null}
       </div>
 
-      <CircularList circulars={circulars} />
+      <CircularList circulars={circulars} departments={departments} canManage={canCreate} />
     </div>
   );
 }

@@ -14,6 +14,8 @@ export function parseCircularFormData(formData: FormData) {
     priority: (get("priority") || "normal") as CircularPriority,
     responseType: (get("response_type") || "acknowledgement") as CircularResponseType,
     dueAt: get("due_at") || null,
+    publishAt: get("publish_at") || null,
+    status: get("status") || undefined,
     departmentIds,
   };
 }

@@ -1,40 +1,58 @@
+"use client";
+
+import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { CircularTableRow } from "./CircularTableRow";
+import { CircularFilters } from "./CircularFilters";
+import { CircularTable } from "./CircularTable";
+import { filterCirculars } from "@/lib/circulars/filterCirculars";
+import { sortCirculars, type CircularSortField } from "@/lib/circulars/sortCirculars";
 import type { CircularRow } from "@/lib/circulars/types";
+import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
-export function CircularList({ circulars }: { circulars: CircularRow[] }) {
+export function CircularList({
+  circulars,
+  departments = [],
+  canManage = false,
+}: {
+  circulars: CircularRow[];
+  departments?: DepartmentRow[];
+  canManage?: boolean;
+}) {
   const t = useTranslations("circulars");
-  const tCommon = useTranslations("common");
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("all");
+  const [priority, setPriority] = useState("all");
+  const [departmentId, setDepartmentId] = useState("all");
+  const [sortBy, setSortBy] = useState<CircularSortField>("publish_at_desc");
 
-  if (circulars.length === 0) {
-    return (
-      <div className="rounded-lg border border-dashed border-border p-12 text-center text-muted-foreground">
-        {t("noCirculars")}
-      </div>
-    );
-  }
+  const filteredAndSorted = useMemo(() => {
+    const filtered = filterCirculars(circulars, { search, status, priority, departmentId });
+    return sortCirculars(filtered, sortBy);
+  }, [circulars, search, status, priority, departmentId, sortBy]);
 
   return (
-    <div className="rounded-lg border border-border bg-card">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-32">{t("refNumber")}</TableHead>
-            <TableHead>{t("circularTitle")}</TableHead>
-            <TableHead className="w-24">{t("priority")}</TableHead>
-            <TableHead className="w-28">{t("status")}</TableHead>
-            <TableHead className="w-36">{t("responseType")}</TableHead>
-            <TableHead className="w-32">{t("dueDate")}</TableHead>
-            <TableHead className="w-24 text-end">{tCommon("actions")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {circulars.map((circ) => (
-            <CircularTableRow key={circ.id} circular={circ} viewLabel={tCommon("actions")} />
-          ))}
-        </TableBody>
-      </Table>
+    <div className="space-y-4">
+      <CircularFilters
+        search={search}
+        onSearchChange={setSearch}
+        status={status}
+        onStatusChange={setStatus}
+        priority={priority}
+        onPriorityChange={setPriority}
+        departmentId={departmentId}
+        onDepartmentChange={setDepartmentId}
+        sortBy={sortBy}
+        onSortByChange={setSortBy}
+        departments={departments}
+      />
+
+      {filteredAndSorted.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center text-muted-foreground">
+          {circulars.length === 0 ? t("noCirculars") : t("noMatchingCirculars")}
+        </div>
+      ) : (
+        <CircularTable circulars={filteredAndSorted} canManage={canManage} />
+      )}
     </div>
   );
 }

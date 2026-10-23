@@ -25,14 +25,29 @@ export type CircularRow = {
   created_by: string;
   closed_at: string | null;
   created_at: string;
+  targets?: CircularTargetRow[];
+  attachments?: CircularAttachmentRow[];
+};
+
+export type CircularAttachmentRow = {
+  id: string;
+  circular_id: string;
+  school_id: string;
+  path: string;
+  mime: string | null;
+  size_bytes: number | null;
+  uploaded_by: string;
+  created_at: string;
+  public_url?: string;
 };
 
 export type CircularTargetRow = {
   id: string;
-  circular_id: string;
+  circular_id?: string;
   department_id: string | null;
   department_name?: string | null;
   role_key: string | null;
+  departments?: { id?: string; name_ar: string; name_en: string } | null;
 };
 
 export type CircularResponseRow = {

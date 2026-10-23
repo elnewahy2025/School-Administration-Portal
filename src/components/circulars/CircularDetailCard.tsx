@@ -3,22 +3,21 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CircularPriorityBadge } from "./CircularPriorityBadge";
 import { CircularStatusBadge } from "./CircularStatusBadge";
-import { CircularPublishButton } from "./CircularPublishButton";
+import { CircularDetailActions } from "./CircularDetailActions";
+import { CircularAttachmentsList } from "./CircularAttachmentsList";
+import { CircularDetailMetaGrid } from "./CircularDetailMetaGrid";
 import type { CircularDetail } from "@/lib/circulars/getCircularById";
 
 export function CircularDetailCard({
   circular,
   canPublish,
+  canManage = false,
 }: {
   circular: CircularDetail;
   canPublish: boolean;
+  canManage?: boolean;
 }) {
   const t = useTranslations("circulars");
-
-  const formattedDueDate = circular.due_at ? new Date(circular.due_at).toLocaleDateString() : "—";
-  const formattedPublishDate = circular.publish_at
-    ? new Date(circular.publish_at).toLocaleDateString()
-    : "—";
 
   return (
     <Card className="border border-border bg-card">
@@ -33,25 +32,14 @@ export function CircularDetailCard({
           </div>
           <CardTitle className="text-xl font-bold">{circular.title}</CardTitle>
         </div>
-        {circular.status === "draft" && canPublish ? (
-          <CircularPublishButton circularId={circular.id} />
-        ) : null}
+        <CircularDetailActions circular={circular} canPublish={canPublish} canManage={canManage} />
       </CardHeader>
       <CardContent className="space-y-6 pt-6">
-        <div className="grid grid-cols-1 gap-4 rounded-lg bg-muted/40 p-4 text-xs sm:grid-cols-3">
-          <div>
-            <span className="text-muted-foreground">{t("publishedAt")}: </span>
-            <span className="font-medium text-foreground">{formattedPublishDate}</span>
-          </div>
-          <div>
-            <span className="text-muted-foreground">{t("dueDate")}: </span>
-            <span className="font-medium text-foreground">{formattedDueDate}</span>
-          </div>
-          <div>
-            <span className="text-muted-foreground">{t("responseType")}: </span>
-            <span className="font-medium text-foreground">{circular.response_type}</span>
-          </div>
-        </div>
+        <CircularDetailMetaGrid
+          publishedAt={circular.publish_at}
+          dueAt={circular.due_at}
+          responseType={circular.response_type}
+        />
 
         {circular.targets.length > 0 ? (
           <div className="space-y-2">
@@ -76,6 +64,14 @@ export function CircularDetailCard({
             {circular.body}
           </div>
         </div>
+
+        {circular.attachments && circular.attachments.length > 0 ? (
+          <CircularAttachmentsList
+            attachments={circular.attachments}
+            circularId={circular.id}
+            canManage={canManage}
+          />
+        ) : null}
       </CardContent>
     </Card>
   );

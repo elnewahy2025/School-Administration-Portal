@@ -1,8 +1,11 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
-import type { CircularRow, CircularTargetRow } from "./types";
+import type { CircularRow, CircularTargetRow, CircularAttachmentRow } from "./types";
+
+import { getCircularAttachments } from "./getCircularAttachments";
 
 export type CircularDetail = CircularRow & {
   targets: CircularTargetRow[];
+  attachments: CircularAttachmentRow[];
 };
 
 type TargetJoinResult = {
@@ -15,12 +18,13 @@ type TargetJoinResult = {
 
 export async function getCircularById(circularId: string): Promise<CircularDetail | null> {
   const supabase = await createSupabaseServerClient();
-  const [{ data: circular, error: circError }, { data: targets }] = await Promise.all([
+  const [{ data: circular, error: circError }, { data: targets }, attachments] = await Promise.all([
     supabase.from("circulars").select("*").eq("id", circularId).maybeSingle(),
     supabase
       .from("circular_targets")
       .select("id, circular_id, department_id, role_key, departments(name_ar, name_en)")
       .eq("circular_id", circularId),
+    getCircularAttachments(circularId).catch(() => []),
   ]);
 
   if (circError || !circular) return null;
@@ -37,5 +41,6 @@ export async function getCircularById(circularId: string): Promise<CircularDetai
   return {
     ...(circular as CircularRow),
     targets: mappedTargets,
+    attachments,
   };
 }

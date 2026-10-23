@@ -4,10 +4,14 @@ import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 export function DepartmentTargetPicker({
   departments,
   label,
+  initialSelectedIds,
 }: {
   departments: DepartmentRow[];
   label: string;
+  initialSelectedIds?: string[];
 }) {
+  const selectedSet = new Set(initialSelectedIds ?? []);
+
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
@@ -21,6 +25,7 @@ export function DepartmentTargetPicker({
               type="checkbox"
               name="department_ids"
               value={dept.id}
+              defaultChecked={selectedSet.has(dept.id)}
               className="rounded border-border text-primary focus:ring-primary"
             />
             <span className="truncate">{dept.name_ar}</span>

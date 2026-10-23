@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createCircularAction } from "@/actions/circulars/createCircularAction";
 import { DepartmentTargetPicker } from "./DepartmentTargetPicker";
 import { CircularMetaFields } from "./CircularMetaFields";
+import { CircularFileUpload } from "./CircularFileUpload";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function CreateCircularForm({ departments }: { departments: DepartmentRow[] }) {
@@ -56,6 +57,8 @@ export function CreateCircularForm({ departments }: { departments: DepartmentRow
       </div>
 
       <DepartmentTargetPicker departments={departments} label={t("targetedDepartments")} />
+
+      <CircularFileUpload />
 
       <div className="flex justify-end pt-2">
         <Button type="submit" disabled={isPending} className="gap-2">

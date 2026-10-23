@@ -1,27 +1,52 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { EyeIcon } from "lucide-react";
+import { PaperclipIcon } from "lucide-react";
 import { CircularPriorityBadge } from "./CircularPriorityBadge";
 import { CircularStatusBadge } from "./CircularStatusBadge";
+import { CircularTargetBadges } from "./CircularTargetBadges";
+import { CircularRowActions } from "./CircularRowActions";
 import type { CircularRow } from "@/lib/circulars/types";
 
 export function CircularTableRow({
   circular,
-  viewLabel,
+  canManage,
 }: {
   circular: CircularRow;
-  viewLabel: string;
+  canManage: boolean;
 }) {
+  const t = useTranslations("circulars");
+  const formattedPublishDate = circular.publish_at
+    ? new Date(circular.publish_at).toLocaleDateString()
+    : circular.created_at
+      ? new Date(circular.created_at).toLocaleDateString()
+      : "—";
+
   const formattedDueDate = circular.due_at ? new Date(circular.due_at).toLocaleDateString() : "—";
+  const attachmentsCount = circular.attachments?.length ?? 0;
 
   return (
-    <TableRow>
+    <TableRow className="group hover:bg-muted/30">
       <TableCell className="font-mono text-xs font-semibold text-foreground">
-        {circular.ref_number}
+        <Link href={`/circulars/${circular.id}`} className="hover:underline">
+          {circular.ref_number}
+        </Link>
       </TableCell>
-      <TableCell className="max-w-xs truncate font-medium text-foreground">
-        {circular.title}
+      <TableCell className="max-w-xs font-medium text-foreground">
+        <div className="flex items-center gap-1.5 truncate">
+          <Link href={`/circulars/${circular.id}`} className="truncate hover:underline">
+            {circular.title}
+          </Link>
+          {attachmentsCount > 0 ? (
+            <span
+              className="inline-flex items-center gap-0.5 rounded-xs bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
+              title={`${attachmentsCount} ${t("attachments")}`}
+            >
+              <PaperclipIcon className="size-3" />
+              <span>{attachmentsCount}</span>
+            </span>
+          ) : null}
+        </div>
       </TableCell>
       <TableCell>
         <CircularPriorityBadge priority={circular.priority} />
@@ -29,15 +54,17 @@ export function CircularTableRow({
       <TableCell>
         <CircularStatusBadge status={circular.status} />
       </TableCell>
-      <TableCell className="text-xs text-muted-foreground">{circular.response_type}</TableCell>
-      <TableCell className="font-mono text-xs text-muted-foreground">{formattedDueDate}</TableCell>
+      <TableCell>
+        <CircularTargetBadges targets={circular.targets} />
+      </TableCell>
+      <TableCell className="font-mono text-xs whitespace-nowrap text-muted-foreground">
+        {formattedPublishDate}
+      </TableCell>
+      <TableCell className="font-mono text-xs whitespace-nowrap text-muted-foreground">
+        {formattedDueDate}
+      </TableCell>
       <TableCell className="text-end">
-        <Link href={`/circulars/${circular.id}`}>
-          <Button variant="ghost" size="sm" className="gap-1 text-xs">
-            <EyeIcon className="size-3.5" />
-            <span>{viewLabel}</span>
-          </Button>
-        </Link>
+        <CircularRowActions circularId={circular.id} canManage={canManage} />
       </TableCell>
     </TableRow>
   );
