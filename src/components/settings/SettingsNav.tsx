@@ -2,14 +2,7 @@
 
 import { usePathname, Link } from "@/i18n";
 import { useTranslations } from "next-intl";
-import {
-  SchoolIcon,
-  Building2Icon,
-  MapPinIcon,
-  UsersIcon,
-  ShieldAlertIcon,
-  LayoutGridIcon,
-} from "lucide-react";
+import { SchoolIcon, Building2Icon, MapPinIcon, UsersIcon, ShieldAlertIcon } from "lucide-react";
 import { cn } from "cn";
 
 export function SettingsNav() {
@@ -17,7 +10,6 @@ export function SettingsNav() {
   const t = useTranslations("settings");
 
   const tabs = [
-    { href: "/settings", label: t("title"), icon: LayoutGridIcon, exact: true },
     { href: "/settings/school", label: t("school"), icon: SchoolIcon },
     { href: "/settings/departments", label: t("departments"), icon: Building2Icon },
     { href: "/settings/locations", label: t("locations"), icon: MapPinIcon },
@@ -29,7 +21,7 @@ export function SettingsNav() {
     <div className="flex overflow-x-auto border-b border-border pb-px">
       <div className="flex min-w-full gap-2">
         {tabs.map((tab) => {
-          const isActive = tab.exact ? pathname === tab.href : pathname.startsWith(tab.href);
+          const isActive = pathname.startsWith(tab.href);
           const Icon = tab.icon;
 
           return (

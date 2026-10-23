@@ -17,6 +17,7 @@ dated entry below when that happens.
 | D9  | Deletion policy    | Soft-delete/archive for circulars, requests, calendar events; deactivate (never delete) users                                                                                 |
 | D10 | Theme              | Dark mode follows system by default; manual light/dark/system toggle, persisted; class-based Tailwind                                                                         |
 | D11 | Code modularity    | **Non-negotiable:** one function per file, file named after the function, size caps enforced by CI (a cohesive component + its sub-parts may share one file up to ~300 lines) |
+| D12 | School Achievements | Tabbed under `/calendar`; records departmental awards & milestones with public/internal visibility, department attribution, and interactive detail modal |
 
 ## Decision log
 
@@ -24,3 +25,5 @@ dated entry below when that happens.
   primitive or a component with its tightly-coupled sub-parts can stay one unit; anything past ~300
   lines, or a genuinely unrelated function bundled into an existing file, must be split. The rule
   lives at the top of [`AGENTS.md`](../AGENTS.md) and in `eslint.config.mjs`.
+- **D12 added (School Achievements Registration).** Placed under `/calendar` with two distinct tabs ("Events" & "School Achievements"). Department heads and calendar managers can register milestones attributed to specific departments with optional certification photos, bilingual titles, and rich descriptions. Interactive click-to-view detail dialogs and real-time category/department/keyword filters ensure seamless navigation.
+

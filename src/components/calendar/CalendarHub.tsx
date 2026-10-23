@@ -3,29 +3,29 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { PlusIcon, CalendarDaysIcon, ListIcon } from "lucide-react";
+import { PlusIcon, CalendarIcon, AwardIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CalendarMonthView } from "./CalendarMonthView";
-import { CalendarListView } from "./CalendarListView";
-import type { CalendarEventRow, CalendarCategory } from "@/lib/calendar/types";
+import { CalendarEventsView } from "./CalendarEventsView";
+import { SchoolAchievementsHub } from "@/components/achievements/SchoolAchievementsHub";
+import type { CalendarEventRow } from "@/lib/calendar/types";
+import type { SchoolAchievementRow } from "@/lib/achievements/types";
+import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function CalendarHub({
   events,
+  achievements,
+  departments,
   canManage,
 }: {
   events: CalendarEventRow[];
+  achievements: SchoolAchievementRow[];
+  departments: DepartmentRow[];
   canManage: boolean;
 }) {
   const t = useTranslations("calendar");
+  const tAch = useTranslations("achievements");
   const locale = useLocale();
-
-  const [viewMode, setViewMode] = useState<"month" | "list">("month");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
-  const filteredEvents = events.filter((ev) => {
-    if (selectedCategory === "all") return true;
-    return ev.category === selectedCategory;
-  });
+  const [activeTab, setActiveTab] = useState<"events" | "achievements">("events");
 
   return (
     <div className="space-y-6">
@@ -34,7 +34,7 @@ export function CalendarHub({
           <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
-        {canManage && (
+        {canManage && activeTab === "events" && (
           <Link href={`/${locale}/calendar/new`}>
             <Button className="gap-2">
               <PlusIcon className="size-4" />
@@ -44,46 +44,41 @@ export function CalendarHub({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1.5">
-          {["all", "academic", "exam", "holiday", "meeting", "event"].map((cat) => (
-            <Button
-              key={cat}
-              variant={selectedCategory === cat ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {cat === "all" ? t("title") : t(`categories.${cat as CalendarCategory}`)}
-            </Button>
-          ))}
-        </div>
-
-        <div className="flex items-center rounded-lg border border-border bg-muted/40 p-1">
-          <Button
-            variant={viewMode === "month" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => setViewMode("month")}
-            className="gap-1.5"
-          >
-            <CalendarDaysIcon className="size-4" />
-            <span>{t("monthView")}</span>
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "ghost"}
-            size="sm"
-            onClick={() => setViewMode("list")}
-            className="gap-1.5"
-          >
-            <ListIcon className="size-4" />
-            <span>{t("listView")}</span>
-          </Button>
-        </div>
+      <div className="flex items-center gap-2 border-b border-border pb-3">
+        <Button
+          variant={activeTab === "events" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setActiveTab("events")}
+          className="gap-2"
+        >
+          <CalendarIcon className="size-4" />
+          <span>{tAch("tabEvents")}</span>
+          <span className="py-0.2 rounded-full bg-background/20 px-1.5 text-[10px] font-bold">
+            {events.length}
+          </span>
+        </Button>
+        <Button
+          variant={activeTab === "achievements" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setActiveTab("achievements")}
+          className="gap-2"
+        >
+          <AwardIcon className="size-4" />
+          <span>{tAch("tabAchievements")}</span>
+          <span className="py-0.2 rounded-full bg-background/20 px-1.5 text-[10px] font-bold">
+            {achievements.length}
+          </span>
+        </Button>
       </div>
 
-      {viewMode === "month" ? (
-        <CalendarMonthView events={filteredEvents} />
+      {activeTab === "events" ? (
+        <CalendarEventsView events={events} canManage={canManage} />
       ) : (
-        <CalendarListView events={filteredEvents} canManage={canManage} />
+        <SchoolAchievementsHub
+          achievements={achievements}
+          departments={departments}
+          canManage={canManage}
+        />
       )}
     </div>
   );

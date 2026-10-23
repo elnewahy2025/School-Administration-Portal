@@ -46,7 +46,7 @@
    - Resolved tickets are reviewed by administration and marked `closed`.
    - If an issue recurs, administration can reopen the ticket (`reopened`) with a mandatory explanation.
 
-## 5. School Calendar & Public Showcase
+## 5. School Calendar & Achievements Showcase
 
 1. **Internal vs. Public Events** (`/calendar/new`):
    - **Internal**: Visible only to authenticated school staff (faculty meetings, internal exam schedules).
@@ -54,6 +54,11 @@
 2. **Event Management**:
    - Manage events across Month Grid and accessible List View.
    - Support for all-day events, specific timeframes, venues, and banner images.
+3. **School Achievements Registration ("تسجيل إنجازات المدرسة")** (`/calendar` -> Achievements tab):
+   - **Departmental Attribution**: Register awards, competition milestones, research excellence, and milestones attributed to specific departments.
+   - **Interactive Details**: Click any achievement card to view complete narrative, attributed department, date achieved, visibility, and recorder details.
+   - **Filtering & Search**: Search by Arabic/English title or description keywords, and filter by category and department.
+
 
 ## 6. Reports & Data Exports
 

@@ -7,6 +7,7 @@ export { CalendarListView } from "./CalendarListView";
 export { CalendarMonthDayCell } from "./CalendarMonthDayCell";
 export { CalendarMonthGrid } from "./CalendarMonthGrid";
 export { CalendarMonthView } from "./CalendarMonthView";
+export { CalendarEventsView } from "./CalendarEventsView";
 export { CalendarHub } from "./CalendarHub";
 export { CalendarCoreFields } from "./CalendarCoreFields";
 export { CalendarDateTimeFields } from "./CalendarDateTimeFields";
