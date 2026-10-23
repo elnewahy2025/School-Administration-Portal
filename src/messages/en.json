@@ -46,7 +46,38 @@
     "locations": "Locations & Facilities",
     "users": "Users & Roles",
     "audit": "Audit Logs",
-    "platform": "Platform Settings"
+    "platform": "Platform Settings",
+    "schoolDesc": "Basic school information, branding, and global policies",
+    "departmentsDesc": "Organizational hierarchy, departments, and staff allocation",
+    "locationsDesc": "Buildings, floors, and rooms for maintenance and events",
+    "usersDesc": "Staff accounts, role assignments, and active status",
+    "auditDesc": "Immutable audit log of all sensitive actions and access",
+    "nameAr": "School Name (Arabic)",
+    "nameEn": "School Name (English)",
+    "slug": "Slug",
+    "timezone": "Timezone",
+    "academicYear": "Academic Year",
+    "vision": "Vision",
+    "mission": "Mission",
+    "saveSchool": "Save Changes",
+    "deptNameAr": "Department Name (Arabic)",
+    "deptNameEn": "Department Name (English)",
+    "building": "Building",
+    "floor": "Floor",
+    "room": "Room / Hall",
+    "kind": "Facility Kind",
+    "kindRoom": "Classroom / Room",
+    "kindLab": "Laboratory",
+    "kindHall": "Hall / Auditorium",
+    "kindFacility": "Facility",
+    "kindOutdoor": "Outdoor Space",
+    "fullName": "Full Name",
+    "jobTitle": "Job Title",
+    "role": "Role",
+    "actor": "Actor",
+    "action": "Action",
+    "entity": "Entity",
+    "date": "Date & Time"
   },
   "common": {
     "save": "Save",
@@ -65,6 +96,7 @@
     "language": "Language",
     "arabic": "العربية",
     "english": "English",
-    "profile": "Profile"
+    "profile": "Profile",
+    "back": "Back"
   }
 }
