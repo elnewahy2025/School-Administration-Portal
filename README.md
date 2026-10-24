@@ -5,7 +5,7 @@ circulars and assignments, maintenance and service requests, school calendar
 and public information, settings, RBAC, audit history, notifications, and
 reports. Arabic-first RTL with English support.
 
-**Status: Core Features & Security Hardening Complete (WP1, WP2, WP3). Features live: Unified Calendar with Personalized Circulars, Full RBAC & Platform Owner Shielding, Scoped Circulars & Maintenance Workflows, Reports Access Segregation, and Settings Persistence. See [ROADMAP_AND_IMPLEMENTATION_STATUS.md](./ROADMAP_AND_IMPLEMENTATION_STATUS.md) for the active roadmap and status, [build_plan.md](./build_plan.md) for the engineering breakdown, and [`docs/decisions.md`](./docs/decisions.md) for locked architectural decisions.**
+**Status: Core Features & Security Hardening Complete (WP1, WP2, WP3). Features live: Unified Calendar with Personalized Circulars, Full RBAC & Platform Owner Shielding, Owner-Exclusive School Achievements Module, Multi-Criteria Reports & Analytics Filtering, Scoped Circulars & Maintenance Workflows, and Settings Persistence. See [ROADMAP_AND_IMPLEMENTATION_STATUS.md](./ROADMAP_AND_IMPLEMENTATION_STATUS.md) for the active roadmap and status, [build_plan.md](./build_plan.md) for the engineering breakdown, and [`docs/decisions.md`](./docs/decisions.md) for locked architectural decisions.**
 
 ## Quickstart
 

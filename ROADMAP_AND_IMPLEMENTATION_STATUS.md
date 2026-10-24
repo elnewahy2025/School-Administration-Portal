@@ -73,12 +73,19 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
    - State-machine workflow: `pending` -> `assigned` -> `in_progress` -> `completed` / `cancelled` / `reopened`.
    - Operator assignment, status transition reason logs, note threads, and photo upload verification.
 
-3. **School Achievements & Milestones (`/calendar` Tab):**
-   - Dedicated "School Achievements" tab under the calendar hub.
+3. **School Achievements & Milestones (`/achievements` - Owner Only):**
+   - Standalone module located at `/[locale]/achievements`, completely isolated as a premium add-on feature.
+   - Access is restricted exclusively to the Platform Owner (`roles.key === 'owner'`).
+   - Completely hidden from the navigation sidebar, mobile drawers, dashboard quick actions, and dashboard statistics for all other roles (including School Managers/Admins).
    - Registration of academic, athletic, and cultural milestones with department attribution, date picker, photo uploads, and bilingual descriptions.
    - Real-time keyword, category, and department filtering.
 
-4. **System Settings & Governance (`/settings`):**
+4. **Executive Reports & Advanced Analytics (`/reports`):**
+   - Segregated access strictly limited to Platform Owner and School Managers.
+   - Multi-criteria filtering: dynamic date sorting (newest/oldest), temporal filters (all time, specific months, or custom date ranges), and department-level filtering across both Circulars Compliance and Maintenance & SLA tabs.
+   - Formula-injection-safe CSV export with UTF-8 BOM encoding for Arabic spreadsheet compatibility.
+
+5. **System Settings & Governance (`/settings`):**
    - Multi-tab management: School Profile, Locations, Departments, Users & Roles, and Immutable Audit Trail.
    - Clean, role-guarded server actions with `withActionErrorHandler` wrapper.
 
@@ -90,11 +97,11 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 - **Centralized Error Handling:** Typed `AppError` taxonomy with standardized error-code catalog, automatic database error mapping, and user-friendly bilingual toast feedback.
 - **Zero Mock / Zero Fake Policy:** All implementations connect directly to PostgreSQL database tables, authenticated Supabase sessions, and live RLS policies.
 - **Verification Suite:**
-  - 36 Vitest test suites (109 unit and component tests passing).
+  - 39 Vitest test suites (121 unit and component tests passing).
   - ESLint with zero errors and zero warnings.
   - Prettier formatting validated.
   - Strict TypeScript compiler (`tsc --noEmit`) passing with zero type issues.
-  - Next.js production build (`next build`) generating all 38 static and dynamic routes cleanly.
+  - Next.js production build (`next build`) generating all 40 static and dynamic routes cleanly.
 
 ---
 

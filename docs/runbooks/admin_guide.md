@@ -46,24 +46,31 @@
    - Resolved tickets are reviewed by administration and marked `closed`.
    - If an issue recurs, administration can reopen the ticket (`reopened`) with a mandatory explanation.
 
-## 5. School Calendar & Achievements Showcase
+4. **School Calendar & Academic Events**
 
-1. **Internal vs. Public Events** (`/calendar/new`):
+5. **Internal vs. Public Events** (`/calendar/new`):
    - **Internal**: Visible only to authenticated school staff (faculty meetings, internal exam schedules).
    - **Public**: Automatically showcased on the public landing page `/` for parents, students, and community visitors.
-2. **Event Management**:
+6. **Event Management**:
    - Manage events across Month Grid and accessible List View.
    - Support for all-day events, specific timeframes, venues, and banner images.
-3. **School Achievements Registration ("تسجيل إنجازات المدرسة")** (`/calendar` -> Achievements tab):
-   - **Departmental Attribution**: Register awards, competition milestones, research excellence, and milestones attributed to specific departments.
-   - **Interactive Details**: Click any achievement card to view complete narrative, attributed department, date achieved, visibility, and recorder details.
-   - **Filtering & Search**: Search by Arabic/English title or description keywords, and filter by category and department.
 
-## 6. Reports & Data Exports
+## 6. School Achievements Module (`/achievements` - Owner Only)
+
+1. **Platform Owner Add-on Feature**:
+   - The **School Achievements** module is an isolated feature restricted exclusively to the **Platform Owner** (`owner` role).
+   - Hidden from the sidebar, mobile drawers, dashboard widgets, and action lists for all other school roles (including School Managers).
+2. **Registration & Showcase**:
+   - Register awards, competition milestones, research excellence, and honours attributed to specific departments.
+   - Interactive card view with search by Arabic/English keywords, category filter, and department filter.
+   - Full mutation capabilities (create, update, delete) protected by owner-only server authorization barriers.
+
+## 7. Reports & Data Exports
 
 1. **Operational Analytics** (`/reports`):
    - **Circulars & Compliance**: Monitor total circulars, response rates, overdue items, and per-department breakdown.
    - **Maintenance SLA**: Inspect ticket volumes, status breakdowns, priority distributions, and average resolution times.
+   - **Dynamic Sorting & Filtering**: Sort rows by creation date (newest or oldest first), filter by time frame (all time, specific month, or custom start/end dates), and filter by target department.
 2. **Server-Authorized CSV Export**:
    - Click "Export CSV" to download verified datasets.
    - Files include formula injection protection (`'`, `=`, `+`, `-`, `@`) and UTF-8 BOM (`\uFEFF`) for Arabic spreadsheet fidelity.
