@@ -22,3 +22,4 @@ export { UserTableActions } from "./UserTableActions";
 export { UserTableRow } from "./UserTableRow";
 export { CreateUserDialog } from "./CreateUserDialog";
 export { CreateUserForm } from "./CreateUserForm";
+export { UserTable } from "./UserTable";

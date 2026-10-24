@@ -8,10 +8,12 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components
 import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
 import { RoleTableRow } from "./RoleTableRow";
 import { CreateRoleDialog } from "./CreateRoleDialog";
+import { EditRoleDialog } from "./EditRoleDialog";
 
 export function RoleList({ roles, canManage }: { roles: SchoolRoleRow[]; canManage: boolean }) {
   const t = useTranslations("rbac");
   const [isCreating, setIsCreating] = useState(false);
+  const [editingRole, setEditingRole] = useState<SchoolRoleRow | null>(null);
 
   return (
     <div className="space-y-4">
@@ -44,13 +46,26 @@ export function RoleList({ roles, canManage }: { roles: SchoolRoleRow[]; canMana
           </TableHeader>
           <TableBody>
             {roles.map((role) => (
-              <RoleTableRow key={role.id} role={role} canManage={canManage} />
+              <RoleTableRow
+                key={role.id}
+                role={role}
+                canManage={canManage}
+                onEdit={() => setEditingRole(role)}
+              />
             ))}
           </TableBody>
         </Table>
       </div>
 
       {isCreating && <CreateRoleDialog isOpen={isCreating} onClose={() => setIsCreating(false)} />}
+
+      {editingRole && (
+        <EditRoleDialog
+          role={editingRole}
+          isOpen={Boolean(editingRole)}
+          onClose={() => setEditingRole(null)}
+        />
+      )}
     </div>
   );
 }

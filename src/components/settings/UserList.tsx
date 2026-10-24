@@ -5,13 +5,13 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { UserPlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toggleUserActiveAction } from "@/actions/settings/toggleUserActiveAction";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
-import { UserTableRow } from "./UserTableRow";
+import { UserTable } from "./UserTable";
 import { CreateUserDialog } from "./CreateUserDialog";
+import { EditUserDialog } from "./EditUserDialog";
 
 type UserListProps = {
   users: SchoolUserRow[];
@@ -32,6 +32,7 @@ export function UserList({
   const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<SchoolUserRow | null>(null);
 
   const handleToggle = (id: string, currentStatus: boolean) => {
     startTransition(async () => {
@@ -60,34 +61,14 @@ export function UserList({
           {tCommon("noData")}
         </div>
       ) : (
-        <div className="rounded-lg border border-border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("fullName")}</TableHead>
-                <TableHead>{t("jobTitle")}</TableHead>
-                <TableHead>{t("departments")}</TableHead>
-                <TableHead>{t("role")}</TableHead>
-                <TableHead className="w-28">{tCommon("status")}</TableHead>
-                {canManage && <TableHead className="w-44 text-end">{tCommon("actions")}</TableHead>}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <UserTableRow
-                  key={user.id}
-                  user={user}
-                  isSelf={user.id === currentUserId}
-                  canManage={canManage}
-                  isPending={isPending}
-                  departments={departments}
-                  roles={roles}
-                  onToggle={handleToggle}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <UserTable
+          users={users}
+          currentUserId={currentUserId}
+          canManage={canManage}
+          isPending={isPending}
+          onEdit={(user) => setEditingUser(user)}
+          onToggle={handleToggle}
+        />
       )}
 
       {isCreateOpen && (
@@ -96,6 +77,16 @@ export function UserList({
           departments={departments}
           roles={roles}
           onClose={() => setIsCreateOpen(false)}
+        />
+      )}
+
+      {editingUser && (
+        <EditUserDialog
+          user={editingUser}
+          departments={departments}
+          roles={roles}
+          isOpen={Boolean(editingUser)}
+          onClose={() => setEditingUser(null)}
         />
       )}
     </div>
