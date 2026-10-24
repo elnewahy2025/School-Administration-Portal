@@ -37,7 +37,7 @@ export function CircularAttachmentsList({
       <h3 className="text-xs font-semibold text-muted-foreground uppercase">
         {t("attachments")} ({attachments.length})
       </h3>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="flex flex-col gap-6">
         {attachments.map((att) => (
           <CircularAttachmentItem
             key={att.id}

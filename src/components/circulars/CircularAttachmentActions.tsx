@@ -1,9 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { DownloadIcon, Trash2Icon, Loader2Icon, ExternalLinkIcon, PrinterIcon } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { DownloadIcon, Trash2Icon, Loader2Icon, PrinterIcon, Maximize2Icon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { printAttachment } from "@/lib/circulars/printAttachment";
+import { downloadAttachmentFile } from "@/lib/circulars/downloadAttachmentFile";
 
 export function CircularAttachmentActions({
   publicUrl,
@@ -11,6 +12,7 @@ export function CircularAttachmentActions({
   attachmentId,
   canManage,
   isPending,
+  onExpand,
   onDelete,
 }: {
   publicUrl?: string;
@@ -18,6 +20,7 @@ export function CircularAttachmentActions({
   attachmentId: string;
   canManage: boolean;
   isPending: boolean;
+  onExpand: () => void;
   onDelete: (id: string) => void;
 }) {
   const t = useTranslations("circulars");
@@ -26,28 +29,16 @@ export function CircularAttachmentActions({
     <div className="flex items-center gap-1">
       {publicUrl ? (
         <>
-          <a
-            href={publicUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "ghost", size: "icon" })}
-            title={t("openAttachment")}
-            aria-label={t("openAttachment")}
+          <Button
+            variant="ghost"
+            size="icon"
+            type="button"
+            onClick={onExpand}
+            title={t("expandAttachment")}
+            aria-label={t("expandAttachment")}
           >
-            <ExternalLinkIcon className="size-4" />
-          </a>
-
-          <a
-            href={publicUrl}
-            download={fileName}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "ghost", size: "icon" })}
-            title={t("downloadAttachment")}
-            aria-label={t("downloadAttachment")}
-          >
-            <DownloadIcon className="size-4" />
-          </a>
+            <Maximize2Icon className="size-4" />
+          </Button>
 
           <Button
             variant="ghost"
@@ -58,6 +49,17 @@ export function CircularAttachmentActions({
             aria-label={t("printAttachment")}
           >
             <PrinterIcon className="size-4" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            type="button"
+            onClick={() => downloadAttachmentFile(publicUrl, fileName)}
+            title={t("downloadAttachment")}
+            aria-label={t("downloadAttachment")}
+          >
+            <DownloadIcon className="size-4" />
           </Button>
         </>
       ) : null}

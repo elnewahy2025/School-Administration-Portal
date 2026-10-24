@@ -1,26 +1,31 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { printAttachment } from "./printAttachment";
 
 describe("printAttachment", () => {
-  it("does nothing when url is not provided", () => {
-    const openSpy = vi.spyOn(window, "open");
-    printAttachment(undefined);
-    expect(openSpy).not.toHaveBeenCalled();
-    openSpy.mockRestore();
+  beforeEach(() => {
+    vi.restoreAllMocks();
   });
 
-  it("opens window with url in _blank target when provided", () => {
-    const focusMock = vi.fn();
-    const openSpy = vi.spyOn(window, "open").mockReturnValue({
-      focus: focusMock,
-      onload: null,
-      print: vi.fn(),
-    } as unknown as Window);
+  it("does nothing when url is not provided", async () => {
+    const appendSpy = vi.spyOn(document.body, "appendChild");
+    await printAttachment(undefined);
+    expect(appendSpy).not.toHaveBeenCalled();
+    appendSpy.mockRestore();
+  });
 
-    printAttachment("https://example.com/test.pdf");
+  it("creates hidden iframe for in-app printing without opening a window", async () => {
+    const mockBlob = new Blob(["pdf"], { type: "application/pdf" });
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      blob: () => Promise.resolve(mockBlob),
+    });
 
-    expect(openSpy).toHaveBeenCalledWith("https://example.com/test.pdf", "_blank");
-    expect(focusMock).toHaveBeenCalled();
-    openSpy.mockRestore();
+    const createObjectURLSpy = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:mock-url");
+    const appendSpy = vi.spyOn(document.body, "appendChild");
+
+    await printAttachment("https://example.com/test.pdf");
+
+    expect(appendSpy).toHaveBeenCalled();
+    createObjectURLSpy.mockRestore();
+    appendSpy.mockRestore();
   });
 });

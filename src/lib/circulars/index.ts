@@ -8,6 +8,8 @@ export { deleteCircularRecord } from "./deleteCircularRecord";
 export { uploadCircularDocument } from "./uploadCircularDocument";
 export { formatCircularDate } from "./formatCircularDate";
 export { formatAttachmentFileName } from "./formatAttachmentFileName";
+export { getAttachmentKind, type AttachmentKind } from "./getAttachmentKind";
+export { downloadAttachmentFile } from "./downloadAttachmentFile";
 export { printAttachment } from "./printAttachment";
 export { assertCanManageCirculars } from "./assertCanManageCirculars";
 export { canRespondToCircular } from "./canRespondToCircular";
