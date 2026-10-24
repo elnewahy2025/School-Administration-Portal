@@ -53,7 +53,6 @@ from (
     ('owner', 'audit.view'),
     ('department_head', 'circular.respond'),
     ('department_head', 'maintenance.create'),
-    ('department_head', 'reports.view'),
     ('staff', 'maintenance.create'),
     ('operator', 'maintenance.update'),
     ('auditor', 'audit.view'),

@@ -24,18 +24,19 @@ export async function assertCanViewReports(): Promise<AssertCanViewReportsResult
 
   const perms = await getEffectivePermissions().catch((): string[] => []);
   const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
-  const allowed = isOwner || perms.includes("reports.view");
+  const isManager =
+    perms.includes("settings.school.update") ||
+    perms.includes("users.manage") ||
+    perms.includes("audit.view");
+  const allowed = isOwner || (perms.includes("reports.view") && isManager);
   if (!allowed) {
     return { authorized: false, error: "Unauthorized" };
   }
-
-  const canViewAll =
-    isOwner || perms.includes("settings.school.update") || perms.includes("audit.view");
 
   return {
     authorized: true,
     profile,
     schoolId: school.id,
-    scopedDepartmentId: canViewAll ? null : profile.department_id,
+    scopedDepartmentId: null,
   };
 }

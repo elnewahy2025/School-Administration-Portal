@@ -28,9 +28,12 @@ export default async function AuthenticatedAppLayout({
   const unreadNotifications = await getUnreadNotificationCount().catch(() => 0);
 
   const canViewReports =
-    permissions.includes("reports.view") ||
     permissions.includes("settings.platform.update") ||
-    permissions.includes("roles.manage");
+    permissions.includes("roles.manage") ||
+    (permissions.includes("reports.view") &&
+      (permissions.includes("settings.school.update") ||
+        permissions.includes("users.manage") ||
+        permissions.includes("audit.view")));
   const canManageSettings =
     permissions.some(
       (p) =>
