@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Label } from "@/components/ui/label";
 import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
+import { resolveRoleDisplayName } from "@/lib/rbac/resolveRoleDisplayName";
 
 export function UserRoleSelect({
   roleKey,
@@ -16,6 +17,7 @@ export function UserRoleSelect({
   disabled: boolean;
 }) {
   const t = useTranslations("settings");
+  const tRbac = useTranslations("rbac");
 
   return (
     <div className="space-y-2">
@@ -30,7 +32,7 @@ export function UserRoleSelect({
         {roles.length > 0 ? (
           roles.map((r) => (
             <option key={r.id} value={r.key}>
-              {r.name} ({r.key})
+              {resolveRoleDisplayName(r.key, tRbac, r.name)}
             </option>
           ))
         ) : (

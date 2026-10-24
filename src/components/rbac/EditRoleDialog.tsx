@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateRoleAction } from "@/actions/rbac/updateRoleAction";
 import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
+import { resolveRoleDisplayName } from "@/lib/rbac/resolveRoleDisplayName";
 import { PermissionCategoriesList } from "./PermissionCategoriesList";
 
 export function EditRoleDialog({
@@ -22,7 +23,8 @@ export function EditRoleDialog({
 }) {
   const t = useTranslations("rbac");
   const tCommon = useTranslations("common");
-  const [name, setName] = useState(role.name);
+  const initialName = role.is_system ? resolveRoleDisplayName(role.key, t, role.name) : role.name;
+  const [name, setName] = useState(initialName);
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set(role.permissions));
   const [isPending, startTransition] = useTransition();
 
@@ -58,6 +60,7 @@ export function EditRoleDialog({
           <ShieldCheckIcon className="size-5 text-primary" />
           <span>{role.is_system ? t("viewRole") : t("editRole")}</span>
         </h3>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="edit_role_name">{t("roleName")}</Label>

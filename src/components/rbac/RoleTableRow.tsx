@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
+import { resolveRoleDisplayName } from "@/lib/rbac/resolveRoleDisplayName";
 import { RoleBadge } from "./RoleBadge";
 import { RoleTableActions } from "./RoleTableActions";
 
@@ -22,7 +23,9 @@ export function RoleTableRow({
     <TableRow>
       <TableCell>
         <div className="flex flex-col">
-          <span className="font-medium text-foreground">{role.name}</span>
+          <span className="font-medium text-foreground">
+            {role.is_system ? resolveRoleDisplayName(role.key, t, role.name) : role.name}
+          </span>
           <span className="font-mono text-xs text-muted-foreground">{role.key}</span>
         </div>
       </TableCell>

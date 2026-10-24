@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { resolveRoleDisplayName } from "@/lib/rbac/resolveRoleDisplayName";
 import { CircularPriorityBadge } from "./CircularPriorityBadge";
 import { CircularStatusBadge } from "./CircularStatusBadge";
 import { CircularDetailActions } from "./CircularDetailActions";
@@ -20,6 +21,7 @@ export function CircularDetailCard({
   totalDepartments?: number;
 }) {
   const t = useTranslations("circulars");
+  const tRbac = useTranslations("rbac");
 
   const isAllTargets =
     !circular.targets ||
@@ -62,7 +64,10 @@ export function CircularDetailCard({
             ) : (
               circular.targets.map((tgt) => (
                 <Badge key={tgt.id} variant="secondary">
-                  {tgt.department_name ?? tgt.role_key ?? t("allDepartments")}
+                  {tgt.department_name ??
+                    (tgt.role_key
+                      ? resolveRoleDisplayName(tgt.role_key, tRbac)
+                      : t("allDepartments"))}
                 </Badge>
               ))
             )}

@@ -1,6 +1,7 @@
 export function resolveRoleDisplayName(
   roleKey: string | null | undefined,
   t: (key: string) => string,
+  fallbackName?: string,
 ): string {
   if (!roleKey) return t("roleStaff");
   switch (roleKey) {
@@ -17,6 +18,6 @@ export function resolveRoleDisplayName(
     case "owner":
       return t("roleOwner");
     default:
-      return roleKey;
+      return fallbackName || roleKey;
   }
 }
