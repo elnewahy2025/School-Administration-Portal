@@ -74,3 +74,17 @@
 2. **Server-Authorized CSV Export**:
    - Click "Export CSV" to download verified datasets.
    - Files include formula injection protection (`'`, `=`, `+`, `-`, `@`) and UTF-8 BOM (`\uFEFF`) for Arabic spreadsheet fidelity.
+
+## 8. Production Deployment & Automated Keepalive (Vercel)
+
+1. **Deploying on Vercel**:
+   - Link the GitHub repository to your Vercel project.
+   - Configure required environment variables in **Project Settings > Environment Variables**:
+     - `NEXT_PUBLIC_SUPABASE_URL`
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+     - `SUPABASE_SERVICE_ROLE_KEY`
+     - _(Optional)_ `CRON_SECRET`
+2. **Automated 3-Day Supabase Keepalive**:
+   - [vercel.json](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/vercel.json) automatically registers the cron schedule to invoke `/api/keepalive` every 3 days at 06:00 UTC (`0 6 */3 * *`).
+   - Keeps your Supabase PostgreSQL project active and prevents automatic 7-day free tier pausing.
+   - Can also be backed up via GitHub Actions by pasting `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in GitHub Repository Secrets.

@@ -134,17 +134,28 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 - [ ] **Service Level Agreement (SLA) Tracking for Maintenance:**
   - Automatic escalation alerts for critical maintenance tickets exceeding resolution windows.
 
+### Phase 7: Deployment & Hosting Checklist (Vercel Production)
+
+- [ ] **Vercel Environment Setup & Supabase Keepalive Activation:**
+  - Add production environment variables in the Vercel Project Dashboard (**Settings > Environment Variables**):
+    - `NEXT_PUBLIC_SUPABASE_URL`
+    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+    - `SUPABASE_SERVICE_ROLE_KEY`
+    - _(Optional)_ `CRON_SECRET`
+  - Vercel automatically deploys [vercel.json](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/vercel.json) crons, which will trigger `/api/keepalive` every 3 days at 06:00 UTC to prevent Supabase free tier inactivity pausing.
+  - Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to **GitHub Repository Secrets** if GitHub Actions scheduled workflow backup is also desired.
+
 ---
 
 ## 4. Verification & Testing Matrix
 
 | Suite               | Target                           | Status      | Passing                     |
 | ------------------- | -------------------------------- | ----------- | --------------------------- |
-| Unit & Integration  | Vitest                           | **PASSING** | 109 / 109 tests (36 suites) |
+| Unit & Integration  | Vitest                           | **PASSING** | 125 / 125 tests (41 suites) |
 | Linter & Modularity | ESLint + D11 Single-Export       | **PASSING** | 0 errors, 0 warnings        |
 | Code Formatting     | Prettier                         | **PASSING** | 100% compliant              |
 | Type Safety         | TypeScript (`tsc --noEmit`)      | **PASSING** | 0 errors                    |
-| Production Build    | Next.js Turbopack (`next build`) | **PASSING** | 38 routes compiled          |
+| Production Build    | Next.js Turbopack (`next build`) | **PASSING** | 41 routes compiled          |
 
 ---
 
