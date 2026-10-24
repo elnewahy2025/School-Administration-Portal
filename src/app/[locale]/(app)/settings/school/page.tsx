@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -16,8 +17,7 @@ export default async function SchoolSettingsPage({
   const tCommon = await getTranslations("common");
 
   const profile = await getCurrentProfile();
-  const [school, perms, hasPerm] = await Promise.all([
-    getSchoolFullDetails(profile?.school_id),
+  const [perms, hasPerm] = await Promise.all([
     getEffectivePermissions().catch((): string[] => []),
     profile?.school_id
       ? hasPermission("settings.school.update", profile.school_id).catch(() => false)
@@ -26,6 +26,12 @@ export default async function SchoolSettingsPage({
 
   const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
   const canManage = isOwner || hasPerm;
+
+  if (!canManage) {
+    redirect({ href: "/settings", locale });
+  }
+
+  const school = await getSchoolFullDetails(profile?.school_id);
 
   if (!school) {
     return (

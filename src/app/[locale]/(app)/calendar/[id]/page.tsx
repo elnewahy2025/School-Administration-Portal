@@ -5,6 +5,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getCalendarEventById } from "@/lib/calendar/getCalendarEventById";
 import { CalendarEventDetailCard } from "@/components/calendar/CalendarEventDetailCard";
 
@@ -26,7 +27,13 @@ export default async function CalendarEventDetailPage({
     notFound();
   }
 
-  const canManage = await hasPermission("calendar.manage", profile.school_id).catch(() => false);
+  const [perms, hasManagePerm] = await Promise.all([
+    getEffectivePermissions().catch((): string[] => []),
+    hasPermission("calendar.manage", profile.school_id).catch(() => false),
+  ]);
+
+  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const canManage = isOwner || hasManagePerm;
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">

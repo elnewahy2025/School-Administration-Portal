@@ -15,12 +15,14 @@ export function CalendarHub({
   events,
   achievements,
   departments,
-  canManage,
+  canManageEvents = false,
+  canManageAchievements = false,
 }: {
   events: CalendarEventRow[];
   achievements: SchoolAchievementRow[];
   departments: DepartmentRow[];
-  canManage: boolean;
+  canManageEvents?: boolean;
+  canManageAchievements?: boolean;
 }) {
   const t = useTranslations("calendar");
   const tAch = useTranslations("achievements");
@@ -34,7 +36,7 @@ export function CalendarHub({
           <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("description")}</p>
         </div>
-        {canManage && activeTab === "events" && (
+        {canManageEvents && activeTab === "events" && (
           <Link href={`/${locale}/calendar/new`}>
             <Button className="gap-2">
               <PlusIcon className="size-4" />
@@ -72,12 +74,12 @@ export function CalendarHub({
       </div>
 
       {activeTab === "events" ? (
-        <CalendarEventsView events={events} canManage={canManage} />
+        <CalendarEventsView events={events} canManage={canManageEvents} />
       ) : (
         <SchoolAchievementsHub
           achievements={achievements}
           departments={departments}
-          canManage={canManage}
+          canManage={canManageAchievements}
         />
       )}
     </div>

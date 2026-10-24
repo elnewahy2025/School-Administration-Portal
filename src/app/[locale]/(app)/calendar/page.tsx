@@ -2,6 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
+import { getUserRoleKey } from "@/lib/rbac/getUserRoleKey";
 import { getSchoolCalendarEvents } from "@/lib/calendar/getSchoolCalendarEvents";
 import { getSchoolAchievements } from "@/lib/achievements/getSchoolAchievements";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
@@ -14,17 +15,20 @@ export default async function CalendarPage({ params }: { params: Promise<{ local
   const profile = await getCurrentProfile();
   const schoolId = profile?.school_id;
 
-  const [permissions, hasManagePerm, events, achievements, departments] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
-    schoolId ? hasPermission("calendar.manage", schoolId).catch(() => false) : false,
-    getSchoolCalendarEvents(schoolId),
-    getSchoolAchievements(schoolId),
-    getSchoolDepartments(schoolId),
-  ]);
+  const [permissions, hasManagePerm, events, achievements, departments, roleKey] =
+    await Promise.all([
+      getEffectivePermissions().catch((): string[] => []),
+      schoolId ? hasPermission("calendar.manage", schoolId).catch(() => false) : false,
+      getSchoolCalendarEvents(schoolId),
+      getSchoolAchievements(schoolId),
+      getSchoolDepartments(schoolId),
+      getUserRoleKey(profile?.id, schoolId),
+    ]);
 
   const isOwner =
     permissions.includes("settings.platform.update") || permissions.includes("roles.manage");
-  const canManage = isOwner || hasManagePerm || Boolean(profile?.department_id);
+  const canManageEvents = isOwner || hasManagePerm;
+  const canManageAchievements = canManageEvents || roleKey === "department_head";
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6">
@@ -32,7 +36,8 @@ export default async function CalendarPage({ params }: { params: Promise<{ local
         events={events}
         achievements={achievements}
         departments={departments}
-        canManage={canManage}
+        canManageEvents={canManageEvents}
+        canManageAchievements={canManageAchievements}
       />
     </div>
   );

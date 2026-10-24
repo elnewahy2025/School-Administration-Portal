@@ -40,6 +40,8 @@ export default async function CircularDetailPage({
   const canPublish = isOwner || perms.includes("circular.publish");
   const canManage = canPublish || perms.includes("circular.create");
   const canRespond = canRespondToCircular(circular, profile);
+  const canViewResponses =
+    isOwner || perms.includes("circular.view_responses") || perms.includes("audit.view");
 
   const userDeptResponse = responses.find((res) => res.department_id === profile?.department_id);
 
@@ -69,10 +71,12 @@ export default async function CircularDetailPage({
         />
       ) : null}
 
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("responses")}</h3>
-        <CircularResponseTable responses={responses} />
-      </div>
+      {canViewResponses && (
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("responses")}</h3>
+          <CircularResponseTable responses={responses} />
+        </div>
+      )}
     </div>
   );
 }

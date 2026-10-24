@@ -13,6 +13,7 @@ export async function assertCanRegisterAchievement(
     profile.school_id,
     profile.department_id,
     targetDepartmentId ?? null,
+    profile.id,
   );
 
   if (!isAuthorized) {

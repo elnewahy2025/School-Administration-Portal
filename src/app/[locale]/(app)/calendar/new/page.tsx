@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { CreateCalendarEventForm } from "@/components/calendar/CreateCalendarEventForm";
 
 export default async function NewCalendarEventPage({
@@ -17,7 +18,14 @@ export default async function NewCalendarEventPage({
     redirect(`/${locale}/login`);
   }
 
-  const canManage = await hasPermission("calendar.manage", profile.school_id).catch(() => false);
+  const [perms, hasManagePerm] = await Promise.all([
+    getEffectivePermissions().catch((): string[] => []),
+    hasPermission("calendar.manage", profile.school_id).catch(() => false),
+  ]);
+
+  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const canManage = isOwner || hasManagePerm;
+
   if (!canManage) {
     redirect(`/${locale}/calendar`);
   }

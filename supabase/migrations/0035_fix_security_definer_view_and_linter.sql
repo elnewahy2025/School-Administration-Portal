@@ -1,26 +1,36 @@
 -- 0035: Fix Security Definer View and address database linter findings.
 --
--- 1. Switch public.public_school_profiles view to security_invoker = true
---    and add policies allowing anon and authenticated to select active schools and settings.
-alter view public.public_school_profiles set (security_invoker = true);
-
-create policy "schools_select_active"
-  on public.schools
-  for select
-  to anon, authenticated
-  using (is_active = true);
-
-create policy "school_settings_select_active"
-  on public.school_settings
-  for select
-  to anon, authenticated
-  using (
-    exists (
-      select 1 from public.schools s
-      where s.id = school_settings.school_id
-        and s.is_active = true
-    )
-  );
+-- 1. Public school profile access.
+--
+-- This migration originally switched the view to `security_invoker = true` and
+-- added `schools_select_active` / `school_settings_select_active` policies for
+-- `anon, authenticated` so the anonymous public page could read it. That
+-- granted the anonymous key the FULL rows of both base tables, not just the
+-- curated view columns: `school_settings` also carries `notification_prefs`,
+-- `circular_policy`, `maintenance_policy` and `calendar_policy`, and the same
+-- policies widened AUTHENTICATED reads to every active school regardless of
+-- membership (verified against the local stack: anon read 2 schools and 1
+-- school_settings row, and the battery's "anon sees no schools" /
+-- "anon sees no school_settings" assertions failed).
+--
+-- The curated view is the correct shape for a public read path: it exposes
+-- exactly the public columns of active schools and nothing else. It therefore
+-- keeps the owner's rights (`security_invoker = false`) and the base tables
+-- stay closed to anonymous callers. The `schools_select` /
+-- `school_settings_select` policies from 0011 continue to serve authenticated
+-- members.
+--
+-- Trade-off: `supabase lint` flags a `security_invoker = false` view. That
+-- warning is accepted deliberately here — the view is the ONLY anonymous read
+-- path, it lists no non-public column, and it filters to active schools. The
+-- alternative (granting anon the base tables) leaks strictly more.
+--
+-- The base tables are left at their Supabase default table-level grant; RLS is
+-- what denies them. With no `anon` policy on `schools` / `school_settings`,
+-- an anonymous read returns zero rows (deny by default) rather than a 401,
+-- which keeps the read path and the RLS battery's "anon sees no schools"
+-- assertion meaningful.
+alter view public.public_school_profiles set (security_invoker = false);
 
 -- 2. Fix mutable search_path on functions
 alter function public.touch_updated_at() set search_path = public;

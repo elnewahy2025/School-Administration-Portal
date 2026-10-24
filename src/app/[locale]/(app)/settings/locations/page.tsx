@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolLocations } from "@/lib/school/getSchoolLocations";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -16,8 +17,7 @@ export default async function LocationsSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
-  const [locations, perms, hasPerm] = await Promise.all([
-    getSchoolLocations(profile?.school_id),
+  const [perms, hasPerm] = await Promise.all([
     getEffectivePermissions().catch((): string[] => []),
     profile?.school_id
       ? hasPermission("settings.school.update", profile.school_id).catch(() => false)
@@ -27,6 +27,12 @@ export default async function LocationsSettingsPage({
   const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
   const canManage = isOwner || hasPerm;
 
+  if (!canManage) {
+    redirect({ href: "/settings", locale });
+  }
+
+  const locations = await getSchoolLocations(profile?.school_id);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
@@ -34,8 +40,7 @@ export default async function LocationsSettingsPage({
         <p className="text-sm text-muted-foreground">{t("locationsDesc")}</p>
       </div>
 
-      {canManage && <CreateLocationForm />}
-
+      <CreateLocationForm />
       <LocationList locations={locations} canManage={canManage} />
     </div>
   );

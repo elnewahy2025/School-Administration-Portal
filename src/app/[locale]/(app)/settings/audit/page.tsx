@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolAuditLogs } from "@/lib/school/getSchoolAuditLogs";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -12,7 +13,6 @@ export default async function AuditSettingsPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("settings");
-  const tCommon = await getTranslations("common");
 
   const profile = await getCurrentProfile();
   const isOwner =
@@ -24,11 +24,7 @@ export default async function AuditSettingsPage({
   const canView = isOwner || hasPerm;
 
   if (!canView) {
-    return (
-      <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-6 text-center text-sm text-destructive">
-        {tCommon("noData")}
-      </div>
-    );
+    redirect({ href: "/settings", locale });
   }
 
   const logs = await getSchoolAuditLogs(profile?.school_id).catch(() => []);
