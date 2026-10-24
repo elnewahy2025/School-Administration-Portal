@@ -1,4 +1,5 @@
 export { AppHeader } from "./AppHeader";
+export { AppHeaderGreeting } from "./AppHeaderGreeting";
 export { AppShell } from "./AppShell";
 export { AppSidebar } from "./AppSidebar";
 export { AppUserLabel } from "./AppUserLabel";

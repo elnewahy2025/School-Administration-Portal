@@ -5,6 +5,7 @@ export function parseSchoolFormData(formData: FormData) {
     nameAr: cleanFormField(formData.get("name_ar")) ?? "",
     nameEn: cleanFormField(formData.get("name_en")) ?? "",
     phone: cleanFormField(formData.get("phone")),
+    email: cleanFormField(formData.get("email")),
     managerNameAr: cleanFormField(formData.get("manager_name_ar")),
     managerNameEn: cleanFormField(formData.get("manager_name_en")),
     assistantManagerAr: cleanFormField(formData.get("assistant_manager_ar")),

@@ -18,7 +18,7 @@ export function PublicFooter({ school }: { school?: PublicSchoolProfileRow | nul
     <footer className="border-t border-border bg-card px-6 py-8 text-center text-xs text-muted-foreground">
       <div className="mx-auto max-w-5xl space-y-3">
         <p className="font-semibold text-foreground whitespace-pre-line text-sm">{schoolName}</p>
-        <PublicFooterContact phone={school?.phone} address={address} />
+        <PublicFooterContact phone={school?.phone} email={school?.email} address={address} />
         <p>© {currentYear} {schoolName}. All rights reserved.</p>
       </div>
     </footer>

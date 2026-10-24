@@ -22,7 +22,7 @@ export function DashboardVisionMission({ school }: { school: SchoolFullDetails |
   if (!vision && !mission) return null;
 
   return (
-    <div className="grid grid-cols-1 gap-3 border-t border-border/60 pt-3 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
       {vision ? (
         <div className="flex items-start gap-3 rounded-lg border border-border/70 bg-background/60 p-3 text-xs shadow-2xs backdrop-blur-xs">
           <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">

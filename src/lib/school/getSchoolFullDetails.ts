@@ -5,7 +5,7 @@ import { mergeSchoolSettings, type SchoolSettingsRow } from "./mergeSchoolSettin
 export type SchoolFullDetails = SchoolRow & SchoolSettingsRow;
 
 const SCHOOL_FIELDS =
-  "id, name_ar, name_en, slug, timezone, logo_path, is_active, phone, manager_name_ar, manager_name_en, assistant_manager_ar, assistant_manager_en, assistant_manager_2_ar, assistant_manager_2_en, address_ar, address_en";
+  "id, name_ar, name_en, slug, timezone, logo_path, is_active, phone, email, manager_name_ar, manager_name_en, assistant_manager_ar, assistant_manager_en, assistant_manager_2_ar, assistant_manager_2_en, address_ar, address_en";
 
 export async function getSchoolFullDetails(
   schoolId?: string | null,

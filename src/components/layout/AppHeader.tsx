@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { AppUserMenu } from "./AppUserMenu";
 import { MobileNav } from "./MobileNav";
+import { AppHeaderGreeting } from "./AppHeaderGreeting";
 import type { ProfileRow } from "@/lib/auth/getCurrentProfile";
 import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
@@ -32,6 +33,8 @@ export function AppHeader({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
+        <AppHeaderGreeting profile={profile} school={school} />
+        <div className="hidden h-5 w-px bg-border sm:block" />
         <NotificationBell unreadCount={unreadNotifications} />
         <LanguageSwitcher />
         <ThemeToggle />

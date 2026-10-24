@@ -17,7 +17,7 @@ export function SchoolContactFields({
       <div className="border-t border-border pt-2 sm:col-span-2">
         <h3 className="text-sm font-semibold text-foreground">{t("contactAndLocation")}</h3>
       </div>
-      <div className="space-y-2 sm:col-span-2">
+      <div className="space-y-2">
         <Label htmlFor="phone">{t("phone")}</Label>
         <Input
           id="phone"
@@ -26,6 +26,18 @@ export function SchoolContactFields({
           dir="ltr"
           defaultValue={school.phone ?? ""}
           placeholder="+966 12 345 6789"
+          disabled={!canManage}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="email">{t("email")}</Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          dir="ltr"
+          defaultValue={school.email ?? ""}
+          placeholder="info@school.edu"
           disabled={!canManage}
         />
       </div>

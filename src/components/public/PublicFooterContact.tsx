@@ -1,13 +1,15 @@
-import { PhoneIcon, MapPinIcon } from "lucide-react";
+import { PhoneIcon, MailIcon, MapPinIcon } from "lucide-react";
 
 export function PublicFooterContact({
   phone,
+  email,
   address,
 }: {
   phone?: string | null;
+  email?: string | null;
   address?: string | null;
 }) {
-  if (!phone && !address) return null;
+  if (!phone && !email && !address) return null;
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-4 text-xs">
@@ -15,6 +17,12 @@ export function PublicFooterContact({
         <div className="flex items-center gap-1.5" dir="ltr">
           <PhoneIcon className="size-3.5 text-primary" />
           <span>{phone}</span>
+        </div>
+      )}
+      {email && (
+        <div className="flex items-center gap-1.5" dir="ltr">
+          <MailIcon className="size-3.5 text-primary" />
+          <span>{email}</span>
         </div>
       )}
       {address && (
