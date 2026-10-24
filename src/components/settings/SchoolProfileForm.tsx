@@ -1,7 +1,8 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { SaveIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,8 @@ export function SchoolProfileForm({
 }) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const router = useRouter();
+  const [formVersion, setFormVersion] = useState(0);
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
@@ -29,6 +32,8 @@ export function SchoolProfileForm({
       const res = await updateSchoolAction(formData);
       if (res.success) {
         toast.success(tCommon("saved"));
+        setFormVersion((v) => v + 1);
+        router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
       }
@@ -37,6 +42,7 @@ export function SchoolProfileForm({
 
   return (
     <form
+      key={`${school.id}-${formVersion}`}
       action={handleSubmit}
       className="flex flex-col gap-6 rounded-lg border border-border bg-card p-6"
     >
@@ -58,7 +64,7 @@ export function SchoolProfileForm({
         <div className="flex justify-end pt-2">
           <Button type="submit" disabled={isPending} className="gap-2">
             <SaveIcon className="size-4" />
-            <span>{t("saveSchool")}</span>
+            <span>{isPending ? tCommon("saving") : t("saveSchool")}</span>
           </Button>
         </div>
       )}

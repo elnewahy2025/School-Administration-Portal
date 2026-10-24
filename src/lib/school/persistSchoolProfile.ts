@@ -26,13 +26,21 @@ export async function persistSchoolProfile(
     schoolUpdates.logo_path = logoPath;
   }
 
-  const { error: schoolError } = await supabase
+  const { data: updatedSchool, error: schoolError } = await supabase
     .from("schools")
     .update(schoolUpdates)
-    .eq("id", schoolId);
+    .eq("id", schoolId)
+    .select("id");
 
   if (schoolError) {
     return { success: false, error: schoolError.message };
+  }
+
+  if (!updatedSchool || updatedSchool.length === 0) {
+    return {
+      success: false,
+      error: "Failed to update school: record not found or insufficient permissions",
+    };
   }
 
   const { error: settingsError } = await supabase.from("school_settings").upsert({

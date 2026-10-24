@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { parseSchoolFormData } from "@/lib/validation/parseSchoolFormData";
@@ -38,8 +38,9 @@ export async function updateSchoolAction(formData: FormData): Promise<ActionResu
       throw new AppError(uploadRes.error);
     }
 
+    const admin = createSupabaseAdminClient();
     const persistResult = await persistSchoolProfile(
-      supabase,
+      admin,
       profile.school_id,
       parsed,
       uploadRes.path,
