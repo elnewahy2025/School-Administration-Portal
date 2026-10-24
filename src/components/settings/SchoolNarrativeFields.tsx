@@ -1,28 +1,68 @@
+import { useTranslations } from "next-intl";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 export function SchoolNarrativeFields({
-  vision,
-  mission,
+  visionAr,
+  visionEn,
+  missionAr,
+  missionEn,
   disabled,
-  visionLabel,
-  missionLabel,
 }: {
-  vision: string;
-  mission: string;
+  visionAr: string;
+  visionEn: string;
+  missionAr: string;
+  missionEn: string;
   disabled: boolean;
-  visionLabel: string;
-  missionLabel: string;
 }) {
+  const t = useTranslations("settings");
+
   return (
     <>
-      <div className="space-y-2 sm:col-span-2">
-        <Label htmlFor="vision">{visionLabel}</Label>
-        <Textarea id="vision" name="vision" defaultValue={vision} disabled={disabled} rows={3} />
+      <div className="border-t border-border pt-2 sm:col-span-2">
+        <h3 className="text-sm font-semibold text-foreground">
+          {t("vision")} &amp; {t("mission")}
+        </h3>
       </div>
-      <div className="space-y-2 sm:col-span-2">
-        <Label htmlFor="mission">{missionLabel}</Label>
-        <Textarea id="mission" name="mission" defaultValue={mission} disabled={disabled} />
+      <div className="space-y-2">
+        <Label htmlFor="vision_ar">{t("visionAr")}</Label>
+        <Textarea
+          id="vision_ar"
+          name="vision_ar"
+          defaultValue={visionAr}
+          disabled={disabled}
+          rows={3}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="vision_en">{t("visionEn")}</Label>
+        <Textarea
+          id="vision_en"
+          name="vision_en"
+          defaultValue={visionEn}
+          disabled={disabled}
+          rows={3}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="mission_ar">{t("missionAr")}</Label>
+        <Textarea
+          id="mission_ar"
+          name="mission_ar"
+          defaultValue={missionAr}
+          disabled={disabled}
+          rows={3}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="mission_en">{t("missionEn")}</Label>
+        <Textarea
+          id="mission_en"
+          name="mission_en"
+          defaultValue={missionEn}
+          disabled={disabled}
+          rows={3}
+        />
       </div>
     </>
   );

@@ -39,10 +39,6 @@ export function SchoolIdentityFields({
         <Input id="slug" value={school.slug} disabled className="bg-muted font-mono" />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="timezone">{t("timezone")}</Label>
-        <Input id="timezone" name="timezone" defaultValue={school.timezone} disabled={!canManage} />
-      </div>
-      <div className="space-y-2 sm:col-span-2">
         <Label htmlFor="academic_year">{t("academicYear")}</Label>
         <Input
           id="academic_year"

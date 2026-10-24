@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
+import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
 import { getSchoolMaintenanceRequests } from "@/lib/maintenance/getSchoolMaintenanceRequests";
@@ -35,7 +35,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   const schoolId = profile.school_id;
   const [school, perms, circulars, maintenance, events, achievements] = await Promise.all([
-    getCurrentSchool(schoolId),
+    getSchoolFullDetails(schoolId),
     getEffectivePermissions().catch((): string[] => []),
     getSchoolCirculars(schoolId),
     getSchoolMaintenanceRequests(schoolId),

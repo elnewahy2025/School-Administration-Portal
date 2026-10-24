@@ -4,4 +4,8 @@ export { getSchoolDepartments, type DepartmentRow } from "./getSchoolDepartments
 export { getSchoolFullDetails, type SchoolFullDetails } from "./getSchoolFullDetails";
 export { getSchoolLocations, type LocationRow } from "./getSchoolLocations";
 export { getSchoolUsers, type SchoolUserRow } from "./getSchoolUsers";
+export { mergeSchoolSettings } from "./mergeSchoolSettings";
+export { persistSchoolProfile } from "./persistSchoolProfile";
+export { resolveLocalizedText } from "./resolveLocalizedText";
 export { resolveSchoolName } from "./resolveSchoolName";
+export { uploadSchoolLogo } from "./uploadSchoolLogo";

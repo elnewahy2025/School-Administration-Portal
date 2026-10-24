@@ -1,3 +1,4 @@
+export { cleanFormField } from "./cleanFormField";
 export { loginSchema, type LoginInput } from "./loginSchema";
 export { parseCircularFormData } from "./parseCircularFormData";
 export { parseLocationFormData } from "./parseLocationFormData";

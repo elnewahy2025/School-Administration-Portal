@@ -1,12 +1,11 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import type { SchoolRow } from "./getCurrentSchool";
+import { mergeSchoolSettings, type SchoolSettingsRow } from "./mergeSchoolSettings";
 
-export type SchoolFullDetails = SchoolRow & {
-  academic_year?: string | null;
-  vision?: string | null;
-  mission?: string | null;
-  public_description?: string | null;
-};
+export type SchoolFullDetails = SchoolRow & SchoolSettingsRow;
+
+const SCHOOL_FIELDS =
+  "id, name_ar, name_en, slug, timezone, logo_path, is_active, phone, manager_name_ar, manager_name_en, assistant_manager_ar, assistant_manager_en, assistant_manager_2_ar, assistant_manager_2_en, address_ar, address_en";
 
 export async function getSchoolFullDetails(
   schoolId?: string | null,
@@ -25,25 +24,17 @@ export async function getSchoolFullDetails(
   if (!resolvedId) return null;
 
   const [{ data: school }, { data: settings }] = await Promise.all([
-    supabase
-      .from("schools")
-      .select("id, name_ar, name_en, slug, timezone, logo_path, is_active")
-      .eq("id", resolvedId)
-      .maybeSingle(),
+    supabase.from("schools").select(SCHOOL_FIELDS).eq("id", resolvedId).maybeSingle(),
     supabase
       .from("school_settings")
-      .select("academic_year, vision, mission, public_description")
+      .select(
+        "academic_year, vision, mission, vision_ar, vision_en, mission_ar, mission_en, public_description",
+      )
       .eq("school_id", resolvedId)
       .maybeSingle(),
   ]);
 
   if (!school) return null;
 
-  return {
-    ...(school as SchoolRow),
-    academic_year: settings ? settings.academic_year : null,
-    vision: settings ? settings.vision : null,
-    mission: settings ? settings.mission : null,
-    public_description: settings ? settings.public_description : null,
-  };
+  return mergeSchoolSettings(school as SchoolRow, settings as SchoolSettingsRow | null);
 }

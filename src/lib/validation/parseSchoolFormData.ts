@@ -1,15 +1,22 @@
-export function parseSchoolFormData(formData: FormData) {
-  const get = (key: string) => {
-    const val = formData.get(key);
-    return typeof val === "string" ? val.trim() : "";
-  };
+import { cleanFormField } from "./cleanFormField";
 
+export function parseSchoolFormData(formData: FormData) {
   return {
-    nameAr: get("name_ar"),
-    nameEn: get("name_en"),
-    timezone: get("timezone") || "UTC",
-    academicYear: get("academic_year") || null,
-    vision: get("vision") || null,
-    mission: get("mission") || null,
+    nameAr: cleanFormField(formData.get("name_ar")) ?? "",
+    nameEn: cleanFormField(formData.get("name_en")) ?? "",
+    phone: cleanFormField(formData.get("phone")),
+    managerNameAr: cleanFormField(formData.get("manager_name_ar")),
+    managerNameEn: cleanFormField(formData.get("manager_name_en")),
+    assistantManagerAr: cleanFormField(formData.get("assistant_manager_ar")),
+    assistantManagerEn: cleanFormField(formData.get("assistant_manager_en")),
+    assistantManager2Ar: cleanFormField(formData.get("assistant_manager_2_ar")),
+    assistantManager2En: cleanFormField(formData.get("assistant_manager_2_en")),
+    addressAr: cleanFormField(formData.get("address_ar")),
+    addressEn: cleanFormField(formData.get("address_en")),
+    academicYear: cleanFormField(formData.get("academic_year")),
+    visionAr: cleanFormField(formData.get("vision_ar")),
+    visionEn: cleanFormField(formData.get("vision_en")),
+    missionAr: cleanFormField(formData.get("mission_ar")),
+    missionEn: cleanFormField(formData.get("mission_en")),
   };
 }

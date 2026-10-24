@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { updateSchoolAction } from "@/actions/settings/updateSchoolAction";
 import type { SchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { SchoolIdentityFields } from "./SchoolIdentityFields";
+import { SchoolLeadershipFields } from "./SchoolLeadershipFields";
+import { SchoolContactFields } from "./SchoolContactFields";
+import { SchoolLogoFields } from "./SchoolLogoFields";
 import { SchoolNarrativeFields } from "./SchoolNarrativeFields";
 
 export function SchoolProfileForm({
@@ -39,12 +42,15 @@ export function SchoolProfileForm({
     >
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <SchoolIdentityFields school={school} canManage={canManage} />
+        <SchoolLeadershipFields school={school} canManage={canManage} />
+        <SchoolContactFields school={school} canManage={canManage} />
+        <SchoolLogoFields logoPath={school.logo_path} canManage={canManage} />
         <SchoolNarrativeFields
-          vision={school.vision ?? ""}
-          mission={school.mission ?? ""}
+          visionAr={school.vision_ar ?? school.vision ?? ""}
+          visionEn={school.vision_en ?? ""}
+          missionAr={school.mission_ar ?? school.mission ?? ""}
+          missionEn={school.mission_en ?? ""}
           disabled={!canManage}
-          visionLabel={t("vision")}
-          missionLabel={t("mission")}
         />
       </div>
 
