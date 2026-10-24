@@ -69,6 +69,7 @@ export async function getCircularsReportData(
     departments: activeDepts,
     targets,
     responses,
+    circularIds,
   });
 
   const totalResponsesRequired = departmentBreakdown.reduce((sum, d) => sum + d.targetedCount, 0);
@@ -78,7 +79,7 @@ export async function getCircularsReportData(
       ? Math.min(100, Math.round((totalResponsesReceived / totalResponsesRequired) * 100))
       : 100;
 
-  const rows = mapCircularReportRows(circularList, targets, responses);
+  const rows = mapCircularReportRows(circularList, targets, responses, activeDepts);
 
   return {
     totalCirculars: circularList.length,

@@ -15,6 +15,11 @@ export interface DepartmentComplianceItem {
   complianceRatePercent: number;
 }
 
+export interface DepartmentCompactItem {
+  id: string;
+  name: string;
+}
+
 export interface CircularReportRow {
   id: string;
   refNumber: string;
@@ -27,6 +32,8 @@ export interface CircularReportRow {
   totalTargets: number;
   totalResponses: number;
   compliancePercent: number;
+  respondedDepartments: DepartmentCompactItem[];
+  pendingDepartments: DepartmentCompactItem[];
 }
 
 export interface CircularsReportSummaryData {

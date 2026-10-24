@@ -1,28 +1,41 @@
-import { useLocale, useTranslations } from "next-intl";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { formatCircularDate } from "@/lib/circulars/formatCircularDate";
-import type { CircularResponseRow } from "@/lib/circulars/types";
+"use client";
 
-export function CircularResponseTable({ responses }: { responses: CircularResponseRow[] }) {
+import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { buildResponseItems } from "@/lib/circulars/buildResponseItems";
+import type { CircularResponseRow } from "@/lib/circulars/types";
+import type { DepartmentResponseStatus } from "@/lib/circulars/getCircularDepartmentStatuses";
+import { CircularResponseFilterBar, type ResponseFilterTab } from "./CircularResponseFilterBar";
+import { CircularResponseTableRow } from "./CircularResponseTableRow";
+
+export function CircularResponseTable({
+  responses,
+  expectedDepartments = [],
+}: {
+  responses: CircularResponseRow[];
+  expectedDepartments?: DepartmentResponseStatus[];
+}) {
   const t = useTranslations("circulars");
   const tCommon = useTranslations("common");
   const locale = useLocale();
+  const [filter, setFilter] = useState<ResponseFilterTab>("all");
 
-  if (responses.length === 0) {
+  const items = buildResponseItems(responses, expectedDepartments);
+  if (items.length === 0) {
     return (
       <div className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
         {t("pending")}
       </div>
     );
   }
+
+  const respondedCount = items.filter((i) => i.hasResponded).length;
+  const filtered = items.filter((i) => {
+    if (filter === "responded") return i.hasResponded;
+    if (filter === "pending") return !i.hasResponded;
+    return true;
+  });
 
   const statusLabels: Record<string, string> = {
     pending: t("pending"),
@@ -34,54 +47,42 @@ export function CircularResponseTable({ responses }: { responses: CircularRespon
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{t("department")}</TableHead>
-            <TableHead>{t("responder")}</TableHead>
-            <TableHead className="w-28">{t("responseStatus")}</TableHead>
-            <TableHead>{t("rejectionReason")}</TableHead>
-            <TableHead className="w-36 text-end">{tCommon("status")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {responses.map((res) => {
-            const formattedDate = formatCircularDate(res.submitted_at, locale);
+    <div className="space-y-3">
+      {expectedDepartments.length > 0 && (
+        <CircularResponseFilterBar
+          filter={filter}
+          setFilter={setFilter}
+          totalCount={items.length}
+          respondedCount={respondedCount}
+          pendingCount={items.length - respondedCount}
+        />
+      )}
 
-            return (
-              <TableRow key={res.id}>
-                <TableCell className="font-medium text-foreground">
-                  {res.department_name ?? "—"}
-                </TableCell>
-                <TableCell className="text-muted-foreground">{res.responder_name ?? "—"}</TableCell>
-                <TableCell>
-                  <Badge
-                    variant={
-                      res.status === "approved" || res.status === "completed"
-                        ? "default"
-                        : res.status === "rejected"
-                          ? "destructive"
-                          : "secondary"
-                    }
-                  >
-                    {statusLabels[res.status] ?? res.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="max-w-xs truncate text-xs text-muted-foreground">
-                  {res.reason ?? "—"}
-                </TableCell>
-                <TableCell
-                  suppressHydrationWarning
-                  className="text-end font-mono text-xs text-muted-foreground"
-                >
-                  {formattedDate}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+      <div className="overflow-hidden rounded-lg border border-border bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t("department")}</TableHead>
+              <TableHead>{t("responder")}</TableHead>
+              <TableHead className="w-32">{t("responseStatus")}</TableHead>
+              <TableHead>{t("rejectionReason")}</TableHead>
+              <TableHead className="w-36 text-end">{tCommon("status")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered.map((item) => (
+              <CircularResponseTableRow
+                key={item.departmentId}
+                item={item}
+                locale={locale}
+                statusLabels={statusLabels}
+                awaitingText={t("awaitingResponse")}
+                notRespondedText={t("notResponded")}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

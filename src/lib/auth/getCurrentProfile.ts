@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { toProfileRow, type RawProfileResult } from "./toProfileRow";
 
 export type ProfileRow = {
   id: string;
@@ -7,6 +8,9 @@ export type ProfileRow = {
   job_title: string | null;
   school_id: string | null;
   department_id: string | null;
+  department_name_ar?: string | null;
+  department_name_en?: string | null;
+  department_name?: string | null;
   is_active: boolean;
 };
 
@@ -14,10 +18,15 @@ export async function getCurrentProfile(): Promise<ProfileRow | null> {
   const supabase = await createSupabaseServerClient();
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) return null;
+
   const { data } = await supabase
     .from("profiles")
-    .select("id, full_name, email, job_title, school_id, department_id, is_active")
+    .select(
+      "id, full_name, email, job_title, school_id, department_id, is_active, departments!profiles_department_id_fkey(id, name_ar, name_en)",
+    )
     .eq("id", userData.user.id)
     .maybeSingle();
-  return (data as ProfileRow | null) ?? null;
+
+  if (!data) return null;
+  return toProfileRow(data as unknown as RawProfileResult);
 }

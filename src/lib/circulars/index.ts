@@ -1,5 +1,10 @@
 export { getCircularById, type CircularDetail } from "./getCircularById";
 export { getCircularResponses } from "./getCircularResponses";
+export {
+  getCircularDepartmentStatuses,
+  type DepartmentResponseStatus,
+} from "./getCircularDepartmentStatuses";
+export { getCircularPermissions } from "./getCircularPermissions";
 export { getSchoolCirculars } from "./getSchoolCirculars";
 export { getCircularAttachments } from "./getCircularAttachments";
 export { createCircularRecord } from "./createCircularRecord";

@@ -9,6 +9,7 @@ import { getCircularResponses } from "@/lib/circulars/getCircularResponses";
 import { canRespondToCircular } from "@/lib/circulars/canRespondToCircular";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
+import { getCircularDepartmentStatuses, getCircularPermissions } from "@/lib/circulars";
 import {
   CircularDetailCard,
   CircularResponseBox,
@@ -36,14 +37,13 @@ export default async function CircularDetailPage({
     notFound();
   }
 
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
-  const canPublish = isOwner || perms.includes("circular.publish");
-  const canManage = canPublish || perms.includes("circular.create");
+  const { canPublish, canManage, canViewResponses } = getCircularPermissions(perms);
   const canRespond = canRespondToCircular(circular, profile);
-  const canViewResponses =
-    isOwner || perms.includes("circular.view_responses") || perms.includes("audit.view");
 
   const userDeptResponse = responses.find((res) => res.department_id === profile?.department_id);
+  const expectedDepartments = canViewResponses
+    ? getCircularDepartmentStatuses(circular, departments, responses)
+    : [];
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">
@@ -74,7 +74,7 @@ export default async function CircularDetailPage({
       {canViewResponses && (
         <div className="space-y-3">
           <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("responses")}</h3>
-          <CircularResponseTable responses={responses} />
+          <CircularResponseTable responses={responses} expectedDepartments={expectedDepartments} />
         </div>
       )}
     </div>

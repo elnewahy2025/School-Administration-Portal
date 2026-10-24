@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { LogOutIcon, UserIcon } from "lucide-react";
 import {
   DropdownMenu,
@@ -13,13 +13,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logoutAction } from "@/actions/auth/logoutAction";
 import { getUserInitials } from "@/lib/auth/getUserInitials";
+import { resolveDepartmentName } from "@/lib/auth/resolveDepartmentName";
+import { resolveUserSubtitle } from "@/lib/auth/resolveUserSubtitle";
 import type { ProfileRow } from "@/lib/auth/getCurrentProfile";
 import { AppUserLabel } from "./AppUserLabel";
 
 export function AppUserMenu({ profile }: { profile: ProfileRow | null }) {
   const t = useTranslations("dashboard");
+  const locale = useLocale();
   const displayName = profile?.full_name ?? "User";
   const initials = getUserInitials(profile?.full_name);
+  const deptName = resolveDepartmentName(profile, locale);
+  const subtitle = resolveUserSubtitle(profile, deptName);
 
   return (
     <DropdownMenu>
@@ -29,8 +34,8 @@ export function AppUserMenu({ profile }: { profile: ProfileRow | null }) {
         </div>
         <div className="hidden flex-col items-start text-start sm:flex">
           <span className="text-sm leading-none font-medium text-foreground">{displayName}</span>
-          <span className="line-clamp-1 text-xs text-muted-foreground">
-            {profile?.job_title ?? profile?.email ?? ""}
+          <span className="line-clamp-1 max-w-[180px] text-xs text-muted-foreground">
+            {subtitle}
           </span>
         </div>
       </DropdownMenuTrigger>
