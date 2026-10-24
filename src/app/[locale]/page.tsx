@@ -20,7 +20,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <PublicAboutSection school={school} />
         <PublicEventsSection events={events} />
       </div>
-      <PublicFooter school={school} />
+      <PublicFooter />
     </main>
   );
 }
