@@ -60,7 +60,7 @@ export function UserTableActions({
         <PencilIcon className="size-3.5" />
       </Button>
       <Button variant="outline" size="sm" disabled={disabled || isSelf} onClick={onToggle}>
-        {isActive ? tCommon("inactive") : tCommon("active")}
+        {isActive ? tCommon("deactivate") : tCommon("activate")}
       </Button>
       <Button
         variant="destructive"

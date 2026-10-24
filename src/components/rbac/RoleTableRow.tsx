@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
@@ -15,6 +16,8 @@ export function RoleTableRow({
   canManage: boolean;
   onEdit: () => void;
 }) {
+  const t = useTranslations("rbac");
+
   return (
     <TableRow>
       <TableCell>
@@ -28,11 +31,13 @@ export function RoleTableRow({
       </TableCell>
       <TableCell>
         <Badge variant="outline" className="text-xs">
-          {role.permissions.length} perms
+          {t("permissionsCount", { count: role.permissions.length })}
         </Badge>
       </TableCell>
       <TableCell>
-        <span className="text-xs text-muted-foreground">{role.user_count} users</span>
+        <span className="text-xs text-muted-foreground">
+          {t("usersCount", { count: role.user_count })}
+        </span>
       </TableCell>
       <TableCell className="text-end">
         <RoleTableActions role={role} canManage={canManage} onEdit={onEdit} />

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { withApiErrorHandler, ForbiddenError } from "@/lib/errors";
 import { assertCanViewReports } from "@/lib/reports/assertCanViewReports";
 import { getCircularsReportData } from "@/lib/reports/getCircularsReportData";
 import { getMaintenanceReportData } from "@/lib/reports/getMaintenanceReportData";
@@ -6,10 +6,10 @@ import { buildCircularsCsv } from "@/lib/reports/buildCircularsCsv";
 import { buildMaintenanceCsv } from "@/lib/reports/buildMaintenanceCsv";
 import type { ReportFilterParams } from "@/lib/reports/types";
 
-export async function GET(request: Request) {
+async function handleReportExport(request: Request) {
   const authCheck = await assertCanViewReports();
   if (!authCheck.authorized) {
-    return new NextResponse(authCheck.error || "Unauthorized", { status: 403 });
+    throw new ForbiddenError(authCheck.error || "Unauthorized");
   }
 
   const { searchParams } = new URL(request.url);
@@ -48,3 +48,5 @@ export async function GET(request: Request) {
     },
   });
 }
+
+export const GET = withApiErrorHandler(handleReportExport);

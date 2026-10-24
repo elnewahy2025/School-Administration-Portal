@@ -1,8 +1,10 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
+import { resolveRoleDisplayName } from "@/lib/rbac/resolveRoleDisplayName";
 import { UserTableActions } from "./UserTableActions";
 import { UserStatusBadge } from "./UserStatusBadge";
 
@@ -21,6 +23,8 @@ export function UserTableRow({
   onEdit: () => void;
   onToggle: (id: string, status: boolean) => void;
 }) {
+  const tRbac = useTranslations("rbac");
+
   return (
     <TableRow>
       <TableCell>
@@ -35,7 +39,7 @@ export function UserTableRow({
       <TableCell className="text-muted-foreground">{user.job_title ?? "—"}</TableCell>
       <TableCell className="text-muted-foreground">{user.department_name ?? "—"}</TableCell>
       <TableCell>
-        <Badge variant="outline">{user.role_key ?? "staff"}</Badge>
+        <Badge variant="outline">{resolveRoleDisplayName(user.role_key, tRbac)}</Badge>
       </TableCell>
       <TableCell>
         <UserStatusBadge isActive={user.is_active} />

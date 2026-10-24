@@ -505,7 +505,18 @@
     "categorySettings": "School Settings",
     "categoryAdmin": "Users & Role Administration",
     "categoryReports": "Reporting & Analytics",
-    "categoryAudit": "Audit Logs"
+    "categoryAudit": "Audit Logs",
+    "systemRole": "System",
+    "customRole": "Custom",
+    "permissionsCount": "{count} perms",
+    "usersCount": "{count} users",
+    "roleKeyPlaceholder": "e.g. academic_coordinator",
+    "roleStaff": "Staff",
+    "roleDeptHead": "Department Head",
+    "roleOperator": "Maintenance Technician",
+    "roleSchoolAdmin": "School Administrator",
+    "roleAuditor": "Auditor",
+    "roleOwner": "Platform Owner"
   },
   "common": {
     "save": "Save",
@@ -523,6 +534,8 @@
     "noData": "No records found",
     "active": "Active",
     "inactive": "Deactivated",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
     "language": "Language",
     "arabic": "العربية",
     "english": "English",
@@ -530,6 +543,29 @@
     "back": "Back",
     "view": "View",
     "close": "Close",
-    "error": "An unexpected error occurred"
+    "error": "An unexpected error occurred",
+    "retry": "Retry",
+    "goHome": "Return to Home"
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred while processing your request.",
+    "notFoundTitle": "Page or Resource Not Found",
+    "notFoundDesc": "The resource or page you are looking for may have been moved or removed.",
+    "unauthorizedTitle": "Authentication Required",
+    "unauthorizedDesc": "Please sign in to access this resource.",
+    "forbiddenTitle": "Access Denied",
+    "forbiddenDesc": "You do not have the required permissions to perform this action or view this content.",
+    "serverErrorTitle": "Internal Server Error",
+    "serverErrorDesc": "We are experiencing a temporary technical difficulty. Please try again later.",
+    "validationTitle": "Validation Error",
+    "validationDesc": "Please correct the highlighted fields and try again.",
+    "conflictTitle": "Conflict",
+    "conflictDesc": "The resource or record already exists or conflicts with another operation.",
+    "rateLimitedTitle": "Too Many Requests",
+    "rateLimitedDesc": "Please wait a moment before sending another request.",
+    "networkTitle": "Network Connection Failed",
+    "networkDesc": "Could not connect to the server. Please check your internet connection.",
+    "referenceCode": "Support Reference: {code}",
+    "contactAdmin": "If the issue persists, please provide the support reference code above to your administrator."
   }
 }

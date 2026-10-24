@@ -62,7 +62,7 @@ export function CreateRoleForm({ onClose }: { onClose: () => void }) {
             id="new_role_key"
             value={key}
             onChange={(e) => setKey(e.target.value)}
-            placeholder="e.g. academic_coordinator"
+            placeholder={t("roleKeyPlaceholder")}
             required
             disabled={isPending}
           />

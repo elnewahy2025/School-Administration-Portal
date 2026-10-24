@@ -505,7 +505,18 @@
     "categorySettings": "إعدادات المدرسة",
     "categoryAdmin": "إدارة المستخدمين والأدوار",
     "categoryReports": "التقارير والإحصائيات",
-    "categoryAudit": "سجل العمليات"
+    "categoryAudit": "سجل العمليات",
+    "systemRole": "نظامي",
+    "customRole": "مخصص",
+    "permissionsCount": "{count} صلاحية",
+    "usersCount": "{count} مستخدم",
+    "roleKeyPlaceholder": "مثال: academic_coordinator",
+    "roleStaff": "موظف / كادر مدرسي",
+    "roleDeptHead": "رئيس قسم",
+    "roleOperator": "فني صيانة",
+    "roleSchoolAdmin": "مدير مدرسة",
+    "roleAuditor": "مدقق حسابات",
+    "roleOwner": "مالك المنصة"
   },
   "common": {
     "save": "حفظ",
@@ -523,6 +534,8 @@
     "noData": "لا توجد سجلات",
     "active": "نشط",
     "inactive": "معطّل",
+    "activate": "تفعيل",
+    "deactivate": "تعطيل",
     "language": "اللغة",
     "arabic": "العربية",
     "english": "English",
@@ -530,6 +543,29 @@
     "back": "رجوع",
     "view": "عرض",
     "close": "إغلاق",
-    "error": "حدث خطأ غير متوقع"
+    "error": "حدث خطأ غير متوقع",
+    "retry": "إعادة المحاولة",
+    "goHome": "العودة للرئيسية"
+  },
+  "errors": {
+    "unexpected": "حدث خطأ غير متوقع أثناء معالجة طلبك.",
+    "notFoundTitle": "الصفحة أو المورد غير موجود",
+    "notFoundDesc": "المورد أو الصفحة التي تحاول الوصول إليها قد تكون نُقلت أو حُذفت.",
+    "unauthorizedTitle": "تسجيل الدخول مطلوب",
+    "unauthorizedDesc": "يرجى تسجيل الدخول للوصول إلى هذا المحتوى.",
+    "forbiddenTitle": "غير مصرح لك بالوصول",
+    "forbiddenDesc": "لا تملك الصلاحيات الكافية لتنفيذ هذا الإجراء أو عرض هذا المحتوى.",
+    "serverErrorTitle": "خطأ في خادم النظام",
+    "serverErrorDesc": "نواجه صعوبة فنية مؤقتة. يرجى المحاولة مرة أخرى.",
+    "validationTitle": "خطأ في البيانات المدخلة",
+    "validationDesc": "يرجى تصحيح الحقول والمحاولة مرة أخرى.",
+    "conflictTitle": "تعارض في البيانات",
+    "conflictDesc": "المورد موجود بالفعل أو يتعارض مع سجل آخر.",
+    "rateLimitedTitle": "تم تجاوز الحد المسموح",
+    "rateLimitedDesc": "يرجى الانتظار قليلاً قبل المحاولة مجدداً.",
+    "networkTitle": "فشل الاتصال بالشبكة",
+    "networkDesc": "تعذر الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت.",
+    "referenceCode": "رمز المرجع: {code}",
+    "contactAdmin": "إذا تكررت المشكلة، يرجى تزويد مسؤول النظام برمز المرجع أعلاه."
   }
 }
