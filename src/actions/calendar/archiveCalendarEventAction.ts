@@ -2,33 +2,33 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { assertCanManageCalendar } from "@/lib/calendar/assertCanManageCalendar";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { sanitizeError } from "@/lib/errors/sanitizeError";
+import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
-export async function archiveCalendarEventAction(eventId: string) {
-  const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
-    return { success: false, error: "No school associated with profile" };
+export async function archiveCalendarEventAction(eventId: string): Promise<ActionResult> {
+  try {
+    const auth = await assertCanManageCalendar();
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase
+      .from("calendar_events")
+      .update({
+        status: "archived",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", eventId)
+      .eq("school_id", auth.schoolId);
+
+    if (error) {
+      throw mapDatabaseError(error);
+    }
+
+    revalidatePath("/[locale]/calendar", "page");
+    revalidatePath(`/[locale]/calendar/${eventId}`, "page");
+    return { success: true };
+  } catch (err: unknown) {
+    const appError = sanitizeError(err);
+    return formatActionErrorResult(appError);
   }
-
-  const allowed = await hasPermission("calendar.manage", profile.school_id);
-  if (!allowed) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const supabase = await createSupabaseServerClient();
-  const { error } = await supabase
-    .from("calendar_events")
-    .update({
-      status: "archived",
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", eventId)
-    .eq("school_id", profile.school_id);
-
-  if (error) return { success: false, error: error.message };
-
-  revalidatePath("/[locale]/calendar", "page");
-  revalidatePath(`/[locale]/calendar/${eventId}`, "page");
-  return { success: true };
 }

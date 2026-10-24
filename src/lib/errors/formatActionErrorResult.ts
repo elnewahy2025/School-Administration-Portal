@@ -9,6 +9,13 @@ export type ActionErrorResult = {
   fieldErrors?: Record<string, string[]>;
 };
 
+export type ActionSuccessResult<T = Record<string, unknown>> = {
+  success: true;
+  error?: undefined;
+} & T;
+
+export type ActionResult<T = Record<string, unknown>> = ActionSuccessResult<T> | ActionErrorResult;
+
 export function formatActionErrorResult(error: AppError): ActionErrorResult {
   const fieldErrors = error instanceof ValidationError ? error.fieldErrors : undefined;
 

@@ -1,12 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient, createSupabaseAdminClient } from "@/lib/supabase";
-import { assignUserRole } from "@/lib/school/assignUserRole";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { validateUserUpdateInput } from "@/lib/school/validateUserUpdateInput";
 import { assertCanManageUser } from "@/lib/school/assertCanManageUser";
 import { persistUserUpdates } from "@/lib/school/persistUserUpdates";
-import { sanitizeError, formatActionErrorResult } from "@/lib/errors";
+import { applyUserRoleUpdate } from "@/lib/school/applyUserRoleUpdate";
+import {
+  sanitizeError,
+  formatActionErrorResult,
+  ForbiddenError,
+  ValidationError,
+  AppError,
+  type ActionResult,
+} from "@/lib/errors";
 
 export type UpdateUserInput = {
   userId: string;
@@ -20,11 +27,11 @@ export type UpdateUserInput = {
   isActive?: boolean;
 };
 
-export async function updateUserAction(input: UpdateUserInput) {
+export async function updateUserAction(input: UpdateUserInput): Promise<ActionResult> {
   try {
     const check = await assertCanManageUser(input.userId, input.roleKey);
     if (!check.allowed || !check.schoolId || !check.currentUserId) {
-      return { success: false, error: check.error };
+      throw new ForbiddenError(check.error || "Unauthorized");
     }
 
     const val = validateUserUpdateInput(
@@ -34,25 +41,16 @@ export async function updateUserAction(input: UpdateUserInput) {
       input.isActive,
     );
     if (!val.valid) {
-      return { success: false, error: val.error };
+      throw new ValidationError(val.error || "Invalid user input");
     }
 
     const adminClient = createSupabaseAdminClient();
     const res = await persistUserUpdates(adminClient, check.schoolId, input);
     if (!res.success) {
-      return { success: false, error: res.error };
+      throw new AppError(res.error || "Failed to update user");
     }
 
-    if (input.roleKey) {
-      const supabase = await createSupabaseServerClient();
-      await assignUserRole(
-        supabase,
-        input.userId,
-        check.schoolId,
-        check.currentUserId,
-        input.roleKey,
-      );
-    }
+    await applyUserRoleUpdate(input.userId, check.schoolId, check.currentUserId, input.roleKey);
 
     revalidatePath("/[locale]/settings/users", "page");
     return { success: true };

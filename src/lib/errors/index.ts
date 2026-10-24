@@ -13,5 +13,10 @@ export { mapDatabaseError } from "./mapDatabaseError";
 export { sanitizeError } from "./sanitizeError";
 export { formatApiErrorResponse, type ApiErrorBody } from "./formatApiErrorResponse";
 export { withApiErrorHandler, type ApiRouteHandler } from "./withApiErrorHandler";
-export { formatActionErrorResult, type ActionErrorResult } from "./formatActionErrorResult";
+export {
+  formatActionErrorResult,
+  type ActionErrorResult,
+  type ActionSuccessResult,
+  type ActionResult,
+} from "./formatActionErrorResult";
 export { withActionErrorHandler, type ServerAction } from "./withActionErrorHandler";

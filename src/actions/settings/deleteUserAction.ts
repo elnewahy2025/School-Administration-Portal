@@ -5,26 +5,34 @@ import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
-import { sanitizeError, formatActionErrorResult } from "@/lib/errors";
+import {
+  sanitizeError,
+  formatActionErrorResult,
+  AuthenticationError,
+  ForbiddenError,
+  ValidationError,
+  mapDatabaseError,
+  type ActionResult,
+} from "@/lib/errors";
 
-export async function deleteUserAction(userId: string) {
+export async function deleteUserAction(userId: string): Promise<ActionResult> {
   try {
     const profile = await getCurrentProfile();
     if (!profile?.school_id) {
-      return { success: false, error: "No school associated with profile" };
+      throw new AuthenticationError("No school associated with profile");
     }
 
     if (profile.id === userId) {
-      return { success: false, error: "Cannot delete your own account" };
+      throw new ValidationError("Cannot delete your own account");
     }
 
     if (await isPlatformOwner(userId)) {
-      return { success: false, error: "Cannot modify or delete platform owner" };
+      throw new ForbiddenError("Cannot modify or delete platform owner");
     }
 
     const allowed = await hasPermission("users.manage", profile.school_id);
     if (!allowed) {
-      return { success: false, error: "Unauthorized" };
+      throw new ForbiddenError("Unauthorized");
     }
 
     const supabase = await createSupabaseServerClient();
@@ -48,7 +56,7 @@ export async function deleteUserAction(userId: string) {
       .eq("school_id", profile.school_id);
 
     if (error) {
-      return { success: false, error: error.message };
+      throw mapDatabaseError(error);
     }
 
     revalidatePath("/[locale]/settings/users", "page");

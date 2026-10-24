@@ -4,17 +4,28 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { deleteCircularRecord } from "@/lib/circulars/deleteCircularRecord";
 import { assertCanManageCirculars } from "@/lib/circulars/assertCanManageCirculars";
+import { ForbiddenError } from "@/lib/errors/ForbiddenError";
+import { AppError } from "@/lib/errors/AppError";
+import { sanitizeError } from "@/lib/errors/sanitizeError";
+import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
-export async function deleteCircularAction(circularId: string) {
-  const auth = await assertCanManageCirculars();
-  if (!auth.authorized) return { success: false, error: auth.error };
+export async function deleteCircularAction(circularId: string): Promise<ActionResult> {
+  try {
+    const auth = await assertCanManageCirculars();
+    if (!auth.authorized) {
+      throw new ForbiddenError(auth.error || "Unauthorized");
+    }
 
-  const supabase = await createSupabaseServerClient();
-  const res = await deleteCircularRecord(supabase, circularId);
-  if (!res.success) {
-    return { success: false, error: res.error || "Failed to delete circular" };
+    const supabase = await createSupabaseServerClient();
+    const res = await deleteCircularRecord(supabase, circularId);
+    if (!res.success) {
+      throw new AppError(res.error || "Failed to delete circular");
+    }
+
+    revalidatePath("/[locale]/circulars", "page");
+    return { success: true };
+  } catch (err: unknown) {
+    const appError = sanitizeError(err);
+    return formatActionErrorResult(appError);
   }
-
-  revalidatePath("/[locale]/circulars", "page");
-  return { success: true };
 }

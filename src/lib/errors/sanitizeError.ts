@@ -4,11 +4,17 @@ import { mapDatabaseError } from "./mapDatabaseError";
 import { createCorrelationId } from "../logger/createCorrelationId";
 import { logError, type LogContext } from "../logger/logError";
 
+import { isNextRouterError } from "./isNextRouterError";
+
 export function sanitizeError(
   error: unknown,
   context?: LogContext,
   providedCorrelationId?: string,
 ): AppError {
+  if (isNextRouterError(error)) {
+    throw error;
+  }
+
   const correlationId = providedCorrelationId || createCorrelationId();
 
   let resolvedAppError: AppError;

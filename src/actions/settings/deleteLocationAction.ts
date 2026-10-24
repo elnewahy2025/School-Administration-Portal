@@ -4,36 +4,45 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { AuthenticationError } from "@/lib/errors/AuthenticationError";
+import { ForbiddenError } from "@/lib/errors/ForbiddenError";
+import { ConflictError } from "@/lib/errors/ConflictError";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { sanitizeError } from "@/lib/errors/sanitizeError";
+import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
-export async function deleteLocationAction(locationId: string) {
-  const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
-    return { success: false, error: "No school associated with profile" };
-  }
-
-  const allowed = await hasPermission("settings.school.update", profile.school_id);
-  if (!allowed) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const supabase = await createSupabaseServerClient();
-  const { error } = await supabase
-    .from("locations")
-    .delete()
-    .eq("id", locationId)
-    .eq("school_id", profile.school_id);
-
-  if (error) {
-    if (error.code === "23503") {
-      return {
-        success: false,
-        error:
-          "Cannot delete location while maintenance requests are associated with it. Deactivate it instead.",
-      };
+export async function deleteLocationAction(locationId: string): Promise<ActionResult> {
+  try {
+    const profile = await getCurrentProfile();
+    if (!profile?.school_id) {
+      throw new AuthenticationError("No school associated with profile");
     }
-    return { success: false, error: error.message };
-  }
 
-  revalidatePath("/[locale]/settings/locations", "page");
-  return { success: true };
+    const allowed = await hasPermission("settings.school.update", profile.school_id);
+    if (!allowed) {
+      throw new ForbiddenError("Unauthorized");
+    }
+
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase
+      .from("locations")
+      .delete()
+      .eq("id", locationId)
+      .eq("school_id", profile.school_id);
+
+    if (error) {
+      if (error.code === "23503") {
+        throw new ConflictError(
+          "Cannot delete location while maintenance requests are associated with it. Deactivate it instead.",
+        );
+      }
+      throw mapDatabaseError(error);
+    }
+
+    revalidatePath("/[locale]/settings/locations", "page");
+    return { success: true };
+  } catch (err: unknown) {
+    const appError = sanitizeError(err);
+    return formatActionErrorResult(appError);
+  }
 }

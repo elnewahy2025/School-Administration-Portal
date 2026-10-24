@@ -1,9 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
-import { sanitizeError, formatActionErrorResult } from "@/lib/errors";
+import { assertCanManageSchoolUsers } from "@/lib/school/assertCanManageSchoolUsers";
+import {
+  sanitizeError,
+  formatActionErrorResult,
+  ValidationError,
+  AppError,
+  type ActionResult,
+} from "@/lib/errors";
 import { provisionAuthUser } from "./provisionAuthUser";
 import { validateCreateUserInput } from "./validateCreateUserInput";
 
@@ -16,19 +21,9 @@ export type CreateUserInput = {
   roleKey: string;
 };
 
-export async function createUserAction(input: CreateUserInput) {
+export async function createUserAction(input: CreateUserInput): Promise<ActionResult> {
   try {
-    const profile = await getCurrentProfile();
-    const schoolId = profile?.school_id;
-    if (!schoolId) {
-      return { success: false, error: "No school associated with profile" };
-    }
-
-    const allowed = await hasPermission("users.manage", schoolId);
-    if (!allowed) {
-      return { success: false, error: "Unauthorized" };
-    }
-
+    const auth = await assertCanManageSchoolUsers();
     const val = validateCreateUserInput(
       input.fullName,
       input.email,
@@ -36,7 +31,7 @@ export async function createUserAction(input: CreateUserInput) {
       input.roleKey || "staff",
     );
     if (!val.valid) {
-      return { success: false, error: val.error };
+      throw new ValidationError(val.error || "Invalid user input");
     }
 
     const res = await provisionAuthUser({
@@ -46,14 +41,16 @@ export async function createUserAction(input: CreateUserInput) {
       jobTitle: input.jobTitle,
       departmentId: input.departmentId,
       roleKey: input.roleKey || "staff",
-      schoolId,
-      callerId: profile.id,
+      schoolId: auth.schoolId,
+      callerId: auth.profileId,
     });
 
-    if (res.success) {
-      revalidatePath("/[locale]/settings/users", "page");
+    if (!res.success) {
+      throw new AppError(res.error || "Failed to create user");
     }
-    return res;
+
+    revalidatePath("/[locale]/settings/users", "page");
+    return { success: true };
   } catch (err: unknown) {
     const sanitized = sanitizeError(err, { action: "createUserAction", email: input.email });
     return formatActionErrorResult(sanitized);

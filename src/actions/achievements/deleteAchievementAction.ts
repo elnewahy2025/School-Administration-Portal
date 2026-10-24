@@ -2,29 +2,27 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { assertCanManageCalendar } from "@/lib/calendar/assertCanManageCalendar";
 import { deleteAchievementRecord } from "@/lib/achievements/deleteAchievementRecord";
+import { AppError } from "@/lib/errors/AppError";
+import { sanitizeError } from "@/lib/errors/sanitizeError";
+import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
-export async function deleteAchievementAction(achievementId: string) {
-  const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
-    return { success: false, error: "No school associated with profile" };
+export async function deleteAchievementAction(achievementId: string): Promise<ActionResult> {
+  try {
+    const auth = await assertCanManageCalendar();
+    const supabase = await createSupabaseServerClient();
+    const res = await deleteAchievementRecord(supabase, achievementId, auth.schoolId);
+
+    if (res.error) {
+      throw new AppError(res.error);
+    }
+
+    revalidatePath("/[locale]/calendar", "page");
+    revalidatePath("/[locale]", "page");
+    return { success: true };
+  } catch (err: unknown) {
+    const appError = sanitizeError(err);
+    return formatActionErrorResult(appError);
   }
-
-  const allowed = await hasPermission("calendar.manage", profile.school_id);
-  if (!allowed) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const supabase = await createSupabaseServerClient();
-  const res = await deleteAchievementRecord(supabase, achievementId, profile.school_id);
-
-  if (res.error) {
-    return { success: false, error: res.error };
-  }
-
-  revalidatePath("/[locale]/calendar", "page");
-  revalidatePath("/[locale]", "page");
-  return { success: true };
 }

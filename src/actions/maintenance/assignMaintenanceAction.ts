@@ -2,66 +2,68 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { assertCanAssignMaintenance } from "@/lib/maintenance/assertCanAssignMaintenance";
 import { parseMaintenanceAssignData } from "@/lib/validation/parseMaintenanceAssignData";
 import { saveMaintenanceAssignment } from "@/lib/maintenance/saveMaintenanceAssignment";
 import { dispatchModuleNotification } from "@/lib/notifications/dispatchModuleNotification";
+import { ValidationError } from "@/lib/errors/ValidationError";
+import { NotFoundError } from "@/lib/errors/NotFoundError";
+import { AppError } from "@/lib/errors/AppError";
+import { sanitizeError } from "@/lib/errors/sanitizeError";
+import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
-export async function assignMaintenanceAction(formData: FormData) {
-  const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
-    return { success: false, error: "No school associated with profile" };
-  }
+export async function assignMaintenanceAction(formData: FormData): Promise<ActionResult> {
+  try {
+    const auth = await assertCanAssignMaintenance();
+    const { requestId, operatorId, priority, notes } = parseMaintenanceAssignData(formData);
+    if (!requestId || !operatorId) {
+      throw new ValidationError("Request ID and Operator are required");
+    }
 
-  const allowed = await hasPermission("maintenance.assign", profile.school_id);
-  if (!allowed) {
-    return { success: false, error: "Unauthorized" };
-  }
+    const supabase = await createSupabaseServerClient();
+    const { data: ticket } = await supabase
+      .from("maintenance_requests")
+      .select("id, school_id, status, priority, assigned_operator_id")
+      .eq("id", requestId)
+      .single();
 
-  const { requestId, operatorId, priority, notes } = parseMaintenanceAssignData(formData);
-  if (!requestId || !operatorId) {
-    return { success: false, error: "Request ID and Operator are required" };
-  }
+    if (!ticket) {
+      throw new NotFoundError("Ticket not found");
+    }
 
-  const supabase = await createSupabaseServerClient();
-  const { data: ticket } = await supabase
-    .from("maintenance_requests")
-    .select("id, school_id, status, priority, assigned_operator_id")
-    .eq("id", requestId)
-    .single();
-
-  if (!ticket) {
-    return { success: false, error: "Ticket not found" };
-  }
-
-  const res = await saveMaintenanceAssignment(supabase, {
-    requestId,
-    schoolId: profile.school_id,
-    operatorId,
-    assignedBy: profile.id,
-    currentStatus: ticket.status,
-    currentOperatorId: ticket.assigned_operator_id,
-    priority,
-    currentPriority: ticket.priority,
-    notes,
-  });
-
-  if (res.error) return { success: false, error: res.error };
-
-  if (operatorId && operatorId !== profile.id) {
-    void dispatchModuleNotification({
-      recipientUserIds: [operatorId],
-      schoolId: profile.school_id,
-      type: "maintenance",
-      title: "تم إسناد بلاغ صيانة جديد لك",
-      body: `تم إسناد البلاغ إليك للمتابعة والإنجاز`,
-      entityType: "maintenance_request",
-      entityId: requestId,
+    const res = await saveMaintenanceAssignment(supabase, {
+      requestId,
+      schoolId: auth.schoolId,
+      operatorId,
+      assignedBy: auth.profileId,
+      currentStatus: ticket.status,
+      currentOperatorId: ticket.assigned_operator_id,
+      priority,
+      currentPriority: ticket.priority,
+      notes,
     });
-  }
 
-  revalidatePath("/[locale]/maintenance", "page");
-  revalidatePath(`/[locale]/maintenance/${requestId}`, "page");
-  return { success: true };
+    if (res.error) {
+      throw new AppError(res.error);
+    }
+
+    if (operatorId && operatorId !== auth.profileId) {
+      void dispatchModuleNotification({
+        recipientUserIds: [operatorId],
+        schoolId: auth.schoolId,
+        type: "maintenance",
+        title: "تم إسناد بلاغ صيانة جديد لك",
+        body: `تم إسناد البلاغ إليك للمتابعة والإنجاز`,
+        entityType: "maintenance_request",
+        entityId: requestId,
+      });
+    }
+
+    revalidatePath("/[locale]/maintenance", "page");
+    revalidatePath(`/[locale]/maintenance/${requestId}`, "page");
+    return { success: true };
+  } catch (err: unknown) {
+    const appError = sanitizeError(err);
+    return formatActionErrorResult(appError);
+  }
 }
