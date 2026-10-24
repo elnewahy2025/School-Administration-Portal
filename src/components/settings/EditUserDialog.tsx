@@ -7,16 +7,19 @@ import { Button } from "@/components/ui/button";
 import { updateUserAction } from "@/actions/settings/updateUserAction";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
+import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
 import { UserFormFields } from "./UserFormFields";
 
 export function EditUserDialog({
   user,
   departments,
+  roles = [],
   isOpen,
   onClose,
 }: {
   user: SchoolUserRow;
   departments: DepartmentRow[];
+  roles?: SchoolRoleRow[];
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -65,6 +68,7 @@ export function EditUserDialog({
             roleKey={roleKey}
             setRoleKey={setRoleKey}
             departments={departments}
+            roles={roles}
             disabled={isPending}
           />
           <div className="flex justify-end gap-2 pt-2">

@@ -7,19 +7,24 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components
 import { toggleUserActiveAction } from "@/actions/settings/toggleUserActiveAction";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
+import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
 import { UserTableRow } from "./UserTableRow";
+
+type UserListProps = {
+  users: SchoolUserRow[];
+  currentUserId?: string | null;
+  canManage: boolean;
+  departments?: DepartmentRow[];
+  roles?: SchoolRoleRow[];
+};
 
 export function UserList({
   users,
   currentUserId,
   canManage,
   departments = [],
-}: {
-  users: SchoolUserRow[];
-  currentUserId?: string | null;
-  canManage: boolean;
-  departments?: DepartmentRow[];
-}) {
+  roles = [],
+}: UserListProps) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
@@ -65,6 +70,7 @@ export function UserList({
               canManage={canManage}
               isPending={isPending}
               departments={departments}
+              roles={roles}
               onToggle={handleToggle}
             />
           ))}

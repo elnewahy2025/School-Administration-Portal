@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
+import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
+import { UserRoleSelect } from "./UserRoleSelect";
 
 type UserFormFieldsProps = {
   fullName: string;
@@ -15,6 +17,7 @@ type UserFormFieldsProps = {
   roleKey: string;
   setRoleKey: (v: string) => void;
   departments: DepartmentRow[];
+  roles?: SchoolRoleRow[];
   disabled: boolean;
 };
 
@@ -29,6 +32,7 @@ export function UserFormFields(props: UserFormFieldsProps) {
     roleKey,
     setRoleKey,
     departments,
+    roles = [],
     disabled,
   } = props;
   const t = useTranslations("settings");
@@ -71,22 +75,7 @@ export function UserFormFields(props: UserFormFieldsProps) {
           ))}
         </select>
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="edit_user_role">{t("role")}</Label>
-        <select
-          id="edit_user_role"
-          value={roleKey}
-          onChange={(e) => setRoleKey(e.target.value)}
-          disabled={disabled}
-          className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <option value="staff">{t("roleStaff")}</option>
-          <option value="department_head">{t("roleDeptHead")}</option>
-          <option value="operator">{t("roleOperator")}</option>
-          <option value="school_admin">{t("roleSchoolAdmin")}</option>
-          <option value="auditor">{t("roleAuditor")}</option>
-        </select>
-      </div>
+      <UserRoleSelect roleKey={roleKey} setRoleKey={setRoleKey} roles={roles} disabled={disabled} />
     </>
   );
 }

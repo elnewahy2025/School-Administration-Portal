@@ -1,20 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
+import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
 import { EditUserDialog } from "./EditUserDialog";
 import { UserTableActions } from "./UserTableActions";
+import { UserStatusBadge } from "./UserStatusBadge";
 
 export function UserTableRow({
   user,
   isSelf,
   canManage,
   isPending,
-  departments = [],
+  departments,
+  roles,
   onToggle,
 }: {
   user: SchoolUserRow;
@@ -22,9 +24,9 @@ export function UserTableRow({
   canManage: boolean;
   isPending: boolean;
   departments?: DepartmentRow[];
+  roles?: SchoolRoleRow[];
   onToggle: (id: string, status: boolean) => void;
 }) {
-  const tCommon = useTranslations("common");
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -42,9 +44,7 @@ export function UserTableRow({
           <Badge variant="outline">{user.role_key ?? "staff"}</Badge>
         </TableCell>
         <TableCell>
-          <Badge variant={user.is_active ? "default" : "secondary"}>
-            {user.is_active ? tCommon("active") : tCommon("inactive")}
-          </Badge>
+          <UserStatusBadge isActive={user.is_active} />
         </TableCell>
         {canManage && (
           <TableCell className="text-end">
@@ -62,7 +62,8 @@ export function UserTableRow({
       {isEditing && (
         <EditUserDialog
           user={user}
-          departments={departments}
+          departments={departments ?? []}
+          roles={roles ?? []}
           isOpen={isEditing}
           onClose={() => setIsEditing(false)}
         />

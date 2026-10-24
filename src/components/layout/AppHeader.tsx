@@ -30,11 +30,10 @@ export function AppHeader({
           canManageSettings={canManageSettings}
           canViewReports={canViewReports}
         />
+        <AppHeaderGreeting profile={profile} school={school} />
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
-        <AppHeaderGreeting profile={profile} school={school} />
-        <div className="hidden h-5 w-px bg-border sm:block" />
         <NotificationBell unreadCount={unreadNotifications} />
         <LanguageSwitcher />
         <ThemeToggle />
