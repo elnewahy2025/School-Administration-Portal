@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { assertCanManageCalendar } from "@/lib/calendar/assertCanManageCalendar";
+import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { assertCanRegisterAchievement } from "./assertCanRegisterAchievement";
 import { deleteAchievementRecord } from "@/lib/achievements/deleteAchievementRecord";
 import { AppError } from "@/lib/errors/AppError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
@@ -10,7 +11,8 @@ import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatA
 
 export async function deleteAchievementAction(achievementId: string): Promise<ActionResult> {
   try {
-    const auth = await assertCanManageCalendar();
+    const profile = await getCurrentProfile();
+    const auth = await assertCanRegisterAchievement(profile);
     const supabase = await createSupabaseServerClient();
     const res = await deleteAchievementRecord(supabase, achievementId, auth.schoolId);
 
@@ -18,8 +20,8 @@ export async function deleteAchievementAction(achievementId: string): Promise<Ac
       throw new AppError(res.error);
     }
 
-    revalidatePath("/[locale]/calendar", "page");
-    revalidatePath("/[locale]", "page");
+    revalidatePath("/[locale]/achievements", "page");
+    revalidatePath("/[locale]/dashboard", "page");
     return { success: true };
   } catch (err: unknown) {
     const appError = sanitizeError(err);

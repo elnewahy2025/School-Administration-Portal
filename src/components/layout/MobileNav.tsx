@@ -11,10 +11,12 @@ import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
 export function MobileNav({
   school,
+  isOwner = false,
   canManageSettings,
   canViewReports,
 }: {
   school: SchoolRow | null;
+  isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
 }) {
@@ -59,6 +61,7 @@ export function MobileNav({
               </Button>
             </div>
             <MobileNavLinks
+              isOwner={isOwner}
               canManageSettings={canManageSettings}
               canViewReports={canViewReports}
               onSelect={() => setIsOpen(false)}

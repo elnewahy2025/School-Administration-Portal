@@ -12,12 +12,14 @@ import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 export function AppHeader({
   profile,
   school,
+  isOwner = false,
   canManageSettings,
   canViewReports,
   unreadNotifications = 0,
 }: {
   profile: ProfileRow | null;
   school: SchoolRow | null;
+  isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
   unreadNotifications?: number;
@@ -27,6 +29,7 @@ export function AppHeader({
       <div className="flex items-center gap-3">
         <MobileNav
           school={school}
+          isOwner={isOwner}
           canManageSettings={canManageSettings}
           canViewReports={canViewReports}
         />

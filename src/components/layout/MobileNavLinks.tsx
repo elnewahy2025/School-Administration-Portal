@@ -13,10 +13,12 @@ import {
 import { NavLink } from "./NavLink";
 
 export function MobileNavLinks({
+  isOwner = false,
   canManageSettings,
   canViewReports,
   onSelect,
 }: {
+  isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
   onSelect: () => void;
@@ -34,7 +36,14 @@ export function MobileNavLinks({
       <NavLink href="/circulars" label={t("circulars")} icon={FileTextIcon} onClick={onSelect} />
       <NavLink href="/maintenance" label={t("maintenance")} icon={WrenchIcon} onClick={onSelect} />
       <NavLink href="/calendar" label={t("calendar")} icon={CalendarIcon} onClick={onSelect} />
-      <NavLink href="/achievements" label={t("achievements")} icon={AwardIcon} onClick={onSelect} />
+      {isOwner ? (
+        <NavLink
+          href="/achievements"
+          label={t("achievements")}
+          icon={AwardIcon}
+          onClick={onSelect}
+        />
+      ) : null}
       {canViewReports ? (
         <NavLink href="/reports" label={t("reports")} icon={BarChart3Icon} onClick={onSelect} />
       ) : null}

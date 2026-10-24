@@ -8,6 +8,7 @@ export function AppShell({
   children,
   profile,
   school,
+  isOwner = false,
   canManageSettings,
   canViewReports,
   unreadNotifications = 0,
@@ -15,6 +16,7 @@ export function AppShell({
   children: React.ReactNode;
   profile: ProfileRow | null;
   school: SchoolRow | null;
+  isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
   unreadNotifications?: number;
@@ -23,6 +25,7 @@ export function AppShell({
     <div className="flex min-h-screen w-full bg-background text-foreground">
       <AppSidebar
         school={school}
+        isOwner={isOwner}
         canManageSettings={canManageSettings}
         canViewReports={canViewReports}
       />
@@ -30,6 +33,7 @@ export function AppShell({
         <AppHeader
           profile={profile}
           school={school}
+          isOwner={isOwner}
           canManageSettings={canManageSettings}
           canViewReports={canViewReports}
           unreadNotifications={unreadNotifications}

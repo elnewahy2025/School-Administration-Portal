@@ -1,8 +1,8 @@
 import { setRequestLocale } from "next-intl/server";
+import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
-import { getUserRoleKey } from "@/lib/rbac/getUserRoleKey";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getSchoolAchievements } from "@/lib/achievements/getSchoolAchievements";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { SchoolAchievementsHub } from "@/components/achievements/SchoolAchievementsHub";
@@ -16,26 +16,38 @@ export default async function AchievementsPage({
   setRequestLocale(locale);
 
   const profile = await getCurrentProfile();
-  const schoolId = profile?.school_id;
+  if (!profile) {
+    redirect({ href: "/login", locale });
+    return null;
+  }
 
-  const [permissions, hasManagePerm, achievements, departments, roleKey] = await Promise.all([
+  const [permissions, isPlatformOwnerUser] = await Promise.all([
     getEffectivePermissions().catch((): string[] => []),
-    schoolId ? hasPermission("calendar.manage", schoolId).catch(() => false) : false,
-    getSchoolAchievements(schoolId),
-    getSchoolDepartments(schoolId),
-    getUserRoleKey(profile?.id, schoolId),
+    isPlatformOwner(profile.id),
   ]);
 
   const isOwner =
-    permissions.includes("settings.platform.update") || permissions.includes("roles.manage");
-  const canManage = isOwner || hasManagePerm || roleKey === "department_head";
+    isPlatformOwnerUser ||
+    permissions.includes("settings.platform.update") ||
+    permissions.includes("roles.manage");
+
+  if (!isOwner) {
+    redirect({ href: "/dashboard", locale });
+    return null;
+  }
+
+  const schoolId = profile.school_id;
+  const [achievements, departments] = await Promise.all([
+    getSchoolAchievements(schoolId),
+    getSchoolDepartments(schoolId),
+  ]);
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6">
       <SchoolAchievementsHub
         achievements={achievements}
         departments={departments}
-        canManage={canManage}
+        canManage={true}
       />
     </div>
   );

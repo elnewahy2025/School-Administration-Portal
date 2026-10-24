@@ -51,8 +51,8 @@ export async function createAchievementAction(
       throw new AppError(res.error);
     }
 
-    revalidatePath("/[locale]/calendar", "page");
-    revalidatePath("/[locale]", "page");
+    revalidatePath("/[locale]/achievements", "page");
+    revalidatePath("/[locale]/dashboard", "page");
     return { success: true, achievementId: res.id };
   } catch (err: unknown) {
     const appError = sanitizeError(err);

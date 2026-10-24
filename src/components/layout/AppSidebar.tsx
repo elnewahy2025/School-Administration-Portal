@@ -17,10 +17,12 @@ import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
 export function AppSidebar({
   school,
+  isOwner = false,
   canManageSettings,
   canViewReports,
 }: {
   school: SchoolRow | null;
+  isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
 }) {
@@ -45,7 +47,9 @@ export function AppSidebar({
         <NavLink href="/circulars" label={t("circulars")} icon={FileTextIcon} />
         <NavLink href="/maintenance" label={t("maintenance")} icon={WrenchIcon} />
         <NavLink href="/calendar" label={t("calendar")} icon={CalendarIcon} />
-        <NavLink href="/achievements" label={t("achievements")} icon={AwardIcon} />
+        {isOwner ? (
+          <NavLink href="/achievements" label={t("achievements")} icon={AwardIcon} />
+        ) : null}
         {canViewReports ? (
           <NavLink href="/reports" label={t("reports")} icon={BarChart3Icon} />
         ) : null}

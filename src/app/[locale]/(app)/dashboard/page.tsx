@@ -4,6 +4,7 @@ import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
 import { getSchoolMaintenanceRequests } from "@/lib/maintenance/getSchoolMaintenanceRequests";
 import { getSchoolCalendarEvents } from "@/lib/calendar/getSchoolCalendarEvents";
@@ -34,16 +35,21 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
 
   const schoolId = profile.school_id;
-  const [school, perms, circulars, maintenance, events, achievements] = await Promise.all([
+  const [school, perms, circulars, maintenance, events, isPlatformOwnerUser] = await Promise.all([
     getSchoolFullDetails(schoolId),
     getEffectivePermissions().catch((): string[] => []),
     getSchoolCirculars(schoolId),
     getSchoolMaintenanceRequests(schoolId),
     getSchoolCalendarEvents(schoolId),
-    getSchoolAchievements(schoolId),
+    isPlatformOwner(profile.id),
   ]);
 
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const isOwner =
+    isPlatformOwnerUser ||
+    perms.includes("settings.platform.update") ||
+    perms.includes("roles.manage");
+  const achievements = isOwner ? await getSchoolAchievements(schoolId) : [];
+
   const canCircular = isOwner || perms.includes("circular.create");
   const canMaintenance = isOwner || perms.includes("maintenance.create");
   const canCalendar = isOwner || perms.includes("calendar.manage");
@@ -57,23 +63,32 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         maintenanceCount={maintenance.length}
         eventsCount={events.length}
         achievementsCount={achievements.length}
+        isOwner={isOwner}
       />
 
       <DashboardQuickActions
         canCreateCircular={canCircular}
         canCreateMaintenance={canMaintenance}
         canCreateCalendar={canCalendar}
+        canManageAchievements={isOwner}
       />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
+      {isOwner ? (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="space-y-6">
+            <DashboardRecentCirculars circulars={circulars} />
+            <DashboardRecentMaintenance requests={maintenance} />
+          </div>
+          <div className="space-y-6">
+            <DashboardAchievementsWidget achievements={achievements} />
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <DashboardRecentCirculars circulars={circulars} />
           <DashboardRecentMaintenance requests={maintenance} />
         </div>
-        <div className="space-y-6">
-          <DashboardAchievementsWidget achievements={achievements} />
-        </div>
-      </div>
+      )}
     </div>
   );
 }

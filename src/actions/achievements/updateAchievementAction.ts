@@ -51,8 +51,8 @@ export async function updateAchievementAction(
       throw new AppError(res.error);
     }
 
-    revalidatePath("/[locale]/calendar", "page");
-    revalidatePath("/[locale]", "page");
+    revalidatePath("/[locale]/achievements", "page");
+    revalidatePath("/[locale]/dashboard", "page");
     return { success: true };
   } catch (err: unknown) {
     const appError = sanitizeError(err);

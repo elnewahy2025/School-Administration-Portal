@@ -9,10 +9,12 @@ export function DashboardQuickActions({
   canCreateCircular,
   canCreateMaintenance,
   canCreateCalendar,
+  canManageAchievements = false,
 }: {
   canCreateCircular: boolean;
   canCreateMaintenance: boolean;
   canCreateCalendar: boolean;
+  canManageAchievements?: boolean;
 }) {
   const t = useTranslations("dashboard");
   const locale = useLocale();
@@ -52,12 +54,14 @@ export function DashboardQuickActions({
           </Link>
         )}
 
-        <Link href={`/${locale}/achievements`}>
-          <Button size="sm" className="gap-1.5 text-xs">
-            <AwardIcon className="size-3.5" />
-            <span>{t("registerAchievement")}</span>
-          </Button>
-        </Link>
+        {canManageAchievements && (
+          <Link href={`/${locale}/achievements`}>
+            <Button size="sm" className="gap-1.5 text-xs">
+              <AwardIcon className="size-3.5" />
+              <span>{t("registerAchievement")}</span>
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );
