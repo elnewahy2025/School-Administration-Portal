@@ -516,6 +516,9 @@
     "arabic": "العربية",
     "english": "English",
     "profile": "Profile",
-    "back": "Back"
+    "back": "Back",
+    "view": "View",
+    "close": "Close",
+    "error": "An unexpected error occurred"
   }
 }
