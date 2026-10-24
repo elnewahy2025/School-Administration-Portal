@@ -6,6 +6,7 @@ import { getUserRoleKey } from "@/lib/rbac/getUserRoleKey";
 import { getSchoolCalendarEvents } from "@/lib/calendar/getSchoolCalendarEvents";
 import { getSchoolAchievements } from "@/lib/achievements/getSchoolAchievements";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
+import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
 import { CalendarHub } from "@/components/calendar/CalendarHub";
 
 export default async function CalendarPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -15,7 +16,7 @@ export default async function CalendarPage({ params }: { params: Promise<{ local
   const profile = await getCurrentProfile();
   const schoolId = profile?.school_id;
 
-  const [permissions, hasManagePerm, events, achievements, departments, roleKey] =
+  const [permissions, hasManagePerm, events, achievements, departments, roleKey, circulars] =
     await Promise.all([
       getEffectivePermissions().catch((): string[] => []),
       schoolId ? hasPermission("calendar.manage", schoolId).catch(() => false) : false,
@@ -23,6 +24,7 @@ export default async function CalendarPage({ params }: { params: Promise<{ local
       getSchoolAchievements(schoolId),
       getSchoolDepartments(schoolId),
       getUserRoleKey(profile?.id, schoolId),
+      getSchoolCirculars(schoolId).catch(() => []),
     ]);
 
   const isOwner =
@@ -34,6 +36,7 @@ export default async function CalendarPage({ params }: { params: Promise<{ local
     <div className="mx-auto flex max-w-6xl flex-col gap-6">
       <CalendarHub
         events={events}
+        circulars={circulars}
         achievements={achievements}
         departments={departments}
         canManageEvents={canManageEvents}

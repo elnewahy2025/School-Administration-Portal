@@ -1,3 +1,5 @@
+import type { CircularRow } from "@/lib/circulars/types";
+
 export type CalendarVisibility = "public" | "internal";
 
 export type CalendarStatus = "draft" | "published" | "cancelled" | "archived";
@@ -29,3 +31,17 @@ export interface CalendarEventRow {
     full_name: string;
   } | null;
 }
+
+export type UnifiedCalendarItem =
+  | {
+      kind: "event";
+      id: string;
+      date: string;
+      event: CalendarEventRow;
+    }
+  | {
+      kind: "circular";
+      id: string;
+      date: string;
+      circular: CircularRow;
+    };

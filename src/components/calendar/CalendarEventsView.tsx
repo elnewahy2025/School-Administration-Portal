@@ -1,44 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CalendarDaysIcon, ListIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CalendarCategoryFilterBar } from "./CalendarCategoryFilterBar";
 import { CalendarMonthView } from "./CalendarMonthView";
 import { CalendarListView } from "./CalendarListView";
-import type { CalendarEventRow, CalendarCategory } from "@/lib/calendar/types";
+import { CalendarItemDetailDialog } from "./CalendarItemDetailDialog";
+import { buildUnifiedCalendarItems } from "@/lib/calendar/buildUnifiedCalendarItems";
+import type { CalendarEventRow, UnifiedCalendarItem } from "@/lib/calendar/types";
+import type { CircularRow } from "@/lib/circulars/types";
 
 export function CalendarEventsView({
   events,
+  circulars = [],
   canManage,
 }: {
   events: CalendarEventRow[];
+  circulars?: CircularRow[];
   canManage: boolean;
 }) {
   const t = useTranslations("calendar");
   const [viewMode, setViewMode] = useState<"month" | "list">("month");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedItem, setSelectedItem] = useState<UnifiedCalendarItem | null>(null);
 
-  const filteredEvents = events.filter((ev) => {
+  const unifiedItems = useMemo(
+    () => buildUnifiedCalendarItems(events, circulars),
+    [events, circulars],
+  );
+
+  const filteredItems = unifiedItems.filter((item) => {
     if (selectedCategory === "all") return true;
-    return ev.category === selectedCategory;
+    if (selectedCategory === "circular") return item.kind === "circular";
+    return item.kind === "event" && item.event.category === selectedCategory;
   });
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1.5">
-          {["all", "academic", "exam", "holiday", "meeting", "event"].map((cat) => (
-            <Button
-              key={cat}
-              variant={selectedCategory === cat ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {cat === "all" ? t("title") : t(`categories.${cat as CalendarCategory}`)}
-            </Button>
-          ))}
-        </div>
+        <CalendarCategoryFilterBar
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
 
         <div className="flex items-center rounded-lg border border-border bg-muted/40 p-1">
           <Button
@@ -63,10 +68,20 @@ export function CalendarEventsView({
       </div>
 
       {viewMode === "month" ? (
-        <CalendarMonthView events={filteredEvents} />
+        <CalendarMonthView items={filteredItems} onSelectItem={setSelectedItem} />
       ) : (
-        <CalendarListView events={filteredEvents} canManage={canManage} />
+        <CalendarListView
+          items={filteredItems}
+          canManage={canManage}
+          onSelectItem={setSelectedItem}
+        />
       )}
+
+      <CalendarItemDetailDialog
+        item={selectedItem}
+        isOpen={Boolean(selectedItem)}
+        onClose={() => setSelectedItem(null)}
+      />
     </div>
   );
 }

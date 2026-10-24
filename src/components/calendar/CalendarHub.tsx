@@ -10,15 +10,18 @@ import { SchoolAchievementsHub } from "@/components/achievements/SchoolAchieveme
 import type { CalendarEventRow } from "@/lib/calendar/types";
 import type { SchoolAchievementRow } from "@/lib/achievements/types";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
+import type { CircularRow } from "@/lib/circulars/types";
 
 export function CalendarHub({
   events,
+  circulars = [],
   achievements,
   departments,
   canManageEvents = false,
   canManageAchievements = false,
 }: {
   events: CalendarEventRow[];
+  circulars?: CircularRow[];
   achievements: SchoolAchievementRow[];
   departments: DepartmentRow[];
   canManageEvents?: boolean;
@@ -74,7 +77,7 @@ export function CalendarHub({
       </div>
 
       {activeTab === "events" ? (
-        <CalendarEventsView events={events} canManage={canManageEvents} />
+        <CalendarEventsView events={events} circulars={circulars} canManage={canManageEvents} />
       ) : (
         <SchoolAchievementsHub
           achievements={achievements}

@@ -5,11 +5,17 @@ import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CalendarMonthGrid } from "./CalendarMonthGrid";
-import type { CalendarEventRow } from "@/lib/calendar/types";
+import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export function CalendarMonthView({ events }: { events: CalendarEventRow[] }) {
+export function CalendarMonthView({
+  items,
+  onSelectItem,
+}: {
+  items: UnifiedCalendarItem[];
+  onSelectItem?: (item: UnifiedCalendarItem) => void;
+}) {
   const locale = useLocale();
   const t = useTranslations("calendar");
   const [currentDate, setCurrentDate] = useState(() => new Date());
@@ -54,7 +60,7 @@ export function CalendarMonthView({ events }: { events: CalendarEventRow[] }) {
         ))}
       </div>
 
-      <CalendarMonthGrid currentDate={currentDate} events={events} />
+      <CalendarMonthGrid currentDate={currentDate} items={items} onSelectItem={onSelectItem} />
     </div>
   );
 }

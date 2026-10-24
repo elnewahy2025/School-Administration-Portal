@@ -1,19 +1,20 @@
 "use client";
 
-import Link from "next/link";
 import { useLocale } from "next-intl";
-import type { CalendarEventRow } from "@/lib/calendar/types";
+import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 
 export function CalendarMonthDayCell({
   day,
   isCurrentMonth,
   isToday,
-  dayEvents,
+  dayItems,
+  onSelectItem,
 }: {
   day: number;
   isCurrentMonth: boolean;
   isToday: boolean;
-  dayEvents: CalendarEventRow[];
+  dayItems: UnifiedCalendarItem[];
+  onSelectItem?: (item: UnifiedCalendarItem) => void;
 }) {
   const locale = useLocale();
 
@@ -34,21 +35,34 @@ export function CalendarMonthDayCell({
       </div>
 
       <div className="space-y-1">
-        {dayEvents.slice(0, 3).map((ev) => {
-          const title = locale === "ar" ? ev.title_ar : ev.title_en || ev.title_ar;
+        {dayItems.slice(0, 3).map((item) => {
+          const isEvent = item.kind === "event";
+          const title = isEvent
+            ? locale === "ar"
+              ? item.event.title_ar
+              : item.event.title_en || item.event.title_ar
+            : item.circular.title;
+
           return (
-            <Link
-              key={ev.id}
-              href={`/${locale}/calendar/${ev.id}`}
-              className="block truncate rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary hover:bg-primary/20"
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => onSelectItem?.(item)}
+              title={title}
+              className={`block w-full truncate rounded px-1.5 py-0.5 text-start text-[10px] font-medium transition ${
+                isEvent
+                  ? "bg-primary/10 text-primary hover:bg-primary/20"
+                  : "bg-indigo-500/15 text-indigo-700 hover:bg-indigo-500/25 dark:text-indigo-300"
+              }`}
             >
+              <span className="me-1 opacity-70">{isEvent ? "•" : "📋"}</span>
               {title}
-            </Link>
+            </button>
           );
         })}
-        {dayEvents.length > 3 && (
+        {dayItems.length > 3 && (
           <span className="block ps-1 text-[10px] text-muted-foreground">
-            +{dayEvents.length - 3}
+            +{dayItems.length - 3}
           </span>
         )}
       </div>

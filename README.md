@@ -5,11 +5,7 @@ circulars and assignments, maintenance and service requests, school calendar
 and public information, settings, RBAC, audit history, notifications, and
 reports. Arabic-first RTL with English support.
 
-**Status: WP2 (database schema, RLS/RBAC, and auth) in progress — schema and RLS are in place
-(26 migrations) and verified by an 81-check authorization battery. See
-[build_plan.md](./build_plan.md) for the roadmap,
-[INSPECTION_REPORT.md](./INSPECTION_REPORT.md) for the security audit, and
-[`docs/decisions.md`](./docs/decisions.md) for the locked Phase-0 decisions.**
+**Status: Core Features & Security Hardening Complete (WP1, WP2, WP3). Features live: Unified Calendar with Personalized Circulars, Full RBAC & Platform Owner Shielding, Scoped Circulars & Maintenance Workflows, Reports Access Segregation, and Settings Persistence. See [ROADMAP_AND_IMPLEMENTATION_STATUS.md](./ROADMAP_AND_IMPLEMENTATION_STATUS.md) for the active roadmap and status, [build_plan.md](./build_plan.md) for the engineering breakdown, and [`docs/decisions.md`](./docs/decisions.md) for locked architectural decisions.**
 
 ## Quickstart
 
@@ -68,8 +64,9 @@ npm run dev                         # http://localhost:3000 (Arabic default, /en
 - `supabase db reset` returning `Error status 502 ... upstream server` while
   "Restarting containers": run `supabase stop` then `supabase start`, then retry.
 
-## Next steps (WP3)
+## Next steps (Phase 4 & beyond)
 
-1. Build the users & roles UI on top of the RBAC helpers and the readable role catalog.
-2. Implement circulars, maintenance, calendar, and reporting screens against the RLS surface.
-3. Add the auth flows still missing from WP2 (password reset, invitation/activation).
+1. Automated invite tokens and self-service password reset flows (Phase 4).
+2. Recurring event engine and push notifications via Supabase Realtime (Phase 5).
+3. Ministry compliance report PDF generator and maintenance SLA alerts (Phase 6).
+   See [ROADMAP_AND_IMPLEMENTATION_STATUS.md](./ROADMAP_AND_IMPLEMENTATION_STATUS.md) for full task details.

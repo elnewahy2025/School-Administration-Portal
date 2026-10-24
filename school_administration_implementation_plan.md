@@ -76,14 +76,16 @@ Implement permissions as data, not scattered role-name checks.
 - **Application Owner:** manages platform-wide configuration, creates
   or disables school tenants if multi-school mode is enabled, assigns
   school administrators, and reviews platform-level audit events.
-  Cannot casually read school operational content unless explicitly
-  granted.
+  Cannot be viewed, edited, created, or deleted by any school administrator
+  or tenant account. Filtered out of tenant-level user management views.
 - **School Administrator / Principal:** manages school profile, staff
   accounts, departments, circulars, assignments, maintenance workflow,
   calendar, reports, and school-level settings.
-- **Department Head:** sees circulars assigned to their department,
+- **Department Head:** mapped strictly to their respective department,
+  sees and responds only to circulars targeted to their department,
   submits acknowledgements or responses, tracks departmental tasks,
-  and sees permitted department maintenance records.
+  and manages permitted department maintenance records. Does NOT have
+  access to executive `/reports` (access revoked to preserve separation of duties).
 - **Staff Member:** views relevant published circulars and calendar
   entries, submits maintenance requests, and tracks their own
   requests.
@@ -98,12 +100,13 @@ Use a permission matrix covering actions such as `circular.create`,
 `circular.view_responses`, `maintenance.create`, `maintenance.assign`,
 `maintenance.update`, `maintenance.close`, `calendar.manage`,
 `settings.school.update`, `users.manage`, `roles.manage`,
-`reports.view`, and `audit.view`.
+`reports.view` (restricted to Owner and School Admin), and `audit.view`.
 
 Requirements: - Deny by default. - Check permissions on every
 server-side read and write. - Enforce school and department scope in RLS
 policies and server queries. - Prevent users from granting themselves
-roles or permissions. - Only the Application Owner may manage
+roles or permissions. - Shield Platform Owner accounts from tenant-level
+discovery or modification. - Only the Application Owner may manage
 platform-wide settings. School administrators may manage only their own
 school settings and permitted school roles. - Protect the last active
 owner/admin account from accidental removal. - Test direct API calls,
@@ -173,24 +176,25 @@ Priority definitions and service-level targets must be editable in
 Settings. Default values are examples only and must be approved by the
 school.
 
-### 5.3 School Calendar and School Information
+### 5.3 School Calendar, Personalized Deadlines, and School Achievements
 
 Calendar entry types: - Holidays and official breaks. - Important dates
-and deadlines. - School events and activities. - Achievements and
-announcements.
+and academic deadlines. - School events and activities. - Personalized
+circular deadlines and assignments. - School achievements and announcements.
 
-Each entry includes title, description, start/end date, all-day flag,
-category, visibility, optional location, attachments or image, creator,
+Each calendar event includes title (Arabic & English), description, start/end date, all-day flag,
+category, visibility (public/internal), location, attachments or image, creator,
 and publication status.
 
-Requirements: - Month, week, and list views, with a mobile-friendly
-layout. - Public entries must be explicitly marked public. Internal
-entries require authentication and permission. - Draft, publish, edit,
-cancel, and archive workflows. - Display the school overview, vision,
-mission, objectives, contact details, and approved school
-achievements. - Keep public pages free of staff-only details and
-internal attachments. - Prevent calendar entries from becoming public
-until an authorized user publishes them.
+Requirements:
+
+- **Universal Viewing:** All authenticated school users can view school events on the calendar.
+- **Personalized Circular Integration:** Active circulars targeted to the authenticated user's department, role, or school-wide are dynamically merged (`buildUnifiedCalendarItems`) with calendar events.
+- **Interactive Full-Detail Dialog:** Clicking any item on the calendar opens an interactive modal dialog (`CalendarItemDetailDialog`):
+  - _Public/Internal Events:_ Arabic & English titles, category badge, visibility badge, status badge, date, time, location, organizer name, description, and link to full event page.
+  - _Personalized Circulars:_ Reference number, priority badge, department target, deadline countdown, required response type (acknowledgement/text), instructions/body excerpt, and direct "View & Respond" link.
+- **School Achievements Registry:** Dedicated tab under `/calendar` allowing department heads and school managers to register departmental milestones, certifications, and awards with public/internal visibility and rich media.
+- **Month Grid & Card List Views:** Full responsive layouts with category and circular filtering buttons.
 
 ### 5.4 Settings
 
