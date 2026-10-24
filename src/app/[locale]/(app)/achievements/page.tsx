@@ -1,7 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getSchoolAchievements } from "@/lib/achievements/getSchoolAchievements";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
@@ -21,16 +20,7 @@ export default async function AchievementsPage({
     return null;
   }
 
-  const [permissions, isPlatformOwnerUser] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
-    isPlatformOwner(profile.id),
-  ]);
-
-  const isOwner =
-    isPlatformOwnerUser ||
-    permissions.includes("settings.platform.update") ||
-    permissions.includes("roles.manage");
-
+  const isOwner = await isPlatformOwner(profile.id);
   if (!isOwner) {
     redirect({ href: "/dashboard", locale });
     return null;

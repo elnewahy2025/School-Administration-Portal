@@ -35,7 +35,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
 
   const schoolId = profile.school_id;
-  const [school, perms, circulars, maintenance, events, isPlatformOwnerUser] = await Promise.all([
+  const [school, perms, circulars, maintenance, events, isOwner] = await Promise.all([
     getSchoolFullDetails(schoolId),
     getEffectivePermissions().catch((): string[] => []),
     getSchoolCirculars(schoolId),
@@ -44,10 +44,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     isPlatformOwner(profile.id),
   ]);
 
-  const isOwner =
-    isPlatformOwnerUser ||
-    perms.includes("settings.platform.update") ||
-    perms.includes("roles.manage");
   const achievements = isOwner ? await getSchoolAchievements(schoolId) : [];
 
   const canCircular = isOwner || perms.includes("circular.create");

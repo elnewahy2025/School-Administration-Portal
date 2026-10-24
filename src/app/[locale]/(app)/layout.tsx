@@ -28,12 +28,7 @@ export default async function AuthenticatedAppLayout({
   const school = await getCurrentSchool(profile?.school_id);
   const permissions: string[] = await getEffectivePermissions().catch(() => []);
   const unreadNotifications = await getUnreadNotificationCount().catch(() => 0);
-  const isPlatformOwnerUser = profile?.id ? await isPlatformOwner(profile.id) : false;
-
-  const isOwner =
-    isPlatformOwnerUser ||
-    permissions.includes("settings.platform.update") ||
-    permissions.includes("roles.manage");
+  const isOwner = profile?.id ? await isPlatformOwner(profile.id) : false;
 
   const { canViewReports, canManageSettings } = resolveLayoutNavigationAccess(
     isOwner,
