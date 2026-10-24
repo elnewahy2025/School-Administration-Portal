@@ -29,17 +29,23 @@ export type MappedSchoolUser = {
 
 export function mapSchoolUserRows(
   rows: RawProfileQueryResult[],
-  viewerIsOwner: boolean,
+  _viewerIsOwner?: boolean,
+  ownerUserIds?: Set<string>,
 ): MappedSchoolUser[] {
   const result: MappedSchoolUser[] = [];
 
   for (const row of rows) {
-    const user = toSchoolUserRow(row);
-    // The owner account cannot be seen by any other user
-    if (user.is_owner && !viewerIsOwner) {
+    const isOwner = Boolean(
+      (ownerUserIds && ownerUserIds.has(row.id)) ||
+      row.user_role_assignments?.some((a) => a.roles?.key === "owner"),
+    );
+
+    // The platform owner account must never appear in the school user list
+    if (isOwner) {
       continue;
     }
-    result.push(user);
+
+    result.push(toSchoolUserRow(row, isOwner));
   }
 
   return result;

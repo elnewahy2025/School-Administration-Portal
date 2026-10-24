@@ -24,7 +24,7 @@ export default async function UsersSettingsPage({
   }
 
   const [users, departments, roles] = await Promise.all([
-    getSchoolUsers(profile?.school_id, profile?.id),
+    getSchoolUsers(profile?.school_id),
     getSchoolDepartments(profile?.school_id),
     getSchoolRoles(profile?.school_id),
   ]);

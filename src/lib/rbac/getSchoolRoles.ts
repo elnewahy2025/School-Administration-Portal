@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { buildRoleMaps } from "./buildRoleMaps";
 
 export type SchoolRoleRow = {
@@ -13,9 +13,9 @@ export type SchoolRoleRow = {
 };
 
 export async function getSchoolRoles(schoolId?: string | null): Promise<SchoolRoleRow[]> {
-  const supabase = await createSupabaseServerClient();
+  const admin = createSupabaseAdminClient();
 
-  let query = supabase
+  let query = admin
     .from("roles")
     .select("id, key, name, school_id, is_system, created_at")
     .neq("key", "owner")
@@ -34,9 +34,9 @@ export async function getSchoolRoles(schoolId?: string | null): Promise<SchoolRo
   const roleIds = roles.map((r) => r.id);
 
   const [{ data: perms }, { data: assignments }] = await Promise.all([
-    supabase.from("role_permissions").select("role_id, permission_key").in("role_id", roleIds),
+    admin.from("role_permissions").select("role_id, permission_key").in("role_id", roleIds),
     schoolId
-      ? supabase.from("user_role_assignments").select("role_id").eq("school_id", schoolId)
+      ? admin.from("user_role_assignments").select("role_id").eq("school_id", schoolId)
       : Promise.resolve({ data: [] }),
   ]);
 

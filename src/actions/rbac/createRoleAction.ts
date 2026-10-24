@@ -9,11 +9,11 @@ import {
   formatActionErrorResult,
   AuthenticationError,
   ForbiddenError,
-  ValidationError,
   AppError,
   type ActionResult,
 } from "@/lib/errors";
 import { insertRoleRow } from "./insertRoleRow";
+import { validateCreateRoleInput } from "./validateCreateRoleInput";
 
 export async function createRoleAction(
   name: string,
@@ -32,14 +32,7 @@ export async function createRoleAction(
       throw new ForbiddenError("Unauthorized");
     }
 
-    const trimmedName = name.trim();
-    const trimmedKey = key
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9_-]/g, "_");
-    if (!trimmedName || !trimmedKey) {
-      throw new ValidationError("Role name and key are required");
-    }
+    const { trimmedName, trimmedKey } = validateCreateRoleInput(name, key);
 
     const supabase = await createSupabaseServerClient();
     const res = await insertRoleRow(supabase, {

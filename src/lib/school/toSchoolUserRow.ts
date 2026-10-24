@@ -1,9 +1,13 @@
 import type { RawProfileQueryResult, MappedSchoolUser } from "./mapSchoolUserRows";
+import { resolveUserRoleKey } from "./resolveUserRoleKey";
 
-export function toSchoolUserRow(row: RawProfileQueryResult): MappedSchoolUser {
-  const isOwner = row.user_role_assignments?.some((a) => a.roles?.key === "owner") ?? false;
-  const deptName = row.departments ? row.departments.name_ar || row.departments.name_en : null;
-  const roleKey = row.user_role_assignments?.[0]?.roles?.key ?? null;
+export function toSchoolUserRow(
+  row: RawProfileQueryResult,
+  explicitIsOwner?: boolean,
+): MappedSchoolUser {
+  const isOwner =
+    explicitIsOwner ?? Boolean(row.user_role_assignments?.some((a) => a.roles?.key === "owner"));
+  const deptName = row.departments?.name_ar ?? row.departments?.name_en ?? null;
 
   return {
     id: row.id,
@@ -14,7 +18,7 @@ export function toSchoolUserRow(row: RawProfileQueryResult): MappedSchoolUser {
     department_id: row.department_id,
     department_name: deptName,
     is_active: row.is_active,
-    role_key: roleKey,
+    role_key: resolveUserRoleKey(row.user_role_assignments),
     is_owner: isOwner,
   };
 }
