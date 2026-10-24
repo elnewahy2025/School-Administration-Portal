@@ -13,19 +13,21 @@ jobs:
     steps:
       - name: Ping Supabase REST API
         env:
-          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SUPABASE_URL: ${{ secrets['NEXT_PUBLIC_SUPABASE_URL'] }}
+          SUPABASE_KEY: ${{ secrets['NEXT_PUBLIC_SUPABASE_ANON_KEY'] }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets['SUPABASE_SERVICE_ROLE_KEY'] }}
+          APP_URL: ${{ secrets['NEXT_PUBLIC_APP_URL'] }}
+          CRON_SECRET: ${{ secrets['CRON_SECRET'] }}
         run: |
           echo "Starting Supabase keepalive ping (scheduled every 3 days)..."
 
           # 1. Direct Supabase REST API ping
-          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_KEY" ]; then
+          KEY="${SUPABASE_KEY:-$SUPABASE_SERVICE_ROLE}"
+          if [ -n "$SUPABASE_URL" ] && [ -n "$KEY" ]; then
             echo "Attempting direct query to Supabase REST API..."
             HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X GET "${SUPABASE_URL}/rest/v1/schools?select=id&limit=1" \
-              -H "apikey: ${SUPABASE_KEY}" \
-              -H "Authorization: Bearer ${SUPABASE_KEY}" \
+              -H "apikey: ${KEY}" \
+              -H "Authorization: Bearer ${KEY}" \
               --max-time 15)
             echo "Supabase REST API HTTP Status: $HTTP_STATUS"
             if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
