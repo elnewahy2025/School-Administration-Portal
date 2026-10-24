@@ -25,13 +25,28 @@ export function CalendarMonthDayCell({
       }`}
     >
       <div className="mb-1 flex justify-end">
-        <span
-          className={`flex size-6 items-center justify-center rounded-full text-xs font-semibold ${
-            isToday ? "bg-primary text-primary-foreground" : "text-muted-foreground"
-          }`}
-        >
-          {day}
-        </span>
+        {dayItems.length > 0 ? (
+          <button
+            type="button"
+            onClick={() => onSelectItem?.(dayItems[0])}
+            title={`View ${dayItems.length} item(s)`}
+            className={`flex size-6 items-center justify-center rounded-full text-xs font-semibold transition hover:scale-105 ${
+              isToday
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-muted"
+            }`}
+          >
+            {day}
+          </button>
+        ) : (
+          <span
+            className={`flex size-6 items-center justify-center rounded-full text-xs font-semibold ${
+              isToday ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+            }`}
+          >
+            {day}
+          </span>
+        )}
       </div>
 
       <div className="space-y-1">
@@ -61,9 +76,13 @@ export function CalendarMonthDayCell({
           );
         })}
         {dayItems.length > 3 && (
-          <span className="block ps-1 text-[10px] text-muted-foreground">
-            +{dayItems.length - 3}
-          </span>
+          <button
+            type="button"
+            onClick={() => onSelectItem?.(dayItems[3])}
+            className="block ps-1 text-[10px] text-muted-foreground hover:text-foreground hover:underline"
+          >
+            +{dayItems.length - 3} more
+          </button>
         )}
       </div>
     </div>

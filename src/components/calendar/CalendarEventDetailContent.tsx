@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { CalendarEventCategoryBadge } from "./CalendarEventCategoryBadge";
 import { CalendarEventStatusBadge } from "./CalendarEventStatusBadge";
 import { CalendarVisibilityBadge } from "./CalendarVisibilityBadge";
+import { CalendarEventImageBanner } from "./CalendarEventImageBanner";
 import type { CalendarEventRow } from "@/lib/calendar/types";
 
 export function CalendarEventDetailContent({
@@ -31,6 +32,7 @@ export function CalendarEventDetailContent({
 
   return (
     <div className="mt-5 space-y-5">
+      <CalendarEventImageBanner imagePath={event.image_path} altText={event.title_ar} />
       <div className="flex flex-wrap items-center gap-2">
         <CalendarEventCategoryBadge category={event.category} />
         <CalendarVisibilityBadge visibility={event.visibility} />
