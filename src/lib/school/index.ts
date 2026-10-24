@@ -16,3 +16,4 @@ export { assertCanManageUser } from "./assertCanManageUser";
 export { persistUserUpdates } from "./persistUserUpdates";
 export { syncAuthUserUpdates } from "./syncAuthUserUpdates";
 export { validateUserUpdateInput } from "./validateUserUpdateInput";
+export { parseSchoolNameHierarchy } from "./parseSchoolNameHierarchy";

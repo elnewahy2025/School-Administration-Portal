@@ -2,68 +2,67 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import {
-  GraduationCapIcon,
-  ArrowRightIcon,
-  CalendarIcon,
-  FileTextIcon,
-  WrenchIcon,
-} from "lucide-react";
+import { GraduationCapIcon, ArrowRightIcon, Building2Icon, CalendarDaysIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile";
 import { resolveLocalizedText } from "@/lib/school/resolveLocalizedText";
 import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
+import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy";
+import { PublicHeroCapabilities } from "./PublicHeroCapabilities";
 
 export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }) {
   const locale = useLocale();
   const t = useTranslations("home");
-  const schoolName =
-    resolveLocalizedText(locale, school?.name_ar, school?.name_en) ?? t("title");
+
+  const rawSchoolName = resolveLocalizedText(locale, school?.name_ar, school?.name_en);
+  const { hierarchy, primaryName } = parseSchoolNameHierarchy(rawSchoolName);
+  const displayTitle = primaryName || t("title");
   const logoUrl = getSchoolLogoUrl(school?.logo_path);
 
   return (
     <section
       id="overview"
-      className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/10 via-background to-background px-6 pt-12 pb-16 sm:pt-20 sm:pb-24"
+      className="relative overflow-hidden border-b border-border/50 bg-gradient-to-b from-primary/5 via-background to-background px-6 pt-12 pb-16 sm:pt-16 sm:pb-20"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 size-[600px] rounded-full bg-primary/15 blur-3xl"
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[650px] rounded-full bg-primary/10 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-4xl text-center space-y-6">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1 text-xs font-semibold text-primary shadow-xs backdrop-blur-xs">
-          <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-          </span>
-          <span>{t("badgeOfficial")}</span>
-        </div>
+      <div className="relative mx-auto max-w-3xl text-center space-y-6">
+        {hierarchy && (
+          <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/80 px-4 py-1.5 text-xs font-medium text-muted-foreground shadow-2xs backdrop-blur-xs">
+            <Building2Icon className="size-3.5 text-primary" />
+            <span>{hierarchy}</span>
+          </div>
+        )}
 
         {logoUrl && (
           <div className="flex justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={logoUrl}
-              alt={schoolName}
-              className="size-24 sm:size-28 object-contain rounded-2xl border border-border/80 bg-background/90 p-3 shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-105"
+              alt={displayTitle}
+              className="size-20 sm:size-24 rounded-full border border-border/80 bg-card object-contain p-1 shadow-md ring-4 ring-primary/5 transition-transform duration-300 hover:scale-105"
             />
           </div>
         )}
 
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground whitespace-pre-line leading-tight">
-          {schoolName}
-        </h1>
+        <div className="space-y-3">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-foreground leading-tight">
+            {displayTitle}
+          </h1>
 
-        <p className="mx-auto max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-          {school?.public_description || t("subtitle")}
-        </p>
+          <p className="mx-auto max-w-xl text-sm sm:text-base text-muted-foreground leading-relaxed">
+            {school?.public_description || t("subtitle")}
+          </p>
+        </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <Link href={`/${locale}/login`}>
             <Button
               size="lg"
-              className="gap-2 shadow-md hover:shadow-lg transition-all text-sm font-semibold h-11 px-6"
+              className="h-11 rounded-xl px-7 text-sm font-semibold shadow-md hover:shadow-lg transition-all gap-2"
             >
               <GraduationCapIcon className="size-5" />
               <span>{t("portalSignIn")}</span>
@@ -74,28 +73,15 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
             <Button
               size="lg"
               variant="outline"
-              className="gap-2 text-sm font-medium h-11 px-5 border-border/80 hover:bg-accent"
+              className="h-11 rounded-xl px-5 text-sm font-medium border-border/80 hover:bg-accent gap-2"
             >
-              <CalendarIcon className="size-4 text-primary" />
+              <CalendarDaysIcon className="size-4 text-primary" />
               <span>{t("exploreEvents")}</span>
             </Button>
           </a>
         </div>
 
-        <div className="pt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-border/60 bg-card/70 px-3 py-1.5 shadow-2xs backdrop-blur-xs">
-            <FileTextIcon className="size-3.5 text-primary" />
-            <span>{t("moduleCirculars")}</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-border/60 bg-card/70 px-3 py-1.5 shadow-2xs backdrop-blur-xs">
-            <WrenchIcon className="size-3.5 text-amber-500" />
-            <span>{t("moduleMaintenance")}</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-lg border border-border/60 bg-card/70 px-3 py-1.5 shadow-2xs backdrop-blur-xs">
-            <CalendarIcon className="size-3.5 text-blue-500" />
-            <span>{t("moduleCalendar")}</span>
-          </span>
-        </div>
+        <PublicHeroCapabilities />
       </div>
     </section>
   );

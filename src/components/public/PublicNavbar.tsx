@@ -10,31 +10,34 @@ import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile
 import { resolveLocalizedText } from "@/lib/school/resolveLocalizedText";
 import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
 
+import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy";
+
 export function PublicNavbar({ school }: { school?: PublicSchoolProfileRow | null }) {
   const locale = useLocale();
   const t = useTranslations("home");
-  const schoolName =
-    resolveLocalizedText(locale, school?.name_ar, school?.name_en) ?? t("title");
+  const rawSchoolName = resolveLocalizedText(locale, school?.name_ar, school?.name_en);
+  const { primaryName } = parseSchoolNameHierarchy(rawSchoolName);
+  const displayTitle = primaryName || t("title");
   const logoUrl = getSchoolLogoUrl(school?.logo_path);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/80 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/85 backdrop-blur-md transition-all">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <a href="#overview" className="flex items-center gap-3 group">
+        <a href="#overview" className="flex items-center gap-2.5 group">
           {logoUrl ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={logoUrl}
-              alt={schoolName}
-              className="size-9 rounded-lg border border-border/80 bg-background object-contain p-1 shadow-xs transition-transform group-hover:scale-105"
+              alt={displayTitle}
+              className="size-9 rounded-full border border-border/80 bg-background object-contain p-0.5 shadow-xs transition-transform group-hover:scale-105"
             />
           ) : (
-            <div className="flex size-9 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary shadow-xs transition-transform group-hover:scale-105">
-              <GraduationCapIcon className="size-5" />
+            <div className="flex size-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary shadow-xs transition-transform group-hover:scale-105">
+              <GraduationCapIcon className="size-4.5" />
             </div>
           )}
-          <span className="font-bold text-sm tracking-tight text-foreground line-clamp-1 max-w-[200px] sm:max-w-xs">
-            {t("title")}
+          <span className="font-semibold text-sm tracking-tight text-foreground line-clamp-1 max-w-[180px] sm:max-w-xs">
+            {displayTitle}
           </span>
         </a>
 

@@ -1,5 +1,6 @@
 export { PublicNavbar } from "./PublicNavbar";
 export { PublicHero } from "./PublicHero";
+export { PublicHeroCapabilities } from "./PublicHeroCapabilities";
 export { PublicFeaturesSection } from "./PublicFeaturesSection";
 export { PublicAboutSection } from "./PublicAboutSection";
 export { PublicAboutCard } from "./PublicAboutCard";
