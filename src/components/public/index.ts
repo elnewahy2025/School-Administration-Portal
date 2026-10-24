@@ -1,5 +1,8 @@
+export { PublicNavbar } from "./PublicNavbar";
 export { PublicHero } from "./PublicHero";
+export { PublicFeaturesSection } from "./PublicFeaturesSection";
 export { PublicAboutSection } from "./PublicAboutSection";
-export { PublicEventsSection } from "./PublicEventsSection";
 export { PublicAboutCard } from "./PublicAboutCard";
+export { PublicEventsSection } from "./PublicEventsSection";
+export { PublicEventCard } from "./PublicEventCard";
 export { PublicFooter } from "./PublicFooter";

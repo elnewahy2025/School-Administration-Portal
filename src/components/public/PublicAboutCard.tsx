@@ -12,12 +12,16 @@ export function PublicAboutCard({
   content: string;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6 shadow-xs space-y-3">
-      <div className={`flex size-10 items-center justify-center rounded-lg ${iconColorClass}`}>
+    <div className="group relative rounded-2xl border border-border/80 bg-card/80 p-6 shadow-xs backdrop-blur-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md space-y-3.5">
+      <div
+        className={`flex size-11 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:scale-110 ${iconColorClass}`}
+      >
         {icon}
       </div>
-      <h2 className="text-lg font-bold text-foreground">{title}</h2>
-      <p className="text-sm text-muted-foreground leading-relaxed">{content}</p>
+      <h3 className="text-base sm:text-lg font-bold text-foreground tracking-tight">{title}</h3>
+      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+        {content}
+      </p>
     </div>
   );
 }

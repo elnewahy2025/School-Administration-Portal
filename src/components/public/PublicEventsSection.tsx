@@ -1,59 +1,45 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { CalendarIcon, MapPinIcon } from "lucide-react";
-import { CalendarEventCategoryBadge } from "@/components/calendar/CalendarEventCategoryBadge";
+import { CalendarDaysIcon } from "lucide-react";
 import type { CalendarEventRow } from "@/lib/calendar/types";
+import { PublicEventCard } from "./PublicEventCard";
 
 export function PublicEventsSection({ events }: { events: CalendarEventRow[] }) {
   const locale = useLocale();
   const t = useTranslations("home");
 
   return (
-    <section className="mx-auto max-w-5xl px-6 py-12 border-t border-border">
-      <div className="mb-8 text-center space-y-2">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-          {t("publicCalendar")}
-        </h2>
-        <p className="text-sm text-muted-foreground">{t("publicCalendarDesc")}</p>
-      </div>
+    <section id="events" className="border-t border-border/60 bg-muted/10 py-16 px-6">
+      <div className="mx-auto max-w-5xl space-y-10">
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary">
+            <CalendarDaysIcon className="size-3.5" />
+            <span>{t("navEvents")}</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            {t("publicCalendar")}
+          </h2>
+          <p className="mx-auto max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
+            {t("publicCalendarDesc")}
+          </p>
+        </div>
 
-      {events.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-border p-8 text-center text-muted-foreground">
-          {t("noPublicEvents")}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {events.map((ev) => {
-            const title = locale === "ar" ? ev.title_ar : (ev.title_en || ev.title_ar);
-            const dateStr = new Date(ev.starts_at).toLocaleDateString(
-              locale === "ar" ? "ar-EG" : "en-US",
-              { month: "short", day: "numeric", weekday: "short" },
-            );
-            return (
-              <div key={ev.id} className="rounded-lg border border-border bg-card p-4 shadow-xs space-y-2">
-                <div className="flex items-center justify-between">
-                  <CalendarEventCategoryBadge category={ev.category} />
-                  <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    <CalendarIcon className="size-3" />
-                    {dateStr}
-                  </span>
-                </div>
-                <h3 className="font-semibold text-foreground text-sm line-clamp-1">{title}</h3>
-                {ev.description && (
-                  <p className="text-xs text-muted-foreground line-clamp-2">{ev.description}</p>
-                )}
-                {ev.location && (
-                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground border-t border-border pt-2">
-                    <MapPinIcon className="size-3" />
-                    <span className="truncate">{ev.location}</span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+        {events.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-card/40 p-12 text-center shadow-2xs">
+            <div className="flex size-12 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary mb-3">
+              <CalendarDaysIcon className="size-6" />
+            </div>
+            <p className="text-sm font-medium text-foreground">{t("noPublicEvents")}</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {events.map((ev) => (
+              <PublicEventCard key={ev.id} event={ev} locale={locale} />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
