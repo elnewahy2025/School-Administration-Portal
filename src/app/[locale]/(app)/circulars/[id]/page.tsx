@@ -8,6 +8,7 @@ import { getCircularById } from "@/lib/circulars/getCircularById";
 import { getCircularResponses } from "@/lib/circulars/getCircularResponses";
 import { canRespondToCircular } from "@/lib/circulars/canRespondToCircular";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
+import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import {
   CircularDetailCard,
   CircularResponseBox,
@@ -23,11 +24,12 @@ export default async function CircularDetailPage({
   setRequestLocale(locale);
   const t = await getTranslations("circulars");
 
-  const [profile, circular, responses, perms] = await Promise.all([
-    getCurrentProfile(),
+  const profile = await getCurrentProfile();
+  const [circular, responses, perms, departments] = await Promise.all([
     getCircularById(id),
     getCircularResponses(id).catch(() => []),
     getEffectivePermissions().catch((): string[] => []),
+    getSchoolDepartments(profile?.school_id).catch(() => []),
   ]);
 
   if (!circular) {
@@ -52,7 +54,12 @@ export default async function CircularDetailPage({
         <span className="text-sm font-medium text-muted-foreground">{t("backToList")}</span>
       </div>
 
-      <CircularDetailCard circular={circular} canPublish={canPublish} canManage={canManage} />
+      <CircularDetailCard
+        circular={circular}
+        canPublish={canPublish}
+        canManage={canManage}
+        totalDepartments={departments.length}
+      />
 
       {canRespond ? (
         <CircularResponseBox

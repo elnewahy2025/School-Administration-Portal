@@ -31,3 +31,4 @@ export { CircularStatusBadge } from "./CircularStatusBadge";
 export { CircularTableRow } from "./CircularTableRow";
 export { CreateCircularForm } from "./CreateCircularForm";
 export { DepartmentTargetPicker } from "./DepartmentTargetPicker";
+export { DepartmentTargetItem } from "./DepartmentTargetItem";

@@ -2,13 +2,29 @@ import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import type { CircularRow } from "@/lib/circulars/types";
 
-export function CircularTargetBadges({ targets }: { targets?: CircularRow["targets"] }) {
+export function CircularTargetBadges({
+  targets,
+  totalDepartments,
+}: {
+  targets?: CircularRow["targets"];
+  totalDepartments?: number;
+}) {
   const t = useTranslations("circulars");
   const locale = useLocale();
 
-  if (!targets || targets.length === 0) {
+  const isAll =
+    !targets ||
+    targets.length === 0 ||
+    (typeof totalDepartments === "number" &&
+      totalDepartments > 0 &&
+      targets.length >= totalDepartments);
+
+  if (isAll) {
     return (
-      <Badge variant="outline" className="border-dashed text-xs text-muted-foreground">
+      <Badge
+        variant="outline"
+        className="border-dashed text-xs font-semibold text-muted-foreground"
+      >
         {t("allDepartments")}
       </Badge>
     );

@@ -12,9 +12,11 @@ import type { CircularRow } from "@/lib/circulars/types";
 export function CircularTableRow({
   circular,
   canManage,
+  totalDepartments,
 }: {
   circular: CircularRow;
   canManage: boolean;
+  totalDepartments?: number;
 }) {
   const t = useTranslations("circulars");
   const locale = useLocale();
@@ -53,7 +55,7 @@ export function CircularTableRow({
         <CircularStatusBadge status={circular.status} />
       </TableCell>
       <TableCell>
-        <CircularTargetBadges targets={circular.targets} />
+        <CircularTargetBadges targets={circular.targets} totalDepartments={totalDepartments} />
       </TableCell>
       <TableCell
         suppressHydrationWarning

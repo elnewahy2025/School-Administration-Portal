@@ -12,12 +12,21 @@ export function CircularDetailCard({
   circular,
   canPublish,
   canManage = false,
+  totalDepartments,
 }: {
   circular: CircularDetail;
   canPublish: boolean;
   canManage?: boolean;
+  totalDepartments?: number;
 }) {
   const t = useTranslations("circulars");
+
+  const isAllTargets =
+    !circular.targets ||
+    circular.targets.length === 0 ||
+    (typeof totalDepartments === "number" &&
+      totalDepartments > 0 &&
+      circular.targets.length >= totalDepartments);
 
   return (
     <Card className="border border-border bg-card">
@@ -41,20 +50,24 @@ export function CircularDetailCard({
           responseType={circular.response_type}
         />
 
-        {circular.targets.length > 0 ? (
-          <div className="space-y-2">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase">
-              {t("targetedDepartments")}
-            </h3>
-            <div className="flex flex-wrap gap-1.5">
-              {circular.targets.map((tgt) => (
+        <div className="space-y-2">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase">
+            {t("targetedDepartments")}
+          </h3>
+          <div className="flex flex-wrap gap-1.5">
+            {isAllTargets ? (
+              <Badge variant="secondary" className="font-semibold">
+                {t("allDepartments")}
+              </Badge>
+            ) : (
+              circular.targets.map((tgt) => (
                 <Badge key={tgt.id} variant="secondary">
                   {tgt.department_name ?? tgt.role_key ?? t("allDepartments")}
                 </Badge>
-              ))}
-            </div>
+              ))
+            )}
           </div>
-        ) : null}
+        </div>
 
         <div className="space-y-2">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase">

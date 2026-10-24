@@ -51,7 +51,11 @@ export function CircularList({
           {circulars.length === 0 ? t("noCirculars") : t("noMatchingCirculars")}
         </div>
       ) : (
-        <CircularTable circulars={filteredAndSorted} canManage={canManage} />
+        <CircularTable
+          circulars={filteredAndSorted}
+          canManage={canManage}
+          totalDepartments={departments.length}
+        />
       )}
     </div>
   );

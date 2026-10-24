@@ -144,6 +144,8 @@
     "responseInstructions": "تعليمات الاستجابة",
     "targetedDepartments": "الأقسام المستهدفة",
     "allDepartments": "جميع الأقسام",
+    "selectAll": "تحديد الكل",
+    "deselectAll": "إلغاء التحديد",
     "dueDate": "الموعد النهائي للاستجابة",
     "publishedAt": "تاريخ النشر",
     "responses": "استجابات الأقسام",

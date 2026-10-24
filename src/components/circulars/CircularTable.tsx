@@ -6,9 +6,11 @@ import type { CircularRow } from "@/lib/circulars/types";
 export function CircularTable({
   circulars,
   canManage,
+  totalDepartments,
 }: {
   circulars: CircularRow[];
   canManage: boolean;
+  totalDepartments?: number;
 }) {
   const t = useTranslations("circulars");
   const tCommon = useTranslations("common");
@@ -30,7 +32,12 @@ export function CircularTable({
         </TableHeader>
         <TableBody>
           {circulars.map((circ) => (
-            <CircularTableRow key={circ.id} circular={circ} canManage={canManage} />
+            <CircularTableRow
+              key={circ.id}
+              circular={circ}
+              canManage={canManage}
+              totalDepartments={totalDepartments}
+            />
           ))}
         </TableBody>
       </Table>
