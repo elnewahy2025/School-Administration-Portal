@@ -149,6 +149,8 @@
     "ownerProtected": "Platform Owner (Protected)",
     "cannotModifyOwner": "Cannot modify or control platform owner account",
     "userCreated": "User created successfully",
+    "leaveBlankPassword": "Leave blank to keep current password (min. 6 characters)",
+    "accountStatus": "Account Status",
     "actor": "Actor",
     "action": "Action",
     "entity": "Entity",

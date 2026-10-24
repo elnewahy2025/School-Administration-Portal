@@ -32,7 +32,7 @@ export async function getSchoolUsers(
   const { data, error } = await supabase
     .from("profiles")
     .select(
-      "id, full_name, email, job_title, department_id, is_active, departments:departments!profiles_department_id_fkey(name_ar, name_en), user_role_assignments:user_role_assignments!user_role_assignments_user_id_fkey(roles(key, name))",
+      "id, full_name, email, phone, job_title, department_id, is_active, departments:departments!profiles_department_id_fkey(name_ar, name_en), user_role_assignments:user_role_assignments!user_role_assignments_user_id_fkey(roles(key, name))",
     )
     .eq("school_id", resolvedId)
     .order("full_name", { ascending: true });

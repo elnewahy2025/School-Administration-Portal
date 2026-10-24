@@ -4,6 +4,7 @@ export type RawProfileQueryResult = {
   id: string;
   full_name: string;
   email: string | null;
+  phone?: string | null;
   job_title: string | null;
   department_id: string | null;
   is_active: boolean;
@@ -17,6 +18,7 @@ export type MappedSchoolUser = {
   id: string;
   full_name: string;
   email: string | null;
+  phone: string | null;
   job_title: string | null;
   department_id: string | null;
   department_name: string | null;

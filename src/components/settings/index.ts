@@ -23,3 +23,7 @@ export { UserTableRow } from "./UserTableRow";
 export { CreateUserDialog } from "./CreateUserDialog";
 export { CreateUserForm } from "./CreateUserForm";
 export { UserTable } from "./UserTable";
+export { EditUserBasicFields } from "./EditUserBasicFields";
+export { EditUserSecurityFields } from "./EditUserSecurityFields";
+export { EditUserDeptSelect } from "./EditUserDeptSelect";
+export { EditUserForm } from "./EditUserForm";

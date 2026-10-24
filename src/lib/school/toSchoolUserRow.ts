@@ -9,6 +9,7 @@ export function toSchoolUserRow(row: RawProfileQueryResult): MappedSchoolUser {
     id: row.id,
     full_name: row.full_name,
     email: row.email,
+    phone: row.phone ?? null,
     job_title: row.job_title,
     department_id: row.department_id,
     department_name: deptName,

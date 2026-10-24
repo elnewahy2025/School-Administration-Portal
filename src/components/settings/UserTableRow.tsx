@@ -26,7 +26,10 @@ export function UserTableRow({
       <TableCell>
         <div className="flex flex-col">
           <span className="font-medium text-foreground">{user.full_name}</span>
-          {user.email && <span className="text-xs text-muted-foreground">{user.email}</span>}
+          <div className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
+            {user.email && <span>{user.email}</span>}
+            {user.phone && <span>• {user.phone}</span>}
+          </div>
         </div>
       </TableCell>
       <TableCell className="text-muted-foreground">{user.job_title ?? "—"}</TableCell>

@@ -12,3 +12,7 @@ export { uploadSchoolLogo } from "./uploadSchoolLogo";
 export { getSchoolLogoUrl } from "./getSchoolLogoUrl";
 export { assignUserRole } from "./assignUserRole";
 export { parseLocationInput } from "./parseLocationInput";
+export { assertCanManageUser } from "./assertCanManageUser";
+export { persistUserUpdates } from "./persistUserUpdates";
+export { syncAuthUserUpdates } from "./syncAuthUserUpdates";
+export { validateUserUpdateInput } from "./validateUserUpdateInput";
