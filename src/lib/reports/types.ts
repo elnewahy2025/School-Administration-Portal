@@ -56,6 +56,8 @@ export interface MaintenanceReportRow {
   status: string;
   locationName: string;
   reporterName: string;
+  departmentId?: string | null;
+  departmentName?: string | null;
   operatorName: string | null;
   createdAt: string;
   resolvedAt: string | null;
@@ -70,4 +72,17 @@ export interface MaintenanceReportSummaryData {
   priorityBreakdown: Record<string, number>;
   statusBreakdown: Record<string, number>;
   rows: MaintenanceReportRow[];
+}
+
+export type ReportDateMode = "all" | "month" | "custom";
+export type SortDirection = "asc" | "desc" | "none";
+
+export interface ReportFilterState {
+  dateMode: ReportDateMode;
+  month: string;
+  fromDate: string;
+  toDate: string;
+  dateSort: SortDirection;
+  departmentId: string;
+  departmentSort: SortDirection;
 }

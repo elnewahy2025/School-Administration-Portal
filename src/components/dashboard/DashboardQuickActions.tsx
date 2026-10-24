@@ -52,7 +52,7 @@ export function DashboardQuickActions({
           </Link>
         )}
 
-        <Link href={`/${locale}/calendar`}>
+        <Link href={`/${locale}/achievements`}>
           <Button size="sm" className="gap-1.5 text-xs">
             <AwardIcon className="size-3.5" />
             <span>{t("registerAchievement")}</span>

@@ -6,6 +6,7 @@ import {
   FileTextIcon,
   WrenchIcon,
   CalendarIcon,
+  AwardIcon,
   BarChart3Icon,
   SettingsIcon,
 } from "lucide-react";
@@ -33,6 +34,7 @@ export function MobileNavLinks({
       <NavLink href="/circulars" label={t("circulars")} icon={FileTextIcon} onClick={onSelect} />
       <NavLink href="/maintenance" label={t("maintenance")} icon={WrenchIcon} onClick={onSelect} />
       <NavLink href="/calendar" label={t("calendar")} icon={CalendarIcon} onClick={onSelect} />
+      <NavLink href="/achievements" label={t("achievements")} icon={AwardIcon} onClick={onSelect} />
       {canViewReports ? (
         <NavLink href="/reports" label={t("reports")} icon={BarChart3Icon} onClick={onSelect} />
       ) : null}

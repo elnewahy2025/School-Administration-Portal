@@ -15,3 +15,4 @@ export { applyCircularReportFilters } from "./applyCircularReportFilters";
 export { applyMaintenanceReportFilters } from "./applyMaintenanceReportFilters";
 export { getCircularsReportData } from "./getCircularsReportData";
 export { getMaintenanceReportData } from "./getMaintenanceReportData";
+export { filterAndSortReportData } from "./filterAndSortReportData";

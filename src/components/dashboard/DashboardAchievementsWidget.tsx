@@ -23,7 +23,7 @@ export function DashboardAchievementsWidget({
           <CardTitle className="text-base font-bold">{t("recentAchievements")}</CardTitle>
         </div>
         <Link
-          href={`/${locale}/calendar`}
+          href={`/${locale}/achievements`}
           className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
         >
           <span>{t("viewAll")}</span>

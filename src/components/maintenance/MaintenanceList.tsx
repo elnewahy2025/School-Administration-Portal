@@ -77,7 +77,6 @@ export function MaintenanceList({
                 <TableHead>{t("priority")}</TableHead>
                 <TableHead>{t("status")}</TableHead>
                 <TableHead>{t("reporter")}</TableHead>
-                <TableHead>{t("assignedOperator")}</TableHead>
                 <TableHead>{t("createdAt")}</TableHead>
                 <TableHead className="text-end">{tCommon("actions")}</TableHead>
               </TableRow>

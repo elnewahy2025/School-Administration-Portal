@@ -54,7 +54,7 @@ export function DashboardStatsGrid({
       title: t("achievementsCount"),
       count: achievementsCount,
       desc: t("achievementsDesc"),
-      href: `/${locale}/calendar`,
+      href: `/${locale}/achievements`,
       icon: AwardIcon,
       accent: "text-emerald-500 bg-emerald-500/10",
     },

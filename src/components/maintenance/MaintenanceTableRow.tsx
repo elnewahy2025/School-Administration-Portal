@@ -13,13 +13,10 @@ import type { MaintenanceRequestRow } from "@/lib/maintenance/types";
 export function MaintenanceTableRow({ ticket }: { ticket: MaintenanceRequestRow }) {
   const locale = useLocale();
   const tCat = useTranslations("maintenance.categories");
-  const tMain = useTranslations("maintenance");
-
   const categoryLabel = tCat.has(ticket.category)
     ? tCat(ticket.category as never)
     : ticket.category;
   const locationLabel = formatLocation(ticket.location);
-  const operatorLabel = ticket.assigned_operator?.full_name ?? tMain("unassigned");
 
   return (
     <TableRow>
@@ -40,7 +37,6 @@ export function MaintenanceTableRow({ ticket }: { ticket: MaintenanceRequestRow 
       <TableCell className="text-xs text-muted-foreground">
         {ticket.reporter?.full_name ?? "—"}
       </TableCell>
-      <TableCell className="text-xs font-medium">{operatorLabel}</TableCell>
       <TableCell className="text-xs text-muted-foreground">
         {new Date(ticket.created_at).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US")}
       </TableCell>

@@ -89,6 +89,7 @@
     "circulars": "التعاميم والمهام",
     "maintenance": "طلبات الصيانة",
     "calendar": "التقويم المدرسي",
+    "achievements": "إنجازات المدرسة",
     "reports": "التقارير",
     "settings": "الإعدادات",
     "notifications": "الإشعارات",
@@ -476,7 +477,19 @@
       "status": "الحالة",
       "allStatuses": "جميع الحالات",
       "apply": "تطبيق التصفية",
-      "reset": "إعادة ضبط"
+      "reset": "إعادة ضبط",
+      "dateMode": "تصفية التاريخ",
+      "allTime": "كل الأوقات",
+      "byMonth": "حسب الشهر",
+      "customDate": "فترة مخصصة",
+      "selectMonth": "اختر الشهر",
+      "sortByDate": "ترتيب حسب التاريخ",
+      "newestFirst": "الأحدث أولاً",
+      "oldestFirst": "الأقدم أولاً",
+      "sortByDepartment": "ترتيب حسب القسم",
+      "deptAsc": "القسم (أ - ي)",
+      "deptDesc": "القسم (ي - أ)",
+      "defaultOrder": "الترتيب الافتراضي"
     },
     "kpis": {
       "totalCirculars": "إجمالي التعاميم",

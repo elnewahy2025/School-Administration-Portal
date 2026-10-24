@@ -89,6 +89,7 @@
     "circulars": "Circulars & Tasks",
     "maintenance": "Maintenance",
     "calendar": "Calendar",
+    "achievements": "School Achievements",
     "reports": "Reports",
     "settings": "Settings",
     "notifications": "Notifications",
@@ -476,7 +477,19 @@
       "status": "Status",
       "allStatuses": "All Statuses",
       "apply": "Filter",
-      "reset": "Reset"
+      "reset": "Reset",
+      "dateMode": "Date Filter",
+      "allTime": "All Time",
+      "byMonth": "By Month",
+      "customDate": "Custom Range",
+      "selectMonth": "Select Month",
+      "sortByDate": "Sort by Date",
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First",
+      "sortByDepartment": "Sort by Department",
+      "deptAsc": "Department (A to Z)",
+      "deptDesc": "Department (Z to A)",
+      "defaultOrder": "Default Order"
     },
     "kpis": {
       "totalCirculars": "Total Circulars",

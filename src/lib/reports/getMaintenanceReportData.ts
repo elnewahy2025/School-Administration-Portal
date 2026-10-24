@@ -22,7 +22,9 @@ export async function getMaintenanceReportData(
       status,
       created_at,
       resolved_at,
+      reporter_department_id,
       locations (building, floor, room),
+      department:departments!maintenance_requests_reporter_department_id_fkey (id, name_ar, name_en),
       reporter:profiles!reporter_id (full_name),
       maintenance_assignments (
         is_active,

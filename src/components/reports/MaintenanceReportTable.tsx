@@ -33,6 +33,7 @@ export function MaintenanceReportTable({ rows }: { rows: MaintenanceReportRow[] 
             <TableHead>{t("table.priority")}</TableHead>
             <TableHead>{t("table.status")}</TableHead>
             <TableHead>{t("table.location")}</TableHead>
+            <TableHead>{t("table.department")}</TableHead>
             <TableHead>{t("table.operator")}</TableHead>
             <TableHead className="text-end">Hours</TableHead>
           </TableRow>
@@ -56,6 +57,9 @@ export function MaintenanceReportTable({ rows }: { rows: MaintenanceReportRow[] 
                 <MaintenanceStatusBadge status={row.status as never} />
               </TableCell>
               <TableCell className="text-xs text-muted-foreground">{row.locationName}</TableCell>
+              <TableCell className="text-xs text-muted-foreground">
+                {row.departmentName ?? "—"}
+              </TableCell>
               <TableCell className="text-xs text-muted-foreground">
                 {row.operatorName ?? "—"}
               </TableCell>
