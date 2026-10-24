@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 
 export async function deleteUserAction(userId: string) {
@@ -13,6 +14,10 @@ export async function deleteUserAction(userId: string) {
 
   if (profile.id === userId) {
     return { success: false, error: "Cannot delete your own account" };
+  }
+
+  if (await isPlatformOwner(userId)) {
+    return { success: false, error: "Cannot modify or delete platform owner" };
   }
 
   const allowed = await hasPermission("users.manage", profile.school_id);

@@ -20,3 +20,5 @@ export { UserFormFields } from "./UserFormFields";
 export { UserList } from "./UserList";
 export { UserTableActions } from "./UserTableActions";
 export { UserTableRow } from "./UserTableRow";
+export { CreateUserDialog } from "./CreateUserDialog";
+export { CreateUserForm } from "./CreateUserForm";

@@ -18,7 +18,7 @@ export default async function UsersSettingsPage({
 
   const profile = await getCurrentProfile();
   const [users, departments, roles, perms, hasPerm] = await Promise.all([
-    getSchoolUsers(profile?.school_id),
+    getSchoolUsers(profile?.school_id, profile?.id),
     getSchoolDepartments(profile?.school_id),
     getSchoolRoles(profile?.school_id),
     getEffectivePermissions().catch((): string[] => []),

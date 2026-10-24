@@ -52,6 +52,7 @@ export function UserTableRow({
               userId={user.id}
               isActive={user.is_active}
               isSelf={isSelf}
+              isOwner={user.is_owner}
               isPending={isPending}
               onEdit={() => setIsEditing(true)}
               onToggle={() => onToggle(user.id, user.is_active)}
@@ -59,7 +60,7 @@ export function UserTableRow({
           </TableCell>
         )}
       </TableRow>
-      {isEditing && (
+      {isEditing && !user.is_owner && (
         <EditUserDialog
           user={user}
           departments={departments ?? []}

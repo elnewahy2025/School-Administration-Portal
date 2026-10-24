@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { PencilIcon, Trash2Icon } from "lucide-react";
+import { PencilIcon, ShieldCheckIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { deleteUserAction } from "@/actions/settings/deleteUserAction";
 
@@ -11,6 +11,7 @@ export function UserTableActions({
   userId,
   isActive,
   isSelf,
+  isOwner = false,
   isPending,
   onEdit,
   onToggle,
@@ -18,12 +19,23 @@ export function UserTableActions({
   userId: string;
   isActive: boolean;
   isSelf: boolean;
+  isOwner?: boolean;
   isPending: boolean;
   onEdit: () => void;
   onToggle: () => void;
 }) {
+  const t = useTranslations("settings");
   const tCommon = useTranslations("common");
   const [isDeleting, startDeleteTransition] = useTransition();
+
+  if (isOwner) {
+    return (
+      <span className="flex items-center justify-end gap-1 text-xs font-medium text-amber-500">
+        <ShieldCheckIcon className="size-3.5" />
+        <span>{t("ownerProtected")}</span>
+      </span>
+    );
+  }
 
   const handleDelete = () => {
     if (!window.confirm(tCommon("confirmDelete"))) return;

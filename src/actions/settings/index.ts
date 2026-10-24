@@ -10,3 +10,4 @@ export { updateDepartmentAction } from "./updateDepartmentAction";
 export { updateLocationAction } from "./updateLocationAction";
 export { updateSchoolAction } from "./updateSchoolAction";
 export { updateUserAction } from "./updateUserAction";
+export { createUserAction } from "./createUserAction";

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { assignUserRole } from "@/lib/school/assignUserRole";
 import { prepareUserProfilePayload } from "@/lib/school/prepareUserProfilePayload";
@@ -17,6 +18,14 @@ export async function updateUserAction(
   const profile = await getCurrentProfile();
   if (!profile?.school_id) {
     return { success: false, error: "No school associated with profile" };
+  }
+
+  if (await isPlatformOwner(userId)) {
+    return { success: false, error: "Cannot modify platform owner" };
+  }
+
+  if (roleKey === "owner") {
+    return { success: false, error: "Cannot assign platform owner role" };
   }
 
   const allowed = await hasPermission("users.manage", profile.school_id);

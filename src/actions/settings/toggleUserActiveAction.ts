@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 
 export async function toggleUserActiveAction(targetUserId: string, currentStatus: boolean) {
@@ -13,6 +14,10 @@ export async function toggleUserActiveAction(targetUserId: string, currentStatus
 
   if (profile.id === targetUserId) {
     return { success: false, error: "Cannot change your own active status" };
+  }
+
+  if (await isPlatformOwner(targetUserId)) {
+    return { success: false, error: "Cannot modify platform owner" };
   }
 
   const allowed = await hasPermission("users.manage", profile.school_id);
