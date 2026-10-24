@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { GraduationCapIcon, ArrowRightIcon, Building2Icon, CalendarDaysIcon } from "lucide-react";
+import { GraduationCapIcon, ArrowRightIcon, Building2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile";
 import { resolveLocalizedText } from "@/lib/school/resolveLocalizedText";
 import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
@@ -22,8 +24,13 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
   return (
     <section
       id="overview"
-      className="relative overflow-hidden border-b border-border/50 bg-gradient-to-b from-primary/5 via-background to-background px-6 pt-12 pb-16 sm:pt-16 sm:pb-20"
+      className="relative overflow-hidden border-b border-border/50 bg-gradient-to-b from-primary/5 via-background to-background px-6 pt-16 pb-16 sm:pt-20 sm:pb-20"
     >
+      <div className="absolute top-4 end-6 flex items-center gap-2">
+        <LanguageSwitcher />
+        <ThemeToggle />
+      </div>
+
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[650px] rounded-full bg-primary/10 blur-3xl"
@@ -62,23 +69,13 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
           <Link href={`/${locale}/login`}>
             <Button
               size="lg"
-              className="h-11 rounded-xl px-7 text-sm font-semibold shadow-md hover:shadow-lg transition-all gap-2"
+              className="h-11 rounded-xl px-8 text-sm font-semibold shadow-md hover:shadow-lg transition-all gap-2"
             >
               <GraduationCapIcon className="size-5" />
               <span>{t("portalSignIn")}</span>
               <ArrowRightIcon className="size-4 rtl:rotate-180" />
             </Button>
           </Link>
-          <a href="#events">
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-11 rounded-xl px-5 text-sm font-medium border-border/80 hover:bg-accent gap-2"
-            >
-              <CalendarDaysIcon className="size-4 text-primary" />
-              <span>{t("exploreEvents")}</span>
-            </Button>
-          </a>
         </div>
 
         <PublicHeroCapabilities />

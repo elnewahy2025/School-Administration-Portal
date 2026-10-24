@@ -33,7 +33,7 @@ export function PublicEventsSection({ events }: { events: CalendarEventRow[] }) 
             <p className="text-sm font-medium text-foreground">{t("noPublicEvents")}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {events.map((ev) => (
               <PublicEventCard key={ev.id} event={ev} locale={locale} />
             ))}

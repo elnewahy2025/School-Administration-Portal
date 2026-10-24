@@ -1,7 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { getPublicSchoolProfile } from "@/lib/school/getPublicSchoolProfile";
 import { getPublicCalendarEvents } from "@/lib/calendar/getPublicCalendarEvents";
-import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicHero } from "@/components/public/PublicHero";
 import { PublicFeaturesSection } from "@/components/public/PublicFeaturesSection";
 import { PublicAboutSection } from "@/components/public/PublicAboutSection";
@@ -17,7 +16,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-background text-foreground">
-      <PublicNavbar school={school} />
       <main className="flex-1">
         <PublicHero school={school} />
         <PublicFeaturesSection />
