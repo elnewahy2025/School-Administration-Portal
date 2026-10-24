@@ -7,3 +7,4 @@ export { LanguageSwitcher } from "./LanguageSwitcher";
 export { MobileNav } from "./MobileNav";
 export { MobileNavLinks } from "./MobileNavLinks";
 export { NavLink } from "./NavLink";
+export { SchoolLogoAvatar } from "./SchoolLogoAvatar";

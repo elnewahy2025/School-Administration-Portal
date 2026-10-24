@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolUsers } from "@/lib/school/getSchoolUsers";
+import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { UserList } from "@/components/settings/UserList";
@@ -15,8 +16,9 @@ export default async function UsersSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
-  const [users, perms, hasPerm] = await Promise.all([
+  const [users, departments, perms, hasPerm] = await Promise.all([
     getSchoolUsers(profile?.school_id),
+    getSchoolDepartments(profile?.school_id),
     getEffectivePermissions().catch((): string[] => []),
     profile?.school_id
       ? hasPermission("users.manage", profile.school_id).catch(() => false)
@@ -33,7 +35,12 @@ export default async function UsersSettingsPage({
         <p className="text-sm text-muted-foreground">{t("usersDesc")}</p>
       </div>
 
-      <UserList users={users} currentUserId={profile?.id} canManage={canManage} />
+      <UserList
+        users={users}
+        departments={departments}
+        currentUserId={profile?.id}
+        canManage={canManage}
+      />
     </div>
   );
 }

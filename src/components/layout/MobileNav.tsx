@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { MenuIcon, XIcon, GraduationCapIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileNavLinks } from "./MobileNavLinks";
+import { SchoolLogoAvatar } from "./SchoolLogoAvatar";
 import { resolveSchoolName } from "@/lib/school/resolveSchoolName";
 import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
@@ -43,10 +44,10 @@ export function MobileNav({
           <div className="relative flex w-72 max-w-[80vw] flex-col bg-card shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-border px-4">
               <div className="flex items-center gap-2 overflow-hidden">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <GraduationCapIcon className="size-4" />
-                </div>
-                <span className="truncate text-sm font-semibold">{schoolName}</span>
+                <SchoolLogoAvatar school={school} className="size-8" iconClassName="size-4" />
+                <span className="truncate text-sm font-semibold whitespace-pre-line">
+                  {schoolName}
+                </span>
               </div>
               <Button
                 variant="ghost"

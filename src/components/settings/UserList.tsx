@@ -6,16 +6,19 @@ import { toast } from "sonner";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toggleUserActiveAction } from "@/actions/settings/toggleUserActiveAction";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
+import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 import { UserTableRow } from "./UserTableRow";
 
 export function UserList({
   users,
   currentUserId,
   canManage,
+  departments = [],
 }: {
   users: SchoolUserRow[];
   currentUserId?: string | null;
   canManage: boolean;
+  departments?: DepartmentRow[];
 }) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
@@ -50,7 +53,7 @@ export function UserList({
             <TableHead>{t("departments")}</TableHead>
             <TableHead>{t("role")}</TableHead>
             <TableHead className="w-28">{tCommon("status")}</TableHead>
-            {canManage && <TableHead className="w-32 text-end">{tCommon("actions")}</TableHead>}
+            {canManage && <TableHead className="w-44 text-end">{tCommon("actions")}</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -61,6 +64,7 @@ export function UserList({
               isSelf={user.id === currentUserId}
               canManage={canManage}
               isPending={isPending}
+              departments={departments}
               onToggle={handleToggle}
             />
           ))}

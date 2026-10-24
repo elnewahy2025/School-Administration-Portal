@@ -1,52 +1,55 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { CompassIcon, TargetIcon, AwardIcon } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { CompassIcon, TargetIcon, AwardIcon, UserCheckIcon } from "lucide-react";
 import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile";
+import { buildAboutCardList, type AboutCardItem } from "@/lib/school/buildAboutCardList";
+import { PublicAboutCard } from "./PublicAboutCard";
+
+const CARD_CONFIG = {
+  vision: {
+    icon: <CompassIcon className="size-5" />,
+    colorClass: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  },
+  mission: {
+    icon: <TargetIcon className="size-5" />,
+    colorClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  },
+  leadership: {
+    icon: <UserCheckIcon className="size-5" />,
+    colorClass: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+  },
+  objectives: {
+    icon: <AwardIcon className="size-5" />,
+    colorClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  },
+} as const;
 
 export function PublicAboutSection({ school }: { school: PublicSchoolProfileRow | null }) {
   const t = useTranslations("home");
+  const tSettings = useTranslations("settings");
+  const locale = useLocale();
 
-  const vision = school?.vision;
-  const mission = school?.mission;
-  const objectives = school?.objectives;
-
-  if (!vision && !mission && !objectives) {
+  const cards = buildAboutCardList(school, locale, t, tSettings);
+  if (cards.length === 0) {
     return null;
   }
 
   return (
     <section className="mx-auto max-w-5xl px-6 py-12">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {vision && (
-          <div className="rounded-xl border border-border bg-card p-6 shadow-xs space-y-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-              <CompassIcon className="size-5" />
-            </div>
-            <h2 className="text-lg font-bold text-foreground">{t("vision")}</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{vision}</p>
-          </div>
-        )}
-
-        {mission && (
-          <div className="rounded-xl border border-border bg-card p-6 shadow-xs space-y-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              <TargetIcon className="size-5" />
-            </div>
-            <h2 className="text-lg font-bold text-foreground">{t("mission")}</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{mission}</p>
-          </div>
-        )}
-
-        {objectives && (
-          <div className="rounded-xl border border-border bg-card p-6 shadow-xs space-y-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
-              <AwardIcon className="size-5" />
-            </div>
-            <h2 className="text-lg font-bold text-foreground">{t("achievements")}</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">{objectives}</p>
-          </div>
-        )}
+        {cards.map((item: AboutCardItem) => {
+          const config = CARD_CONFIG[item.iconType];
+          return (
+            <PublicAboutCard
+              key={item.key}
+              icon={config.icon}
+              iconColorClass={config.colorClass}
+              title={item.title}
+              content={item.content}
+            />
+          );
+        })}
       </div>
     </section>
   );

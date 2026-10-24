@@ -8,9 +8,9 @@ import {
   CalendarIcon,
   BarChart3Icon,
   SettingsIcon,
-  GraduationCapIcon,
 } from "lucide-react";
 import { NavLink } from "./NavLink";
+import { SchoolLogoAvatar } from "./SchoolLogoAvatar";
 import { resolveSchoolName } from "@/lib/school/resolveSchoolName";
 import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
@@ -30,11 +30,11 @@ export function AppSidebar({
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-e border-border bg-card md:flex">
       <div className="flex h-16 items-center gap-3 border-b border-border px-6">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
-          <GraduationCapIcon className="size-5" />
-        </div>
+        <SchoolLogoAvatar school={school} />
         <div className="flex flex-col overflow-hidden">
-          <span className="truncate text-sm font-semibold text-foreground">{schoolName}</span>
+          <span className="truncate text-sm font-semibold whitespace-pre-line text-foreground">
+            {schoolName}
+          </span>
           <span className="text-xs text-muted-foreground">{t("portal")}</span>
         </div>
       </div>

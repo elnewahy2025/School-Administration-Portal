@@ -9,3 +9,6 @@ export { persistSchoolProfile } from "./persistSchoolProfile";
 export { resolveLocalizedText } from "./resolveLocalizedText";
 export { resolveSchoolName } from "./resolveSchoolName";
 export { uploadSchoolLogo } from "./uploadSchoolLogo";
+export { getSchoolLogoUrl } from "./getSchoolLogoUrl";
+export { assignUserRole } from "./assignUserRole";
+export { parseLocationInput } from "./parseLocationInput";

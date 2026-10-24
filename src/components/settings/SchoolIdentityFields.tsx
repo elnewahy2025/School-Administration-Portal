@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import type { SchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 
 export function SchoolIdentityFields({
@@ -16,21 +17,23 @@ export function SchoolIdentityFields({
     <>
       <div className="space-y-2">
         <Label htmlFor="name_ar">{t("nameAr")}</Label>
-        <Input
+        <Textarea
           id="name_ar"
           name="name_ar"
           defaultValue={school.name_ar}
           required
+          rows={2}
           disabled={!canManage}
         />
       </div>
       <div className="space-y-2">
         <Label htmlFor="name_en">{t("nameEn")}</Label>
-        <Input
+        <Textarea
           id="name_en"
           name="name_en"
           defaultValue={school.name_en}
           required
+          rows={2}
           disabled={!canManage}
         />
       </div>

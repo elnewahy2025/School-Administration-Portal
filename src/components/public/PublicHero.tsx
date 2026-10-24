@@ -7,11 +7,15 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile";
+import { resolveLocalizedText } from "@/lib/school/resolveLocalizedText";
+import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
 
 export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }) {
   const locale = useLocale();
   const t = useTranslations("home");
-  const schoolName = locale === "ar" ? (school?.name_ar || t("title")) : (school?.name_en || school?.name_ar || t("title"));
+  const schoolName =
+    resolveLocalizedText(locale, school?.name_ar, school?.name_en) ?? t("title");
+  const logoUrl = getSchoolLogoUrl(school?.logo_path);
 
   return (
     <header className="relative overflow-hidden border-b border-border bg-gradient-to-b from-primary/10 via-background to-background px-6 py-16 md:py-24">
@@ -21,12 +25,23 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
       </div>
 
       <div className="mx-auto max-w-4xl text-center space-y-6">
+        {logoUrl && (
+          <div className="flex justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={logoUrl}
+              alt={schoolName}
+              className="size-20 md:size-24 object-contain rounded-2xl border border-border/80 bg-background/80 p-2 shadow-md backdrop-blur-xs"
+            />
+          </div>
+        )}
+
         <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary shadow-xs">
           <SparklesIcon className="size-3.5" />
-          <span>{schoolName}</span>
+          <span className="whitespace-pre-line">{schoolName}</span>
         </div>
 
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-foreground">
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-foreground whitespace-pre-line">
           {schoolName}
         </h1>
 
