@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { GraduationCapIcon, ArrowRightIcon, SparklesIcon } from "lucide-react";
+import { GraduationCapIcon, ArrowRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
@@ -35,11 +35,6 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
             />
           </div>
         )}
-
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-medium text-primary shadow-xs">
-          <SparklesIcon className="size-3.5" />
-          <span className="whitespace-pre-line">{schoolName}</span>
-        </div>
 
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-foreground whitespace-pre-line">
           {schoolName}
