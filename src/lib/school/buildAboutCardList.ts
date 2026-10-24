@@ -44,12 +44,34 @@ export function buildAboutCardList(
   }
 
   const manager = resolveLocalizedText(locale, school.manager_name_ar, school.manager_name_en);
+  const assistant1 = resolveLocalizedText(
+    locale,
+    school.assistant_manager_ar,
+    school.assistant_manager_en,
+  );
+  const assistant2 = resolveLocalizedText(
+    locale,
+    school.assistant_manager_2_ar,
+    school.assistant_manager_2_en,
+  );
+
+  const leadershipLines: string[] = [];
   if (manager) {
+    leadershipLines.push(`${t("managerTitle")}: ${manager}`);
+  }
+  if (assistant1) {
+    leadershipLines.push(`${t("assistantManager1Title")}: ${assistant1}`);
+  }
+  if (assistant2) {
+    leadershipLines.push(`${t("assistantManager2Title")}: ${assistant2}`);
+  }
+
+  if (leadershipLines.length > 0) {
     items.push({
       key: "leadership",
       iconType: "leadership",
       title: tSettings("leadership"),
-      content: manager,
+      content: leadershipLines.join("\n"),
     });
   }
 

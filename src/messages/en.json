@@ -31,7 +31,10 @@
     "moduleMaintenance": "Facilities & Maintenance",
     "moduleMaintenanceDesc": "End-to-end work orders, technician assignment, priority scheduling, and real-time repair progression.",
     "moduleCalendar": "Academic Calendar",
-    "moduleCalendarDesc": "Institutional milestones, public announcements, exams, and departmental meetings in one synchronized hub."
+    "moduleCalendarDesc": "Institutional milestones, public announcements, exams, and departmental meetings in one synchronized hub.",
+    "managerTitle": "School Principal",
+    "assistantManager1Title": "Assistant Principal 1",
+    "assistantManager2Title": "Assistant Principal 2"
   },
   "theme": {
     "toDark": "Switch to dark mode",
