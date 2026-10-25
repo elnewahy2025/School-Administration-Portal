@@ -145,6 +145,16 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
   - Vercel automatically deploys [vercel.json](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/vercel.json) crons, which will trigger `/api/keepalive` every 3 days at 06:00 UTC to prevent Supabase free tier inactivity pausing.
   - Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to **GitHub Repository Secrets** if GitHub Actions scheduled workflow backup is also desired.
 
+### Phase 8: Deferred Backend Feature Exposure (To Do Later)
+
+- [ ] **1. Implement "Edit Calendar Event" UI:**
+  - Connect the existing backend action [updateCalendarEventAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/calendar/updateCalendarEventAction.ts) to the frontend.
+  - Add an "Edit Event" modal or `/calendar/[id]/edit` form for events, accessible to users with `calendar.manage` permission or platform owner.
+  - Expose an edit action button on the event details page ([calendar/[id]/page.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/calendar/[id]/page.tsx)).
+- [ ] **2. Expand `/settings/school` with Workweek & Policy Settings:**
+  - Expose existing backend columns from `school_settings` (`working_days`, `date_format`, `circular_policy`, `maintenance_policy`, `calendar_policy`, `notification_prefs`).
+  - Add interactive checkboxes for the working week (Sunday–Thursday) and default operational response timelines in the school settings UI ([src/app/[locale]/(app)/settings/school/page.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/settings/school/page.tsx)).
+
 ---
 
 ## 4. Verification & Testing Matrix
