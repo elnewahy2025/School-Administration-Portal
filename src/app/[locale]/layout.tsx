@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme";
+import { ServiceWorkerRegister, PwaInstallBanner } from "@/components/pwa";
 import { routing } from "@/i18n";
 import en from "../../messages/en.json";
 import ar from "../../messages/ar.json";
@@ -19,6 +20,16 @@ const fontMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+  ],
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -26,7 +37,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "home" });
-  return { title: t("title"), description: t("subtitle") };
+  return {
+    title: t("title"),
+    description: t("subtitle"),
+    manifest: "/manifest.json",
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: "School Portal",
+    },
+  };
 }
 
 export function generateStaticParams() {
@@ -60,6 +80,8 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={locale === "ar" ? ar : en}>
             {children}
+            <PwaInstallBanner />
+            <ServiceWorkerRegister />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
