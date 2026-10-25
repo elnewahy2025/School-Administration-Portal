@@ -129,8 +129,12 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
   - Added [CalendarRecurrenceFields.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CalendarRecurrenceFields.tsx) to [CreateCalendarEventForm.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CreateCalendarEventForm.tsx).
   - Updated [parseCalendarFormData.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/validation/parseCalendarFormData.ts) and [createCalendarEventAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/calendar/createCalendarEventAction.ts).
   - Added complete unit and component test suites in [computeRecurringEventInstances.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/computeRecurringEventInstances.test.ts), [createCalendarEventSeries.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/createCalendarEventSeries.test.ts), [parseCalendarFormData.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/validation/parseCalendarFormData.test.ts), and [CalendarRecurrenceFields.test.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CalendarRecurrenceFields.test.tsx).
-- [ ] **Real-Time Push Notifications (WebSockets):**
-  - Supabase Realtime integration pushing instant alerts to active users when urgent circulars or emergency maintenance tickets are dispatched.
+- [x] **Real-Time Push Notifications (WebSockets):**
+  - Enabled Supabase Realtime publication on `public.notifications` table (`supabase/migrations/0039_enable_realtime_notifications.sql`).
+  - Implemented [RealtimeNotificationListener.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/notifications/RealtimeNotificationListener.tsx) listening for live `postgres_changes` on the authenticated user's channel.
+  - Dynamically triggers interactive bilingual Sonner toasts with direct deep-links to circulars, maintenance tickets, and calendar events.
+  - Automatically invokes `router.refresh()` to update unread badge counts in [NotificationBell.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/notifications/NotificationBell.tsx) and refresh notification lists live without page reloads.
+  - Verified with comprehensive unit tests in [RealtimeNotificationListener.test.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/notifications/RealtimeNotificationListener.test.tsx).
 - [ ] **Department Head Delegation & Deputy Sign-Off:**
   - Allow Department Heads to designate acting deputies during leave periods with scoped permission grants.
 

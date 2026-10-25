@@ -8,6 +8,7 @@ import { getUnreadNotificationCount } from "@/lib/notifications/getUnreadNotific
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { resolveLayoutNavigationAccess } from "@/lib/auth/resolveLayoutNavigationAccess";
 import { AppShell } from "@/components/layout";
+import { RealtimeNotificationListener } from "@/components/notifications";
 
 export default async function AuthenticatedAppLayout({
   children,
@@ -41,15 +42,18 @@ export default async function AuthenticatedAppLayout({
   );
 
   return (
-    <AppShell
-      profile={profile}
-      school={school}
-      isOwner={isOwner}
-      canManageSettings={canManageSettings}
-      canViewReports={canViewReports}
-      unreadNotifications={unreadNotifications}
-    >
-      {children}
-    </AppShell>
+    <>
+      {profile?.id && <RealtimeNotificationListener userId={profile.id} />}
+      <AppShell
+        profile={profile}
+        school={school}
+        isOwner={isOwner}
+        canManageSettings={canManageSettings}
+        canViewReports={canViewReports}
+        unreadNotifications={unreadNotifications}
+      >
+        {children}
+      </AppShell>
+    </>
   );
 }

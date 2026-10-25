@@ -495,6 +495,8 @@
     "markAllRead": "Mark all as read",
     "markRead": "Mark as read",
     "viewDetails": "View Details",
+    "newNotification": "New notification",
+    "view": "View",
     "empty": "No notifications yet",
     "emptyDesc": "You are all caught up! New alerts and tasks will appear here.",
     "types": {
