@@ -46,7 +46,22 @@
     "passwordLabel": "Password",
     "signIn": "Sign in",
     "error": "Invalid email or password",
-    "disabled": "This account is deactivated. Contact the school administration."
+    "disabled": "This account is deactivated. Contact the school administration.",
+    "forgotPassword": "Forgot password?",
+    "forgotPasswordTitle": "Reset Password",
+    "forgotPasswordDesc": "Enter your registered email address and we'll send you a link to reset your password.",
+    "sendResetLink": "Send Reset Link",
+    "sending": "Sending...",
+    "resetLinkSent": "Password reset link has been sent to your email.",
+    "backToSignIn": "Back to Sign In",
+    "resetPasswordTitle": "Set New Password",
+    "resetPasswordDesc": "Enter and confirm your new secure password.",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "saveNewPassword": "Save New Password",
+    "passwordResetSuccess": "Your password has been reset successfully. You can now sign in.",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "passwordTooShort": "Password must be at least 8 characters long."
   },
   "dashboard": {
     "title": "Dashboard",

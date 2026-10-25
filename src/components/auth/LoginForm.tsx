@@ -3,7 +3,7 @@
 import { useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { loginAction } from "@/actions/auth/loginAction";
-import { useRouter } from "@/i18n";
+import { Link, useRouter } from "@/i18n";
 
 export function LoginForm() {
   const t = useTranslations("auth");
@@ -42,6 +42,14 @@ export function LoginForm() {
           className="h-9 rounded-md border border-input bg-background px-3"
         />
       </label>
+      <div className="flex justify-end">
+        <Link
+          href="/forgot-password"
+          className="text-xs text-muted-foreground hover:text-foreground hover:underline"
+        >
+          {t("forgotPassword")}
+        </Link>
+      </div>
       {state.error ? (
         <p className="text-sm text-destructive">
           {state.error === "disabled" ? t("disabled") : t("error")}

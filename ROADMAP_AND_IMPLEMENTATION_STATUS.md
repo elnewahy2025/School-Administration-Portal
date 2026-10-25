@@ -112,8 +112,12 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 - [ ] **Invitation & Magic Link Activation:**
   - Automated transactional email dispatch when an administrator creates a new staff account.
   - Secure activation tokens with time-limited expiration and initial password configuration.
-- [ ] **Self-Service Password Reset:**
-  - Secure password reset flow integrating Supabase Auth recovery tokens, rate-limited and audit-logged.
+- [x] **Self-Service Password Reset:**
+  - Added "Forgot password?" link on [LoginForm.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/auth/LoginForm.tsx).
+  - Created [forgot-password/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(auth)/forgot-password/page.tsx>) and [ForgotPasswordForm.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/auth/ForgotPasswordForm.tsx) invoking [requestPasswordResetAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/auth/requestPasswordResetAction.ts).
+  - Added PKCE auth callback route handler [src/app/api/auth/callback/route.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/api/auth/callback/route.ts) for secure code-to-session exchange.
+  - Created [reset-password/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(auth)/reset-password/page.tsx>) and [ResetPasswordForm.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/auth/ResetPasswordForm.tsx) invoking [resetPasswordAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/auth/resetPasswordAction.ts).
+  - Full unit, route, and component tests in [requestPasswordResetAction.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/auth/requestPasswordResetAction.test.ts), [resetPasswordAction.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/auth/resetPasswordAction.test.ts), [route.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/api/auth/callback/route.test.ts), [ForgotPasswordForm.test.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/auth/ForgotPasswordForm.test.tsx), and [ResetPasswordForm.test.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/auth/ResetPasswordForm.test.tsx).
 - [ ] **Session & Device Auditing:**
   - Profile page showing active user sessions and sign-in history.
 
