@@ -6,16 +6,18 @@
  * - Network-Only for Supabase API calls, auth endpoints, mutations, and storage assets
  */
 
-const CACHE_NAME = "school-portal-cache-v2";
+const CACHE_NAME = "school-portal-cache-v3";
 const OFFLINE_URL = "/offline.html";
 
 // Pre-cached assets during installation (strictly static, unauthenticated assets)
 const PRECACHE_ASSETS = [
   "/manifest.json",
-  "/file.svg",
+  "/favicon.ico",
+  "/icons/icon.svg",
   "/offline.html",
   "/icons/icon-192x192.png",
   "/icons/icon-512x512.png",
+  "/icons/icon-512x512-maskable.png",
 ];
 
 self.addEventListener("install", (event) => {
