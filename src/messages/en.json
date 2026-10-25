@@ -577,6 +577,7 @@
   "common": {
     "save": "Save",
     "saved": "Saved successfully",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "delete": "Delete",
     "deleted": "Deleted successfully",
