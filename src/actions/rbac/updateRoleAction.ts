@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { syncRolePermissions } from "./syncRolePermissions";
 import {
   sanitizeError,
   formatActionErrorResult,
@@ -45,16 +46,15 @@ export async function updateRoleAction(
       throw new ForbiddenError("Cannot modify system or unauthorized roles");
     }
 
-    await supabase.from("roles").update({ name: trimmedName }).eq("id", roleId);
-    await supabase.from("role_permissions").delete().eq("role_id", roleId);
-
-    if (permissionKeys.length > 0) {
-      const rows = permissionKeys.map((p) => ({
-        role_id: roleId,
-        permission_key: p,
-      }));
-      await supabase.from("role_permissions").insert(rows);
+    const { error: updateError } = await supabase
+      .from("roles")
+      .update({ name: trimmedName })
+      .eq("id", roleId);
+    if (updateError) {
+      throw updateError;
     }
+
+    await syncRolePermissions(supabase, roleId, permissionKeys);
 
     revalidatePath("/[locale]/settings/users", "page");
     return { success: true };

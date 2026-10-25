@@ -8,4 +8,7 @@ export const serverEnvSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   APP_URL: z.string().min(1),
   SCHOOL_TIMEZONE: z.string().min(1),
+  PLATFORM_BOOTSTRAP_SECRET: z.string().min(8).optional(),
+  PLATFORM_OWNER_EMAIL: z.string().email().optional(),
+  CRON_SECRET: z.string().min(1).optional(),
 });

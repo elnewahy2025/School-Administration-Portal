@@ -1,5 +1,7 @@
 import { createSupabaseAdminClient } from "@/lib/supabase";
 import { assignUserRole } from "@/lib/school/assignUserRole";
+import { rollbackProvisionedUser } from "./rollbackProvisionedUser";
+import { createProvisionedAuthUser } from "./createProvisionedAuthUser";
 
 export type ProvisionUserParams = {
   fullName: string;
@@ -14,22 +16,15 @@ export type ProvisionUserParams = {
 
 export async function provisionAuthUser(params: ProvisionUserParams) {
   const admin = createSupabaseAdminClient();
-  const { data: authData, error: authError } = await admin.auth.admin.createUser({
-    email: params.email,
-    password: params.password,
-    email_confirm: true,
-    user_metadata: { full_name: params.fullName },
-  });
-
-  if (authError || !authData.user) {
-    return {
-      success: false,
-      error: authError?.message ?? "Failed to create user account",
-    };
+  const authResult = await createProvisionedAuthUser(admin, params);
+  if ("error" in authResult) {
+    return { success: false, error: authResult.error };
   }
 
+  const userId = authResult.userId;
+
   const { error: profileError } = await admin.from("profiles").upsert({
-    id: authData.user.id,
+    id: userId,
     full_name: params.fullName,
     email: params.email,
     job_title: params.jobTitle?.trim() || null,
@@ -40,10 +35,19 @@ export async function provisionAuthUser(params: ProvisionUserParams) {
   });
 
   if (profileError) {
-    await admin.auth.admin.deleteUser(authData.user.id);
+    await admin.auth.admin.deleteUser(userId);
     return { success: false, error: profileError.message };
   }
 
-  await assignUserRole(admin, authData.user.id, params.schoolId, params.callerId, params.roleKey);
+  try {
+    await assignUserRole(admin, userId, params.schoolId, params.callerId, params.roleKey);
+  } catch (roleErr) {
+    await rollbackProvisionedUser(admin, userId);
+    return {
+      success: false,
+      error: roleErr instanceof Error ? roleErr.message : "Failed to assign user role",
+    };
+  }
+
   return { success: true };
 }

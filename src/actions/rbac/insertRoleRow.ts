@@ -32,7 +32,14 @@ export async function insertRoleRow(
       role_id: newRole.id,
       permission_key: p,
     }));
-    await supabase.from("role_permissions").insert(rows);
+    const { error: permError } = await supabase.from("role_permissions").insert(rows);
+    if (permError) {
+      await supabase.from("roles").delete().eq("id", newRole.id);
+      return {
+        success: false,
+        error: `Failed to insert role permissions: ${permError.message}`,
+      };
+    }
   }
 
   return { success: true };

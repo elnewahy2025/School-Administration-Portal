@@ -25,6 +25,10 @@ export default async function AuthenticatedAppLayout({
   }
 
   const profile = await getCurrentProfile();
+  if (!profile || !profile.is_active) {
+    redirect({ href: "/login", locale });
+  }
+
   const school = await getCurrentSchool(profile?.school_id);
   const permissions: string[] = await getEffectivePermissions().catch(() => []);
   const unreadNotifications = await getUnreadNotificationCount().catch(() => 0);

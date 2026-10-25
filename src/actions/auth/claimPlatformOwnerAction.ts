@@ -4,8 +4,9 @@ import { hasAnyPlatformOwner } from "@/lib/auth/hasAnyPlatformOwner";
 import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { bootstrapPlatformOwnerClaim } from "./bootstrapPlatformOwnerClaim";
+import { validateBootstrapGuard } from "./validateBootstrapGuard";
 
-export async function claimPlatformOwnerAction(): Promise<{
+export async function claimPlatformOwnerAction(bootstrapSecret?: string): Promise<{
   ok: boolean;
   error: string | null;
 }> {
@@ -13,6 +14,9 @@ export async function claimPlatformOwnerAction(): Promise<{
     const supabase = await createSupabaseServerClient();
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return { ok: false, error: "unauthenticated" };
+
+    const guardError = validateBootstrapGuard(userData.user.email, bootstrapSecret);
+    if (guardError) return { ok: false, error: guardError };
 
     const admin = createSupabaseAdminClient();
     try {

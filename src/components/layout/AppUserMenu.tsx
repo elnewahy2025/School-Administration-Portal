@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logoutAction } from "@/actions/auth/logoutAction";
+import { purgeClientCaches } from "@/lib/pwa";
 import { getUserInitials } from "@/lib/auth/getUserInitials";
 import { resolveDepartmentName } from "@/lib/auth/resolveDepartmentName";
 import { resolveUserSubtitle } from "@/lib/auth/resolveUserSubtitle";
@@ -47,8 +48,20 @@ export function AppUserMenu({ profile }: { profile: ProfileRow | null }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <form action={logoutAction} className="w-full">
-            <button type="submit" className="w-full">
+          <form
+            action={logoutAction}
+            onSubmit={async () => {
+              await purgeClientCaches();
+            }}
+            className="w-full"
+          >
+            <button
+              type="submit"
+              className="w-full"
+              onClick={async () => {
+                await purgeClientCaches();
+              }}
+            >
               <DropdownMenuItem variant="destructive" className="w-full cursor-pointer">
                 <LogOutIcon className="me-2 size-4" />
                 <span>{t("signOut")}</span>
