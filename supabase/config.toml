@@ -54,3 +54,10 @@ allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
 public = true
 file_size_limit = "5MiB"
 allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
+
+[analytics]
+enabled = false
+
+[edge_runtime]
+enabled = false
+
