@@ -14,3 +14,4 @@ export { CalendarDateTimeFields } from "./CalendarDateTimeFields";
 export { CreateCalendarEventForm } from "./CreateCalendarEventForm";
 export { CalendarEventDetailCard } from "./CalendarEventDetailCard";
 export { CalendarEventMetaGrid } from "./CalendarEventMetaGrid";
+export { EditCalendarEventForm } from "./EditCalendarEventForm";

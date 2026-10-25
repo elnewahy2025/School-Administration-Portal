@@ -147,10 +147,11 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 
 ### Phase 8: Deferred Backend Feature Exposure (To Do Later)
 
-- [ ] **1. Implement "Edit Calendar Event" UI:**
-  - Connect the existing backend action [updateCalendarEventAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/calendar/updateCalendarEventAction.ts) to the frontend.
-  - Add an "Edit Event" modal or `/calendar/[id]/edit` form for events, accessible to users with `calendar.manage` permission or platform owner.
-  - Expose an edit action button on the event details page ([calendar/[id]/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/calendar/[id]/page.tsx>)).
+- [x] **1. Implement "Edit Calendar Event" UI:**
+  - Connected the backend action [updateCalendarEventAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/calendar/updateCalendarEventAction.ts) to the frontend.
+  - Added the dedicated route [calendar/[id]/edit/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/calendar/[id]/edit/page.tsx>) and [EditCalendarEventForm.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/EditCalendarEventForm.tsx), accessible to users with `calendar.manage` permission or platform owner.
+  - Added [formatDateTimeInput.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/formatDateTimeInput.ts) for ISO to `datetime-local` input pre-population.
+  - Exposed an edit action button in [CalendarActionButtons.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CalendarActionButtons.tsx) on the event details page.
 - [ ] **2. Expand `/settings/school` with Workweek & Policy Settings:**
   - Expose existing backend columns from `school_settings` (`working_days`, `date_format`, `circular_policy`, `maintenance_policy`, `calendar_policy`, `notification_prefs`).
   - Add interactive checkboxes for the working week (Sunday–Thursday) and default operational response timelines in the school settings UI ([src/app/[locale]/(app)/settings/school/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/settings/school/page.tsx>)).

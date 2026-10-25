@@ -1,9 +1,10 @@
 "use client";
 
 import { useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { toast } from "sonner";
-import { SendIcon, BanIcon, ArchiveIcon } from "lucide-react";
+import { SendIcon, BanIcon, ArchiveIcon, PencilIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { publishCalendarEventAction } from "@/actions/calendar/publishCalendarEventAction";
 import { cancelCalendarEventAction } from "@/actions/calendar/cancelCalendarEventAction";
@@ -21,29 +22,14 @@ export function CalendarActionButtons({
 }) {
   const t = useTranslations("calendar.actions");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
   const [isPending, startTransition] = useTransition();
 
   if (!canManage) return null;
 
-  const handlePublish = () => {
+  const executeAction = (action: (id: string) => Promise<{ success: boolean; error?: string }>) => {
     startTransition(async () => {
-      const res = await publishCalendarEventAction(eventId);
-      if (res.success) toast.success(tCommon("saved"));
-      else toast.error(res.error || tCommon("error"));
-    });
-  };
-
-  const handleCancel = () => {
-    startTransition(async () => {
-      const res = await cancelCalendarEventAction(eventId);
-      if (res.success) toast.success(tCommon("saved"));
-      else toast.error(res.error || tCommon("error"));
-    });
-  };
-
-  const handleArchive = () => {
-    startTransition(async () => {
-      const res = await archiveCalendarEventAction(eventId);
+      const res = await action(eventId);
       if (res.success) toast.success(tCommon("saved"));
       else toast.error(res.error || tCommon("error"));
     });
@@ -51,11 +37,20 @@ export function CalendarActionButtons({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
+      {status !== "archived" && (
+        <Link href={`/${locale}/calendar/${eventId}/edit`}>
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <PencilIcon className="size-3.5" />
+            <span>{t("edit")}</span>
+          </Button>
+        </Link>
+      )}
+
       {status === "draft" && (
         <Button
           size="sm"
           disabled={isPending}
-          onClick={handlePublish}
+          onClick={() => executeAction(publishCalendarEventAction)}
           className="gap-1.5 bg-emerald-600 text-white"
         >
           <SendIcon className="size-3.5 rtl:rotate-180" />
@@ -69,7 +64,7 @@ export function CalendarActionButtons({
             variant="outline"
             size="sm"
             disabled={isPending}
-            onClick={handleCancel}
+            onClick={() => executeAction(cancelCalendarEventAction)}
             className="gap-1.5 text-destructive"
           >
             <BanIcon className="size-3.5" />
@@ -79,7 +74,7 @@ export function CalendarActionButtons({
             variant="ghost"
             size="sm"
             disabled={isPending}
-            onClick={handleArchive}
+            onClick={() => executeAction(archiveCalendarEventAction)}
             className="gap-1.5 text-muted-foreground"
           >
             <ArchiveIcon className="size-3.5" />
