@@ -9,6 +9,11 @@ const SENSITIVE_KEYS = new Set([
   "service_role",
   "access_token",
   "refresh_token",
+  "email",
+  "civil_id",
+  "national_id",
+  "phone",
+  "phone_number",
 ]);
 
 export function redactSensitiveData(data: unknown): unknown {

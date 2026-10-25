@@ -1,27 +1,24 @@
-import { isAppError } from "../errors/isAppError";
 import { redactSensitiveData } from "./redactSensitiveData";
+import { sanitizeLogString } from "./sanitizeLogString";
+import { resolveErrorDetails } from "./resolveErrorDetails";
 
 export function buildErrorLogPayload(
   error: unknown,
   context?: Record<string, unknown>,
   correlationId?: string,
 ) {
-  const resolvedCorrelationId =
-    correlationId || (isAppError(error) ? error.correlationId : undefined) || `err_${Date.now()}`;
-
-  const message = error instanceof Error ? error.message : String(error);
-  const stack = error instanceof Error ? error.stack : undefined;
-  const code = isAppError(error) ? error.code : "INTERNAL_ERROR";
-  const statusCode = isAppError(error) ? error.statusCode : 500;
+  const details = resolveErrorDetails(error);
+  const resolvedCorrelationId = correlationId || details.correlationId || `err_${Date.now()}`;
+  const isProd = process.env.NODE_ENV === "production";
 
   return {
     timestamp: new Date().toISOString(),
-    level: statusCode >= 500 ? "ERROR" : "WARN",
+    level: details.statusCode >= 500 ? "ERROR" : "WARN",
     correlationId: resolvedCorrelationId,
-    code,
-    statusCode,
-    message,
+    code: details.code,
+    statusCode: details.statusCode,
+    message: sanitizeLogString(details.rawMessage),
     context: context ? redactSensitiveData(context) : undefined,
-    stack,
+    stack: isProd || !details.rawStack ? undefined : sanitizeLogString(details.rawStack),
   };
 }

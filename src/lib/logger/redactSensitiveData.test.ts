@@ -8,11 +8,15 @@ describe("redactSensitiveData", () => {
       password: "SuperSecretPassword123",
       apiKey: "secret_live_key",
       email: "teacher@school.test",
+      civil_id: "290123456789",
+      phone: "+96512345678",
     };
 
     const output = redactSensitiveData(input) as Record<string, unknown>;
     expect(output.username).toBe("teacher1");
-    expect(output.email).toBe("teacher@school.test");
+    expect(output.email).toBe("[REDACTED]");
+    expect(output.civil_id).toBe("[REDACTED]");
+    expect(output.phone).toBe("[REDACTED]");
     expect(output.password).toBe("[REDACTED]");
     expect(output.apiKey).toBe("[REDACTED]");
   });
