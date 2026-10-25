@@ -7,6 +7,13 @@ export type CalendarStatus = "draft" | "published" | "cancelled" | "archived";
 export type CalendarCategory =
   "event" | "academic" | "exam" | "holiday" | "meeting" | "activity" | "other";
 
+export type CalendarRecurrenceFrequency =
+  | "none"
+  | "daily"
+  | "weekly"
+  | "biweekly"
+  | "monthly";
+
 export interface CalendarEventRow {
   id: string;
   school_id: string;

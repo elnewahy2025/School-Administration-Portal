@@ -1,6 +1,8 @@
 export * from "./types";
 export { uploadCalendarImage } from "./uploadCalendarImage";
 export { createCalendarEventRecord } from "./createCalendarEventRecord";
+export { createCalendarEventSeries } from "./createCalendarEventSeries";
+export { computeRecurringEventInstances } from "./computeRecurringEventInstances";
 export { updateCalendarEventRecord } from "./updateCalendarEventRecord";
 export { getSchoolCalendarEvents } from "./getSchoolCalendarEvents";
 export { getPublicCalendarEvents } from "./getPublicCalendarEvents";

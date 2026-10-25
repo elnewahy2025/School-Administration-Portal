@@ -440,6 +440,17 @@
       "archive": "أرشفة",
       "edit": "تعديل الفعالية"
     },
+    "recurrence": "تكرار الفعالية",
+    "recurrenceFreq": "التكرار",
+    "recurrenceNone": "لا يتكرر (مرة واحدة)",
+    "recurrenceDaily": "يومياً",
+    "recurrenceWeekly": "أسبوعياً",
+    "recurrenceBiweekly": "كل أسبوعين",
+    "recurrenceMonthly": "شهرياً",
+    "recurrenceUntil": "تكرار حتى تاريخ",
+    "recurrenceCount": "الحد الأقصى للتكرار",
+    "recurrenceHelp": "جدولة الفعالية بشكل دوري تلقائياً حتى التاريخ أو العدد المحدد",
+    "recurringBadge": "دوري",
     "backToList": "العودة للتقويم"
   },
   "achievements": {

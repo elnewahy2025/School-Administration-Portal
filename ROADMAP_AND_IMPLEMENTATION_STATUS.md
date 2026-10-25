@@ -123,8 +123,12 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 
 ### Phase 5: Advanced Calendar & Circular Automation
 
-- [ ] **Recurring Events Engine:**
-  - Support recurring schedules (weekly department meetings, monthly staff assemblies) with rule-based exceptions.
+- [x] **Recurring Events Engine:**
+  - Implemented pure date recurrence expansion helper [computeRecurringEventInstances.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/computeRecurringEventInstances.ts) supporting `daily`, `weekly`, `biweekly`, and `monthly` frequencies with end-date and occurrence bounds.
+  - Added batch series creator [createCalendarEventSeries.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/createCalendarEventSeries.ts) inserting occurrence sets atomically into `calendar_events`.
+  - Added [CalendarRecurrenceFields.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CalendarRecurrenceFields.tsx) to [CreateCalendarEventForm.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CreateCalendarEventForm.tsx).
+  - Updated [parseCalendarFormData.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/validation/parseCalendarFormData.ts) and [createCalendarEventAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/calendar/createCalendarEventAction.ts).
+  - Added complete unit and component test suites in [computeRecurringEventInstances.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/computeRecurringEventInstances.test.ts), [createCalendarEventSeries.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/createCalendarEventSeries.test.ts), [parseCalendarFormData.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/validation/parseCalendarFormData.test.ts), and [CalendarRecurrenceFields.test.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CalendarRecurrenceFields.test.tsx).
 - [ ] **Real-Time Push Notifications (WebSockets):**
   - Supabase Realtime integration pushing instant alerts to active users when urgent circulars or emergency maintenance tickets are dispatched.
 - [ ] **Department Head Delegation & Deputy Sign-Off:**

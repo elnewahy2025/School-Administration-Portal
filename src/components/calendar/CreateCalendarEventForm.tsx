@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { CalendarCoreFields } from "./CalendarCoreFields";
 import { CalendarDateTimeFields } from "./CalendarDateTimeFields";
+import { CalendarRecurrenceFields } from "./CalendarRecurrenceFields";
 import { createCalendarEventAction } from "@/actions/calendar/createCalendarEventAction";
 
 export function CreateCalendarEventForm() {
@@ -44,6 +45,7 @@ export function CreateCalendarEventForm() {
       <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-xs">
         <CalendarCoreFields />
         <CalendarDateTimeFields />
+        <CalendarRecurrenceFields />
 
         <div className="space-y-2 border-t border-border pt-4">
           <Label htmlFor="image" className="flex items-center gap-2">

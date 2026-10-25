@@ -5,7 +5,8 @@ import { createSupabaseServerClient } from "@/lib/supabase";
 import { assertCanManageCalendar } from "@/lib/calendar/assertCanManageCalendar";
 import { parseCalendarFormData } from "@/lib/validation/parseCalendarFormData";
 import { assertValidCalendarInput } from "@/lib/calendar/assertValidCalendarInput";
-import { createCalendarEventRecord } from "@/lib/calendar/createCalendarEventRecord";
+import { computeRecurringEventInstances } from "@/lib/calendar/computeRecurringEventInstances";
+import { createCalendarEventSeries } from "@/lib/calendar/createCalendarEventSeries";
 import { uploadCalendarImage } from "@/lib/calendar/uploadCalendarImage";
 import { ValidationError } from "@/lib/errors/ValidationError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
@@ -34,31 +35,38 @@ export async function createCalendarEventAction(
       imagePath = uploadRes.path ?? null;
     }
 
-    const res = await createCalendarEventRecord(supabase, {
+    const instances = computeRecurringEventInstances({
+      startsAt: data.startsAt,
+      endsAt: data.endsAt,
+      frequency: data.recurrenceFreq,
+      untilDate: data.recurrenceUntil,
+      maxCount: data.recurrenceCount,
+    });
+
+    const res = await createCalendarEventSeries(supabase, {
       schoolId: auth.schoolId,
       titleAr: data.titleAr,
       titleEn: data.titleEn,
       description: data.description,
       category: data.category,
-      startsAt: data.startsAt,
-      endsAt: data.endsAt,
       allDay: data.allDay,
       visibility: data.visibility,
       location: data.location,
       imagePath,
       createdBy: auth.profileId,
+      instances,
     });
 
     if (res.error) {
       throw new AppError(res.error);
     }
-    if (!res.eventId) {
+    if (!res.firstEventId) {
       throw new AppError("Failed to create calendar event");
     }
 
     revalidatePath("/[locale]/calendar", "page");
     revalidatePath("/[locale]", "page");
-    return { success: true, eventId: res.eventId };
+    return { success: true, eventId: res.firstEventId };
   } catch (err: unknown) {
     const appError = sanitizeError(err);
     return formatActionErrorResult(appError);

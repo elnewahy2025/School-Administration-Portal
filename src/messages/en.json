@@ -440,6 +440,17 @@
       "archive": "Archive",
       "edit": "Edit Event"
     },
+    "recurrence": "Recurrence",
+    "recurrenceFreq": "Repeats",
+    "recurrenceNone": "Does not repeat",
+    "recurrenceDaily": "Daily",
+    "recurrenceWeekly": "Weekly",
+    "recurrenceBiweekly": "Every 2 weeks",
+    "recurrenceMonthly": "Monthly",
+    "recurrenceUntil": "Repeat until",
+    "recurrenceCount": "Max occurrences",
+    "recurrenceHelp": "Automatically schedules recurring instances up to the selected date or limit",
+    "recurringBadge": "Recurring",
     "backToList": "Back to Calendar"
   },
   "achievements": {
