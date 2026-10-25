@@ -17,7 +17,6 @@ const DAYS_OF_WEEK = [
 const DATE_FORMATS = [
   { value: "yyyy-MM-dd", labelKey: "dateFormatIso" },
   { value: "dd/MM/yyyy", labelKey: "dateFormatSlash" },
-  { value: "dd-MM-yyyy", labelKey: "dateFormatDash" },
   { value: "MM/dd/yyyy", labelKey: "dateFormatUs" },
 ] as const;
 

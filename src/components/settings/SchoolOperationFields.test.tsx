@@ -22,7 +22,6 @@ const messages = {
     daySaturday: "السبت",
     dateFormatIso: "YYYY-MM-DD (القياسي الدولي)",
     dateFormatSlash: "DD/MM/YYYY (يوم/شهر/سنة)",
-    dateFormatDash: "DD-MM-YYYY (يوم-شهر-سنة)",
     dateFormatUs: "MM/DD/YYYY (شهر/يوم/سنة)",
   },
 };
