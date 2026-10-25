@@ -10,10 +10,12 @@ import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 export function CalendarItemDetailDialog({
   item,
   isOpen,
+  canManage = false,
   onClose,
 }: {
   item: UnifiedCalendarItem | null;
   isOpen: boolean;
+  canManage?: boolean;
   onClose: () => void;
 }) {
   const locale = useLocale();
@@ -53,7 +55,7 @@ export function CalendarItemDetailDialog({
         </div>
 
         {isEvent ? (
-          <CalendarEventDetailContent event={item.event} onClose={onClose} />
+          <CalendarEventDetailContent event={item.event} canManage={canManage} onClose={onClose} />
         ) : (
           <CalendarCircularDetailContent circular={item.circular} onClose={onClose} />
         )}

@@ -80,6 +80,7 @@ export function CalendarEventsView({
       <CalendarItemDetailDialog
         item={selectedItem}
         isOpen={Boolean(selectedItem)}
+        canManage={canManage}
         onClose={() => setSelectedItem(null)}
       />
     </div>
