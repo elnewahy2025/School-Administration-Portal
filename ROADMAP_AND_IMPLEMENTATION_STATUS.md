@@ -152,9 +152,11 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
   - Added the dedicated route [calendar/[id]/edit/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/calendar/[id]/edit/page.tsx>) and [EditCalendarEventForm.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/EditCalendarEventForm.tsx), accessible to users with `calendar.manage` permission or platform owner.
   - Added [formatDateTimeInput.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/calendar/formatDateTimeInput.ts) for ISO to `datetime-local` input pre-population.
   - Exposed an edit action button in [CalendarActionButtons.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/calendar/CalendarActionButtons.tsx) on the event details page.
-- [ ] **2. Expand `/settings/school` with Workweek & Policy Settings:**
-  - Expose existing backend columns from `school_settings` (`working_days`, `date_format`, `circular_policy`, `maintenance_policy`, `calendar_policy`, `notification_prefs`).
-  - Add interactive checkboxes for the working week (Sunday–Thursday) and default operational response timelines in the school settings UI ([src/app/[locale]/(app)/settings/school/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/settings/school/page.tsx>)).
+- [x] **2. Expand `/settings/school` with Workweek & Policy Settings:**
+  - Connected existing backend columns from `school_settings` (`working_days`, `date_format`) to the UI.
+  - Created [SchoolOperationFields.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/settings/SchoolOperationFields.tsx) featuring interactive checkboxes for the working week (Sunday–Saturday with Sunday–Thursday default for Kuwait/Gulf academic operations) and date format selection (`YYYY-MM-DD`, `DD/MM/YYYY`, `DD-MM-YYYY`, `MM/DD/YYYY`).
+  - Updated [parseSchoolFormData.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/validation/parseSchoolFormData.ts), [persistSchoolProfile.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/school/persistSchoolProfile.ts), [mergeSchoolSettings.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/school/mergeSchoolSettings.ts), and [getSchoolFullDetails.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/school/getSchoolFullDetails.ts).
+  - Added unit and component tests in [mergeSchoolSettings.test.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/lib/school/mergeSchoolSettings.test.ts) and [SchoolOperationFields.test.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/components/settings/SchoolOperationFields.test.tsx).
 
 ---
 

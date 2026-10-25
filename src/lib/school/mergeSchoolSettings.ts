@@ -9,9 +9,14 @@ export type SchoolSettingsRow = {
   mission_ar?: string | null;
   mission_en?: string | null;
   public_description?: string | null;
+  working_days?: number[] | null;
+  date_format?: string | null;
 };
 
 export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsRow | null) {
+  const defaultWorkingDays = [0, 1, 2, 3, 4];
+  const defaultDateFormat = "yyyy-MM-dd";
+
   if (!settings) {
     return {
       ...school,
@@ -23,6 +28,8 @@ export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsR
       mission_ar: null,
       mission_en: null,
       public_description: null,
+      working_days: defaultWorkingDays,
+      date_format: defaultDateFormat,
     };
   }
 
@@ -36,5 +43,7 @@ export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsR
     mission_ar: settings.mission_ar,
     mission_en: settings.mission_en,
     public_description: settings.public_description,
+    working_days: settings.working_days ?? defaultWorkingDays,
+    date_format: settings.date_format ?? defaultDateFormat,
   };
 }

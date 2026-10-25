@@ -9,10 +9,10 @@ export function SchoolNarrativeFields({
   missionEn,
   disabled,
 }: {
-  visionAr: string;
-  visionEn: string;
-  missionAr: string;
-  missionEn: string;
+  visionAr?: string | null;
+  visionEn?: string | null;
+  missionAr?: string | null;
+  missionEn?: string | null;
   disabled: boolean;
 }) {
   const t = useTranslations("settings");
@@ -29,7 +29,7 @@ export function SchoolNarrativeFields({
         <Textarea
           id="vision_ar"
           name="vision_ar"
-          defaultValue={visionAr}
+          defaultValue={visionAr ?? undefined}
           disabled={disabled}
           rows={3}
         />
@@ -39,7 +39,7 @@ export function SchoolNarrativeFields({
         <Textarea
           id="vision_en"
           name="vision_en"
-          defaultValue={visionEn}
+          defaultValue={visionEn ?? undefined}
           disabled={disabled}
           rows={3}
         />
@@ -49,7 +49,7 @@ export function SchoolNarrativeFields({
         <Textarea
           id="mission_ar"
           name="mission_ar"
-          defaultValue={missionAr}
+          defaultValue={missionAr ?? undefined}
           disabled={disabled}
           rows={3}
         />
@@ -59,7 +59,7 @@ export function SchoolNarrativeFields({
         <Textarea
           id="mission_en"
           name="mission_en"
-          defaultValue={missionEn}
+          defaultValue={missionEn ?? undefined}
           disabled={disabled}
           rows={3}
         />

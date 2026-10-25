@@ -25,6 +25,8 @@ describe("parseSchoolFormData", () => {
     expect(parsed.visionEn).toBeNull();
     expect(parsed.missionAr).toBeNull();
     expect(parsed.missionEn).toBeNull();
+    expect(parsed.workingDays).toEqual([]);
+    expect(parsed.dateFormat).toBe("yyyy-MM-dd");
     // Timezone field is intentionally omitted
     expect((parsed as Record<string, unknown>).timezone).toBeUndefined();
   });
@@ -49,6 +51,13 @@ describe("parseSchoolFormData", () => {
     formData.append("mission_ar", "تنمية مهارات الجيل القادم");
     formData.append("mission_en", "Developing next-generation skills");
 
+    formData.append("date_format", "dd/MM/yyyy");
+    formData.append("working_days", "0");
+    formData.append("working_days", "1");
+    formData.append("working_days", "2");
+    formData.append("working_days", "3");
+    formData.append("working_days", "4");
+
     const parsed = parseSchoolFormData(formData);
     expect(parsed.nameAr).toBe("مدرسة النور");
     expect(parsed.nameEn).toBe("Al-Noor School");
@@ -67,5 +76,7 @@ describe("parseSchoolFormData", () => {
     expect(parsed.visionEn).toBe("A leading educational environment");
     expect(parsed.missionAr).toBe("تنمية مهارات الجيل القادم");
     expect(parsed.missionEn).toBe("Developing next-generation skills");
+    expect(parsed.workingDays).toEqual([0, 1, 2, 3, 4]);
+    expect(parsed.dateFormat).toBe("dd/MM/yyyy");
   });
 });

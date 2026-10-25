@@ -13,6 +13,7 @@ import { SchoolLeadershipFields } from "./SchoolLeadershipFields";
 import { SchoolContactFields } from "./SchoolContactFields";
 import { SchoolLogoFields } from "./SchoolLogoFields";
 import { SchoolNarrativeFields } from "./SchoolNarrativeFields";
+import { SchoolOperationFields } from "./SchoolOperationFields";
 
 export function SchoolProfileForm({
   school,
@@ -51,11 +52,16 @@ export function SchoolProfileForm({
         <SchoolLeadershipFields school={school} canManage={canManage} />
         <SchoolContactFields school={school} canManage={canManage} />
         <SchoolLogoFields logoPath={school.logo_path} canManage={canManage} />
+        <SchoolOperationFields
+          workingDays={school.working_days}
+          dateFormat={school.date_format}
+          canManage={canManage}
+        />
         <SchoolNarrativeFields
-          visionAr={school.vision_ar ?? school.vision ?? ""}
-          visionEn={school.vision_en ?? ""}
-          missionAr={school.mission_ar ?? school.mission ?? ""}
-          missionEn={school.mission_en ?? ""}
+          visionAr={school.vision_ar || school.vision}
+          visionEn={school.vision_en}
+          missionAr={school.mission_ar || school.mission}
+          missionEn={school.mission_en}
           disabled={!canManage}
         />
       </div>

@@ -28,7 +28,7 @@ export async function getSchoolFullDetails(
     supabase
       .from("school_settings")
       .select(
-        "academic_year, vision, mission, vision_ar, vision_en, mission_ar, mission_en, public_description",
+        "academic_year, vision, mission, vision_ar, vision_en, mission_ar, mission_en, public_description, working_days, date_format",
       )
       .eq("school_id", resolvedId)
       .maybeSingle(),

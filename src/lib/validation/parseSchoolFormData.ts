@@ -19,5 +19,10 @@ export function parseSchoolFormData(formData: FormData) {
     visionEn: cleanFormField(formData.get("vision_en")),
     missionAr: cleanFormField(formData.get("mission_ar")),
     missionEn: cleanFormField(formData.get("mission_en")),
+    workingDays: formData
+      .getAll("working_days")
+      .map(Number)
+      .filter((n) => !isNaN(n) && n >= 0 && n <= 6),
+    dateFormat: cleanFormField(formData.get("date_format")) ?? "yyyy-MM-dd",
   };
 }

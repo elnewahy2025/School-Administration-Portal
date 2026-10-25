@@ -52,6 +52,8 @@ export async function persistSchoolProfile(
     vision_en: parsed.visionEn,
     mission_ar: parsed.missionAr,
     mission_en: parsed.missionEn,
+    working_days: parsed.workingDays.length > 0 ? parsed.workingDays : [0, 1, 2, 3, 4],
+    date_format: parsed.dateFormat,
   });
 
   if (settingsError) {
