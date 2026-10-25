@@ -38,7 +38,13 @@
   },
   "theme": {
     "toDark": "Switch to dark mode",
-    "toLight": "Switch to light mode"
+    "toLight": "Switch to light mode",
+    "selectTheme": "Select Theme",
+    "alNada": "Al-Nada (Royal Navy)",
+    "light": "Classic Light",
+    "dark": "Slate Dark",
+    "emerald": "Emerald Academy",
+    "midnight": "Midnight OLED"
   },
   "auth": {
     "loginTitle": "Sign in",

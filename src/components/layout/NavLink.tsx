@@ -28,8 +28,8 @@ export function NavLink({
       className={cn(
         "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
         isActive
-          ? "bg-primary text-primary-foreground shadow-xs"
-          : "text-muted-foreground hover:bg-accent hover:text-foreground",
+          ? "bg-sidebar-primary text-sidebar-primary-foreground font-semibold shadow-xs"
+          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
       )}
     >
       <Icon className="size-4 shrink-0" />
@@ -39,8 +39,8 @@ export function NavLink({
           className={cn(
             "ms-auto rounded-full px-2 py-0.5 text-xs font-semibold",
             isActive
-              ? "bg-primary-foreground/20 text-primary-foreground"
-              : "bg-muted text-muted-foreground",
+              ? "bg-sidebar-primary-foreground/20 text-sidebar-primary-foreground"
+              : "bg-sidebar-accent text-sidebar-accent-foreground",
           )}
         >
           {badge}

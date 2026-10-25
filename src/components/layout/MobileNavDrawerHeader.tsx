@@ -22,16 +22,16 @@ export function MobileNavDrawerHeader({
   const t = useTranslations("nav");
 
   return (
-    <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-4">
+    <div className="flex h-16 shrink-0 items-center justify-between border-b border-sidebar-border px-4">
       <div className="flex min-w-0 items-center gap-2.5 overflow-hidden">
         <SchoolLogoAvatar school={school} className="size-8" iconClassName="size-4" />
         <div className="flex min-w-0 flex-col overflow-hidden">
           {hierarchy ? (
-            <span className="truncate text-[10px] leading-tight text-muted-foreground">
+            <span className="truncate text-[10px] leading-tight text-sidebar-foreground/70">
               {hierarchy}
             </span>
           ) : null}
-          <span className="truncate text-sm leading-snug font-semibold text-foreground">
+          <span className="truncate text-sm leading-snug font-semibold text-sidebar-foreground">
             {primaryName || schoolName}
           </span>
         </div>
@@ -41,7 +41,7 @@ export function MobileNavDrawerHeader({
         size="icon"
         onClick={onClose}
         aria-label={t("closeMenu")}
-        className="ms-2 shrink-0"
+        className="ms-2 shrink-0 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
       >
         <XIcon className="size-5" />
       </Button>

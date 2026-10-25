@@ -31,14 +31,14 @@ export function AppSidebar({
   const schoolName = resolveSchoolName(school, locale, t("portal"));
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-e border-border bg-card md:flex">
-      <div className="flex h-16 items-center gap-3 border-b border-border px-6">
+    <aside className="hidden w-64 shrink-0 flex-col border-e border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
+      <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-6">
         <SchoolLogoAvatar school={school} />
         <div className="flex flex-col overflow-hidden">
-          <span className="truncate text-sm font-semibold whitespace-pre-line text-foreground">
+          <span className="truncate text-sm font-semibold whitespace-pre-line text-sidebar-foreground">
             {schoolName}
           </span>
-          <span className="text-xs text-muted-foreground">{t("portal")}</span>
+          <span className="text-xs text-sidebar-foreground/70">{t("portal")}</span>
         </div>
       </div>
 
@@ -58,8 +58,8 @@ export function AppSidebar({
         ) : null}
       </nav>
 
-      <div className="border-t border-border p-4 text-center">
-        <p className="text-xs text-muted-foreground">v0.1.0 · Next.js 16</p>
+      <div className="border-t border-sidebar-border p-4 text-center">
+        <p className="text-xs text-sidebar-foreground/60">v0.1.0 · Next.js 16</p>
       </div>
     </aside>
   );

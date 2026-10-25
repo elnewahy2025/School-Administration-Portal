@@ -83,8 +83,9 @@ export default async function LocaleLayout({
       <body className="flex min-h-full flex-col">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="al-nada"
+          themes={["al-nada", "light", "dark", "emerald", "midnight"]}
+          enableSystem={false}
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={locale === "ar" ? ar : en}>

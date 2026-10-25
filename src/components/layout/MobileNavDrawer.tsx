@@ -57,7 +57,7 @@ export function MobileNavDrawer({
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="fixed inset-y-0 start-0 z-[60] flex h-dvh w-72 max-w-[85vw] flex-col border-e border-border bg-card shadow-2xl transition-transform duration-200">
+      <div className="fixed inset-y-0 start-0 z-[60] flex h-dvh w-72 max-w-[85vw] flex-col border-e border-sidebar-border bg-sidebar text-sidebar-foreground shadow-2xl transition-transform duration-200">
         <MobileNavDrawerHeader
           school={school}
           schoolName={schoolName}
@@ -76,9 +76,9 @@ export function MobileNavDrawer({
         </div>
 
         {school?.academic_year ? (
-          <div className="flex shrink-0 items-center justify-between border-t border-border px-4 py-3 text-xs text-muted-foreground">
+          <div className="flex shrink-0 items-center justify-between border-t border-sidebar-border px-4 py-3 text-xs text-sidebar-foreground/70">
             <span>{t("portal")}</span>
-            <span className="rounded-md border border-border px-1.5 py-0.5 font-medium">
+            <span className="rounded-md border border-sidebar-border px-1.5 py-0.5 font-medium">
               {school.academic_year}
             </span>
           </div>
