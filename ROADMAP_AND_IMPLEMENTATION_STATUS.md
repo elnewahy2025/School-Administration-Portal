@@ -150,10 +150,10 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 - [ ] **1. Implement "Edit Calendar Event" UI:**
   - Connect the existing backend action [updateCalendarEventAction.ts](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/actions/calendar/updateCalendarEventAction.ts) to the frontend.
   - Add an "Edit Event" modal or `/calendar/[id]/edit` form for events, accessible to users with `calendar.manage` permission or platform owner.
-  - Expose an edit action button on the event details page ([calendar/[id]/page.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/calendar/[id]/page.tsx)).
+  - Expose an edit action button on the event details page ([calendar/[id]/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/calendar/[id]/page.tsx>)).
 - [ ] **2. Expand `/settings/school` with Workweek & Policy Settings:**
   - Expose existing backend columns from `school_settings` (`working_days`, `date_format`, `circular_policy`, `maintenance_policy`, `calendar_policy`, `notification_prefs`).
-  - Add interactive checkboxes for the working week (Sunday–Thursday) and default operational response timelines in the school settings UI ([src/app/[locale]/(app)/settings/school/page.tsx](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/settings/school/page.tsx)).
+  - Add interactive checkboxes for the working week (Sunday–Thursday) and default operational response timelines in the school settings UI ([src/app/[locale]/(app)/settings/school/page.tsx](<file:///c:/Users/ahmed/Desktop/School_Administration_Portal/src/app/[locale]/(app)/settings/school/page.tsx>)).
 
 ---
 
@@ -161,6 +161,7 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 
 | Suite               | Target                           | Status      | Passing                     |
 | ------------------- | -------------------------------- | ----------- | --------------------------- |
+| RLS Battery         | Supabase Auth & RLS Harness      | **PASSING** | 85 / 85 checks passed       |
 | Unit & Integration  | Vitest                           | **PASSING** | 125 / 125 tests (41 suites) |
 | Linter & Modularity | ESLint + D11 Single-Export       | **PASSING** | 0 errors, 0 warnings        |
 | Code Formatting     | Prettier                         | **PASSING** | 100% compliant              |
