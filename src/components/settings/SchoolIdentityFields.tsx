@@ -39,7 +39,13 @@ export function SchoolIdentityFields({
       </div>
       <div className="space-y-2">
         <Label htmlFor="slug">{t("slug")}</Label>
-        <Input id="slug" value={school.slug} disabled className="bg-muted font-mono" />
+        <Input
+          id="slug"
+          name="slug"
+          defaultValue={school.slug}
+          disabled={!canManage}
+          className="font-mono"
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="academic_year">{t("academicYear")}</Label>

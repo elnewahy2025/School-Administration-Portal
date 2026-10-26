@@ -35,7 +35,7 @@ export function PublicFeaturesSection() {
     <section id="features" className="border-t border-border/60 bg-muted/20 py-16 px-6">
       <div className="mx-auto max-w-5xl space-y-10">
         <div className="text-center space-y-3">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+          <h2 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground">
             {t("featuresTitle")}
           </h2>
           <p className="mx-auto max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">

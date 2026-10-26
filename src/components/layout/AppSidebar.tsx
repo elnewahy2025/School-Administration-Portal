@@ -13,6 +13,7 @@ import {
 import { NavLink } from "./NavLink";
 import { SchoolLogoAvatar } from "./SchoolLogoAvatar";
 import { resolveSchoolName } from "@/lib/school/resolveSchoolName";
+import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy";
 import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
 export function AppSidebar({
@@ -29,14 +30,19 @@ export function AppSidebar({
   const t = useTranslations("nav");
   const locale = useLocale();
   const schoolName = resolveSchoolName(school, locale, t("portal"));
+  const { primaryName } = parseSchoolNameHierarchy(schoolName);
+  const displayName = primaryName || schoolName;
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-e border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
       <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-6">
         <SchoolLogoAvatar school={school} />
         <div className="flex flex-col overflow-hidden">
-          <span className="truncate text-sm font-semibold whitespace-pre-line text-sidebar-foreground">
-            {schoolName}
+          <span
+            className="truncate text-sm font-semibold text-sidebar-foreground"
+            title={displayName}
+          >
+            {displayName}
           </span>
           <span className="text-xs text-sidebar-foreground/70">{t("portal")}</span>
         </div>

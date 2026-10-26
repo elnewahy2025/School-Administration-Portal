@@ -10,6 +10,7 @@ export async function dispatchModuleNotification({
   body,
   entityType,
   entityId,
+  skipThrottle,
 }: {
   recipientUserIds: string[];
   schoolId?: string | null;
@@ -18,6 +19,7 @@ export async function dispatchModuleNotification({
   body?: string | null;
   entityType?: NotificationEntityKind | null;
   entityId?: string | null;
+  skipThrottle?: boolean;
 }) {
   if (!recipientUserIds.length) return;
   const adminClient = createSupabaseAdminClient();
@@ -33,6 +35,7 @@ export async function dispatchModuleNotification({
         body,
         entityType,
         entityId,
+        skipThrottle,
       }),
     ),
   );

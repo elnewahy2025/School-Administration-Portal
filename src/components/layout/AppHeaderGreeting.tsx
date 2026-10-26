@@ -25,25 +25,25 @@ export function AppHeaderGreeting({
   });
 
   return (
-    <div className="flex items-center gap-2 text-xs">
+    <div className="flex items-center gap-2.5 sm:gap-3 text-sm font-human">
       {profile?.full_name && (
-        <span className="hidden font-medium text-foreground sm:inline">
+        <span className="hidden text-base font-bold text-foreground sm:inline">
           {t("welcome", { name: profile.full_name })}
         </span>
       )}
       {departmentName && (
-        <span className="hidden items-center gap-1 rounded-md border border-primary/20 bg-primary/10 px-2 py-1 font-medium text-primary sm:inline-flex">
-          <Building2Icon className="size-3" />
+        <span className="hidden items-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs sm:text-sm font-semibold text-primary shadow-2xs sm:inline-flex">
+          <Building2Icon className="size-3.5" />
           {departmentName}
         </span>
       )}
       {school?.academic_year && (
-        <span className="hidden rounded-md border border-border bg-background/80 px-2 py-1 font-medium text-muted-foreground md:inline-flex">
+        <span className="hidden rounded-xl border border-border/80 bg-card px-3 py-1.5 text-xs sm:text-sm font-semibold text-foreground/80 shadow-2xs md:inline-flex">
           {school.academic_year}
         </span>
       )}
-      <div className="hidden items-center gap-1.5 rounded-md border border-border bg-background/80 px-2 py-1 text-muted-foreground lg:flex">
-        <CalendarIcon className="size-3.5" />
+      <div className="hidden items-center gap-2 rounded-xl border border-border/80 bg-card px-3 py-1.5 text-xs sm:text-sm font-semibold text-foreground/80 shadow-2xs lg:flex">
+        <CalendarIcon className="size-4 text-primary" />
         <span>{todayStr}</span>
       </div>
     </div>

@@ -23,4 +23,5 @@ export interface CreateNotificationInput {
   body?: string | null;
   entityType?: NotificationEntityKind | null;
   entityId?: string | null;
+  skipThrottle?: boolean;
 }

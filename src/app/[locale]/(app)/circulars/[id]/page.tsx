@@ -14,6 +14,7 @@ import {
   CircularDetailCard,
   CircularResponseBox,
   CircularResponseTable,
+  CircularRemindButton,
 } from "@/components/circulars";
 
 export default async function CircularDetailPage({
@@ -73,7 +74,12 @@ export default async function CircularDetailPage({
 
       {canViewResponses && (
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("responses")}</h3>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("responses")}</h3>
+            {(canManage || canPublish) && circular.status !== "draft" && circular.status !== "cancelled" ? (
+              <CircularRemindButton circularId={circular.id} circularTitle={circular.title} />
+            ) : null}
+          </div>
           <CircularResponseTable responses={responses} expectedDepartments={expectedDepartments} />
         </div>
       )}

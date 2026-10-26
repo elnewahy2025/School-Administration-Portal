@@ -32,13 +32,13 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[850px] rounded-full bg-primary/10 blur-3xl"
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[850px] rounded-full bg-primary/10 blur-3xl animate-ambient-pulse"
       />
 
       <div className="relative mx-auto w-full max-w-[1720px] text-center space-y-12">
-        <div className="mx-auto max-w-4xl space-y-6">
+        <div className="mx-auto max-w-4xl space-y-6 animate-hero-fade-down">
           {hierarchy && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/80 px-5 py-2 text-xs sm:text-sm font-medium text-muted-foreground shadow-2xs backdrop-blur-xs">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/80 px-5 py-2 text-xs sm:text-sm font-medium text-muted-foreground shadow-2xs backdrop-blur-xs transition-transform duration-300 hover:scale-105">
               <Building2Icon className="size-4 text-primary" />
               <span>{hierarchy}</span>
             </div>
@@ -50,13 +50,13 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
               <img
                 src={logoUrl}
                 alt={displayTitle}
-                className="size-24 sm:size-28 rounded-full border border-border/80 bg-card object-contain p-1.5 shadow-md ring-4 ring-primary/5 transition-transform duration-300 hover:scale-105"
+                className="size-24 sm:size-28 rounded-full border border-border/80 bg-card object-contain p-1.5 shadow-md ring-4 ring-primary/5 transition-transform duration-500 hover:scale-105"
               />
             </div>
           )}
 
           <div className="space-y-4">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-foreground leading-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-foreground leading-tight">
               {displayTitle}
             </h1>
 

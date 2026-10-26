@@ -20,6 +20,7 @@ export async function persistSchoolProfile(
     assistant_manager_2_en: parsed.assistantManager2En,
     address_ar: parsed.addressAr,
     address_en: parsed.addressEn,
+    ...(parsed.slug ? { slug: parsed.slug } : {}),
   };
 
   if (logoPath) {

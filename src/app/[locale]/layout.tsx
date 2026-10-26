@@ -1,18 +1,34 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Almarai, Aref_Ruqaa, Outfit, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme";
 import { ServiceWorkerRegister, PwaInstallBanner } from "@/components/pwa";
+import { MessageBoxHost } from "@/components/ui/MessageBoxHost";
 import { routing } from "@/i18n";
 import en from "../../messages/en.json";
 import ar from "../../messages/ar.json";
 import "../globals.css";
 
-const fontSans = Geist({
+const fontSans = Almarai({
+  subsets: ["arabic"],
+  weight: ["300", "400", "700", "800"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const fontHeading = Aref_Ruqaa({
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const fontLatin = Outfit({
   subsets: ["latin"],
+  variable: "--font-latin",
+  display: "swap",
 });
 
 const fontMono = Geist_Mono({
@@ -77,7 +93,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
-      className={`${fontSans.variable} ${fontMono.variable} h-full antialiased`}
+      className={`${fontSans.variable} ${fontHeading.variable} ${fontLatin.variable} ${fontMono.variable} font-sans h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
@@ -90,6 +106,7 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={locale === "ar" ? ar : en}>
             {children}
+            <MessageBoxHost />
             <PwaInstallBanner />
             <ServiceWorkerRegister />
           </NextIntlClientProvider>

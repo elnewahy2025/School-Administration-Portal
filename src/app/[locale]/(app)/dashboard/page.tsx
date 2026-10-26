@@ -14,7 +14,10 @@ import {
   DashboardRecentCirculars,
   DashboardRecentMaintenance,
   DashboardAchievementsWidget,
+  DashboardComplianceWidget,
 } from "@/components/dashboard";
+import { getDashboardComplianceData } from "@/lib/dashboard/getDashboardComplianceData";
+import { resolveDashboardPermissions } from "@/lib/dashboard/resolveDashboardPermissions";
 
 export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -42,10 +45,13 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   ]);
 
   const achievements = isOwner ? await getSchoolAchievements(schoolId) : [];
+  const { canCircular, canMaintenance, canCalendar, canViewCompliance } =
+    resolveDashboardPermissions(isOwner, perms);
 
-  const canCircular = isOwner || perms.includes("circular.create");
-  const canMaintenance = isOwner || perms.includes("maintenance.create");
-  const canCalendar = isOwner || perms.includes("calendar.manage");
+  const complianceData =
+    canViewCompliance && schoolId
+      ? await getDashboardComplianceData(schoolId).catch(() => null)
+      : null;
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6">
@@ -63,6 +69,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         canCreateCalendar={canCalendar}
         canManageAchievements={isOwner}
       />
+
+      {complianceData && <DashboardComplianceWidget data={complianceData} />}
 
       {isOwner ? (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

@@ -10,6 +10,7 @@ describe("parseSchoolFormData", () => {
     const parsed = parseSchoolFormData(formData);
     expect(parsed.nameAr).toBe("مدرسة الأمل");
     expect(parsed.nameEn).toBe("Al-Amal School");
+    expect(parsed.slug).toBeNull();
     expect(parsed.phone).toBeNull();
     expect(parsed.email).toBeNull();
     expect(parsed.managerNameAr).toBeNull();
@@ -35,6 +36,7 @@ describe("parseSchoolFormData", () => {
     const formData = new FormData();
     formData.append("name_ar", "مدرسة النور");
     formData.append("name_en", "Al-Noor School");
+    formData.append("slug", "al-noor");
     formData.append("phone", "+966 12 345 6789");
     formData.append("email", "info@alnoor.edu.sa");
     formData.append("manager_name_ar", "د. أحمد المنصور");
@@ -61,6 +63,7 @@ describe("parseSchoolFormData", () => {
     const parsed = parseSchoolFormData(formData);
     expect(parsed.nameAr).toBe("مدرسة النور");
     expect(parsed.nameEn).toBe("Al-Noor School");
+    expect(parsed.slug).toBe("al-noor");
     expect(parsed.phone).toBe("+966 12 345 6789");
     expect(parsed.email).toBe("info@alnoor.edu.sa");
     expect(parsed.managerNameAr).toBe("د. أحمد المنصور");

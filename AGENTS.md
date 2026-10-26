@@ -21,6 +21,14 @@ Any new file must also satisfy the ~300-line cap and, outside the carve-outs abo
 
 <!-- END:modularity-rule -->
 
+<!-- BEGIN:language-rule -->
+
+## Language Rule: Always Respond in English
+
+Never respond to the user in Arabic under any circumstances. All communication, explanations, code walkthroughs, and answers must be strictly in English, even when user prompts contain Arabic or when discussing Arabic UI text/content.
+
+<!-- END:language-rule -->
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know

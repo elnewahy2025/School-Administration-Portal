@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { EditIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CircularPublishButton } from "./CircularPublishButton";
+import { CircularRemindButton } from "./CircularRemindButton";
 import { CircularDeleteDialog } from "./CircularDeleteDialog";
 import type { CircularDetail } from "@/lib/circulars/getCircularById";
 
@@ -23,10 +24,22 @@ export function CircularDetailActions({
   const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState(false);
 
+  const canRemind =
+    circular.status !== "draft" &&
+    circular.status !== "cancelled" &&
+    (canPublish || canManage);
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       {circular.status === "draft" && canPublish ? (
         <CircularPublishButton circularId={circular.id} />
+      ) : null}
+
+      {canRemind ? (
+        <CircularRemindButton
+          circularId={circular.id}
+          circularTitle={circular.title}
+        />
       ) : null}
 
       {canManage ? (

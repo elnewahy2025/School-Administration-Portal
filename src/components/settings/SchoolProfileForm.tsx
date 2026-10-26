@@ -8,12 +8,9 @@ import { SaveIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { updateSchoolAction } from "@/actions/settings/updateSchoolAction";
 import type { SchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
-import { SchoolIdentityFields } from "./SchoolIdentityFields";
-import { SchoolLeadershipFields } from "./SchoolLeadershipFields";
-import { SchoolContactFields } from "./SchoolContactFields";
-import { SchoolLogoFields } from "./SchoolLogoFields";
-import { SchoolNarrativeFields } from "./SchoolNarrativeFields";
-import { SchoolOperationFields } from "./SchoolOperationFields";
+import { SchoolProfileSubTabs } from "./SchoolProfileSubTabs";
+import { SchoolProfilePanels } from "./SchoolProfilePanels";
+import type { SchoolProfileTabId } from "./schoolProfileTabTypes";
 
 export function SchoolProfileForm({
   school,
@@ -26,6 +23,7 @@ export function SchoolProfileForm({
   const tCommon = useTranslations("common");
   const router = useRouter();
   const [formVersion, setFormVersion] = useState(0);
+  const [activeTab, setActiveTab] = useState<SchoolProfileTabId>("identity");
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
@@ -45,35 +43,27 @@ export function SchoolProfileForm({
     <form
       key={`${school.id}-${formVersion}`}
       action={handleSubmit}
-      className="flex flex-col gap-6 rounded-lg border border-border bg-card p-6"
+      className="flex flex-col gap-6"
     >
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <SchoolIdentityFields school={school} canManage={canManage} />
-        <SchoolLeadershipFields school={school} canManage={canManage} />
-        <SchoolContactFields school={school} canManage={canManage} />
-        <SchoolLogoFields logoPath={school.logo_path} canManage={canManage} />
-        <SchoolOperationFields
-          workingDays={school.working_days}
-          dateFormat={school.date_format}
+      <SchoolProfileSubTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">
+        <SchoolProfilePanels
+          activeTab={activeTab}
+          school={school}
           canManage={canManage}
         />
-        <SchoolNarrativeFields
-          visionAr={school.vision_ar || school.vision}
-          visionEn={school.vision_en}
-          missionAr={school.mission_ar || school.mission}
-          missionEn={school.mission_en}
-          disabled={!canManage}
-        />
-      </div>
 
-      {canManage && (
-        <div className="flex justify-end pt-2">
-          <Button type="submit" disabled={isPending} className="gap-2">
-            <SaveIcon className="size-4" />
-            <span>{isPending ? tCommon("saving") : t("saveSchool")}</span>
-          </Button>
-        </div>
-      )}
+        {canManage && (
+          <div className="mt-8 flex justify-end border-t border-border/70 pt-4">
+            <Button type="submit" disabled={isPending} className="gap-2">
+              <SaveIcon className="size-4" />
+              <span>{isPending ? tCommon("saving") : t("saveSchool")}</span>
+            </Button>
+          </div>
+        )}
+      </div>
     </form>
   );
 }
+
