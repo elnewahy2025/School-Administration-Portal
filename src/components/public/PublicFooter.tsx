@@ -8,8 +8,8 @@ export function PublicFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative border-t border-border/60 bg-card/60 px-6 py-10 text-xs text-muted-foreground backdrop-blur-xs">
-      <div className="mx-auto flex max-w-5xl flex-col sm:flex-row items-center justify-between gap-4">
+    <footer className="relative border-t border-border/60 bg-card/60 px-4 sm:px-8 lg:px-12 xl:px-16 py-10 text-xs text-muted-foreground backdrop-blur-xs">
+      <div className="mx-auto flex w-full max-w-[1720px] flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-center sm:text-start">
           © {currentYear} <span className="font-semibold text-foreground">{t("title")}</span>. All
           rights reserved.

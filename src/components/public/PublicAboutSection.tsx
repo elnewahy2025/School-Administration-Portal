@@ -36,16 +36,7 @@ export function PublicAboutSection({ school }: { school: PublicSchoolProfileRow 
   }
 
   return (
-    <section id="about" className="mx-auto max-w-5xl px-6 py-16 space-y-10">
-      <div className="text-center space-y-3">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-          {t("aboutSectionTitle")}
-        </h2>
-        <p className="mx-auto max-w-2xl text-sm sm:text-base text-muted-foreground leading-relaxed">
-          {t("aboutSectionDesc")}
-        </p>
-      </div>
-
+    <section id="about" className="mx-auto max-w-5xl px-6 py-16">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((item: AboutCardItem) => {
           const config = CARD_CONFIG[item.iconType];

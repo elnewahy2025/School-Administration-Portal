@@ -2,7 +2,6 @@ import { setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
@@ -10,7 +9,6 @@ import { getSchoolMaintenanceRequests } from "@/lib/maintenance/getSchoolMainten
 import { getSchoolCalendarEvents } from "@/lib/calendar/getSchoolCalendarEvents";
 import { getSchoolAchievements } from "@/lib/achievements/getSchoolAchievements";
 import {
-  DashboardHeader,
   DashboardStatsGrid,
   DashboardQuickActions,
   DashboardRecentCirculars,
@@ -35,8 +33,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   }
 
   const schoolId = profile.school_id;
-  const [school, perms, circulars, maintenance, events, isOwner] = await Promise.all([
-    getSchoolFullDetails(schoolId),
+  const [perms, circulars, maintenance, events, isOwner] = await Promise.all([
     getEffectivePermissions().catch((): string[] => []),
     getSchoolCirculars(schoolId),
     getSchoolMaintenanceRequests(schoolId),
@@ -52,8 +49,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6">
-      <DashboardHeader profile={profile} school={school} />
-
       <DashboardStatsGrid
         circularsCount={circulars.length}
         maintenanceCount={maintenance.length}
