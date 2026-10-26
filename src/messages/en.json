@@ -412,7 +412,10 @@
       "postNote": "Post Work Note",
       "notePlaceholder": "Add an update or internal work note...",
       "reasonPlaceholder": "Provide a mandatory reason...",
-      "evidenceUpload": "Attach Completion Photo (Optional)"
+      "evidenceUpload": "Attach Completion Photo (Optional)",
+      "noOperatorsWarningTitle": "No Maintenance Technicians Available",
+      "noOperatorsWarningDesc": "There are no active users with the 'Maintenance Operator' role in this school. Please register or assign a user to the technician role first.",
+      "createOperatorLink": "Go to User Settings to assign a technician"
     },
     "timeline": "Activity History & Notes",
     "attachments": "Photos & Attachments",
@@ -479,7 +482,19 @@
     "recurrenceCount": "Max occurrences",
     "recurrenceHelp": "Automatically schedules recurring instances up to the selected date or limit",
     "recurringBadge": "Recurring",
-    "backToList": "Back to Calendar"
+    "backToList": "Back to Calendar",
+    "weekendNotAllowed": "Events cannot be scheduled on weekends (Friday or Saturday) as they are official school holidays.",
+    "weekendNotice": "Friday and Saturday are official school holidays. Please select dates between Sunday and Thursday.",
+    "weekendBadge": "Holiday / Weekend",
+    "weekdays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri (Holiday)",
+      "sat": "Sat (Holiday)"
+    }
   },
   "achievements": {
     "title": "School Achievements",

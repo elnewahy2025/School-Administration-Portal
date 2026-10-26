@@ -9,6 +9,7 @@ vi.mock("next-intl", () => ({
   useTranslations: () => (key: string) => {
     const map: Record<string, string> = {
       confirm: "OK",
+      cancel: "Cancel",
       notice: "Notice",
       success: "Success",
       error: "Error",
@@ -50,6 +51,33 @@ describe("AppMessageBox", () => {
     const okBtn = screen.getByRole("button", { name: "OK" });
     fireEvent.click(okBtn);
 
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("renders cancel button and triggers onCancel when cancelled", () => {
+    const onConfirm = vi.fn();
+    const onCancel = vi.fn();
+
+    render(<AppMessageBox />);
+
+    act(() => {
+      showMessageBox({
+        title: "Confirm Action",
+        message: "Are you sure you want to proceed?",
+        type: "warning",
+        showCancel: true,
+        onConfirm,
+        onCancel,
+      });
+    });
+
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDefined();
+    expect(screen.getByRole("button", { name: "OK" })).toBeDefined();
+
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
+    expect(onConfirm).not.toHaveBeenCalled();
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 });

@@ -2,6 +2,7 @@
 
 import { useTransition, useRef } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import { createLocationAction } from "@/actions/settings/createLocationAction";
 export function CreateLocationForm() {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -21,6 +23,7 @@ export function CreateLocationForm() {
       if (res.success) {
         toast.success(tCommon("saved"));
         formRef.current?.reset();
+        router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
       }

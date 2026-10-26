@@ -1,26 +1,40 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { isWeekendDay } from "@/lib/calendar/isWeekendDay";
+import { CalendarWeekendNotice } from "./CalendarWeekendNotice";
 import type { CalendarVisibility } from "@/lib/calendar/types";
+
+type CalendarDateTimeFieldsProps = {
+  defaultStartsAt?: string;
+  defaultEndsAt?: string;
+  defaultAllDay?: boolean;
+  defaultVisibility?: CalendarVisibility;
+};
 
 export function CalendarDateTimeFields({
   defaultStartsAt,
   defaultEndsAt,
   defaultAllDay,
   defaultVisibility,
-}: {
-  defaultStartsAt?: string;
-  defaultEndsAt?: string;
-  defaultAllDay?: boolean;
-  defaultVisibility?: CalendarVisibility;
-}) {
+}: CalendarDateTimeFieldsProps) {
   const t = useTranslations("calendar");
   const tVis = useTranslations("calendar.visibilities");
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isWeekendDay(e.target.value)) {
+      e.target.value = "";
+      toast.error(t("weekendNotAllowed"));
+    }
+  };
+
   return (
     <div className="space-y-4 border-t border-border pt-4">
+      <CalendarWeekendNotice />
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="starts_at">{t("startsAt")} *</Label>
@@ -30,6 +44,7 @@ export function CalendarDateTimeFields({
             type="datetime-local"
             required
             defaultValue={defaultStartsAt ?? ""}
+            onChange={handleDateChange}
           />
         </div>
 
@@ -41,6 +56,7 @@ export function CalendarDateTimeFields({
             type="datetime-local"
             required
             defaultValue={defaultEndsAt ?? ""}
+            onChange={handleDateChange}
           />
         </div>
       </div>

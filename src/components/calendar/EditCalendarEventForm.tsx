@@ -12,10 +12,13 @@ import { Input } from "@/components/ui/input";
 import { CalendarCoreFields } from "./CalendarCoreFields";
 import { CalendarDateTimeFields } from "./CalendarDateTimeFields";
 import { formatDateTimeInput } from "@/lib/calendar/formatDateTimeInput";
+import { isWeekendDay } from "@/lib/calendar/isWeekendDay";
 import { updateCalendarEventAction } from "@/actions/calendar/updateCalendarEventAction";
 import type { CalendarEventRow } from "@/lib/calendar/types";
 
-export function EditCalendarEventForm({ event }: { event: CalendarEventRow }) {
+type EditCalendarEventFormProps = { event: CalendarEventRow };
+
+export function EditCalendarEventForm({ event }: EditCalendarEventFormProps) {
   const t = useTranslations("calendar");
   const tCommon = useTranslations("common");
   const locale = useLocale();
@@ -23,6 +26,13 @@ export function EditCalendarEventForm({ event }: { event: CalendarEventRow }) {
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
+    const startsAt = String(formData.get("starts_at") || "");
+    const endsAt = String(formData.get("ends_at") || "");
+    if (isWeekendDay(startsAt) || isWeekendDay(endsAt)) {
+      toast.error(t("weekendNotAllowed"));
+      return;
+    }
+
     startTransition(async () => {
       const res = await updateCalendarEventAction(formData);
       if (res.success) {

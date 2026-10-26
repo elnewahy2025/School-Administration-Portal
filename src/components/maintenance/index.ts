@@ -9,6 +9,7 @@ export { MaintenanceCoreFields } from "./MaintenanceCoreFields";
 export { MaintenanceDetailCard } from "./MaintenanceDetailCard";
 export { MaintenanceDetailMetaGrid } from "./MaintenanceDetailMetaGrid";
 export { MaintenanceAssignSection } from "./MaintenanceAssignSection";
+export { MaintenanceNoOperatorsAlert } from "./MaintenanceNoOperatorsAlert";
 export { MaintenanceStatusActions } from "./MaintenanceStatusActions";
 export { MaintenanceStatusButtons } from "./MaintenanceStatusButtons";
 export { OperatorStatusButtons } from "./OperatorStatusButtons";

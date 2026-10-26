@@ -21,20 +21,20 @@ When you log into your newly provisioned school account for the first time, your
 Step 1: School Profile & Workweek  ➔  Step 2: Campus Locations  ➔  Step 3: Departments  ➔  Step 4: Staff Accounts
 ```
 
-### Step 1: School Profile, Workweek & Date Preferences
+### Step 1: School Profile, Sub-Tabs, Workweek & Date Preferences
 1. In the sidebar, navigate to **Settings > School Profile** (`/settings/school`).
-2. Enter your institution's core details:
-   - **School Name:** Arabic and English official legal names.
-   - **School Type:** Primary, Middle, Secondary, or Combined.
-   - **Educational Zone / Governorate:** (e.g., العاصمة, حولي).
-   - **Vision & Mission Statements:** Used across public portals and staff dashboards to reinforce campus values.
-   - **Official Contact Info:** Phone number, official email, physical street address, and website URL.
-   - **School Crest / Logo:** Upload your official emblem (PNG, JPG, SVG up to 5MB).
-3. **Academic Workweek & Operating Schedule:**
-   - Under **Weekly Working Days**, check the operating days of your school (in Gulf/Kuwait schools: check **Sunday through Thursday**, leaving Friday and Saturday unchecked).
-4. **Date Display Format:**
-   - Choose your preferred date formatting standard (e.g., `YYYY-MM-DD` ISO standard, `DD/MM/YYYY` Day/Month/Year, or `MM/DD/YYYY`).
-5. Click **Save School Profile**.
+2. The School Profile is organized into **6 focused sub-tabs** for streamlined configuration:
+   - **1. School Identity (`الهوية المدرسية`):** Official Arabic & English names, educational stage, and emblem/logo upload (JPG, PNG, SVG up to 5MB).
+   - **2. School Leadership (`القيادة المدرسية`):** Principal and Assistant Principal details in Arabic and English.
+   - **3. Location & Contact (`الموقع والاتصال`):** Official contact telephone, school administration email, and physical campus street address.
+   - **4. Academic Year (`العام الدراسي`):** Active academic calendar year (e.g., `2026/2027`).
+   - **5. Vision & Mission (`الرؤية والرسالة`):** Institutional mission statements and educational vision displayed across portals.
+   - **6. Operations (`التشغيل`):**
+     - **Weekly Working Days:** Operating days of the school (check **Sunday through Thursday**, leaving Friday and Saturday unchecked).
+     - **Date Display Format:** Choose standard formatting (`YYYY-MM-DD`, `DD/MM/YYYY`, or `MM/DD/YYYY`).
+3. Click **Save School Profile**. Settings are saved simultaneously across all tabs.
+
+> **Note on Deletion Safety:** When deleting departments, locations, or users in Settings, the portal displays a built-in accessible confirmation modal (`AppMessageBox`) with safety warnings rather than basic browser popups.
 
 ---
 
@@ -114,8 +114,9 @@ When teachers or staff report broken air conditioning, plumbing leaks, or electr
 2. New requests arrive with the status `pending` (`قيد الانتظار`).
 3. Click on the ticket to inspect details and any attached photos.
 4. Click **Assign Operator**:
-   - Select an available technician from your facilities staff.
-   - Set the priority: `Emergency`, `Urgent`, `Normal`, or `Low`.
+   - Only active users with the dedicated **Maintenance Operator** (`operator` / `فني صيانة`) role are listed in the dropdown.
+   - **No Technicians Warning:** If no user with the `operator` role is registered in your school, a warning banner appears (`لا يوجد فنيو صيانة متاحون`) with a direct shortcut link to **Settings > Users & Roles** to assign a technician, and assignment is temporarily locked to avoid misallocating tasks.
+   - Set the priority: `Emergency`, `Urgent`, `Medium`, or `Deferrable`.
 5. The assigned technician receives an instant in-app notification to begin work.
 6. Once the technician marks the repair complete and uploads photographic evidence, you review the ticket and click **Close Ticket** (`إغلاق الطلب`).
 
@@ -124,11 +125,17 @@ When teachers or staff report broken air conditioning, plumbing leaks, or electr
 ### 3. Managing the Academic Calendar (`/calendar`)
 Keep the school faculty and public informed of upcoming academic milestones.
 
+#### Weekend Policy (Friday & Saturday):
+- In adherence to school operations, **Friday and Saturday** are locked as official non-working holidays.
+- **Scheduling Prevention:** The portal prevents selecting Friday or Saturday for any event start or end date. If chosen in the date picker, the input immediately resets with an alert toast, and form submissions are blocked both in the client and on the server.
+- **Recurrence Skipping:** Recurring daily or periodic event series automatically skip Friday and Saturday, continuing on Sunday.
+- **Visual Grid:** Friday and Saturday are clearly distinguished with amber holiday headers (`الجمعة (عطلة)`, `السبت (عطلة)`) and shaded holiday cells.
+
 #### Creating Recurring Faculty Meetings or Exams:
 1. Go to **School Calendar > New Event** (`/calendar/new`).
 2. Fill in:
    - **Title (Arabic & English):** e.g., `اجتماع الهيئة الإدارية الأسبوعي`.
-   - **Start & End Time:** Specific hour or toggle **All Day Event**.
+   - **Start & End Time:** Specific hour on a school working day (Sunday through Thursday), or toggle **All Day Event**.
    - **Category:** Academic, Exam, Holiday, Meeting, Activity, or General Event.
    - **Visibility:**
      - **Public:** Highlighted on the public school homepage for parents and visitors.
@@ -136,7 +143,7 @@ Keep the school faculty and public informed of upcoming academic milestones.
    - **Recurrence Engine:**
      - Select **Weekly**, **Biweekly**, or **Monthly**.
      - Set the **Repeat Until** date (e.g., end of the academic semester).
-3. Click **Save Event**. The system automatically generates all recurring series instances across the calendar.
+3. Click **Save Event**. The system automatically generates all recurring series instances across the calendar, skipping any weekend dates.
 
 ---
 

@@ -45,3 +45,13 @@ On the login screen (`/login`), click the **Forgot password?** (`نسيت كلم
 
 ### Q3: How do Real-Time Notifications work?
 When an administrator publishes a circular targeted to your department or assigns a maintenance ticket to your queue, an interactive toast notification appears on your screen in real time over WebSockets. Clicking the toast takes you directly to the relevant record.
+
+### Q4: Why can't I schedule events on Friday and Saturday?
+In alignment with the school's operational workweek, Friday and Saturday are configured as official weekly holidays. The calendar engine prevents scheduling events on weekend dates across the date picker, form submission, and server actions, and recurring series automatically skip weekend dates.
+
+### Q5: Who can be assigned as a Maintenance Technician?
+Only active faculty accounts assigned the dedicated **Maintenance Operator** role (`operator` / `فني صيانة`) appear in the technician dispatch list. If no technician exists in your school, a warning banner appears with a shortcut to register one in Settings.
+
+### Q6: How are destructive actions confirmed?
+All deletion and irreversible actions across the portal (such as deleting departments, locations, user assignments, circulars, or achievements) display an in-app accessible confirmation dialog (`AppMessageBox`) with safety warnings rather than native browser popups.
+

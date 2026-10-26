@@ -77,4 +77,22 @@ describe("computeRecurringEventInstances", () => {
     });
     expect(monthly).toHaveLength(3);
   });
+
+  it("skips Friday and Saturday when computing daily recurrence", () => {
+    // 2026-11-05 is Thursday, Nov 6 is Friday, Nov 7 is Saturday, Nov 8 is Sunday
+    const res = computeRecurringEventInstances({
+      startsAt: "2026-11-05T08:00:00.000Z",
+      endsAt: "2026-11-05T09:00:00.000Z",
+      frequency: "daily",
+      untilDate: "2026-11-09",
+    });
+
+    const days = res.map((item) => new Date(item.startsAt).getUTCDate());
+    expect(days).toContain(5); // Thursday
+    expect(days).not.toContain(6); // Friday skipped
+    expect(days).not.toContain(7); // Saturday skipped
+    expect(days).toContain(8); // Sunday
+    expect(days).toContain(9); // Monday
+  });
 });
+

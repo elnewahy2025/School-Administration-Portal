@@ -8,8 +8,19 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { assignMaintenanceAction } from "@/actions/maintenance/assignMaintenanceAction";
+import { MaintenanceNoOperatorsAlert } from "./MaintenanceNoOperatorsAlert";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
 import type { MaintenancePriority, MaintenanceStatus } from "@/lib/maintenance/types";
+
+const PRIORITY_KEYS: MaintenancePriority[] = ["emergency", "urgent", "medium", "deferrable"];
+
+type MaintenanceAssignSectionProps = {
+  requestId: string;
+  currentOperatorId: string | null;
+  currentPriority: MaintenancePriority;
+  currentStatus: MaintenanceStatus;
+  operators: SchoolUserRow[];
+};
 
 export function MaintenanceAssignSection({
   requestId,
@@ -17,19 +28,15 @@ export function MaintenanceAssignSection({
   currentPriority,
   currentStatus,
   operators,
-}: {
-  requestId: string;
-  currentOperatorId: string | null;
-  currentPriority: MaintenancePriority;
-  currentStatus: MaintenanceStatus;
-  operators: SchoolUserRow[];
-}) {
+}: MaintenanceAssignSectionProps) {
   const t = useTranslations("maintenance");
   const tPri = useTranslations("maintenance.priorities");
   const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
 
   if (currentStatus === "closed" || currentStatus === "rejected") return null;
+
+  const hasOperators = operators.length > 0;
 
   const handleAssign = (formData: FormData) => {
     startTransition(async () => {
@@ -45,6 +52,9 @@ export function MaintenanceAssignSection({
         <UserCheckIcon className="size-5 text-primary" />
         <h3 className="font-semibold text-foreground">{t("actions.assign")}</h3>
       </div>
+
+      {!hasOperators && <MaintenanceNoOperatorsAlert />}
+
       <form action={handleAssign} className="space-y-4">
         <input type="hidden" name="request_id" value={requestId} />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -55,7 +65,8 @@ export function MaintenanceAssignSection({
               name="operator_id"
               defaultValue={currentOperatorId ?? ""}
               required
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
+              disabled={isPending || !hasOperators}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs disabled:opacity-50"
             >
               <option value="">{t("actions.selectOperator")}</option>
               {operators.map((op) => (
@@ -71,20 +82,20 @@ export function MaintenanceAssignSection({
               id="priority"
               name="priority"
               defaultValue={currentPriority}
+              disabled={isPending}
               className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
             >
-              <option value="emergency">{tPri("emergency")}</option>
-              <option value="urgent">{tPri("urgent")}</option>
-              <option value="medium">{tPri("medium")}</option>
-              <option value="deferrable">{tPri("deferrable")}</option>
+              {PRIORITY_KEYS.map((p) => (
+                <option key={p} value={p}>{tPri(p)}</option>
+              ))}
             </select>
           </div>
         </div>
         <div className="space-y-2">
-          <Input id="notes" name="notes" placeholder={t("actions.notePlaceholder")} />
+          <Input id="notes" name="notes" placeholder={t("actions.notePlaceholder")} disabled={isPending} />
         </div>
         <div className="flex justify-end">
-          <Button type="submit" size="sm" disabled={isPending}>
+          <Button type="submit" size="sm" disabled={isPending || !hasOperators}>
             {isPending ? tCommon("loading") : t("actions.assign")}
           </Button>
         </div>

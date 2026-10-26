@@ -32,21 +32,44 @@ export const messageBoxStore = {
       title: opts.title,
       type: opts.type ?? "info",
       confirmText: opts.confirmText,
+      cancelText: opts.cancelText,
+      showCancel: opts.showCancel,
       onConfirm: opts.onConfirm,
+      onCancel: opts.onCancel,
     };
     notify();
   },
 
-  close(): void {
-    if (currentState.onConfirm) {
-      currentState.onConfirm();
-    }
+  confirm(): void {
+    const callback = currentState.onConfirm;
     currentState = {
       ...currentState,
       isOpen: false,
       onConfirm: undefined,
+      onCancel: undefined,
     };
     notify();
+    callback?.();
+  },
+
+  cancel(): void {
+    const callback = currentState.onCancel;
+    currentState = {
+      ...currentState,
+      isOpen: false,
+      onConfirm: undefined,
+      onCancel: undefined,
+    };
+    notify();
+    callback?.();
+  },
+
+  close(): void {
+    if (currentState.showCancel) {
+      this.cancel();
+    } else {
+      this.confirm();
+    }
   },
 
   subscribe(listener: () => void): () => void {

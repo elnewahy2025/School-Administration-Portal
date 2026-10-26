@@ -16,3 +16,4 @@ export { CalendarEventDetailCard } from "./CalendarEventDetailCard";
 export { CalendarEventMetaGrid } from "./CalendarEventMetaGrid";
 export { EditCalendarEventForm } from "./EditCalendarEventForm";
 export { CalendarRecurrenceFields } from "./CalendarRecurrenceFields";
+export { CalendarWeekendNotice } from "./CalendarWeekendNotice";

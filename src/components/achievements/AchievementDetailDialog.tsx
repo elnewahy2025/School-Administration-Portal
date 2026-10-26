@@ -8,6 +8,7 @@ import { AchievementCategoryBadge } from "./AchievementCategoryBadge";
 import { AchievementDetailView } from "./AchievementDetailView";
 import { EditAchievementForm } from "./EditAchievementForm";
 import { deleteAchievementAction } from "@/actions/achievements/deleteAchievementAction";
+import { showConfirmBox } from "@/lib/feedback/showConfirmBox";
 import type { SchoolAchievementRow } from "@/lib/achievements/types";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
@@ -28,8 +29,12 @@ export function AchievementDetailDialog({
 
   if (!achievement) return null;
 
-  const handleDelete = () => {
-    if (!confirm(`${t("delete")}?`)) return;
+  const handleDelete = async () => {
+    const confirmed = await showConfirmBox({
+      message: `${t("delete")}?`,
+      type: "warning",
+    });
+    if (!confirmed) return;
     startTransition(async () => {
       await deleteAchievementAction(achievement.id);
       onClose();

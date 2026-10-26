@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ export function EditDepartmentDialog({
 }) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const [nameAr, setNameAr] = useState(department.name_ar);
   const [nameEn, setNameEn] = useState(department.name_en);
   const [isPending, startTransition] = useTransition();
@@ -33,6 +35,7 @@ export function EditDepartmentDialog({
       if (res.success) {
         toast.success(tCommon("saved"));
         onClose();
+        router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
       }

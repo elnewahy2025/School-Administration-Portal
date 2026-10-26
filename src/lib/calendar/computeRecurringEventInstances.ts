@@ -1,6 +1,8 @@
 import type { CalendarRecurrenceFrequency } from "./types";
-import { parseUntilTimestamp } from "./parseUntilTimestamp";
 import { advanceRecurrenceDate } from "./advanceRecurrenceDate";
+import { isWeekendDay } from "./isWeekendDay";
+import { parseRecurrenceDates } from "./parseRecurrenceDates";
+import { resolveRecurrenceLimits } from "./resolveRecurrenceLimits";
 
 export interface RecurrenceParams {
   startsAt: string;
@@ -13,33 +15,32 @@ export interface RecurrenceParams {
 export function computeRecurringEventInstances(
   params: RecurrenceParams,
 ): Array<{ startsAt: string; endsAt: string }> {
-  const start = new Date(params.startsAt);
-  const end = new Date(params.endsAt);
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end.getTime() < start.getTime()) {
-    return [];
-  }
+  const dates = parseRecurrenceDates(params.startsAt, params.endsAt);
+  if (!dates) return [];
 
-  const durationMs = end.getTime() - start.getTime();
-  const freq = params.frequency ?? "none";
+  const { freq, untilTimestamp, countLimit } = resolveRecurrenceLimits(params);
   if (freq === "none") {
+    if (isWeekendDay(dates.start)) return [];
     return [{ startsAt: params.startsAt, endsAt: params.endsAt }];
   }
 
-  const untilTimestamp = parseUntilTimestamp(params.untilDate);
-  const countLimit = Math.min(Math.max(params.maxCount ?? 52, 1), 100);
   const instances: Array<{ startsAt: string; endsAt: string }> = [];
-  let currentStart = new Date(start);
+  let currentStart = new Date(dates.start);
+  let iterations = 0;
+  const maxIterations = countLimit * 3;
 
-  while (instances.length < countLimit) {
-    if (untilTimestamp !== null && currentStart.getTime() > untilTimestamp) {
+  while (instances.length < countLimit && iterations < maxIterations) {
+    iterations++;
+    if (currentStart.getTime() > untilTimestamp) {
       break;
     }
 
-    const currentEnd = new Date(currentStart.getTime() + durationMs);
-    instances.push({
-      startsAt: currentStart.toISOString(),
-      endsAt: currentEnd.toISOString(),
-    });
+    if (!isWeekendDay(currentStart)) {
+      instances.push({
+        startsAt: currentStart.toISOString(),
+        endsAt: new Date(currentStart.getTime() + dates.durationMs).toISOString(),
+      });
+    }
 
     currentStart = advanceRecurrenceDate(currentStart, freq);
   }

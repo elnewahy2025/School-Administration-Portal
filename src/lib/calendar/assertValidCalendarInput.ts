@@ -1,4 +1,5 @@
 import { validateDateRange } from "@/lib/validation/validateDateRange";
+import { isWeekendDay } from "./isWeekendDay";
 
 export function assertValidCalendarInput(data: {
   titleAr: string;
@@ -16,6 +17,9 @@ export function assertValidCalendarInput(data: {
   }
   if (!validateDateRange(data.startsAt, data.endsAt)) {
     return "End time must be after or equal to start time";
+  }
+  if (isWeekendDay(data.startsAt) || isWeekendDay(data.endsAt)) {
+    return "Events cannot be scheduled on weekends (Friday or Saturday)";
   }
   return null;
 }

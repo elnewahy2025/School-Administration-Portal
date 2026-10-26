@@ -24,9 +24,9 @@ export async function deleteLocationAction(locationId: string): Promise<ActionRe
     }
 
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase
+    const { error, count } = await supabase
       .from("locations")
-      .delete()
+      .delete({ count: "exact" })
       .eq("id", locationId)
       .eq("school_id", profile.school_id);
 
@@ -37,6 +37,12 @@ export async function deleteLocationAction(locationId: string): Promise<ActionRe
         );
       }
       throw mapDatabaseError(error);
+    }
+
+    if (count === 0) {
+      throw new ConflictError(
+        "Location could not be deleted or does not exist.",
+      );
     }
 
     revalidatePath("/[locale]/settings/locations", "page");

@@ -3,26 +3,43 @@
 import { CalendarDayItemList } from "./CalendarDayItemList";
 import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 
+type CalendarMonthDayCellProps = {
+  day: number;
+  isCurrentMonth: boolean;
+  isToday: boolean;
+  isWeekend?: boolean;
+  dayItems: UnifiedCalendarItem[];
+  onSelectItem?: (item: UnifiedCalendarItem) => void;
+};
+
 export function CalendarMonthDayCell({
   day,
   isCurrentMonth,
   isToday,
+  isWeekend,
   dayItems,
   onSelectItem,
-}: {
-  day: number;
-  isCurrentMonth: boolean;
-  isToday: boolean;
-  dayItems: UnifiedCalendarItem[];
-  onSelectItem?: (item: UnifiedCalendarItem) => void;
-}) {
+}: CalendarMonthDayCellProps) {
+  const bgClass = !isCurrentMonth
+    ? "bg-muted/20 text-muted-foreground/40"
+    : isWeekend
+      ? "bg-muted/15 text-muted-foreground/80 dark:bg-muted/10"
+      : "bg-card";
+
   return (
     <div
-      className={`min-h-[90px] border-e border-b border-border p-1.5 transition ${
-        isCurrentMonth ? "bg-card" : "bg-muted/20 text-muted-foreground/50"
-      }`}
+      title={isWeekend && isCurrentMonth ? "Official Weekend / عطلة رسمية" : undefined}
+      className={`min-h-[90px] border-e border-b border-border p-1.5 transition ${bgClass}`}
     >
-      <div className="mb-1 flex justify-end">
+      <div className="mb-1 flex items-center justify-between">
+        {isWeekend && isCurrentMonth ? (
+          <span className="text-[10px] font-medium text-amber-600/70 dark:text-amber-400/70">
+            •
+          </span>
+        ) : (
+          <span />
+        )}
+
         {dayItems.length > 0 ? (
           <button
             type="button"

@@ -16,7 +16,7 @@ A modern, enterprise-grade school management platform built for modern education
 | **Theming Engine** | `next-themes` supporting 5 curated themes (Al-Nada Royal Navy, Classic Light, Slate Dark, Emerald Academy, Midnight OLED) |
 | **Internationalization** | `next-intl` (Arabic `ar` RTL default + English `en` LTR) with locale prefix routing |
 | **Validation & Security** | [Zod 4](https://zod.dev/) type-safe schemas · Server-only guardrail modules · Strict RLS SQL isolation |
-| **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (183 tests across 62 suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
+| **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (214 tests across 76 suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
 | **Mobile & PWA** | Progressive Web App manifest, Service Worker offline caching, install banner |
 
 ---
@@ -37,12 +37,15 @@ A modern, enterprise-grade school management platform built for modern education
 
 3. **Maintenance & Facilities Service Desk (طلبات الصيانة والمرافق):**
    - Structured work order ticketing with location tagging (Buildings, Floors, Classrooms, Labs).
-   - Priority-based triage (Urgent, High, Medium, Low) and technician assignment.
+   - Priority-based triage (Urgent, High, Medium, Low) and strict technician assignment (`operator` role).
+   - Smart technician absence detection displaying a warning banner with direct shortcut to Users & Roles.
    - Photo attachment uploads and stage transition controls.
 
 4. **Unified School Calendar & Recurrence Engine (الرزنامة المدرسية):**
    - Dual calendar support: Islamic Hijri and Gregorian dates.
-   - Series recurrence engine supporting Daily, Weekly, Biweekly, and Monthly recurring events with expansion calculations.
+   - Strict weekend scheduling policy: Friday & Saturday are designated as non-working holidays and prevented from selection across client and server.
+   - Series recurrence engine supporting Daily, Weekly, Biweekly, and Monthly recurring events with automatic weekend skipping.
+   - Visual weekend indicators and localized holiday headers (`الجمعة (عطلة)`, `السبت (عطلة)`).
    - Personalized circular deadlines automatically merged into teacher and administrator agendas.
 
 5. **Real-Time Push Notifications (الإشعارات الفورية):**
@@ -59,6 +62,8 @@ A modern, enterprise-grade school management platform built for modern education
 
 8. **School Settings, Security & RBAC (الإعدادات والصلاحيات):**
    - 6 hierarchical roles: Platform Owner, School Principal, Assistant Principal, Department Head, Teacher, Maintenance Technician.
+   - Structured 6-sub-tab layout: School Identity, Leadership, Location & Contact, Academic Year, Vision & Mission, Operations.
+   - Custom accessible confirmation modal (`AppMessageBox`) replacing all native browser confirm popups with responsive action handling.
    - Self-service password reset with cryptographic tokens.
    - Date display format configuration (ISO, Day/Month/Year, Day-Month-Year, Month/Day/Year).
    - Academic year, terms, and institutional metadata persistence.

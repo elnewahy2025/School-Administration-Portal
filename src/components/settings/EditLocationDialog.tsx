@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { updateLocationAction } from "@/actions/settings/updateLocationAction";
@@ -19,6 +20,7 @@ export function EditLocationDialog({
 }) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const [building, setBuilding] = useState(location.building);
   const [floor, setFloor] = useState(location.floor ?? "");
   const [room, setRoom] = useState(location.room ?? "");
@@ -34,6 +36,7 @@ export function EditLocationDialog({
       if (res.success) {
         toast.success(tCommon("saved"));
         onClose();
+        router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
       }

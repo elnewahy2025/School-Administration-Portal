@@ -4,9 +4,11 @@ import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { XIcon } from "lucide-react";
 import { useMessageBoxState } from "@/lib/feedback/useMessageBoxState";
-import { closeMessageBox } from "@/lib/feedback/closeMessageBox";
+import { confirmMessageBox } from "@/lib/feedback/confirmMessageBox";
+import { cancelMessageBox } from "@/lib/feedback/cancelMessageBox";
 import { getMessageBoxTheme } from "@/lib/feedback/getMessageBoxTheme";
 import { MessageBoxIcon } from "./MessageBoxIcon";
+import { MessageBoxActions } from "./MessageBoxActions";
 
 export function AppMessageBox() {
   const state = useMessageBoxState();
@@ -24,6 +26,7 @@ export function AppMessageBox() {
   const theme = getMessageBoxTheme(state.type);
   const displayTitle = state.title || t(theme.defaultTitleKey);
   const confirmLabel = state.confirmText || t("confirm");
+  const cancelLabel = state.cancelText || t("cancel");
 
   return (
     <div
@@ -31,7 +34,7 @@ export function AppMessageBox() {
       aria-modal="true"
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
       onKeyDown={(e) => {
-        if (e.key === "Escape" || e.key === "Enter") closeMessageBox();
+        if (e.key === "Escape") cancelMessageBox();
       }}
     >
       <div
@@ -40,8 +43,8 @@ export function AppMessageBox() {
         <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary/30 via-primary to-primary/30" />
 
         <button
-          onClick={closeMessageBox}
-          className="absolute top-4 end-4 rounded-lg p-1 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          onClick={cancelMessageBox}
+          className="absolute top-4 end-4 rounded-lg p-1 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors cursor-pointer"
           aria-label="Close"
         >
           <XIcon className="size-5" />
@@ -61,15 +64,15 @@ export function AppMessageBox() {
             </p>
           </div>
 
-          <div className="w-full pt-2">
-            <button
-              ref={confirmBtnRef}
-              onClick={closeMessageBox}
-              className={`w-full rounded-xl py-2.5 text-sm font-bold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background active:scale-[0.99] cursor-pointer ${theme.buttonClass}`}
-            >
-              {confirmLabel}
-            </button>
-          </div>
+          <MessageBoxActions
+            showCancel={state.showCancel}
+            confirmLabel={confirmLabel}
+            cancelLabel={cancelLabel}
+            buttonClass={theme.buttonClass}
+            confirmBtnRef={confirmBtnRef}
+            onConfirm={confirmMessageBox}
+            onCancel={cancelMessageBox}
+          />
         </div>
       </div>
     </div>

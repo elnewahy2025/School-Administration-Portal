@@ -5,7 +5,10 @@ export interface MessageBoxOptions {
   title?: string;
   type?: MessageBoxType;
   confirmText?: string;
+  cancelText?: string;
+  showCancel?: boolean;
   onConfirm?: () => void;
+  onCancel?: () => void;
 }
 
 export interface MessageBoxState extends MessageBoxOptions {

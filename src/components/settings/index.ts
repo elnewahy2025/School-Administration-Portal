@@ -9,6 +9,7 @@ export { EditUserDialog } from "./EditUserDialog";
 export { LocationFormFields } from "./LocationFormFields";
 export { LocationList } from "./LocationList";
 export { LocationTableRow } from "./LocationTableRow";
+export { LocationTableRowActions } from "./LocationTableRowActions";
 export { SchoolContactFields } from "./SchoolContactFields";
 export { SchoolIdentityFields } from "./SchoolIdentityFields";
 export { SchoolLeadershipFields } from "./SchoolLeadershipFields";

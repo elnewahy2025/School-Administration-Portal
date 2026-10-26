@@ -3,15 +3,17 @@
 import { CalendarMonthDayCell } from "./CalendarMonthDayCell";
 import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 
+type CalendarMonthGridProps = {
+  currentDate: Date;
+  items: UnifiedCalendarItem[];
+  onSelectItem?: (item: UnifiedCalendarItem) => void;
+};
+
 export function CalendarMonthGrid({
   currentDate,
   items,
   onSelectItem,
-}: {
-  currentDate: Date;
-  items: UnifiedCalendarItem[];
-  onSelectItem?: (item: UnifiedCalendarItem) => void;
-}) {
+}: CalendarMonthGridProps) {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
@@ -21,10 +23,12 @@ export function CalendarMonthGrid({
 
   const cells = [];
   for (let i = 0; i < firstDayIndex; i++) {
+    const isWeekend = i % 7 === 5 || i % 7 === 6;
     cells.push({
       day: 0,
       isCurrentMonth: false,
       isToday: false,
+      isWeekend,
       dayItems: [] as UnifiedCalendarItem[],
     });
   }
@@ -32,6 +36,8 @@ export function CalendarMonthGrid({
   for (let d = 1; d <= totalDays; d++) {
     const isToday =
       today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+    const dayOfWeek = (firstDayIndex + d - 1) % 7;
+    const isWeekend = dayOfWeek === 5 || dayOfWeek === 6;
 
     const dayItems = items.filter((item) => {
       const itemDate = new Date(item.date);
@@ -40,7 +46,7 @@ export function CalendarMonthGrid({
       );
     });
 
-    cells.push({ day: d, isCurrentMonth: true, isToday, dayItems });
+    cells.push({ day: d, isCurrentMonth: true, isToday, isWeekend, dayItems });
   }
 
   return (
@@ -51,6 +57,7 @@ export function CalendarMonthGrid({
           day={cell.day}
           isCurrentMonth={cell.isCurrentMonth}
           isToday={cell.isToday}
+          isWeekend={cell.isWeekend}
           dayItems={cell.dayItems}
           onSelectItem={onSelectItem}
         />

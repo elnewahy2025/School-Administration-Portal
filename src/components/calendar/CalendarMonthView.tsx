@@ -7,15 +7,14 @@ import { Button } from "@/components/ui/button";
 import { CalendarMonthGrid } from "./CalendarMonthGrid";
 import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
 
-export function CalendarMonthView({
-  items,
-  onSelectItem,
-}: {
+type CalendarMonthViewProps = {
   items: UnifiedCalendarItem[];
   onSelectItem?: (item: UnifiedCalendarItem) => void;
-}) {
+};
+
+export function CalendarMonthView({ items, onSelectItem }: CalendarMonthViewProps) {
   const locale = useLocale();
   const t = useTranslations("calendar");
   const [currentDate, setCurrentDate] = useState(() => new Date());
@@ -55,9 +54,17 @@ export function CalendarMonthView({
       </div>
 
       <div className="grid grid-cols-7 border-b border-border pb-2 text-center text-xs font-semibold text-muted-foreground">
-        {WEEKDAYS.map((day) => (
-          <div key={day}>{day}</div>
-        ))}
+        {WEEKDAYS.map((day, idx) => {
+          const isWeekend = idx === 5 || idx === 6;
+          return (
+            <div
+              key={day}
+              className={isWeekend ? "font-bold text-amber-600 dark:text-amber-400" : ""}
+            >
+              {t(`weekdays.${day}`)}
+            </div>
+          );
+        })}
       </div>
 
       <CalendarMonthGrid currentDate={currentDate} items={items} onSelectItem={onSelectItem} />

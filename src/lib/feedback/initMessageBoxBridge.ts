@@ -27,4 +27,8 @@ export function initMessageBoxBridge(): void {
     showMessageBox({ message: extractMessageText(message), type: "warning" });
     return "msgbox-toast";
   };
+
+  window.alert = (message?: unknown) => {
+    showMessageBox({ message: extractMessageText(message), type: "info" });
+  };
 }

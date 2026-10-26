@@ -2,10 +2,12 @@
 
 import { useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { PencilIcon, ShieldCheckIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { deleteUserAction } from "@/actions/settings/deleteUserAction";
+import { showConfirmBox } from "@/lib/feedback/showConfirmBox";
 
 export function UserTableActions({
   userId,
@@ -26,6 +28,7 @@ export function UserTableActions({
 }) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const [isDeleting, startDeleteTransition] = useTransition();
 
   if (isOwner) {
@@ -37,12 +40,20 @@ export function UserTableActions({
     );
   }
 
-  const handleDelete = () => {
-    if (!window.confirm(tCommon("confirmDelete"))) return;
+  const handleDelete = async () => {
+    const confirmed = await showConfirmBox({
+      message: tCommon("confirmDelete"),
+      type: "warning",
+    });
+    if (!confirmed) return;
     startDeleteTransition(async () => {
       const res = await deleteUserAction(userId);
-      if (res.success) toast.success(tCommon("deleted"));
-      else toast.error(res.error ?? tCommon("error"));
+      if (res.success) {
+        toast.success(tCommon("deleted"));
+        router.refresh();
+      } else {
+        toast.error(res.error ?? tCommon("error"));
+      }
     });
   };
 

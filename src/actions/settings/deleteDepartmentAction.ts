@@ -24,9 +24,9 @@ export async function deleteDepartmentAction(departmentId: string): Promise<Acti
     }
 
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase
+    const { error, count } = await supabase
       .from("departments")
-      .delete()
+      .delete({ count: "exact" })
       .eq("id", departmentId)
       .eq("school_id", profile.school_id);
 
@@ -37,6 +37,12 @@ export async function deleteDepartmentAction(departmentId: string): Promise<Acti
         );
       }
       throw mapDatabaseError(error);
+    }
+
+    if (count === 0) {
+      throw new ConflictError(
+        "Department could not be deleted or does not exist.",
+      );
     }
 
     revalidatePath("/[locale]/settings/departments", "page");

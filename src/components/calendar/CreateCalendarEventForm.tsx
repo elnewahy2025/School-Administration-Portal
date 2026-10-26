@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { CalendarCoreFields } from "./CalendarCoreFields";
 import { CalendarDateTimeFields } from "./CalendarDateTimeFields";
 import { CalendarRecurrenceFields } from "./CalendarRecurrenceFields";
+import { isWeekendDay } from "@/lib/calendar/isWeekendDay";
 import { createCalendarEventAction } from "@/actions/calendar/createCalendarEventAction";
 
 export function CreateCalendarEventForm() {
@@ -22,6 +23,13 @@ export function CreateCalendarEventForm() {
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
+    const startsAt = String(formData.get("starts_at") || "");
+    const endsAt = String(formData.get("ends_at") || "");
+    if (isWeekendDay(startsAt) || isWeekendDay(endsAt)) {
+      toast.error(t("weekendNotAllowed"));
+      return;
+    }
+
     startTransition(async () => {
       const res = await createCalendarEventAction(formData);
       if (res.success) {

@@ -11,6 +11,8 @@ As a **Maintenance Technician or Facilities Operator**, you are responsible for 
 
 The portal functions seamlessly on mobile phones and tablets, allowing you to manage work orders on the move across campus.
 
+> **Role & Eligibility Note:** To receive work orders in the maintenance queue, your account must be assigned the dedicated **Maintenance Operator** role (`operator` / `فني صيانة`). The dispatcher interface strictly routes work orders to verified technicians.
+
 ---
 
 ## 2. Phase 1: Logging In & Mobile Access
