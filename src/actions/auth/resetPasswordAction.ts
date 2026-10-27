@@ -12,7 +12,7 @@ export async function resetPasswordAction(
     const password = cleanFormField(formData.get("password"));
     const confirmPassword = cleanFormField(formData.get("confirm_password"));
 
-    if (!password || password.length < 8) {
+    if (!password || password.length < 6) {
       return { success: false, error: "tooShort" };
     }
 

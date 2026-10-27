@@ -36,7 +36,7 @@ export function LoginForm() {
           name="password"
           type="password"
           required
-          minLength={8}
+          minLength={6}
           autoComplete="current-password"
           dir="ltr"
           className="h-9 rounded-md border border-input bg-background px-3"

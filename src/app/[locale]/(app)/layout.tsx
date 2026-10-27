@@ -7,6 +7,7 @@ import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getUnreadNotificationCount } from "@/lib/notifications/getUnreadNotificationCount";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { resolveLayoutNavigationAccess } from "@/lib/auth/resolveLayoutNavigationAccess";
+import { assertCanManageBackup } from "@/lib/backup";
 import { AppShell } from "@/components/layout";
 import { RealtimeNotificationListener } from "@/components/notifications";
 
@@ -30,16 +31,20 @@ export default async function AuthenticatedAppLayout({
     redirect({ href: "/login", locale });
   }
 
-  const school = await getCurrentSchool(profile?.school_id);
-  const permissions: string[] = await getEffectivePermissions().catch(() => []);
-  const unreadNotifications = await getUnreadNotificationCount().catch(() => 0);
-  const isOwner = profile?.id ? await isPlatformOwner(profile.id) : false;
+  const [school, permissions, unreadNotifications, isOwner, backupAccess] = await Promise.all([
+    getCurrentSchool(profile?.school_id),
+    getEffectivePermissions().catch(() => []),
+    getUnreadNotificationCount().catch(() => 0),
+    profile?.id ? isPlatformOwner(profile.id) : Promise.resolve(false),
+    assertCanManageBackup().catch(() => ({ allowed: false })),
+  ]);
 
   const { canViewReports, canManageSettings } = resolveLayoutNavigationAccess(
     isOwner,
     permissions,
     Boolean(profile?.school_id),
   );
+  const canBackupRestore = backupAccess.allowed;
 
   return (
     <>
@@ -50,6 +55,7 @@ export default async function AuthenticatedAppLayout({
         isOwner={isOwner}
         canManageSettings={canManageSettings}
         canViewReports={canViewReports}
+        canBackupRestore={canBackupRestore}
         unreadNotifications={unreadNotifications}
       >
         {children}

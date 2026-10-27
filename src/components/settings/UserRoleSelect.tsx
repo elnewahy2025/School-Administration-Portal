@@ -30,11 +30,13 @@ export function UserRoleSelect({
         className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
       >
         {roles.length > 0 ? (
-          roles.map((r) => (
-            <option key={r.id} value={r.key}>
-              {resolveRoleDisplayName(r.key, tRbac, r.name)}
-            </option>
-          ))
+          roles
+            .filter((r) => r.key !== "owner")
+            .map((r) => (
+              <option key={r.id} value={r.key}>
+                {resolveRoleDisplayName(r.key, tRbac, r.name)}
+              </option>
+            ))
         ) : (
           <>
             <option value="staff">{t("roleStaff")}</option>

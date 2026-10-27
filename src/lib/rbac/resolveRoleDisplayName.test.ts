@@ -8,7 +8,7 @@ describe("resolveRoleDisplayName", () => {
     roleOperator: "فني صيانة",
     roleSchoolAdmin: "مدير مدرسة",
     roleAuditor: "مدقق حسابات",
-    roleOwner: "مالك المنصة",
+    roleOwner: "مدير النظام",
   };
   const t = (key: string) => translations[key] ?? key;
 
@@ -24,7 +24,7 @@ describe("resolveRoleDisplayName", () => {
     expect(resolveRoleDisplayName("operator", t)).toBe("فني صيانة");
     expect(resolveRoleDisplayName("school_admin", t)).toBe("مدير مدرسة");
     expect(resolveRoleDisplayName("auditor", t)).toBe("مدقق حسابات");
-    expect(resolveRoleDisplayName("owner", t)).toBe("مالك المنصة");
+    expect(resolveRoleDisplayName("owner", t)).toBe("مدير النظام");
   });
 
   it("falls back to fallbackName or key for custom roles", () => {

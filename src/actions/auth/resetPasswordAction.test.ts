@@ -23,7 +23,7 @@ describe("resetPasswordAction", () => {
     vi.clearAllMocks();
   });
 
-  it("returns error if password is less than 8 characters", async () => {
+  it("returns error if password is less than 6 characters", async () => {
     const formData = new FormData();
     formData.append("password", "short");
     formData.append("confirm_password", "short");

@@ -10,6 +10,7 @@ export function AppShell({
   isOwner = false,
   canManageSettings,
   canViewReports,
+  canBackupRestore = false,
   unreadNotifications = 0,
 }: {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export function AppShell({
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
+  canBackupRestore?: boolean;
   unreadNotifications?: number;
 }) {
   return (
@@ -27,6 +29,7 @@ export function AppShell({
         isOwner={isOwner}
         canManageSettings={canManageSettings}
         canViewReports={canViewReports}
+        canBackupRestore={canBackupRestore}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <AppHeader
@@ -35,6 +38,7 @@ export function AppShell({
           isOwner={isOwner}
           canManageSettings={canManageSettings}
           canViewReports={canViewReports}
+          canBackupRestore={canBackupRestore}
           unreadNotifications={unreadNotifications}
         />
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>

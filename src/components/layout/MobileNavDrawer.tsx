@@ -15,6 +15,7 @@ export function MobileNavDrawer({
   isOwner = false,
   canManageSettings,
   canViewReports,
+  canBackupRestore = false,
   onClose,
 }: {
   school: SchoolRow | null;
@@ -24,6 +25,7 @@ export function MobileNavDrawer({
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
+  canBackupRestore?: boolean;
   onClose: () => void;
 }) {
   const t = useTranslations("nav");
@@ -71,6 +73,7 @@ export function MobileNavDrawer({
             isOwner={isOwner}
             canManageSettings={canManageSettings}
             canViewReports={canViewReports}
+            canBackupRestore={canBackupRestore}
             onSelect={onClose}
           />
         </div>

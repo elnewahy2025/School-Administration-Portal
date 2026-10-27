@@ -2,36 +2,28 @@
 
 import { usePathname, Link } from "@/i18n";
 import { useTranslations } from "next-intl";
-import { SchoolIcon, Building2Icon, MapPinIcon, UsersIcon, ShieldAlertIcon } from "lucide-react";
 import { cn } from "cn";
+import { buildSettingsTabs } from "./buildSettingsTabs";
 
 export function SettingsNav({
   canManageSchool = true,
   canManageUsers = true,
   canViewAudit = true,
+  canBackupRestore = false,
 }: {
   canManageSchool?: boolean;
   canManageUsers?: boolean;
   canViewAudit?: boolean;
+  canBackupRestore?: boolean;
 }) {
   const pathname = usePathname();
   const t = useTranslations("settings");
-
-  const tabs = [
-    canManageSchool ? { href: "/settings/school", label: t("school"), icon: SchoolIcon } : null,
-    canManageSchool
-      ? { href: "/settings/departments", label: t("departments"), icon: Building2Icon }
-      : null,
-    canManageSchool
-      ? { href: "/settings/locations", label: t("locations"), icon: MapPinIcon }
-      : null,
-    canManageUsers ? { href: "/settings/users", label: t("users"), icon: UsersIcon } : null,
-    canViewAudit ? { href: "/settings/audit", label: t("audit"), icon: ShieldAlertIcon } : null,
-  ].filter(Boolean) as Array<{
-    href: string;
-    label: string;
-    icon: React.ComponentType<{ className?: string }>;
-  }>;
+  const tabs = buildSettingsTabs(t, {
+    canManageSchool,
+    canManageUsers,
+    canViewAudit,
+    canBackupRestore,
+  });
 
   return (
     <div className="flex overflow-x-auto border-b border-border pb-px">

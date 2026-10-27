@@ -15,7 +15,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
     access.isOwner ||
     access.permissions.includes("users.manage") ||
     access.permissions.includes("roles.manage");
-  const canAudit = access.isOwner || access.permissions.includes("audit.view");
+  const canAudit = access.isOwner;
 
   if (canSchool) {
     redirect({ href: "/settings/school", locale });
@@ -23,6 +23,8 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
     redirect({ href: "/settings/users", locale });
   } else if (canAudit) {
     redirect({ href: "/settings/audit", locale });
+  } else if (access.isOwner) {
+    redirect({ href: "/settings/backup", locale });
   } else {
     redirect({ href: "/dashboard", locale });
   }

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { detectIosDevice } from "./detectIosDevice";
+import { isStandaloneMode } from "./isStandaloneMode";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -9,7 +11,10 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function usePwaInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
+  const [hasPrompt, setHasPrompt] = useState(false);
+  const [isIos] = useState(() => detectIosDevice());
+  const [isStandalone] = useState(() => isStandaloneMode());
+  const [isIosGuideOpen, setIsIosGuideOpen] = useState(false);
   const [isDismissed, setIsDismissed] = useState(() => {
     if (typeof window === "undefined") return false;
     return sessionStorage.getItem("pwa_install_dismissed") === "true";
@@ -19,12 +24,12 @@ export function usePwaInstall() {
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setIsInstallable(true);
+      setHasPrompt(true);
     };
 
     const handleAppInstalled = () => {
       setDeferredPrompt(null);
-      setIsInstallable(false);
+      setHasPrompt(false);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
@@ -36,25 +41,39 @@ export function usePwaInstall() {
     };
   }, []);
 
+  const openIosGuide = useCallback(() => setIsIosGuideOpen(true), []);
+  const closeIosGuide = useCallback(() => setIsIosGuideOpen(false), []);
+
   const promptInstall = useCallback(async () => {
-    if (!deferredPrompt) return;
-
-    await deferredPrompt.prompt();
-    const choice = await deferredPrompt.userChoice;
-
-    if (choice.outcome === "accepted") {
-      setIsInstallable(false);
+    if (deferredPrompt) {
+      await deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice.outcome === "accepted") {
+        setHasPrompt(false);
+      }
+      setDeferredPrompt(null);
+      return;
     }
-    setDeferredPrompt(null);
-  }, [deferredPrompt]);
+
+    if (isIos) {
+      setIsIosGuideOpen(true);
+    }
+  }, [deferredPrompt, isIos]);
 
   const dismiss = useCallback(() => {
     setIsDismissed(true);
     sessionStorage.setItem("pwa_install_dismissed", "true");
   }, []);
 
+  const isInstallable = (hasPrompt || isIos) && !isStandalone && !isDismissed;
+
   return {
-    isInstallable: isInstallable && !isDismissed,
+    isInstallable,
+    isIos,
+    isStandalone,
+    isIosGuideOpen,
+    openIosGuide,
+    closeIosGuide,
     promptInstall,
     dismiss,
   };

@@ -19,11 +19,11 @@ export async function assertCanManageUser(
   }
 
   if (await isPlatformOwner(targetUserId)) {
-    return { allowed: false, error: "Cannot modify platform owner" };
+    return { allowed: false, error: "Cannot modify system-protected account" };
   }
 
   if (targetRoleKey === "owner") {
-    return { allowed: false, error: "Cannot assign platform owner role" };
+    return { allowed: false, error: "Invalid role selection" };
   }
 
   const permitted = await hasPermission("users.manage", profile.school_id);

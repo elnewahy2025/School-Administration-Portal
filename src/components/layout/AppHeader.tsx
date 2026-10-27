@@ -15,6 +15,7 @@ export function AppHeader({
   isOwner = false,
   canManageSettings,
   canViewReports,
+  canBackupRestore = false,
   unreadNotifications = 0,
 }: {
   profile: ProfileRow | null;
@@ -22,6 +23,7 @@ export function AppHeader({
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
+  canBackupRestore?: boolean;
   unreadNotifications?: number;
 }) {
   return (
@@ -32,6 +34,7 @@ export function AppHeader({
           isOwner={isOwner}
           canManageSettings={canManageSettings}
           canViewReports={canViewReports}
+          canBackupRestore={canBackupRestore}
         />
         <AppHeaderGreeting profile={profile} school={school} />
       </div>

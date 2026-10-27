@@ -9,6 +9,7 @@ import {
   AwardIcon,
   BarChart3Icon,
   SettingsIcon,
+  DatabaseIcon,
 } from "lucide-react";
 import { NavLink } from "./NavLink";
 import { SchoolLogoAvatar } from "./SchoolLogoAvatar";
@@ -21,11 +22,13 @@ export function AppSidebar({
   isOwner = false,
   canManageSettings,
   canViewReports,
+  canBackupRestore = false,
 }: {
   school: SchoolRow | null;
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
+  canBackupRestore?: boolean;
 }) {
   const t = useTranslations("nav");
   const locale = useLocale();
@@ -60,7 +63,15 @@ export function AppSidebar({
           <NavLink href="/reports" label={t("reports")} icon={BarChart3Icon} />
         ) : null}
         {canManageSettings ? (
-          <NavLink href="/settings" label={t("settings")} icon={SettingsIcon} />
+          <NavLink
+            href="/settings"
+            label={t("settings")}
+            icon={SettingsIcon}
+            excludedPrefixes={canBackupRestore ? ["/settings/backup"] : undefined}
+          />
+        ) : null}
+        {canBackupRestore ? (
+          <NavLink href="/settings/backup" label={t("backup")} icon={DatabaseIcon} />
         ) : null}
       </nav>
 

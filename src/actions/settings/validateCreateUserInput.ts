@@ -28,7 +28,7 @@ export function validateCreateUserInput(
   if (roleKey === "owner") {
     return {
       valid: false,
-      error: "Cannot create platform owner",
+      error: "Invalid role selection",
       trimmedName,
       trimmedEmail,
     };

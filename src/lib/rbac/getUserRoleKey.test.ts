@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { getUserRoleKey } from "./getUserRoleKey";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 
 vi.mock("@/lib/supabase", () => ({
-  createSupabaseServerClient: vi.fn(),
+  createSupabaseAdminClient: vi.fn(),
 }));
 
 describe("getUserRoleKey", () => {
@@ -17,14 +17,14 @@ describe("getUserRoleKey", () => {
       data: { roles: { key: "department_head" } },
     });
     const limitMock = vi.fn().mockReturnValue({ maybeSingle: maybeSingleMock });
-    const eqSchoolMock = vi.fn().mockReturnValue({ limit: limitMock });
-    const eqUserMock = vi.fn().mockReturnValue({ eq: eqSchoolMock, limit: limitMock });
+    const orMock = vi.fn().mockReturnValue({ limit: limitMock });
+    const eqUserMock = vi.fn().mockReturnValue({ or: orMock, limit: limitMock });
     const selectMock = vi.fn().mockReturnValue({ eq: eqUserMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.mocked(createSupabaseServerClient).mockResolvedValueOnce({
+    vi.mocked(createSupabaseAdminClient).mockReturnValue({
       from: fromMock,
-    } as unknown as Awaited<ReturnType<typeof createSupabaseServerClient>>);
+    } as unknown as ReturnType<typeof createSupabaseAdminClient>);
 
     const res = await getUserRoleKey("user-1", "school-1");
     expect(res).toBe("department_head");
@@ -37,9 +37,9 @@ describe("getUserRoleKey", () => {
     const selectMock = vi.fn().mockReturnValue({ eq: eqUserMock });
     const fromMock = vi.fn().mockReturnValue({ select: selectMock });
 
-    vi.mocked(createSupabaseServerClient).mockResolvedValueOnce({
+    vi.mocked(createSupabaseAdminClient).mockReturnValue({
       from: fromMock,
-    } as unknown as Awaited<ReturnType<typeof createSupabaseServerClient>>);
+    } as unknown as ReturnType<typeof createSupabaseAdminClient>);
 
     const res = await getUserRoleKey("user-2");
     expect(res).toBeNull();

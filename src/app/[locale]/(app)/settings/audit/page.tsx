@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getSchoolAuditLogs } from "@/lib/school/getSchoolAuditLogs";
-import { hasPermission } from "@/lib/rbac/hasPermission";
 import { AuditLogList } from "@/components/settings/AuditLogList";
 
 export default async function AuditSettingsPage({
@@ -15,15 +15,9 @@ export default async function AuditSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
-  const isOwner =
-    (await hasPermission("settings.platform.update").catch(() => false)) ||
-    (await hasPermission("roles.manage").catch(() => false));
-  const hasPerm = profile?.school_id
-    ? await hasPermission("audit.view", profile.school_id).catch(() => false)
-    : false;
-  const canView = isOwner || hasPerm;
+  const isOwner = profile?.id ? await isPlatformOwner(profile.id) : false;
 
-  if (!canView) {
+  if (!isOwner) {
     redirect({ href: "/settings", locale });
   }
 

@@ -1,0 +1,61 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { UploadCloud } from "lucide-react";
+import { RestoreConfirmDialog } from "./RestoreConfirmDialog";
+import { useRestoreFile } from "./useRestoreFile";
+
+export function RestoreUploadCard() {
+  const t = useTranslations("backup");
+  const {
+    previewPayload,
+    isDialogOpen,
+    isRestoring,
+    fileInputRef,
+    handleFileChange,
+    handleConfirmRestore,
+    closeDialog,
+  } = useRestoreFile();
+
+  return (
+    <>
+      <div className="flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm">
+        <div className="space-y-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <UploadCloud className="h-6 w-6" />
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-lg font-semibold text-foreground">{t("restoreCardTitle")}</h2>
+            <p className="text-sm leading-relaxed text-muted-foreground">{t("restoreCardDesc")}</p>
+          </div>
+        </div>
+
+        <div className="mt-8 border-t border-border pt-4">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            onChange={handleFileChange}
+            className="hidden"
+            id="backup-file-input"
+          />
+          <label
+            htmlFor="backup-file-input"
+            className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-muted/30 px-4 py-3 text-sm font-medium text-foreground transition hover:border-primary hover:bg-muted/60 active:scale-95"
+          >
+            <UploadCloud className="h-4 w-4 text-primary" />
+            <span>{t("selectFile")}</span>
+          </label>
+        </div>
+      </div>
+
+      <RestoreConfirmDialog
+        isOpen={isDialogOpen}
+        isRestoring={isRestoring}
+        payload={previewPayload}
+        onClose={closeDialog}
+        onConfirm={handleConfirmRestore}
+      />
+    </>
+  );
+}

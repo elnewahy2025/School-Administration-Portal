@@ -47,7 +47,7 @@ export function ResetPasswordForm() {
           name="password"
           type="password"
           required
-          minLength={8}
+          minLength={6}
           autoComplete="new-password"
           dir="ltr"
           className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:ring-1 focus:ring-ring focus:outline-none"
@@ -60,7 +60,7 @@ export function ResetPasswordForm() {
           name="confirm_password"
           type="password"
           required
-          minLength={8}
+          minLength={6}
           autoComplete="new-password"
           dir="ltr"
           className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:ring-1 focus:ring-ring focus:outline-none"

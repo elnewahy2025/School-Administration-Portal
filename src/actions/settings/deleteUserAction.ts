@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -27,7 +27,7 @@ export async function deleteUserAction(userId: string): Promise<ActionResult> {
     }
 
     if (await isPlatformOwner(userId)) {
-      throw new ForbiddenError("Cannot modify or delete platform owner");
+      throw new ForbiddenError("Cannot modify system-protected account");
     }
 
     const allowed = await hasPermission("users.manage", profile.school_id);
@@ -35,17 +35,17 @@ export async function deleteUserAction(userId: string): Promise<ActionResult> {
       throw new ForbiddenError("Unauthorized");
     }
 
-    const supabase = await createSupabaseServerClient();
+    const admin = createSupabaseAdminClient();
 
     // Delete role assignments for this user within this school
-    await supabase
+    await admin
       .from("user_role_assignments")
       .delete()
       .eq("user_id", userId)
       .eq("school_id", profile.school_id);
 
     // Disassociate the user from the school and deactivate
-    const { error } = await supabase
+    const { error } = await admin
       .from("profiles")
       .update({
         school_id: null,

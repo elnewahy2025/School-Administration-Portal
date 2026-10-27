@@ -30,3 +30,5 @@ export { EditUserBasicFields } from "./EditUserBasicFields";
 export { EditUserSecurityFields } from "./EditUserSecurityFields";
 export { EditUserDeptSelect } from "./EditUserDeptSelect";
 export { EditUserForm } from "./EditUserForm";
+export { BackupRestorePanel } from "./backup";
+export { buildSettingsTabs } from "./buildSettingsTabs";

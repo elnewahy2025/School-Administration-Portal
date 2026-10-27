@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -30,7 +30,7 @@ export async function toggleUserActiveAction(
     }
 
     if (await isPlatformOwner(targetUserId)) {
-      throw new ForbiddenError("Cannot modify platform owner");
+      throw new ForbiddenError("Cannot modify system-protected account");
     }
 
     const allowed = await hasPermission("users.manage", profile.school_id);
@@ -38,8 +38,8 @@ export async function toggleUserActiveAction(
       throw new ForbiddenError("Unauthorized");
     }
 
-    const supabase = await createSupabaseServerClient();
-    const { error } = await supabase
+    const admin = createSupabaseAdminClient();
+    const { error } = await admin
       .from("profiles")
       .update({ is_active: !currentStatus })
       .eq("id", targetUserId)

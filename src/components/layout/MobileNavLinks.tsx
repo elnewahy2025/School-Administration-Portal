@@ -9,6 +9,7 @@ import {
   AwardIcon,
   BarChart3Icon,
   SettingsIcon,
+  DatabaseIcon,
 } from "lucide-react";
 import { NavLink } from "./NavLink";
 
@@ -16,11 +17,13 @@ export function MobileNavLinks({
   isOwner = false,
   canManageSettings,
   canViewReports,
+  canBackupRestore = false,
   onSelect,
 }: {
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
+  canBackupRestore?: boolean;
   onSelect: () => void;
 }) {
   const t = useTranslations("nav");
@@ -48,7 +51,21 @@ export function MobileNavLinks({
         <NavLink href="/reports" label={t("reports")} icon={BarChart3Icon} onClick={onSelect} />
       ) : null}
       {canManageSettings ? (
-        <NavLink href="/settings" label={t("settings")} icon={SettingsIcon} onClick={onSelect} />
+        <NavLink
+          href="/settings"
+          label={t("settings")}
+          icon={SettingsIcon}
+          excludedPrefixes={canBackupRestore ? ["/settings/backup"] : undefined}
+          onClick={onSelect}
+        />
+      ) : null}
+      {canBackupRestore ? (
+        <NavLink
+          href="/settings/backup"
+          label={t("backup")}
+          icon={DatabaseIcon}
+          onClick={onSelect}
+        />
       ) : null}
     </nav>
   );

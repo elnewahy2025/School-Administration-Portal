@@ -10,16 +10,23 @@ export function NavLink({
   label,
   icon: Icon,
   badge,
+  exact = false,
+  excludedPrefixes,
   onClick,
 }: {
   href: string;
   label: string;
   icon: LucideIcon;
   badge?: number | string;
+  exact?: boolean;
+  excludedPrefixes?: string[];
   onClick?: () => void;
 }) {
   const pathname = usePathname();
-  const isActive = href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
+  const isExcluded = excludedPrefixes?.some((prefix) => pathname.startsWith(prefix)) ?? false;
+  const isActive =
+    !isExcluded &&
+    (exact || href === "/dashboard" ? pathname === href : pathname.startsWith(href));
 
   return (
     <Link
