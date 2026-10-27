@@ -13,10 +13,10 @@ A modern, enterprise-grade school management platform built for modern education
 | **Database & Backend** | [Supabase](https://supabase.com/) (PostgreSQL 15+, Row-Level Security / RLS policies, Storage buckets) |
 | **Real-Time Engine** | [Supabase Realtime](https://supabase.com/docs/guides/realtime) (WebSockets push notifications on `public.notifications`) |
 | **Styling & Design System** | [Tailwind CSS v4](https://tailwindcss.com/) · [@base-ui/react](https://base-ui.com/) primitives · [Lucide Icons](https://lucide.dev/) |
-| **Theming Engine** | `next-themes` supporting 5 curated themes (Al-Nada Royal Navy, Classic Light, Slate Dark, Emerald Academy, Midnight OLED) |
+| **Theming Engine** | `next-themes` supporting 5 curated themes (Royal Navy [Default], Classic Light, Slate Dark, Emerald Academy, Midnight OLED) |
 | **Internationalization** | `next-intl` (Arabic `ar` RTL default + English `en` LTR) with locale prefix routing |
 | **Validation & Security** | [Zod 4](https://zod.dev/) type-safe schemas · Server-only guardrail modules · Strict RLS SQL isolation |
-| **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (214 tests across 76 suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
+| **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (253 tests across 88 suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
 | **Mobile & PWA** | Progressive Web App manifest, Service Worker offline caching, install banner |
 
 ---
@@ -68,6 +68,12 @@ A modern, enterprise-grade school management platform built for modern education
    - Date display format configuration (ISO, Day/Month/Year, Day-Month-Year, Month/Day/Year).
    - Academic year, terms, and institutional metadata persistence.
 
+9. **Database Backup & Disaster Recovery (النسخ الاحتياطي واستعادة البيانات):**
+   - High-integrity JSON database snapshot export and validated restore interface (`/settings/backup`).
+   - Platform Owner exclusivity: strictly hidden across navigation and settings from school administrators and staff.
+   - Comprehensive multi-table schema validation powered by Zod with visual entity counts preview prior to commit.
+   - Automatic security scrubbing: Platform Owner accounts and platform governance credentials are excluded from tenant backup exports.
+
 ---
 
 ## Getting Started
@@ -101,7 +107,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the portal in Arabic
 | `npm run start` | Serve production application bundle |
 | `npm run lint` | Run ESLint enforcing strict Modularity Rule #1 |
 | `npm run typecheck` | Run strict TypeScript validation (`tsc --noEmit`) |
-| `npm run test` | Run all 62 Vitest test suites (183 tests) |
+| `npm run test` | Run all 88 Vitest test suites (253 tests) |
 | `npm run test:e2e` | Run end-to-end Playwright tests across browsers |
 | `npm run test:rls` | Execute full Supabase RLS security harness & battery |
 | `npm run format` | Format entire codebase using Prettier |

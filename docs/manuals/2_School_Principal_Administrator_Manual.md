@@ -69,7 +69,7 @@ Staff accounts are managed strictly by the school administration—there is no p
 3. Fill in the staff member's credentials:
    - **Full Name:** Official faculty name.
    - **Email:** School email address.
-   - **Initial Password:** Secure temporary password.
+   - **Initial Password:** Secure temporary password (minimum 6 characters).
    - **Assigned Department:** Link the user to their academic department.
    - **Role:** Select the appropriate role:
      - `department_head`: Head of Department (can respond to circulars and manage departmental staff).
@@ -77,6 +77,10 @@ Staff accounts are managed strictly by the school administration—there is no p
      - `operator`: Maintenance technician.
      - `school_admin`: Assistant Principal or Administrative Deputy.
 4. Save the user. Inform the staff member of their login details.
+
+#### Managing Staff Accounts:
+- **Deactivating/Activating Staff:** Toggle the active status switch to immediately prevent a departing staff member from signing in while preserving their historical circular responses and maintenance records.
+- **Removing Staff Members:** To permanently unlink a user from the school, click the delete icon. An accessible confirmation modal (`AppMessageBox`) prompts for verification before cleanly disassociating the account.
 
 ---
 

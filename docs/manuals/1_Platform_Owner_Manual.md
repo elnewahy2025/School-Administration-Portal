@@ -102,3 +102,20 @@ As Platform Owner, you can filter and inspect:
 
 > [!TIP]
 > **Best Practice:** Review the audit trail periodically at the end of each academic quarter to ensure zero unauthorized configuration changes.
+
+---
+
+## 6. Database Backup & Disaster Recovery (`/settings/backup`)
+
+As Platform Owner, you have exclusive custody over tenant database backup and disaster recovery.
+
+### Key Capabilities & Privacy Guarantees
+- **Exclusive Access:** Gated strictly to the `owner` role. Completely hidden from School Administrators, Department Heads, and Staff.
+- **Exporting Snapshots:** Generate a complete JSON backup containing schools, profiles, departments, locations, circulars, maintenance orders, calendar events, achievements, and audit logs.
+- **Owner Account Shielding:** The backup export engine automatically scrubs all Platform Owner user profiles from the exported file. This ensures your master administrative credentials and identity are never exposed in backup files or overwritten when restoring client data.
+- **Safe Restoration Workflow:**
+  1. Navigate to **Settings > Database Backup** (`/settings/backup`).
+  2. Upload a valid JSON backup file.
+  3. Inspect the **Entity Counts Summary** modal (verifying total records across each table).
+  4. Confirm the operation to safely restore data with atomic database transactions.
+

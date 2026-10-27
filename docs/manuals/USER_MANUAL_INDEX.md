@@ -12,7 +12,7 @@ Select the manual matching your role:
 
 | # | Role / Persona | Target Audience | Primary Responsibilities & Guide Link |
 |---|----------------|-----------------|---------------------------------------|
-| 1 | **Platform Owner** | Super Administrator / System Host | **[Platform Owner Manual](./1_Platform_Owner_Manual.md)**<br>System bootstrap, school provisioning, multi-tenant isolation, platform achievements. |
+| 1 | **Platform Owner** | Super Administrator / System Host | **[Platform Owner Manual](./1_Platform_Owner_Manual.md)**<br>System bootstrap, school provisioning, database backup & disaster recovery, multi-tenant isolation, platform achievements. |
 | 2 | **School Administrator** | School Principal, Assistant Principal, Admin Deputy | **[School Principal & Administrator Manual](./2_School_Principal_Administrator_Manual.md)**<br>Empty-app setup, school profile, workweek days, departments, locations, user accounts, circulars, maintenance triage, calendar, reports. |
 | 3 | **Department Head** | Heads of Academic & Admin Departments (Math, Science, English...) | **[Department Head Manual](./3_Department_Head_Manual.md)**<br>Departmental dashboard, reviewing official circulars, downloading/printing attachments, submitting department responses, reporting lab/department repairs. |
 | 4 | **Teacher / Academic Staff** | Teachers, Counselors, Academic Staff | **[Teacher & Academic Staff Manual](./4_Teacher_Staff_Manual.md)**<br>Daily dashboard routine, acknowledging general circulars, academic calendar and exams, reporting classroom repairs with photos. |
@@ -32,6 +32,7 @@ Select the manual matching your role:
 | **Maintenance Work Orders** (`/maintenance`) | Full Oversight | Triage & Assign | Submit & Track | Submit & Track | Execute & Update |
 | **School Calendar** (`/calendar`) | Full Manage | Create & Edit | View & Filter | View & Filter | View & Filter |
 | **School Achievements** (`/achievements`) | Exclusive Access | Hidden | Hidden | Hidden | Hidden |
+| **Database Backup & Restore** (`/settings/backup`) | Exclusive Access | Hidden | Hidden | Hidden | Hidden |
 
 ---
 
@@ -54,4 +55,7 @@ Only active faculty accounts assigned the dedicated **Maintenance Operator** rol
 
 ### Q6: How are destructive actions confirmed?
 All deletion and irreversible actions across the portal (such as deleting departments, locations, user assignments, circulars, or achievements) display an in-app accessible confirmation dialog (`AppMessageBox`) with safety warnings rather than native browser popups.
+
+### Q7: What themes are available and how do I change them?
+The portal includes 5 curated visual themes: **Royal Navy (Default)** (`كحلي ملكي [افتراضي]`), **Classic Light** (`فاتح كلاسيكي`), **Slate Dark** (`داكن هادئ`), **Emerald Academy** (`أكاديمية الزمرد`), and **Midnight OLED** (`سواد الليل [OLED]`). Click the palette icon in the header to select your preferred appearance.
 
