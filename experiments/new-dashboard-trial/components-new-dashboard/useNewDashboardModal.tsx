@@ -61,8 +61,10 @@ export function useNewDashboardModal(data: {
       title: item.title,
       content: (
         <div className="rounded-lg border bg-muted/30 p-3 text-xs">
-          <div className="font-bold text-foreground mb-1">{item.title}</div>
-          <div className="text-muted-foreground">التاريخ: {item.date} · الموقع: {item.loc}</div>
+          <div className="mb-1 font-bold text-foreground">{item.title}</div>
+          <div className="text-muted-foreground">
+            التاريخ: {item.date} · الموقع: {item.loc}
+          </div>
         </div>
       ),
     });

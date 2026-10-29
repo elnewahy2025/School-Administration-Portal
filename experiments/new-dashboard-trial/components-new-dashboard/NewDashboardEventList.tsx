@@ -22,7 +22,7 @@ export function NewDashboardEventList({
   return (
     <>
       <div
-        className="absolute top-[342px] z-10 -translate-y-1/2 text-right text-[12.4px] font-extrabold text-[#27366f] whitespace-nowrap"
+        className="absolute top-[342px] z-10 -translate-y-1/2 text-right text-[12.4px] font-extrabold whitespace-nowrap text-[#27366f]"
         style={{ right: "calc(844px - 401px)" }}
       >
         التقويم والفعاليات القادمة
@@ -52,14 +52,14 @@ export function NewDashboardEventList({
           </div>
           {/* Title */}
           <div
-            className="pointer-events-none absolute z-10 -translate-y-1/2 text-right text-[10.2px] font-bold text-[#2f4577] whitespace-nowrap"
+            className="pointer-events-none absolute z-10 -translate-y-1/2 text-right text-[10.2px] font-bold whitespace-nowrap text-[#2f4577]"
             style={{ right: "calc(844px - 369px)", top: `${e.cy - 4}px` }}
           >
             {e.title}
           </div>
           {/* Subtext / Date */}
           <div
-            className="pointer-events-none absolute z-10 -translate-y-1/2 text-right text-[8.4px] font-medium text-[#8d94b0] whitespace-nowrap"
+            className="pointer-events-none absolute z-10 -translate-y-1/2 text-right text-[8.4px] font-medium whitespace-nowrap text-[#8d94b0]"
             style={{ right: "calc(844px - 369px)", top: `${e.cy + 13}px` }}
           >
             {e.date}

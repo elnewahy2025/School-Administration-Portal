@@ -79,12 +79,24 @@
 
 1. **Deploying on Vercel**:
    - Link the GitHub repository to your Vercel project.
-   - Configure required environment variables in **Project Settings > Environment Variables**:
+   - Configure required environment variables in **Project Settings > Environment Variables** (see `.env.example` for the full annotated list):
      - `NEXT_PUBLIC_SUPABASE_URL`
      - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
      - `SUPABASE_SERVICE_ROLE_KEY`
-     - _(Optional)_ `CRON_SECRET`
-2. **Automated 3-Day Supabase Keepalive**:
+     - `APP_URL` — the public origin; auth emails are built from it
+     - `SCHOOL_TIMEZONE`
+     - `CRON_SECRET` — **required in production**: without it `/api/keepalive` rejects every call instead of being public
+     - `PLATFORM_BOOTSTRAP_SECRET` and/or `PLATFORM_OWNER_EMAIL` — required to claim the first owner in production
+     - _(Optional)_ `ERROR_REPORTING_URL` / `ERROR_REPORTING_TOKEN` — forward structured errors to a collector
+   - `vercel.json` needs no secret: Vercel sends `Authorization: Bearer $CRON_SECRET` to the cron automatically once the variable exists.
+2. **Health check**:
+   - `GET /api/health` → `200` with the running commit hash, without touching the database.
+   - `GET /api/health?deep=1` → also runs one database query and returns `503` when it cannot reach it. Point the external uptime monitor at this URL.
+3. **Automated 3-Day Supabase Keepalive**:
    - [vercel.json](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/vercel.json) automatically registers the cron schedule to invoke `/api/keepalive` every 3 days at 06:00 UTC (`0 6 */3 * *`).
    - Keeps your Supabase PostgreSQL project active and prevents automatic 7-day free tier pausing.
    - Can also be backed up via GitHub Actions by pasting `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in GitHub Repository Secrets.
+4. **Error visibility**:
+   - Server crashes (render, route handler, Server Action, proxy) are reported by `src/instrumentation.ts` with a correlation id.
+   - Browser crashes are reported by `src/instrumentation-client.ts` and by the error boundaries; the screen shows the reference code a user can quote.
+   - With `ERROR_REPORTING_URL` unset, reports stay in the platform's structured log; set it to forward the same JSON payload to a collector.

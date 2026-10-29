@@ -6,18 +6,18 @@ A modern, enterprise-grade school management platform built for modern education
 
 ## Application Framework & Tech Stack
 
-| Layer | Technologies & Tools |
-| :--- | :--- |
-| **Framework & Runtime** | [Next.js 16.4.2](https://nextjs.org/) (App Router, Turbopack, React 19 Server Components, Server Actions) |
-| **Language & Toolchain** | [TypeScript 5](https://www.typescriptlang.org/) (Strict Mode) · [Node.js 24+](https://nodejs.org/) |
-| **Database & Backend** | [Supabase](https://supabase.com/) (PostgreSQL 15+, Row-Level Security / RLS policies, Storage buckets) |
-| **Real-Time Engine** | [Supabase Realtime](https://supabase.com/docs/guides/realtime) (WebSockets push notifications on `public.notifications`) |
-| **Styling & Design System** | [Tailwind CSS v4](https://tailwindcss.com/) · [@base-ui/react](https://base-ui.com/) primitives · [Lucide Icons](https://lucide.dev/) |
-| **Theming Engine** | `next-themes` supporting 5 curated themes (Royal Navy [Default], Classic Light, Slate Dark, Emerald Academy, Midnight OLED) |
-| **Internationalization** | `next-intl` (Arabic `ar` RTL default + English `en` LTR) with locale prefix routing |
-| **Validation & Security** | [Zod 4](https://zod.dev/) type-safe schemas · Server-only guardrail modules · Strict RLS SQL isolation |
+| Layer                       | Technologies & Tools                                                                                                                   |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| **Framework & Runtime**     | [Next.js 16.4.2](https://nextjs.org/) (App Router, Turbopack, React 19 Server Components, Server Actions)                              |
+| **Language & Toolchain**    | [TypeScript 5](https://www.typescriptlang.org/) (Strict Mode) · [Node.js 24+](https://nodejs.org/)                                     |
+| **Database & Backend**      | [Supabase](https://supabase.com/) (PostgreSQL 15+, Row-Level Security / RLS policies, Storage buckets)                                 |
+| **Real-Time Engine**        | [Supabase Realtime](https://supabase.com/docs/guides/realtime) (WebSockets push notifications on `public.notifications`)               |
+| **Styling & Design System** | [Tailwind CSS v4](https://tailwindcss.com/) · [@base-ui/react](https://base-ui.com/) primitives · [Lucide Icons](https://lucide.dev/)  |
+| **Theming Engine**          | `next-themes` supporting 5 curated themes (Royal Navy [Default], Classic Light, Slate Dark, Emerald Academy, Midnight OLED)            |
+| **Internationalization**    | `next-intl` (Arabic `ar` RTL default + English `en` LTR) with locale prefix routing                                                    |
+| **Validation & Security**   | [Zod 4](https://zod.dev/) type-safe schemas · Server-only guardrail modules · Strict RLS SQL isolation                                 |
 | **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (253 tests across 88 suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
-| **Mobile & PWA** | Progressive Web App manifest, Service Worker offline caching, install banner |
+| **Mobile & PWA**            | Progressive Web App manifest, Service Worker offline caching, install banner                                                           |
 
 ---
 
@@ -79,11 +79,13 @@ A modern, enterprise-grade school management platform built for modern education
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 24+
 - npm 10+
 - Supabase account or local Supabase CLI
 
 ### Setup & Local Development
+
 ```powershell
 # 1. Install dependencies
 npm ci
@@ -94,24 +96,25 @@ Copy-Item .env.example .env.local
 # 3. Start development server with Turbopack
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) to view the portal in Arabic (RTL), or navigate to [http://localhost:3000/en](http://localhost:3000/en) for English (LTR).
 
 ---
 
 ## Available Scripts
 
-| Command | Purpose |
-| :--- | :--- |
-| `npm run dev` | Launch local development server with Next.js Turbopack |
-| `npm run build` | Compile and bundle production Next.js application |
-| `npm run start` | Serve production application bundle |
-| `npm run lint` | Run ESLint enforcing strict Modularity Rule #1 |
-| `npm run typecheck` | Run strict TypeScript validation (`tsc --noEmit`) |
-| `npm run test` | Run all 88 Vitest test suites (253 tests) |
-| `npm run test:e2e` | Run end-to-end Playwright tests across browsers |
-| `npm run test:rls` | Execute full Supabase RLS security harness & battery |
-| `npm run format` | Format entire codebase using Prettier |
-| `npm run verify` | Full CI verification gate (lint + typecheck + test + scan) |
+| Command             | Purpose                                                    |
+| :------------------ | :--------------------------------------------------------- |
+| `npm run dev`       | Launch local development server with Next.js Turbopack     |
+| `npm run build`     | Compile and bundle production Next.js application          |
+| `npm run start`     | Serve production application bundle                        |
+| `npm run lint`      | Run ESLint enforcing strict Modularity Rule #1             |
+| `npm run typecheck` | Run strict TypeScript validation (`tsc --noEmit`)          |
+| `npm run test`      | Run all 88 Vitest test suites (253 tests)                  |
+| `npm run test:e2e`  | Run end-to-end Playwright tests across browsers            |
+| `npm run test:rls`  | Execute full Supabase RLS security harness & battery       |
+| `npm run format`    | Format entire codebase using Prettier                      |
+| `npm run verify`    | Full CI verification gate (lint + typecheck + test + scan) |
 
 ---
 

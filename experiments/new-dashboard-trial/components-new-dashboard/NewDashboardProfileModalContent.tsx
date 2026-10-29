@@ -24,7 +24,7 @@ export function NewDashboardProfileModalContent({
         </div>
       </div>
       <div className="rounded-lg bg-primary/5 p-3 text-[11px] leading-relaxed">
-        <div className="font-bold text-primary mb-1">الرؤية المعتمدة:</div>
+        <div className="mb-1 font-bold text-primary">الرؤية المعتمدة:</div>
         <p className="text-muted-foreground">{visionText}</p>
       </div>
     </div>

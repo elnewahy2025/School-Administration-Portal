@@ -14,16 +14,20 @@ As a **Teacher or Academic Staff Member**, the School Administration Portal prov
 ## 2. Getting Started: First-Time Login
 
 ### Step 1: Logging In
+
 1. Open the portal URL in your desktop or mobile browser.
 2. Sign in using the email address and password provided by the school administration.
 3. Once logged in, you will arrive at your personalized **Dashboard** (`/dashboard`).
 
 ### Step 2: Language & Theme Preferences
+
 - **Language Toggle:** Click the language selector in the header to switch between Arabic (RTL, default) and English (LTR).
 - **Dark Mode:** Click the Sun/Moon theme toggle in the header to select **Light Mode**, **Dark Mode**, or follow your system preference.
 
 ### Step 3: Self-Service Password Reset
+
 If you ever forget your password:
+
 1. On the sign-in screen, click **Forgot password?** (`نسيت كلمة المرور؟`).
 2. Enter your email.
 3. Click the reset link sent to your inbox to establish a new password immediately.
@@ -33,7 +37,9 @@ If you ever forget your password:
 ## 3. Daily Workflows
 
 ### 1. Checking Your Personalized Dashboard (`/dashboard`)
+
 Start your school day by reviewing your dashboard:
+
 - **School Vision & Mission:** Institutional principles and semester focus.
 - **Active Circulars:** Directives issued by the Principal that require your attention.
 - **Pending Maintenance:** Status of classroom repair requests you have submitted.
@@ -42,9 +48,11 @@ Start your school day by reviewing your dashboard:
 ---
 
 ### 2. Acknowledging School Circulars (`/circulars`)
+
 The school administration issues administrative memos, duty rosters, exam rules, and holiday schedules digitally through the portal.
 
 #### How to Review a Circular:
+
 1. When a new circular is published for all staff, you will receive an in-app **Notification Toast** and an unread counter badge on the bell icon in the top header.
 2. Navigate to **Administrative Circulars** (`/circulars`).
 3. Click on the circular title to open it.
@@ -55,9 +63,11 @@ The school administration issues administrative memos, duty rosters, exam rules,
 ---
 
 ### 3. Reporting Classroom & Facility Issues (`/maintenance/new`)
+
 If a projector fails, an air conditioner stops cooling, a window latch is damaged, or lighting is flickering in your classroom:
 
 #### How to Submit a Maintenance Request:
+
 1. Navigate to **Maintenance & Services** in the sidebar.
 2. Click **New Service Request** (`+ طلب صيانة جديد`).
 3. Fill in the short request form:
@@ -71,6 +81,7 @@ If a projector fails, an air conditioner stops cooling, a window latch is damage
 4. Click **Submit Request**.
 
 #### Following Up on Your Request:
+
 - Open your request in `/maintenance`.
 - You can watch the status change as administration assigns a technician (`assigned`), the technician begins work (`in_progress`), and the repair is finished (`completed`).
 - Once completed, you can view the technician's resolution notes and completion photo.
@@ -78,6 +89,7 @@ If a projector fails, an air conditioner stops cooling, a window latch is damage
 ---
 
 ### 4. Navigating the Academic Calendar (`/calendar`)
+
 1. Open **School Calendar** (`/calendar`).
 2. Use the calendar to plan your lessons and assessments:
    - **Academic Milestones:** Semester start/end dates, report card distributions.

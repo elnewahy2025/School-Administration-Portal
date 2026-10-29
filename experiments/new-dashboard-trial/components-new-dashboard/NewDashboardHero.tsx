@@ -1,10 +1,6 @@
 "use client";
 
-export function NewDashboardHero({
-  visionText,
-}: {
-  visionText: string;
-}) {
+export function NewDashboardHero({ visionText }: { visionText: string }) {
   return (
     <>
       <div

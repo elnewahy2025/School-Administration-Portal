@@ -27,7 +27,9 @@ The portal functions seamlessly on mobile phones and tablets, allowing you to ma
 ## 3. Phase 2: Daily Maintenance Workflows
 
 ### 1. Receiving Assigned Work Orders
+
 When a teacher reports an issue and the School Administrator assigns it to you:
+
 1. You will receive an immediate **Real-Time Push Notification** on your screen.
 2. The **Notification Bell** in the top header will display an unread alert.
 3. Tapping the notification takes you directly to the work order.
@@ -35,7 +37,9 @@ When a teacher reports an issue and the School Administrator assigns it to you:
 ---
 
 ### 2. Inspecting Ticket Details & Reporter Evidence
+
 Open the ticket from your **Maintenance Queue** (`/maintenance`):
+
 - **Specific Location:** (e.g., `مبنى الإدارة - غرفة 204`).
 - **Category & Priority:** Review if the ticket is flagged as an **Emergency** or **Urgent**.
 - **Report Description:** Symptoms observed by the teacher or staff member.
@@ -52,20 +56,25 @@ The portal enforces a verified state-machine workflow to ensure accountability:
 ```
 
 #### Step 1: Starting the Repair (`in_progress`)
+
 1. When you arrive at the location and begin diagnosing or fixing the equipment, open the ticket.
 2. Tap the action button **Start Work** (`بدء العمل`).
 3. The ticket status updates to `in_progress`.
    - The reporter and administration can see that an operator is actively on site.
 
 #### Step 2: Adding Work Notes & Updates
+
 If you need to leave the site to fetch spare parts from storage:
+
 1. Scroll down to the **Work Notes** section on the ticket.
 2. Enter a brief note (e.g., `تم فحص الضاغط، جاري إحضار صمام بديل من المستودع`).
 3. Tap **Post Note**.
 4. This keeps the reporting teacher informed without requiring phone calls.
 
 #### Step 3: Completing the Work & Attaching Photo Evidence (`completed`)
+
 Once the equipment is repaired and tested:
+
 1. On the ticket page, tap **Mark Completed** (`تم الإنجاز`).
 2. **Resolution Summary:** Enter a brief description of the repair (e.g., `تم استبدال قاطع الكهرباء الرئيسي وإعادة تشغيل الإنارة بنجاح`).
 3. **Completion Evidence (Recommended):** Take a photo of the repaired equipment with your phone camera and attach it.
@@ -75,7 +84,9 @@ Once the equipment is repaired and tested:
 ---
 
 ### 4. Handling Rejections or Unserviceable Requests
+
 If a request is outside maintenance scope (e.g., software installation) or duplicate:
+
 1. Tap **Reject Request** (`رفض الطلب`).
 2. Enter a mandatory reason explaining why the ticket cannot be fulfilled.
 3. Tap **Confirm Rejection**. The ticket is routed back to the dispatcher.

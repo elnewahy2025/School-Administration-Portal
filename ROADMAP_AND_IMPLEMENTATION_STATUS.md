@@ -149,12 +149,16 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 ### Phase 7: Deployment & Hosting Checklist (Vercel Production)
 
 - [ ] **Vercel Environment Setup & Supabase Keepalive Activation:**
-  - Add production environment variables in the Vercel Project Dashboard (**Settings > Environment Variables**):
+  - Add production environment variables in the Vercel Project Dashboard (**Settings > Environment Variables**); see `.env.example` for the annotated list:
     - `NEXT_PUBLIC_SUPABASE_URL`
     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
     - `SUPABASE_SERVICE_ROLE_KEY`
-    - _(Optional)_ `CRON_SECRET`
-  - Vercel automatically deploys [vercel.json](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/vercel.json) crons, which will trigger `/api/keepalive` every 3 days at 06:00 UTC to prevent Supabase free tier inactivity pausing.
+    - `APP_URL`
+    - `SCHOOL_TIMEZONE`
+    - `CRON_SECRET` (**required** — without it `/api/keepalive` fails closed with 503)
+    - `PLATFORM_BOOTSTRAP_SECRET` / `PLATFORM_OWNER_EMAIL` (to claim the first owner)
+  - Vercel automatically deploys [vercel.json](file:///c:/Users/ahmed/Desktop/School_Administration_Portal/vercel.json) crons, which will trigger `/api/keepalive` every 3 days at 06:00 UTC to prevent Supabase free tier inactivity pausing. Vercel sends the `CRON_SECRET` bearer automatically.
+  - Point the uptime monitor at `GET /api/health?deep=1` (200 healthy, 503 database unreachable).
   - Add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` to **GitHub Repository Secrets** if GitHub Actions scheduled workflow backup is also desired.
 
 ### Phase 8: Deferred Backend Feature Exposure (To Do Later)

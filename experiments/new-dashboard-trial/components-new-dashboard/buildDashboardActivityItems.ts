@@ -17,7 +17,9 @@ function buildCircularActivity(circ?: CircularRow): ActivityItem {
 
 function buildMaintenanceActivity(mnt?: MaintenanceRequestRow): ActivityItem {
   const ticket = mnt ? mnt.ticket_number : "MNT-2026-001";
-  const desc = mnt ? mnt.description : "عطل في وحدات التكييف المركزية بالصالة الرياضية - تم تكليف الفني المختص.";
+  const desc = mnt
+    ? mnt.description
+    : "عطل في وحدات التكييف المركزية بالصالة الرياضية - تم تكليف الفني المختص.";
   return {
     id: "a2",
     text: mnt ? mnt.title : "بلاغ عاجل: صيانة وحدات التكييف",

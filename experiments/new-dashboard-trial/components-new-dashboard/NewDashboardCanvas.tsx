@@ -41,7 +41,13 @@ export function NewDashboardCanvas({
 }) {
   return (
     <div className="relative h-[491px] w-[844px] overflow-hidden rounded-2xl border border-slate-200/40 shadow-xl">
-      <Image src="/assets/dashboard/plate.png" alt="" fill priority className="pointer-events-none object-cover" />
+      <Image
+        src="/assets/dashboard/plate.png"
+        alt=""
+        fill
+        priority
+        className="pointer-events-none object-cover"
+      />
 
       <NewDashboardSidebar />
 

@@ -20,23 +20,23 @@ The root-level `school_administration_implementation_plan.md` is a byte-identica
 
 These are the only genuinely open choices. Defaults are the most reasonable reading of the requirements doc; any can be overridden before WP1 ends.
 
-| #   | Decision           | Default                                                                                                                               | Rationale / alternative                                    |
-| --- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| D1  | Tenancy            | Single school at launch; **every table keeps `school_id` + RLS from day 1**                                                           | Companion doc §6; cheapest path to multi-school later      |
-| D2  | UI language        | Arabic-first RTL, English toggle; default locale `ar`                                                                                 | Companion doc §1                                           |
-| D3  | Auth method        | Supabase email + password; accounts created by admin invitation only; no self sign-up; magic links optional later                     | Schools control staff accounts                             |
-| D4  | Notifications      | In-app only at launch; email deferred until a provider is reviewed                                                                    | Companion doc §8                                           |
-| D5  | Respondent privacy | Dashboards show department + job title only; identity stored in a restricted, audited record; UI copy explains this honestly          | Companion doc §5.1 privacy rule                            |
-| D6  | Timezone           | One configurable school timezone, set at bootstrap; all timestamps stored `timestamptz`                                               | Companion doc §3                                           |
-| D7  | Hosting            | Vercel Hobby + two Supabase projects (dev, prod)                                                                                      | Companion doc §2, §9 Phase 1                               |
-| D8  | Attachment limits  | 10 MB/file; jpg, png, webp, pdf; validated server-side; adjustable in Settings                                                        | Companion doc §5.4, §7                                     |
-| D9  | Deletion policy    | Soft-delete/archive for circulars, requests, calendar events; deactivate (never delete) users                                         | Companion doc §3                                           |
-| D10 | Theme              | Dark mode follows system preference by default; manual light/dark/system toggle, persisted per browser; class-based Tailwind strategy | Print views always render light regardless of active theme |
-| D11 | Code modularity    | **Non-negotiable:** one function per file, file named after the function, hard size caps enforced by CI                               | Rules and exceptions in §4.1                               |
-| D18 | Confirmation UX    | Standardized in-app `AppMessageBox` dialog replacing native browser `confirm()` calls across all actions                             | Accessible, theme-aware, responsive confirmation dialog   |
-| D19 | Maintenance Role   | Strict `operator` role filtering for technicians; absence alert banner + settings redirect when empty                                 | Prevents assigning maintenance tasks to non-technical staff|
-| D20 | Weekend Policy     | Friday & Saturday locked as non-working holidays; scheduling prevented client/server; recurrence skips weekends                       | Preserves institutional working schedule                   |
-| D21 | Settings Sub-Tabs  | School profile organized into 6 focused sub-tabs (Identity, Leadership, Contact, Academic Year, Vision, Operations)                   | Reduces form cognitive load                                |
+| #   | Decision           | Default                                                                                                                               | Rationale / alternative                                     |
+| --- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| D1  | Tenancy            | Single school at launch; **every table keeps `school_id` + RLS from day 1**                                                           | Companion doc §6; cheapest path to multi-school later       |
+| D2  | UI language        | Arabic-first RTL, English toggle; default locale `ar`                                                                                 | Companion doc §1                                            |
+| D3  | Auth method        | Supabase email + password; accounts created by admin invitation only; no self sign-up; magic links optional later                     | Schools control staff accounts                              |
+| D4  | Notifications      | In-app only at launch; email deferred until a provider is reviewed                                                                    | Companion doc §8                                            |
+| D5  | Respondent privacy | Dashboards show department + job title only; identity stored in a restricted, audited record; UI copy explains this honestly          | Companion doc §5.1 privacy rule                             |
+| D6  | Timezone           | One configurable school timezone, set at bootstrap; all timestamps stored `timestamptz`                                               | Companion doc §3                                            |
+| D7  | Hosting            | Vercel Hobby + two Supabase projects (dev, prod)                                                                                      | Companion doc §2, §9 Phase 1                                |
+| D8  | Attachment limits  | 10 MB/file; jpg, png, webp, pdf; validated server-side; adjustable in Settings                                                        | Companion doc §5.4, §7                                      |
+| D9  | Deletion policy    | Soft-delete/archive for circulars, requests, calendar events; deactivate (never delete) users                                         | Companion doc §3                                            |
+| D10 | Theme              | Dark mode follows system preference by default; manual light/dark/system toggle, persisted per browser; class-based Tailwind strategy | Print views always render light regardless of active theme  |
+| D11 | Code modularity    | **Non-negotiable:** one function per file, file named after the function, hard size caps enforced by CI                               | Rules and exceptions in §4.1                                |
+| D18 | Confirmation UX    | Standardized in-app `AppMessageBox` dialog replacing native browser `confirm()` calls across all actions                              | Accessible, theme-aware, responsive confirmation dialog     |
+| D19 | Maintenance Role   | Strict `operator` role filtering for technicians; absence alert banner + settings redirect when empty                                 | Prevents assigning maintenance tasks to non-technical staff |
+| D20 | Weekend Policy     | Friday & Saturday locked as non-working holidays; scheduling prevented client/server; recurrence skips weekends                       | Preserves institutional working schedule                    |
+| D21 | Settings Sub-Tabs  | School profile organized into 6 focused sub-tabs (Identity, Leadership, Contact, Academic Year, Vision, Operations)                   | Reduces form cognitive load                                 |
 
 **Exit gate WP0:** school management approves D1–D21 and the §6 permission matrix. Outcomes recorded in `docs/decisions.md`.
 

@@ -7,7 +7,7 @@
 
 ## 1. Introduction
 
-As a **School Administrator / Principal**, you manage the day-to-day academic and facilities governance of your campus. 
+As a **School Administrator / Principal**, you manage the day-to-day academic and facilities governance of your campus.
 
 This manual guides you through configuring your school from a completely blank portal to conducting active daily operations.
 
@@ -22,6 +22,7 @@ Step 1: School Profile & Workweek  ➔  Step 2: Campus Locations  ➔  Step 3: D
 ```
 
 ### Step 1: School Profile, Sub-Tabs, Workweek & Date Preferences
+
 1. In the sidebar, navigate to **Settings > School Profile** (`/settings/school`).
 2. The School Profile is organized into **6 focused sub-tabs** for streamlined configuration:
    - **1. School Identity (`الهوية المدرسية`):** Official Arabic & English names, educational stage, and emblem/logo upload (JPG, PNG, SVG up to 5MB).
@@ -39,7 +40,9 @@ Step 1: School Profile & Workweek  ➔  Step 2: Campus Locations  ➔  Step 3: D
 ---
 
 ### Step 2: Setting Up Campus Locations & Facilities
+
 Before staff can report broken equipment or book rooms, you must register campus facilities.
+
 1. In the sidebar, go to **Settings > Locations** (`/settings/locations`).
 2. Click **Add Location** (`+ إضافة موقع جديد`).
 3. Create entries for your physical spaces:
@@ -50,6 +53,7 @@ Before staff can report broken equipment or book rooms, you must register campus
 ---
 
 ### Step 3: Setting Up Academic & Administrative Departments
+
 1. Navigate to **Settings > Departments** (`/settings/departments`).
 2. Click **Add Department** (`+ إضافة قسم جديد`).
 3. Add your departments:
@@ -58,12 +62,14 @@ Before staff can report broken equipment or book rooms, you must register campus
    - Arabic Language Department (`قسم اللغة العربية`)
    - Facilities & Maintenance (`قسم الصيانة والخدمات`)
    - Student Affairs (`قسم شؤون الطلاب`)
-4. *(Optional at this stage)*: Once staff accounts are created, you will return here to designate each department's **Department Head**.
+4. _(Optional at this stage)_: Once staff accounts are created, you will return here to designate each department's **Department Head**.
 
 ---
 
 ### Step 4: Provisioning Staff & Assigning Roles
+
 Staff accounts are managed strictly by the school administration—there is no public self-signup.
+
 1. Navigate to **Settings > Users & Roles** (`/settings/users`).
 2. Click **Add User** (`+ إضافة مستخدم جديد`).
 3. Fill in the staff member's credentials:
@@ -79,6 +85,7 @@ Staff accounts are managed strictly by the school administration—there is no p
 4. Save the user. Inform the staff member of their login details.
 
 #### Managing Staff Accounts:
+
 - **Deactivating/Activating Staff:** Toggle the active status switch to immediately prevent a departing staff member from signing in while preserving their historical circular responses and maintenance records.
 - **Removing Staff Members:** To permanently unlink a user from the school, click the delete icon. An accessible confirmation modal (`AppMessageBox`) prompts for verification before cleanly disassociating the account.
 
@@ -87,9 +94,11 @@ Staff accounts are managed strictly by the school administration—there is no p
 ## 3. Phase 2: Daily Operations
 
 ### 1. Issuing Administrative Circulars (`/circulars`)
+
 Circulars replace paper memos with verifiable, trackable digital directives.
 
 #### How to Issue a New Circular:
+
 1. Go to **Administrative Circulars > New Circular** (`/circulars/new`).
 2. Enter the details:
    - **Title (Arabic):** Clear title (e.g., `الجدول الموحد لاختبارات منتصف الفصل الدراسي`).
@@ -106,6 +115,7 @@ Circulars replace paper memos with verifiable, trackable digital directives.
 4. The system immediately broadcasts **Real-Time Push Notifications** over WebSockets to all targeted users.
 
 #### Monitoring Compliance in Real Time:
+
 - Open any published circular (`/circulars/[id]`).
 - The **Recipient Progress Bar** displays real-time statistics: e.g., `7 of 10 departments responded`.
 - View the **Responded Departments** and **Pending Departments** lists to identify who has not yet acknowledged the directive.
@@ -113,7 +123,9 @@ Circulars replace paper memos with verifiable, trackable digital directives.
 ---
 
 ### 2. Triaging & Assigning Maintenance Work Orders (`/maintenance`)
+
 When teachers or staff report broken air conditioning, plumbing leaks, or electrical failures:
+
 1. Navigate to **Maintenance & Services** (`/maintenance`).
 2. New requests arrive with the status `pending` (`قيد الانتظار`).
 3. Click on the ticket to inspect details and any attached photos.
@@ -127,15 +139,18 @@ When teachers or staff report broken air conditioning, plumbing leaks, or electr
 ---
 
 ### 3. Managing the Academic Calendar (`/calendar`)
+
 Keep the school faculty and public informed of upcoming academic milestones.
 
 #### Weekend Policy (Friday & Saturday):
+
 - In adherence to school operations, **Friday and Saturday** are locked as official non-working holidays.
 - **Scheduling Prevention:** The portal prevents selecting Friday or Saturday for any event start or end date. If chosen in the date picker, the input immediately resets with an alert toast, and form submissions are blocked both in the client and on the server.
 - **Recurrence Skipping:** Recurring daily or periodic event series automatically skip Friday and Saturday, continuing on Sunday.
 - **Visual Grid:** Friday and Saturday are clearly distinguished with amber holiday headers (`الجمعة (عطلة)`, `السبت (عطلة)`) and shaded holiday cells.
 
 #### Creating Recurring Faculty Meetings or Exams:
+
 1. Go to **School Calendar > New Event** (`/calendar/new`).
 2. Fill in:
    - **Title (Arabic & English):** e.g., `اجتماع الهيئة الإدارية الأسبوعي`.
@@ -152,7 +167,9 @@ Keep the school faculty and public informed of upcoming academic milestones.
 ---
 
 ### 4. Executive Reports & Analytics (`/reports`)
+
 Access to compliance analytics is strictly reserved for School Administrators and the Platform Owner.
+
 1. Navigate to **Reports & Analytics** (`/reports`).
 2. **Circulars Compliance Tab:**
    - Filter by date range or specific academic departments.

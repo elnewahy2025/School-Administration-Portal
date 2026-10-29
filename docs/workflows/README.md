@@ -37,13 +37,13 @@ This directory contains comprehensive, real-life operational workflows for every
 
 ## 2. Directory of Workflow Guides
 
-| # | Role | Workflow Guide | Primary Focus & Empty-App Starting Point |
-|---|------|----------------|------------------------------------------|
-| 1 | **Platform Owner** | [1_platform_owner_workflow.md](./1_platform_owner_workflow.md) | Initial system bootstrap, claiming owner privilege, school creation, platform settings, achievements module. |
-| 2 | **School Administrator** | [2_school_admin_workflow.md](./2_school_admin_workflow.md) | First-time school onboarding, workweek settings, department/location setup, staff provisioning, issuing circulars, maintenance triage, reporting. |
-| 3 | **Department Head** | [3_department_head_workflow.md](./3_department_head_workflow.md) | Department dashboard, receiving and responding to circulars, file attachment review, reporting departmental maintenance. |
-| 4 | **Teacher / Staff** | [4_teacher_staff_workflow.md](./4_teacher_staff_workflow.md) | Daily dashboard routine, acknowledging general circulars, checking academic calendar, submitting classroom maintenance requests. |
-| 5 | **Maintenance Operator** | [5_maintenance_operator_workflow.md](./5_maintenance_operator_workflow.md) | Ticket triage queue, transitioning legal repair states, logging work progress, uploading resolution photo evidence. |
+| #   | Role                     | Workflow Guide                                                             | Primary Focus & Empty-App Starting Point                                                                                                          |
+| --- | ------------------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Platform Owner**       | [1_platform_owner_workflow.md](./1_platform_owner_workflow.md)             | Initial system bootstrap, claiming owner privilege, school creation, platform settings, achievements module.                                      |
+| 2   | **School Administrator** | [2_school_admin_workflow.md](./2_school_admin_workflow.md)                 | First-time school onboarding, workweek settings, department/location setup, staff provisioning, issuing circulars, maintenance triage, reporting. |
+| 3   | **Department Head**      | [3_department_head_workflow.md](./3_department_head_workflow.md)           | Department dashboard, receiving and responding to circulars, file attachment review, reporting departmental maintenance.                          |
+| 4   | **Teacher / Staff**      | [4_teacher_staff_workflow.md](./4_teacher_staff_workflow.md)               | Daily dashboard routine, acknowledging general circulars, checking academic calendar, submitting classroom maintenance requests.                  |
+| 5   | **Maintenance Operator** | [5_maintenance_operator_workflow.md](./5_maintenance_operator_workflow.md) | Ticket triage queue, transitioning legal repair states, logging work progress, uploading resolution photo evidence.                               |
 
 ---
 
