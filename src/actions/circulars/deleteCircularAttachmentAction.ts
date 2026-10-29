@@ -3,9 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
+import { AppError } from "@/lib/errors/AppError";
+import { NotFoundError } from "@/lib/errors/NotFoundError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
@@ -21,7 +24,7 @@ export async function deleteCircularAttachmentAction(
     }
 
     const perms = await getEffectivePermissions().catch((): string[] => []);
-    const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+    const isOwner = await isPlatformOwner(profile.id);
     const canEdit =
       isOwner || perms.includes("circular.create") || perms.includes("circular.publish");
     if (!canEdit) {
@@ -36,12 +39,27 @@ export async function deleteCircularAttachmentAction(
       .maybeSingle();
 
     if (attachment) {
-      await supabase.storage.from("circular-attachments").remove([attachment.path]);
+      // The bucket now has a DELETE policy (0045). Surface a failure instead of
+      // removing the row and leaving the private object behind (H-16).
+      const { error: removeError } = await supabase.storage
+        .from("circular-attachments")
+        .remove([attachment.path]);
+      if (removeError) {
+        throw new AppError("Could not delete the stored file. Please try again.");
+      }
     }
 
-    const { error } = await supabase.from("circular_attachments").delete().eq("id", attachmentId);
+    const { data: deleted, error } = await supabase
+      .from("circular_attachments")
+      .delete()
+      .eq("id", attachmentId)
+      .select("id")
+      .maybeSingle();
     if (error) {
       throw mapDatabaseError(error);
+    }
+    if (!deleted) {
+      throw new NotFoundError("Attachment not found");
     }
 
     revalidatePath(`/[locale]/circulars/${circularId}`, "page");

@@ -27,7 +27,8 @@ vi.mock("@/lib/supabase", () => ({
     from: () => ({
       select: () => ({
         eq: () => ({
-          maybeSingle: () => Promise.resolve({ data: { title: "Exam Schedule", ref_number: "CIRC-99" } }),
+          maybeSingle: () =>
+            Promise.resolve({ data: { title: "Exam Schedule", ref_number: "CIRC-99" } }),
         }),
       }),
     }),
@@ -39,6 +40,7 @@ import { remindCircularAction } from "./remindCircularAction";
 describe("remindCircularAction", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockDispatchNotification.mockResolvedValue({ delivered: 0 });
   });
 
   it("returns error if user is not authorized", async () => {
@@ -64,6 +66,7 @@ describe("remindCircularAction", () => {
       profileId: "admin-user",
     });
     mockGetRecipients.mockResolvedValueOnce(["user-1", "user-2", "admin-user"]);
+    mockDispatchNotification.mockResolvedValueOnce({ delivered: 2 });
 
     const res = await remindCircularAction({
       circularId: "circ-1",

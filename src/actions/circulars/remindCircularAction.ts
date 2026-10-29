@@ -44,7 +44,7 @@ export async function remindCircularAction(
 
     const body = buildCircularReminderBody(meta.ref, meta.title, payload.customMessage);
 
-    await dispatchModuleNotification({
+    const { delivered } = await dispatchModuleNotification({
       recipientUserIds: filteredRecipients,
       schoolId: auth.schoolId,
       type: "circular",
@@ -57,7 +57,7 @@ export async function remindCircularAction(
 
     revalidateCircularReminderPaths(payload.circularId);
 
-    return { success: true, count: filteredRecipients.length };
+    return { success: true, count: delivered };
   } catch (err: unknown) {
     const appError = sanitizeError(err);
     return formatActionErrorResult(appError);

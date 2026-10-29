@@ -44,7 +44,19 @@ export async function createCircularAction(
       throw new AppError(res.error || "Failed to create circular");
     }
 
-    await insertCircularTargets(supabase, res.circularId, auth.schoolId, departmentIds);
+    const targetResult = await insertCircularTargets(
+      supabase,
+      res.circularId,
+      auth.schoolId,
+      departmentIds,
+    );
+    if (targetResult.error) {
+      // Best-effort rollback: a circular with no audience is worse than a
+      // failed creation, and the user must see the failure.
+      await supabase.from("circulars").delete().eq("id", res.circularId);
+      throw new AppError(`Could not save the circular targets: ${targetResult.error}`);
+    }
+
     await handleCircularDocumentsUpload(supabase, {
       formData,
       schoolId: auth.schoolId,
