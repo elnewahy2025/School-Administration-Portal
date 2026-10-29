@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { hasValidFileSignature } from "@/lib/storage/hasValidFileSignature";
 import { insertCircularAttachment } from "./insertCircularAttachment";
 
 const ALLOWED_MIME = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
@@ -20,14 +21,18 @@ export async function uploadCircularDocument(
     return { error: "File exceeds 10MB limit." };
   }
 
+  const fileBuffer = await params.file.arrayBuffer();
+  if (!hasValidFileSignature(new Uint8Array(fileBuffer), params.file.type)) {
+    return { error: "File content does not match its declared type." };
+  }
+
   const cleanName = params.file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
   const storagePath = `${params.schoolId}/${params.circularId}/${Date.now()}_${cleanName}`;
-  const fileBuffer = await params.file.arrayBuffer();
 
   const { error: uploadError } = await supabase.storage
     .from("circular-attachments")
     .upload(storagePath, fileBuffer, {
-      contentType: params.file.type || "application/octet-stream",
+      contentType: params.file.type,
       upsert: false,
     });
 
@@ -39,7 +44,7 @@ export async function uploadCircularDocument(
     circularId: params.circularId,
     schoolId: params.schoolId,
     path: storagePath,
-    mime: params.file.type || null,
+    mime: params.file.type,
     sizeBytes: params.file.size,
     uploadedBy: params.uploadedBy,
   });

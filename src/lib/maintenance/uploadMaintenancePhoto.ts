@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { hasValidFileSignature } from "@/lib/storage/hasValidFileSignature";
 import { insertMaintenanceAttachment } from "./insertMaintenanceAttachment";
 
 const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp"];
@@ -21,10 +22,14 @@ export async function uploadMaintenancePhoto(
     return { error: "Photo exceeds 10MB limit." };
   }
 
+  const fileBuffer = await params.photo.arrayBuffer();
+  if (!hasValidFileSignature(new Uint8Array(fileBuffer), params.photo.type)) {
+    return { error: "Photo content does not match its declared type." };
+  }
+
   const cleanName = params.photo.name.replace(/[^a-zA-Z0-9.-]/g, "_");
   const prefix = params.kind === "evidence" ? "evidence_" : "";
   const storagePath = `${params.schoolId}/${params.requestId}/${prefix}${Date.now()}_${cleanName}`;
-  const fileBuffer = await params.photo.arrayBuffer();
 
   const { error: uploadError } = await supabase.storage
     .from("maintenance-photos")

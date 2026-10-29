@@ -16,7 +16,9 @@ export async function createMaintenanceRecord(
     reporterDepartmentId: string | null;
   },
 ): Promise<{ requestId?: string; error?: string }> {
-  const { data: ticketNumber, error: ticketError } = await supabase.rpc("generate_school_number", {
+  // 0023 revoked the raw generator from `authenticated`; end users go through
+  // the checked wrapper (audit finding B-4).
+  const { data: ticketNumber, error: ticketError } = await supabase.rpc("next_school_number", {
     p_school: params.schoolId,
     p_kind: "maintenance",
   });

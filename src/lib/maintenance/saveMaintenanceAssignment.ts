@@ -19,7 +19,8 @@ export async function saveMaintenanceAssignment(
   await supabase
     .from("maintenance_assignments")
     .update({ is_active: false })
-    .eq("request_id", params.requestId);
+    .eq("request_id", params.requestId)
+    .eq("school_id", params.schoolId);
 
   const { error: assignError } = await supabase.from("maintenance_assignments").insert({
     request_id: params.requestId,
@@ -46,7 +47,8 @@ export async function saveMaintenanceAssignment(
   const { error: reqError } = await supabase
     .from("maintenance_requests")
     .update(updatePayload)
-    .eq("id", params.requestId);
+    .eq("id", params.requestId)
+    .eq("school_id", params.schoolId);
 
   if (reqError) return { error: reqError.message };
 
