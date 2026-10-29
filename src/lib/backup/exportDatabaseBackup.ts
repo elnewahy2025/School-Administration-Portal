@@ -1,29 +1,18 @@
 import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getPlatformOwnerUserIds } from "@/lib/auth/getPlatformOwnerUserIds";
+import { BACKUP_TABLES } from "./backupTables";
+import { buildBackupManifest } from "./buildBackupManifest";
 import { fetchTableData } from "./fetchTableData";
 import type { BackupAccessResult } from "./assertCanManageBackup";
 import type { DatabaseBackupPayload } from "./types";
 
-const BACKUP_TABLES = [
-  "schools",
-  "school_settings",
-  "departments",
-  "locations",
-  "roles",
-  "role_permissions",
-  "profiles",
-  "user_role_assignments",
-  "school_sequences",
-  "circulars",
-  "circular_targets",
-  "circular_responses",
-  "maintenance_requests",
-  "maintenance_assignments",
-  "maintenance_updates",
-  "calendar_events",
-  "school_achievements",
-] as const;
-
+/**
+ * Reads every table in the backup contract, completely.
+ *
+ * Any table-level failure aborts the whole export: a partial file that still
+ * says `success: true` is worse than no file, because it silently restores a
+ * truncated tenant.
+ */
 export async function exportDatabaseBackup(
   access: BackupAccessResult,
 ): Promise<DatabaseBackupPayload> {
@@ -33,11 +22,7 @@ export async function exportDatabaseBackup(
 
   const [school, ownerUserIds] = await Promise.all([
     schoolId
-      ? admin
-          .from("schools")
-          .select("name_ar, name_en")
-          .eq("id", schoolId)
-          .maybeSingle()
+      ? admin.from("schools").select("name_ar, name_en").eq("id", schoolId).maybeSingle()
       : Promise.resolve({ data: null }),
     getPlatformOwnerUserIds(),
   ]);
@@ -46,22 +31,21 @@ export async function exportDatabaseBackup(
 
   const tableResults = await Promise.all(
     BACKUP_TABLES.map(async (table) => {
-      const rows = await fetchTableData(admin, table, schoolId, ownerUserIds);
-      return [table, rows] as const;
+      const rows = await fetchTableData(admin, table.name, schoolId, ownerUserIds);
+      return [table.name, rows] as const;
     }),
   );
 
   const tables: DatabaseBackupPayload["tables"] = Object.fromEntries(tableResults);
 
   return {
-    metadata: {
-      version: 1,
-      exportedAt: new Date().toISOString(),
+    metadata: buildBackupManifest({
       exportedBy: access.userId ?? "system",
       scope,
       schoolId: schoolId ?? null,
       schoolName,
-    },
+      tables,
+    }),
     tables,
   };
 }

@@ -1,76 +1,54 @@
 import { createSupabaseAdminClient } from "@/lib/supabase";
-import { backupSchema } from "./backupSchema";
-import { upsertTableRecords } from "./upsertTableRecords";
-import { filterRowsForManager } from "./filterRowsForManager";
+import { savePreRestoreSnapshot } from "./savePreRestoreSnapshot";
+import { validateBackupPayload } from "./validateBackupPayload";
 import type { BackupAccessResult } from "./assertCanManageBackup";
 import type { RestoreSummary } from "./types";
 
-import { getPlatformOwnerUserIds } from "@/lib/auth/getPlatformOwnerUserIds";
-
-const RESTORE_ORDER = [
-  "schools",
-  "school_settings",
-  "departments",
-  "locations",
-  "roles",
-  "role_permissions",
-  "profiles",
-  "user_role_assignments",
-  "school_sequences",
-  "circulars",
-  "circular_targets",
-  "circular_responses",
-  "maintenance_requests",
-  "maintenance_assignments",
-  "maintenance_updates",
-  "calendar_events",
-  "school_achievements",
-] as const;
-
+/**
+ * Restores a parsed backup in one database transaction.
+ *
+ * Order of checks: envelope → checksum → tenant scope → snapshot → RPC. The
+ * snapshot is written before the transaction starts, so it survives a failed
+ * restore and records exactly what was about to be replaced. The RPC performs
+ * every table write in a single transaction: a failure leaves the database
+ * untouched.
+ */
 export async function restoreDatabaseBackup(
   access: BackupAccessResult,
   rawJson: unknown,
 ): Promise<RestoreSummary> {
-  const parsed = backupSchema.safeParse(rawJson);
-  if (!parsed.success) {
-    throw new Error(`Invalid backup JSON format: ${parsed.error.message}`);
+  const payload = validateBackupPayload(rawJson);
+
+  if (!access.userId) {
+    throw new Error("A restore needs an authenticated operator");
   }
 
-  const payload = parsed.data;
+  const targetSchoolId = payload.metadata.scope === "school" ? payload.metadata.schoolId : null;
+  const snapshotId = await savePreRestoreSnapshot(access, targetSchoolId);
   const admin = createSupabaseAdminClient();
-  const ownerUserIds = await getPlatformOwnerUserIds();
-  const tableCounts: Record<string, number> = {};
-  let totalRecords = 0;
 
-  for (const table of RESTORE_ORDER) {
-    let rows = (payload.tables[table as keyof typeof payload.tables] ?? []) as Record<
-      string,
-      unknown
-    >[];
+  const { data, error } = await admin.rpc("restore_backup", {
+    p_tables: payload.tables,
+    p_scope: payload.metadata.scope,
+    p_school: payload.metadata.scope === "school" ? payload.metadata.schoolId : null,
+    p_actor: access.userId,
+  });
 
-    if (access.isManager && access.schoolId) {
-      rows = filterRowsForManager(table, rows, access.schoolId, ownerUserIds);
-    }
-
-    if (rows.length > 0) {
-      const count = await upsertTableRecords(admin, table, rows);
-      tableCounts[table] = count;
-      totalRecords += count;
-    }
+  if (error) {
+    throw new Error(`Restore failed and the database was left unchanged: ${error.message}`);
   }
 
-  await admin.from("audit_logs").insert({
-    school_id: access.schoolId,
-    actor_id: access.userId,
-    actor_label: access.userEmail,
-    action: "database.restore",
-    entity_type: "database",
-    metadata: { totalRecords, tableCounts },
-  });
+  const result = data as {
+    tableCounts: Record<string, number>;
+    totalRecords: number;
+    authUsersCreated: number;
+  };
 
   return {
     success: true,
-    totalRecords,
-    tableCounts,
+    totalRecords: result.totalRecords,
+    tableCounts: result.tableCounts,
+    authUsersCreated: result.authUsersCreated,
+    snapshotId,
   };
 }

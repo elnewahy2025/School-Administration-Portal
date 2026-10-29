@@ -9,6 +9,7 @@ export function RestoreMetadataSummary({ payload }: { payload: DatabaseBackupPay
     ([, rows]) => Array.isArray(rows) && rows.length > 0,
   );
   const totalCount = tableEntries.reduce((acc, [, rows]) => acc + (rows?.length ?? 0), 0);
+  const checksum = payload.metadata.checksum;
 
   return (
     <div className="space-y-2 rounded-xl bg-muted/50 p-4 text-xs">
@@ -28,6 +29,14 @@ export function RestoreMetadataSummary({ payload }: { payload: DatabaseBackupPay
         <span className="text-muted-foreground">{t("totalRecords")}:</span>
         <span className="font-semibold text-primary">{totalCount}</span>
       </div>
+      {checksum ? (
+        <div className="flex justify-between gap-3 border-b border-border/50 py-1">
+          <span className="shrink-0 text-muted-foreground">{t("checksum")}:</span>
+          <span className="truncate font-mono text-[11px]" title={checksum}>
+            {checksum.slice(0, 16)}…
+          </span>
+        </div>
+      ) : null}
       <div className="pt-2">
         <span className="mb-1.5 block font-medium text-muted-foreground">
           {t("tablesIncluded")}:

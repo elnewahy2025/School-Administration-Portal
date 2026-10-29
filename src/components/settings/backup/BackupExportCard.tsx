@@ -5,9 +5,12 @@ import { useTranslations } from "next-intl";
 import { Database, Download, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { exportBackupAction } from "@/actions/backup";
+import { ExportManifestSummary } from "./ExportManifestSummary";
+import type { BackupMetadata } from "@/lib/backup/types";
 
 export function BackupExportCard() {
   const [isExporting, setIsExporting] = useState(false);
+  const [lastManifest, setLastManifest] = useState<BackupMetadata | null>(null);
   const t = useTranslations("backup");
   const tCommon = useTranslations("common");
 
@@ -22,8 +25,7 @@ export function BackupExportCard() {
       }
 
       const jsonString = JSON.stringify(res.backup, null, 2);
-      const blob = new Blob([jsonString], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(new Blob([jsonString], { type: "application/json" }));
       const a = document.createElement("a");
       const dateStr = new Date().toISOString().slice(0, 10);
       const scopeStr = res.backup.metadata.schoolId ? "school" : "platform";
@@ -35,6 +37,7 @@ export function BackupExportCard() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
+      setLastManifest(res.backup.metadata);
       toast.success(t("exportSuccess"));
     } catch {
       toast.error(tCommon("error"));
@@ -55,6 +58,8 @@ export function BackupExportCard() {
         </div>
       </div>
 
+      {lastManifest ? <ExportManifestSummary metadata={lastManifest} /> : null}
+
       <div className="mt-8 border-t border-border pt-4">
         <button
           type="button"
@@ -74,6 +79,9 @@ export function BackupExportCard() {
             </>
           )}
         </button>
+        <p className="mt-2 text-center text-[11px] leading-relaxed text-muted-foreground">
+          {t("notDisasterRecovery")}
+        </p>
       </div>
     </div>
   );

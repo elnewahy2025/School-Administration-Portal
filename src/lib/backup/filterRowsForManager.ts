@@ -13,9 +13,7 @@ export function filterRowsForManager(
   }
 
   if (table === "roles") {
-    return rows.filter(
-      (r) => r.school_id === managerSchoolId && !r.is_system && r.key !== "owner",
-    );
+    return rows.filter((r) => r.school_id === managerSchoolId && !r.is_system && r.key !== "owner");
   }
 
   let filtered = rows;

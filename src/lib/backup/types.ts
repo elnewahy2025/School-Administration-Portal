@@ -1,10 +1,17 @@
+export type BackupExclusion = { item: string; reason: string };
+
 export type BackupMetadata = {
   version: number;
+  schemaVersion?: number;
   exportedAt: string;
   exportedBy: string;
   scope: "platform" | "school";
   schoolId: string | null;
   schoolName?: string | null;
+  tableCounts?: Record<string, number>;
+  totalRows?: number;
+  checksum?: string;
+  exclusions?: BackupExclusion[];
 };
 
 export type DatabaseBackupPayload = {
@@ -35,4 +42,15 @@ export type RestoreSummary = {
   totalRecords: number;
   tableCounts: Record<string, number>;
   message?: string;
+  /** Axe/restore provenance: the pre-restore snapshot and reconciled accounts. */
+  snapshotId?: string;
+  authUsersCreated?: number;
+};
+
+/** Per-table preview of what a restore would change. */
+export type RestoreDiff = {
+  added: number;
+  overwritten: number;
+  untouched: number;
+  perTable: Record<string, { added: number; overwritten: number; untouched: number }>;
 };

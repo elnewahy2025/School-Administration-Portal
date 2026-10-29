@@ -9,6 +9,8 @@ export function RestoreUploadCard() {
   const t = useTranslations("backup");
   const {
     previewPayload,
+    restoreDiff,
+    isPreviewing,
     isDialogOpen,
     isRestoring,
     fileInputRef,
@@ -46,13 +48,16 @@ export function RestoreUploadCard() {
             <UploadCloud className="h-4 w-4 text-primary" />
             <span>{t("selectFile")}</span>
           </label>
+          <p className="mt-2 text-center text-[11px] text-muted-foreground">{t("maxFileSize")}</p>
         </div>
       </div>
 
       <RestoreConfirmDialog
         isOpen={isDialogOpen}
         isRestoring={isRestoring}
+        isPreviewing={isPreviewing}
         payload={previewPayload}
+        diff={restoreDiff}
         onClose={closeDialog}
         onConfirm={handleConfirmRestore}
       />
