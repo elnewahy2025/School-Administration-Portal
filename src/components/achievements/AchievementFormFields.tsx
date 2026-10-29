@@ -58,7 +58,7 @@ export function AchievementFormFields({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="ach_img">{t("certificate")}</Label>
-          <Input id="ach_img" name="image" type="file" accept="image/*" />
+          <Input id="ach_img" name="image" type="file" accept="image/jpeg,image/png,image/webp" />
         </div>
       </div>
 

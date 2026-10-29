@@ -170,7 +170,7 @@
     "logo": "School Logo",
     "uploadLogo": "Upload Logo",
     "changeLogo": "Change Logo",
-    "logoHint": "Supported formats: PNG, JPG, WebP, SVG (max 2MB)",
+    "logoHint": "Supported formats: PNG, JPG, WebP (max 2MB)",
     "operationalSettings": "Operational & Workweek Settings",
     "workingDays": "Weekly Working Days",
     "workingDaysHint": "Active official working days for campus operations, circular response deadlines, and maintenance scheduling",
@@ -441,7 +441,7 @@
     "visibility": "Visibility",
     "location": "Location / Venue",
     "bannerImage": "Banner Image (Optional)",
-    "bannerHelp": "JPG, PNG, WebP, or SVG up to 5MB",
+    "bannerHelp": "JPG, PNG, or WebP up to 5MB",
     "status": "Status",
     "noEvents": "No events found in this view",
     "monthView": "Month View",
@@ -751,6 +751,19 @@
     "tablesIncluded": "Tables included",
     "recordsCount": "{count} records",
     "platformScope": "Platform-wide (All Schools)",
-    "schoolScope": "School-scoped"
+    "schoolScope": "School-scoped",
+    "manifestTitle": "Backup summary",
+    "rowsAcrossTables": "{rows} rows across {tables} tables",
+    "checksum": "Checksum",
+    "fileTooLarge": "This file is larger than the 10 MB limit.",
+    "maxFileSize": "Maximum file size: 10 MB.",
+    "previewing": "Calculating what would change…",
+    "previewFailed": "Could not preview this backup file.",
+    "diffAdded": "New records",
+    "diffOverwritten": "Overwritten records",
+    "diffUntouched": "Untouched records",
+    "restoreNeverDeletes": "Restore only inserts or updates records. It never deletes a record that is missing from the file.",
+    "notDisasterRecovery": "This JSON file is a per-school configuration export, not a disaster-recovery backup. For full recovery, use `supabase db dump` as described in the runbook.",
+    "restoreSuccessWithSnapshot": "Database restored: {count} records across {tables} tables. Pre-restore snapshot: {id}"
   }
 }

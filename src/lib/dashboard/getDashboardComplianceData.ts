@@ -25,8 +25,8 @@ export async function getDashboardComplianceData(
       pendingDepartments: r.pendingDepartments,
     }));
 
-  const departmentSlices: DashboardDepartmentComplianceSlice[] =
-    reportData.departmentBreakdown.map((dept, index) => ({
+  const departmentSlices: DashboardDepartmentComplianceSlice[] = reportData.departmentBreakdown.map(
+    (dept, index) => ({
       id: dept.departmentId,
       name: dept.departmentName,
       targetedCount: dept.targetedCount,
@@ -34,7 +34,8 @@ export async function getDashboardComplianceData(
       pendingCount: dept.pendingCount,
       complianceRate: dept.complianceRatePercent,
       color: DONUT_PALETTE[index % DONUT_PALETTE.length],
-    }));
+    }),
+  );
 
   const overallRespondedDepartments = reportData.departmentBreakdown
     .filter((d) => d.respondedCount > 0)

@@ -1,7 +1,4 @@
-import type {
-  DashboardComplianceCircularItem,
-  DashboardDepartmentComplianceSlice,
-} from "./types";
+import type { DashboardComplianceCircularItem, DashboardDepartmentComplianceSlice } from "./types";
 
 export function resolveCircularSlices(
   baseSlices: DashboardDepartmentComplianceSlice[],

@@ -3,6 +3,7 @@ import { Link } from "@/i18n";
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
@@ -17,9 +18,7 @@ export default async function CircularsPage({ params }: { params: Promise<{ loca
   const [circulars, departments, isOwner, hasPerm] = await Promise.all([
     getSchoolCirculars(profile?.school_id),
     getSchoolDepartments(profile?.school_id),
-    hasPermission("settings.platform.update")
-      .catch(() => false)
-      .then(async (v) => v || (await hasPermission("roles.manage").catch(() => false))),
+    isCurrentUserPlatformOwner(profile?.id),
     profile?.school_id
       ? hasPermission("circular.create", profile.school_id).catch(() => false)
       : false,

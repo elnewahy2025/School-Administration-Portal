@@ -39,10 +39,7 @@ export async function createCalendarEventSeries(
     created_by: params.createdBy,
   }));
 
-  const { data, error } = await supabase
-    .from("calendar_events")
-    .insert(rows)
-    .select("id");
+  const { data, error } = await supabase.from("calendar_events").insert(rows).select("id");
 
   if (error) {
     return { error: error.message };

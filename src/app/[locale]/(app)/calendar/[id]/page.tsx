@@ -4,8 +4,8 @@ import { setRequestLocale } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
-import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getCalendarEventById } from "@/lib/calendar/getCalendarEventById";
 import { CalendarEventDetailCard } from "@/components/calendar/CalendarEventDetailCard";
 
@@ -27,12 +27,11 @@ export default async function CalendarEventDetailPage({
     notFound();
   }
 
-  const [perms, hasManagePerm] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
+  const [hasManagePerm, isOwner] = await Promise.all([
     hasPermission("calendar.manage", profile.school_id).catch(() => false),
+    isPlatformOwner(profile.id),
   ]);
 
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
   const canManage = isOwner || hasManagePerm;
 
   return (

@@ -1,9 +1,6 @@
 import type { CalendarRecurrenceFrequency } from "./types";
 
-export function advanceRecurrenceDate(
-  current: Date,
-  freq: CalendarRecurrenceFrequency,
-): Date {
+export function advanceRecurrenceDate(current: Date, freq: CalendarRecurrenceFrequency): Date {
   const next = new Date(current);
   if (freq === "daily") {
     next.setDate(next.getDate() + 1);

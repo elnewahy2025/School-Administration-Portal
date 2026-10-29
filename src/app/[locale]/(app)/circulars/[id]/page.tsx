@@ -4,12 +4,14 @@ import { Link } from "@/i18n";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { getCircularById } from "@/lib/circulars/getCircularById";
 import { getCircularResponses } from "@/lib/circulars/getCircularResponses";
 import { canRespondToCircular } from "@/lib/circulars/canRespondToCircular";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { getCircularDepartmentStatuses, getCircularPermissions } from "@/lib/circulars";
+import { shouldShowCircularReminder } from "@/lib/circulars/shouldShowCircularReminder";
 import {
   CircularDetailCard,
   CircularResponseBox,
@@ -27,18 +29,19 @@ export default async function CircularDetailPage({
   const t = await getTranslations("circulars");
 
   const profile = await getCurrentProfile();
-  const [circular, responses, perms, departments] = await Promise.all([
+  const [circular, responses, perms, departments, isOwner] = await Promise.all([
     getCircularById(id),
     getCircularResponses(id).catch(() => []),
     getEffectivePermissions().catch((): string[] => []),
     getSchoolDepartments(profile?.school_id).catch(() => []),
+    isCurrentUserPlatformOwner(profile?.id),
   ]);
 
   if (!circular) {
     notFound();
   }
 
-  const { canPublish, canManage, canViewResponses } = getCircularPermissions(perms);
+  const { canPublish, canManage, canViewResponses } = getCircularPermissions(perms, isOwner);
   const canRespond = canRespondToCircular(circular, profile);
 
   const userDeptResponse = responses.find((res) => res.department_id === profile?.department_id);
@@ -75,8 +78,10 @@ export default async function CircularDetailPage({
       {canViewResponses && (
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-lg font-semibold tracking-tight text-foreground">{t("responses")}</h3>
-            {(canManage || canPublish) && circular.status !== "draft" && circular.status !== "cancelled" ? (
+            <h3 className="text-lg font-semibold tracking-tight text-foreground">
+              {t("responses")}
+            </h3>
+            {shouldShowCircularReminder(canManage, canPublish, circular.status) ? (
               <CircularRemindButton circularId={circular.id} circularTitle={circular.title} />
             ) : null}
           </div>

@@ -53,21 +53,19 @@ export function ThemeToggle() {
             >
               <span className="flex items-center -space-x-1 rtl:space-x-reverse">
                 <span
-                  className="size-3.5 rounded-full ring-1 ring-border shadow-2xs"
+                  className="size-3.5 rounded-full shadow-2xs ring-1 ring-border"
                   style={{ backgroundColor: item.sidebarColor }}
                 />
                 <span
-                  className="size-3.5 rounded-full ring-1 ring-border shadow-2xs"
+                  className="size-3.5 rounded-full shadow-2xs ring-1 ring-border"
                   style={{ backgroundColor: item.primaryColor }}
                 />
                 <span
-                  className="size-3.5 rounded-full ring-1 ring-border shadow-2xs"
+                  className="size-3.5 rounded-full shadow-2xs ring-1 ring-border"
                   style={{ backgroundColor: item.canvasColor }}
                 />
               </span>
-              <span className="flex-1 truncate text-xs font-medium">
-                {t(item.labelKey)}
-              </span>
+              <span className="flex-1 truncate text-xs font-medium">{t(item.labelKey)}</span>
               {isSelected ? <CheckIcon className="size-3.5 text-primary" /> : null}
             </DropdownMenuItem>
           );

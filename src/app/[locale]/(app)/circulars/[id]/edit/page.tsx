@@ -4,6 +4,7 @@ import { Link } from "@/i18n";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getCircularById } from "@/lib/circulars/getCircularById";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
@@ -21,15 +22,15 @@ export default async function EditCircularPage({
   const profile = await getCurrentProfile();
   if (!profile) redirect(`/${locale}/login`);
 
-  const [circular, departments, perms] = await Promise.all([
+  const [circular, departments, perms, isOwner] = await Promise.all([
     getCircularById(id),
     getSchoolDepartments(profile.school_id),
     getEffectivePermissions().catch((): string[] => []),
+    isPlatformOwner(profile.id),
   ]);
 
   if (!circular) notFound();
 
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
   const canEdit =
     isOwner || perms.includes("circular.create") || perms.includes("circular.publish");
   if (!canEdit) redirect(`/${locale}/circulars/${id}`);

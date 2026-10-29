@@ -30,7 +30,10 @@ export function SchoolProfilePanels({
         </div>
       </div>
 
-      <div id="panel-leadership" className={activeTab === "leadership" ? "block space-y-4" : "hidden"}>
+      <div
+        id="panel-leadership"
+        className={activeTab === "leadership" ? "block space-y-4" : "hidden"}
+      >
         <div className="border-b border-border/70 pb-2">
           <h3 className="text-base font-bold text-foreground">{t("leadership")}</h3>
         </div>
@@ -55,19 +58,35 @@ export function SchoolProfilePanels({
         <SchoolLogoFields logoPath={school.logo_path} canManage={canManage} />
       </div>
 
-      <div id="panel-operations" className={activeTab === "operations" ? "block space-y-4" : "hidden"}>
+      <div
+        id="panel-operations"
+        className={activeTab === "operations" ? "block space-y-4" : "hidden"}
+      >
         <div className="border-b border-border/70 pb-2">
           <h3 className="text-base font-bold text-foreground">{t("operationalSettings")}</h3>
         </div>
-        <SchoolOperationFields workingDays={school.working_days} dateFormat={school.date_format} canManage={canManage} />
+        <SchoolOperationFields
+          workingDays={school.working_days}
+          dateFormat={school.date_format}
+          canManage={canManage}
+        />
       </div>
 
-      <div id="panel-narrative" className={activeTab === "narrative" ? "block space-y-4" : "hidden"}>
+      <div
+        id="panel-narrative"
+        className={activeTab === "narrative" ? "block space-y-4" : "hidden"}
+      >
         <div className="border-b border-border/70 pb-2">
           <h3 className="text-base font-bold text-foreground">{t("visionAndMission")}</h3>
         </div>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <SchoolNarrativeFields visionAr={school.vision_ar || school.vision} visionEn={school.vision_en} missionAr={school.mission_ar || school.mission} missionEn={school.mission_en} disabled={!canManage} />
+          <SchoolNarrativeFields
+            visionAr={school.vision_ar || school.vision}
+            visionEn={school.vision_en}
+            missionAr={school.mission_ar || school.mission}
+            missionEn={school.mission_en}
+            disabled={!canManage}
+          />
         </div>
       </div>
     </div>

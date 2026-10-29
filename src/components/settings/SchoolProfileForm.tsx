@@ -40,19 +40,11 @@ export function SchoolProfileForm({
   };
 
   return (
-    <form
-      key={`${school.id}-${formVersion}`}
-      action={handleSubmit}
-      className="flex flex-col gap-6"
-    >
+    <form key={`${school.id}-${formVersion}`} action={handleSubmit} className="flex flex-col gap-6">
       <SchoolProfileSubTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">
-        <SchoolProfilePanels
-          activeTab={activeTab}
-          school={school}
-          canManage={canManage}
-        />
+        <SchoolProfilePanels activeTab={activeTab} school={school} canManage={canManage} />
 
         {canManage && (
           <div className="mt-8 flex justify-end border-t border-border/70 pt-4">
@@ -66,4 +58,3 @@ export function SchoolProfileForm({
     </form>
   );
 }
-

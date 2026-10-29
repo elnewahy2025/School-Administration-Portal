@@ -75,12 +75,7 @@ export function EditCalendarEventForm({ event }: EditCalendarEventFormProps) {
             <UploadIcon className="size-4 text-muted-foreground" />
             <span>{t("bannerImage")}</span>
           </Label>
-          <Input
-            id="image"
-            name="image"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/svg+xml"
-          />
+          <Input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" />
           <p className="text-xs text-muted-foreground">{t("bannerHelp")}</p>
         </div>
       </div>

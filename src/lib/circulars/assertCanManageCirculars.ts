@@ -1,4 +1,5 @@
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 
@@ -24,7 +25,7 @@ export async function assertCanManageCirculars(): Promise<ManageCircularAuthResu
   if (!school) return { authorized: false, error: "No school associated with profile" };
 
   const perms = await getEffectivePermissions().catch((): string[] => []);
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const isOwner = await isPlatformOwner(profile.id);
   const canManage =
     isOwner || perms.includes("circular.create") || perms.includes("circular.publish");
   if (!canManage) return { authorized: false, error: "Unauthorized" };

@@ -1,9 +1,4 @@
-import {
-  CircleCheckIcon,
-  OctagonXIcon,
-  TriangleAlertIcon,
-  InfoIcon,
-} from "lucide-react";
+import { CircleCheckIcon, OctagonXIcon, TriangleAlertIcon, InfoIcon } from "lucide-react";
 import type { MessageBoxType } from "@/lib/feedback/types";
 
 export function MessageBoxIcon({ type }: { type: MessageBoxType }) {

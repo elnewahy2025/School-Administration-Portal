@@ -4,7 +4,7 @@ import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolUsers } from "@/lib/school/getSchoolUsers";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { getSchoolRoles } from "@/lib/rbac/getSchoolRoles";
-import { assertCanManageUsers } from "@/lib/settings/assertCanManageUsers";
+import { resolveUserManagementAccess } from "@/lib/settings/resolveUserManagementAccess";
 import { UserRolesManager } from "@/components/rbac/UserRolesManager";
 
 export default async function UsersSettingsPage({
@@ -17,16 +17,16 @@ export default async function UsersSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
-  const canManage = await assertCanManageUsers(profile?.school_id);
+  const access = await resolveUserManagementAccess(profile);
 
-  if (!canManage) {
+  if (!access.canManageUsers && !access.canManageRoles) {
     redirect({ href: "/settings", locale });
   }
 
   const [users, departments, roles] = await Promise.all([
-    getSchoolUsers(profile?.school_id),
-    getSchoolDepartments(profile?.school_id),
-    getSchoolRoles(profile?.school_id),
+    access.canManageUsers ? getSchoolUsers(access.schoolId) : Promise.resolve([]),
+    access.canManageUsers ? getSchoolDepartments(access.schoolId) : Promise.resolve([]),
+    access.canManageRoles ? getSchoolRoles(access.schoolId) : Promise.resolve([]),
   ]);
 
   return (
@@ -41,7 +41,8 @@ export default async function UsersSettingsPage({
         departments={departments}
         roles={roles}
         currentUserId={profile?.id}
-        canManage={canManage}
+        canManageUsers={access.canManageUsers}
+        canManageRoles={access.canManageRoles}
       />
     </div>
   );

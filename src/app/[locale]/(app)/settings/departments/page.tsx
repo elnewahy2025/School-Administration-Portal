@@ -1,9 +1,9 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { hasPermission } from "@/lib/rbac/hasPermission";
-import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { DepartmentList } from "@/components/settings/DepartmentList";
 import { CreateDepartmentForm } from "@/components/settings/CreateDepartmentForm";
 
@@ -17,14 +17,13 @@ export default async function DepartmentsSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
-  const [perms, hasPerm] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
+  const [hasPerm, isOwner] = await Promise.all([
     profile?.school_id
       ? hasPermission("settings.school.update", profile.school_id).catch(() => false)
       : false,
+    isCurrentUserPlatformOwner(profile?.id),
   ]);
 
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
   const canManage = isOwner || hasPerm;
 
   if (!canManage) {

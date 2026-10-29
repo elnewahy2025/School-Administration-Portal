@@ -9,11 +9,7 @@ import { CircularRemindButton } from "@/components/circulars/CircularRemindButto
 import { resolveSelectedComplianceView } from "@/lib/dashboard/resolveSelectedComplianceView";
 import type { DashboardComplianceData } from "@/lib/dashboard/types";
 
-export function DashboardComplianceWidget({
-  data,
-}: {
-  data: DashboardComplianceData;
-}) {
+export function DashboardComplianceWidget({ data }: { data: DashboardComplianceData }) {
   const t = useTranslations("dashboard");
   const [selectedCircularId, setSelectedCircularId] = useState<string>(
     () => data.circulars[0]?.id ?? "all",
@@ -42,9 +38,7 @@ export function DashboardComplianceWidget({
               {t("circularCompliance")}
             </h2>
           </div>
-          <p className="text-xs text-muted-foreground">
-            {t("circularComplianceDesc")}
-          </p>
+          <p className="text-xs text-muted-foreground">{t("circularComplianceDesc")}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -52,7 +46,7 @@ export function DashboardComplianceWidget({
             <select
               value={selectedCircularId}
               onChange={(e) => setSelectedCircularId(e.target.value)}
-              className="w-full rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground outline-none transition-colors focus:border-primary sm:w-auto"
+              className="w-full rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors outline-none focus:border-primary sm:w-auto"
               aria-label={t("selectCircular")}
             >
               <option value="all">{t("allCircularsSummary")}</option>
@@ -78,17 +72,12 @@ export function DashboardComplianceWidget({
           <DashboardComplianceDonut
             slices={displayedSlices}
             centerPercent={currentPercent}
-            centerLabel={
-              selectedCircular ? selectedCircular.refNumber : t("overallCompliance")
-            }
+            centerLabel={selectedCircular ? selectedCircular.refNumber : t("overallCompliance")}
           />
         </div>
 
         <div className="flex flex-col justify-center lg:col-span-7">
-          <DashboardComplianceDeptsCard
-            responded={displayedResponded}
-            pending={displayedPending}
-          />
+          <DashboardComplianceDeptsCard responded={displayedResponded} pending={displayedPending} />
         </div>
       </div>
     </div>

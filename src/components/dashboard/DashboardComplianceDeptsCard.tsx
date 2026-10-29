@@ -19,7 +19,7 @@ export function DashboardComplianceDeptsCard({
           <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
             {t("respondedDepartments")} ({responded.length})
           </span>
-          <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
         </div>
         <div className="flex flex-wrap gap-1.5 pt-0.5">
           {responded.length > 0 ? (

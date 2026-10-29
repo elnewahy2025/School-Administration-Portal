@@ -16,20 +16,14 @@ export function CircularRemindFooter({
 
   return (
     <div className="flex items-center justify-end gap-2.5 pt-2">
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        onClick={onClose}
-        disabled={isPending}
-      >
+      <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={isPending}>
         {tCommon("cancel")}
       </Button>
       <Button
         type="submit"
         size="sm"
         disabled={isPending}
-        className="bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5"
+        className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90"
       >
         {isPending ? (
           <>

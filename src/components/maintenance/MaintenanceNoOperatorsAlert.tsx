@@ -10,10 +10,8 @@ export function MaintenanceNoOperatorsAlert() {
     <div className="flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-amber-600 dark:text-amber-400">
       <AlertCircleIcon className="mt-0.5 size-5 shrink-0" />
       <div className="space-y-1">
-        <p className="text-sm font-semibold text-foreground">
-          {t("noOperatorsWarningTitle")}
-        </p>
-        <p className="text-xs text-muted-foreground leading-relaxed">
+        <p className="text-sm font-semibold text-foreground">{t("noOperatorsWarningTitle")}</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
           {t("noOperatorsWarningDesc")}
         </p>
         <div className="pt-1">

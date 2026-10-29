@@ -1,7 +1,4 @@
-import type {
-  MessageBoxOptions,
-  MessageBoxState,
-} from "./types";
+import type { MessageBoxOptions, MessageBoxState } from "./types";
 
 let currentState: MessageBoxState = {
   isOpen: false,
@@ -23,8 +20,7 @@ export const messageBoxStore = {
   },
 
   show(options: MessageBoxOptions | string): void {
-    const opts: MessageBoxOptions =
-      typeof options === "string" ? { message: options } : options;
+    const opts: MessageBoxOptions = typeof options === "string" ? { message: options } : options;
 
     currentState = {
       isOpen: true,

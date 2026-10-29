@@ -5,8 +5,14 @@ export interface CircularPagePermissions {
   canViewResponses: boolean;
 }
 
-export function getCircularPermissions(perms: string[]): CircularPagePermissions {
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+/**
+ * Derives the circular UI capabilities from effective permissions.
+ *
+ * `isOwner` is now passed in from a verified platform-owner check instead of
+ * being inferred from `settings.platform.update` / `roles.manage`, which any
+ * school admin holds (audit finding H-10).
+ */
+export function getCircularPermissions(perms: string[], isOwner = false): CircularPagePermissions {
   const canPublish = isOwner || perms.includes("circular.publish");
   const canManage = canPublish || perms.includes("circular.create");
   const canViewResponses =

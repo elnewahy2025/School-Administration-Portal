@@ -50,7 +50,7 @@ export function SchoolLogoFields({
               id="logo"
               name="logo"
               type="file"
-              accept="image/png,image/jpeg,image/webp,image/svg+xml"
+              accept="image/png,image/jpeg,image/webp"
               disabled={!canManage}
               onChange={handleFileChange}
               className="cursor-pointer file:cursor-pointer file:font-medium"

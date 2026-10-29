@@ -95,4 +95,3 @@ describe("computeRecurringEventInstances", () => {
     expect(days).toContain(9); // Monday
   });
 });
-

@@ -41,8 +41,27 @@ export async function updateCircularRecord(
   if (error) return { success: false, error: error.message };
 
   if (params.departmentIds) {
-    await supabase.from("circular_targets").delete().eq("circular_id", params.circularId);
-    await insertCircularTargets(supabase, params.circularId, params.schoolId, params.departmentIds);
+    // Both halves are checked: a delete that matched nothing used to be a
+    // silent no-op, so removed departments stayed targeted (H-15).
+    const { error: deleteError } = await supabase
+      .from("circular_targets")
+      .delete()
+      .eq("circular_id", params.circularId);
+
+    if (deleteError) {
+      return { success: false, error: `Failed to update circular targets: ${deleteError.message}` };
+    }
+
+    const insertResult = await insertCircularTargets(
+      supabase,
+      params.circularId,
+      params.schoolId,
+      params.departmentIds,
+    );
+
+    if (insertResult.error) {
+      return { success: false, error: `Failed to update circular targets: ${insertResult.error}` };
+    }
   }
 
   return { success: true };

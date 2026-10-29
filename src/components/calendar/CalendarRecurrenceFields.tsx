@@ -41,11 +41,7 @@ export function CalendarRecurrenceFields() {
         {freq !== "none" && (
           <div className="space-y-2">
             <Label htmlFor="recurrence_until">{t("recurrenceUntil")}</Label>
-            <Input
-              id="recurrence_until"
-              name="recurrence_until"
-              type="date"
-            />
+            <Input id="recurrence_until" name="recurrence_until" type="date" />
           </div>
         )}
       </div>

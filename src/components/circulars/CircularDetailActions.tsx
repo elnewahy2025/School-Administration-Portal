@@ -25,9 +25,7 @@ export function CircularDetailActions({
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const canRemind =
-    circular.status !== "draft" &&
-    circular.status !== "cancelled" &&
-    (canPublish || canManage);
+    circular.status !== "draft" && circular.status !== "cancelled" && (canPublish || canManage);
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -36,10 +34,7 @@ export function CircularDetailActions({
       ) : null}
 
       {canRemind ? (
-        <CircularRemindButton
-          circularId={circular.id}
-          circularTitle={circular.title}
-        />
+        <CircularRemindButton circularId={circular.id} circularTitle={circular.title} />
       ) : null}
 
       {canManage ? (

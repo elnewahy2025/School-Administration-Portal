@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { assignMaintenanceAction } from "@/actions/maintenance/assignMaintenanceAction";
 import { MaintenanceNoOperatorsAlert } from "./MaintenanceNoOperatorsAlert";
+import { MaintenanceOperatorSelect } from "./MaintenanceOperatorSelect";
 import type { SchoolUserRow } from "@/lib/school/getSchoolUsers";
 import type { MaintenancePriority, MaintenanceStatus } from "@/lib/maintenance/types";
 
@@ -58,24 +59,11 @@ export function MaintenanceAssignSection({
       <form action={handleAssign} className="space-y-4">
         <input type="hidden" name="request_id" value={requestId} />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="operator_id">{t("assignedOperator")} *</Label>
-            <select
-              id="operator_id"
-              name="operator_id"
-              defaultValue={currentOperatorId ?? ""}
-              required
-              disabled={isPending || !hasOperators}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs disabled:opacity-50"
-            >
-              <option value="">{t("actions.selectOperator")}</option>
-              {operators.map((op) => (
-                <option key={op.id} value={op.id}>
-                  {op.full_name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <MaintenanceOperatorSelect
+            currentOperatorId={currentOperatorId}
+            isPending={isPending}
+            operators={operators}
+          />
           <div className="space-y-2">
             <Label htmlFor="priority">{t("priority")}</Label>
             <select
@@ -86,13 +74,20 @@ export function MaintenanceAssignSection({
               className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
             >
               {PRIORITY_KEYS.map((p) => (
-                <option key={p} value={p}>{tPri(p)}</option>
+                <option key={p} value={p}>
+                  {tPri(p)}
+                </option>
               ))}
             </select>
           </div>
         </div>
         <div className="space-y-2">
-          <Input id="notes" name="notes" placeholder={t("actions.notePlaceholder")} disabled={isPending} />
+          <Input
+            id="notes"
+            name="notes"
+            placeholder={t("actions.notePlaceholder")}
+            disabled={isPending}
+          />
         </div>
         <div className="flex justify-end">
           <Button type="submit" size="sm" disabled={isPending || !hasOperators}>

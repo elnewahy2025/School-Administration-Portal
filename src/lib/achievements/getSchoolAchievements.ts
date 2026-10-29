@@ -37,7 +37,7 @@ export async function getSchoolAchievements(
       creator:profiles!created_by(id, full_name)
     `,
     )
-    .eq("school_id", schoolId)
+    .eq("school_id", resolvedId)
     .order("date_achieved", { ascending: false });
 
   if (error || !data) return [];

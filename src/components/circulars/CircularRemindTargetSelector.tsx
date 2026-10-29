@@ -14,16 +14,14 @@ export function CircularRemindTargetSelector({
 
   return (
     <div className="space-y-2">
-      <span className="text-xs font-semibold text-foreground">
-        {t("whoResponded")}
-      </span>
+      <span className="text-xs font-semibold text-foreground">{t("whoResponded")}</span>
       <div className="grid grid-cols-2 gap-2">
         <button
           type="button"
           onClick={() => onChange("pending")}
           className={`flex flex-col items-center gap-1.5 rounded-xl border p-3 text-xs font-bold transition-all ${
             targetType === "pending"
-              ? "border-rose-500 bg-rose-500/10 text-rose-700 dark:text-rose-300 ring-2 ring-rose-500/20"
+              ? "border-rose-500 bg-rose-500/10 text-rose-700 ring-2 ring-rose-500/20 dark:text-rose-300"
               : "border-border bg-card text-muted-foreground hover:bg-muted"
           }`}
         >

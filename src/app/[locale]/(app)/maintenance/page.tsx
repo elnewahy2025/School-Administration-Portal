@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { getSchoolMaintenanceRequests } from "@/lib/maintenance/getSchoolMaintenanceRequests";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { MaintenanceList } from "@/components/maintenance/MaintenanceList";
@@ -11,9 +12,7 @@ export default async function MaintenancePage({ params }: { params: Promise<{ lo
   const profile = await getCurrentProfile();
   const [tickets, isOwner, hasPerm] = await Promise.all([
     getSchoolMaintenanceRequests(profile?.school_id),
-    hasPermission("settings.platform.update")
-      .catch(() => false)
-      .then(async (v) => v || (await hasPermission("roles.manage").catch(() => false))),
+    isCurrentUserPlatformOwner(profile?.id),
     profile?.school_id
       ? hasPermission("maintenance.create", profile.school_id).catch(() => false)
       : false,

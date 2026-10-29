@@ -21,7 +21,8 @@
 }
 
 @keyframes ambientPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.12;
     transform: translate(-50%, 0) scale(1);
   }
@@ -32,7 +33,8 @@
 }
 
 @keyframes gentleFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

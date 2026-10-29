@@ -23,7 +23,7 @@ export function MessageBoxActions({
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 rounded-xl border border-border bg-background py-2.5 text-sm font-semibold text-foreground transition-all hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer"
+          className="flex-1 cursor-pointer rounded-xl border border-border bg-background py-2.5 text-sm font-semibold text-foreground transition-all hover:bg-muted focus:ring-2 focus:ring-ring focus:outline-none"
         >
           {cancelLabel}
         </button>
@@ -31,7 +31,7 @@ export function MessageBoxActions({
           ref={confirmBtnRef}
           type="button"
           onClick={onConfirm}
-          className={`flex-1 rounded-xl py-2.5 text-sm font-bold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background active:scale-[0.99] cursor-pointer ${buttonClass}`}
+          className={`flex-1 cursor-pointer rounded-xl py-2.5 text-sm font-bold shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:outline-none active:scale-[0.99] ${buttonClass}`}
         >
           {confirmLabel}
         </button>
@@ -45,7 +45,7 @@ export function MessageBoxActions({
         ref={confirmBtnRef}
         type="button"
         onClick={onConfirm}
-        className={`w-full rounded-xl py-2.5 text-sm font-bold shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background active:scale-[0.99] cursor-pointer ${buttonClass}`}
+        className={`w-full cursor-pointer rounded-xl py-2.5 text-sm font-bold shadow-sm transition-all focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:outline-none active:scale-[0.99] ${buttonClass}`}
       >
         {confirmLabel}
       </button>

@@ -20,8 +20,7 @@ export function computeDonutSegments(
 
   let acc = 0;
   return validSlices.map((slice) => {
-    const slicePercent =
-      totalTargets > 0 ? (slice.respondedCount / totalTargets) * 100 : 0;
+    const slicePercent = totalTargets > 0 ? (slice.respondedCount / totalTargets) * 100 : 0;
     const strokeLength = (slicePercent / 100) * circumference;
     const offset = -(acc / 100) * circumference;
     acc += slicePercent;

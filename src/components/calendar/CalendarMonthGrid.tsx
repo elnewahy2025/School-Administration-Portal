@@ -9,11 +9,7 @@ type CalendarMonthGridProps = {
   onSelectItem?: (item: UnifiedCalendarItem) => void;
 };
 
-export function CalendarMonthGrid({
-  currentDate,
-  items,
-  onSelectItem,
-}: CalendarMonthGridProps) {
+export function CalendarMonthGrid({ currentDate, items, onSelectItem }: CalendarMonthGridProps) {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 

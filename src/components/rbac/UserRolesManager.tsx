@@ -13,30 +13,38 @@ export function UserRolesManager({
   departments,
   roles,
   currentUserId,
-  canManage,
+  canManageUsers,
+  canManageRoles,
 }: {
   users: SchoolUserRow[];
   departments: DepartmentRow[];
   roles: SchoolRoleRow[];
   currentUserId?: string;
-  canManage: boolean;
+  canManageUsers: boolean;
+  canManageRoles: boolean;
 }) {
-  const [activeTab, setActiveTab] = useState<"users" | "roles">("users");
+  // A roles-only user lands on the Roles tab; a users-only user never sees it.
+  const [activeTab, setActiveTab] = useState<"users" | "roles">(canManageUsers ? "users" : "roles");
 
   return (
     <div className="space-y-6">
-      <UserRolesTabNav activeTab={activeTab} onTabChange={setActiveTab} />
-      {activeTab === "users" ? (
+      <UserRolesTabNav
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        showUsers={canManageUsers}
+        showRoles={canManageRoles}
+      />
+      {activeTab === "users" && canManageUsers ? (
         <UserList
           users={users}
           departments={departments}
           roles={roles}
           currentUserId={currentUserId}
-          canManage={canManage}
+          canManage={canManageUsers}
         />
-      ) : (
-        <RoleList roles={roles} canManage={canManage} />
-      )}
+      ) : canManageRoles ? (
+        <RoleList roles={roles} canManage={canManageRoles} />
+      ) : null}
     </div>
   );
 }

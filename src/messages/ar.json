@@ -170,7 +170,7 @@
     "logo": "شعار المدرسة",
     "uploadLogo": "رفع الشعار",
     "changeLogo": "تغيير الشعار",
-    "logoHint": "صيغ مدعومة: PNG, JPG, WebP أو SVG (بحد أقصى 2 ميجابايت)",
+    "logoHint": "صيغ مدعومة: PNG, JPG, WebP (بحد أقصى 2 ميجابايت)",
     "operationalSettings": "الإعدادات التشغيلية والتقويم المدرسي",
     "workingDays": "أيام العمل الأسبوعية",
     "workingDaysHint": "الأيام المعتمدة للدوام الرسمي ومواعيد استجابة التعاميم والصيانة",
@@ -441,7 +441,7 @@
     "visibility": "نطاق الظهور",
     "location": "الموقع / القاعة",
     "bannerImage": "صورة الغلاف (اختياري)",
-    "bannerHelp": "صيغ JPG أو PNG أو WebP أو SVG بحد أقصى 5 ميجابايت",
+    "bannerHelp": "صيغ JPG أو PNG أو WebP بحد أقصى 5 ميجابايت",
     "status": "الحالة",
     "noEvents": "لا توجد فعاليات في هذا العرض",
     "monthView": "عرض شهري",
@@ -751,6 +751,19 @@
     "tablesIncluded": "الجداول المتضمنة",
     "recordsCount": "{count} سجل",
     "platformScope": "شامل المنصة (كل المدارس)",
-    "schoolScope": "خاص بالمدرسة"
+    "schoolScope": "خاص بالمدرسة",
+    "manifestTitle": "ملخّص النسخة الاحتياطية",
+    "rowsAcrossTables": "{rows} صفًا في {tables} جدولًا",
+    "checksum": "بصمة التحقق",
+    "fileTooLarge": "حجم الملف أكبر من الحد المسموح (10 ميغابايت).",
+    "maxFileSize": "الحد الأقصى لحجم الملف: 10 ميغابايت.",
+    "previewing": "جارٍ حساب التغييرات المطلوبة…",
+    "previewFailed": "تعذّرت معاينة النسخة الاحتياطية.",
+    "diffAdded": "سجلات جديدة",
+    "diffOverwritten": "سجلات سيتم استبدالها",
+    "diffUntouched": "سجلات لن تتغيّر",
+    "restoreNeverDeletes": "الاستعادة تضيف السجلات أو تحدّثها فقط، ولا تحذف أي سجل غير موجود في الملف.",
+    "notDisasterRecovery": "ملف JSON هذا تصدير لإعدادات المدرسة، وليس نسخة استعادة من الكوارث. للاستعادة الكاملة استخدم supabase db dump كما هو موضّح في دليل التشغيل.",
+    "restoreSuccessWithSnapshot": "تمت استعادة قاعدة البيانات: {count} سجلًا في {tables} جدولًا. نسخة ما قبل الاستعادة: {id}"
   }
 }

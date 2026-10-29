@@ -70,11 +70,7 @@ export function DashboardComplianceDonut({
         </div>
       </div>
 
-      <DashboardComplianceLegend
-        segments={segments}
-        hoveredId={hoveredId}
-        onHover={setHoveredId}
-      />
+      <DashboardComplianceLegend segments={segments} hoveredId={hoveredId} onHover={setHoveredId} />
     </div>
   );
 }

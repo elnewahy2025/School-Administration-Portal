@@ -20,7 +20,7 @@ export function DashboardComplianceLegend({
             key={seg.id}
             onMouseEnter={() => onHover(seg.id)}
             onMouseLeave={() => onHover(null)}
-            className={`flex items-center justify-between rounded-lg px-2.5 py-1 text-xs transition-colors cursor-pointer ${
+            className={`flex cursor-pointer items-center justify-between rounded-lg px-2.5 py-1 text-xs transition-colors ${
               isHovered ? "bg-muted font-bold" : "hover:bg-muted/50"
             }`}
           >

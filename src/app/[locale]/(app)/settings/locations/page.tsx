@@ -1,9 +1,9 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { getSchoolLocations } from "@/lib/school/getSchoolLocations";
 import { hasPermission } from "@/lib/rbac/hasPermission";
-import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { LocationList } from "@/components/settings/LocationList";
 import { CreateLocationForm } from "@/components/settings/CreateLocationForm";
 
@@ -17,14 +17,13 @@ export default async function LocationsSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
-  const [perms, hasPerm] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
+  const [hasPerm, isOwner] = await Promise.all([
     profile?.school_id
       ? hasPermission("settings.school.update", profile.school_id).catch(() => false)
       : false,
+    isCurrentUserPlatformOwner(profile?.id),
   ]);
 
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
   const canManage = isOwner || hasPerm;
 
   if (!canManage) {

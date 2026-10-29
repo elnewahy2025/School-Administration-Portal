@@ -1,7 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
-import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getSchoolCalendarEvents } from "@/lib/calendar/getSchoolCalendarEvents";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
 import { CalendarHub } from "@/components/calendar/CalendarHub";
@@ -13,15 +13,13 @@ export default async function CalendarPage({ params }: { params: Promise<{ local
   const profile = await getCurrentProfile();
   const schoolId = profile?.school_id;
 
-  const [permissions, hasManagePerm, events, circulars] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
+  const [hasManagePerm, events, circulars, isOwner] = await Promise.all([
     schoolId ? hasPermission("calendar.manage", schoolId).catch(() => false) : false,
     getSchoolCalendarEvents(schoolId),
     getSchoolCirculars(schoolId).catch(() => []),
+    isCurrentUserPlatformOwner(profile?.id),
   ]);
 
-  const isOwner =
-    permissions.includes("settings.platform.update") || permissions.includes("roles.manage");
   const canManageEvents = isOwner || hasManagePerm;
 
   return (

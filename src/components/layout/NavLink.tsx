@@ -25,8 +25,7 @@ export function NavLink({
   const pathname = usePathname();
   const isExcluded = excludedPrefixes?.some((prefix) => pathname.startsWith(prefix)) ?? false;
   const isActive =
-    !isExcluded &&
-    (exact || href === "/dashboard" ? pathname === href : pathname.startsWith(href));
+    !isExcluded && (exact || href === "/dashboard" ? pathname === href : pathname.startsWith(href));
 
   return (
     <Link
@@ -35,7 +34,7 @@ export function NavLink({
       className={cn(
         "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
         isActive
-          ? "bg-sidebar-primary text-sidebar-primary-foreground font-semibold shadow-xs"
+          ? "bg-sidebar-primary font-semibold text-sidebar-primary-foreground shadow-xs"
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
       )}
     >

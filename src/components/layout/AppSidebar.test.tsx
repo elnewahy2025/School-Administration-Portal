@@ -23,14 +23,7 @@ vi.mock("next-intl", () => ({
 
 vi.mock("@/i18n", () => ({
   usePathname: () => "/dashboard",
-  Link: ({
-    children,
-    href,
-    ...props
-  }: {
-    children: React.ReactNode;
-    href: string;
-  }) => (
+  Link: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => (
     <a href={href} {...props}>
       {children}
     </a>

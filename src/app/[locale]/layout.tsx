@@ -93,7 +93,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
-      className={`${fontSans.variable} ${fontHeading.variable} ${fontLatin.variable} ${fontMono.variable} font-sans h-full antialiased`}
+      className={`${fontSans.variable} ${fontHeading.variable} ${fontLatin.variable} ${fontMono.variable} h-full font-sans antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
