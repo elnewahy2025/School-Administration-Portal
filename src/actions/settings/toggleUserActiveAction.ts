@@ -5,12 +5,14 @@ import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { assertNotLastActiveSchoolAdmin } from "@/lib/school/assertNotLastActiveSchoolAdmin";
 import {
   sanitizeError,
   formatActionErrorResult,
   AuthenticationError,
   ForbiddenError,
   ValidationError,
+  NotFoundError,
   mapDatabaseError,
   type ActionResult,
 } from "@/lib/errors";
@@ -39,14 +41,28 @@ export async function toggleUserActiveAction(
     }
 
     const admin = createSupabaseAdminClient();
-    const { error } = await admin
+
+    // Deactivating a school's only administrator would lock everyone else out.
+    if (currentStatus) {
+      await assertNotLastActiveSchoolAdmin(admin, targetUserId);
+    }
+
+    // `.select()` exposes the affected row: a 0-row update is reported as
+    // "not found" instead of a silent success (M-28).
+    const { data: updated, error } = await admin
       .from("profiles")
       .update({ is_active: !currentStatus })
       .eq("id", targetUserId)
-      .eq("school_id", profile.school_id);
+      .eq("school_id", profile.school_id)
+      .select("id")
+      .maybeSingle();
 
     if (error) {
       throw mapDatabaseError(error);
+    }
+
+    if (!updated) {
+      throw new NotFoundError("User not found in this school");
     }
 
     revalidatePath("/[locale]/settings/users", "page");

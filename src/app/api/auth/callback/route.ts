@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
+import { sanitizeNextPath } from "@/lib/auth/sanitizeNextPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") ?? "/dashboard";
+  // Same-origin relative paths only: `?next=//evil.example` must not become a
+  // redirect off the deployment.
+  const next = sanitizeNextPath(requestUrl.searchParams.get("next"));
 
   if (code) {
     try {

@@ -40,9 +40,7 @@ export async function deleteDepartmentAction(departmentId: string): Promise<Acti
     }
 
     if (count === 0) {
-      throw new ConflictError(
-        "Department could not be deleted or does not exist.",
-      );
+      throw new ConflictError("Department could not be deleted or does not exist.");
     }
 
     revalidatePath("/[locale]/settings/departments", "page");

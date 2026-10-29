@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseAdminClient } from "@/lib/supabase";
 import { validateUserUpdateInput } from "@/lib/school/validateUserUpdateInput";
 import { assertCanManageUser } from "@/lib/school/assertCanManageUser";
+import { assertDepartmentBelongsToSchool } from "@/lib/school/assertDepartmentBelongsToSchool";
 import { persistUserUpdates } from "@/lib/school/persistUserUpdates";
 import { applyUserRoleUpdate } from "@/lib/school/applyUserRoleUpdate";
 import {
@@ -43,6 +44,8 @@ export async function updateUserAction(input: UpdateUserInput): Promise<ActionRe
     if (!val.valid) {
       throw new ValidationError(val.error || "Invalid user input");
     }
+
+    await assertDepartmentBelongsToSchool(input.departmentId, check.schoolId);
 
     const adminClient = createSupabaseAdminClient();
     const res = await persistUserUpdates(adminClient, check.schoolId, input);

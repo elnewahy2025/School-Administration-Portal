@@ -7,10 +7,7 @@ export async function getUserRoleKey(
   if (!userId) return null;
 
   const admin = createSupabaseAdminClient();
-  let query = admin
-    .from("user_role_assignments")
-    .select("roles!inner(key)")
-    .eq("user_id", userId);
+  let query = admin.from("user_role_assignments").select("roles!inner(key)").eq("user_id", userId);
 
   if (schoolId) {
     query = query.or(`school_id.eq.${schoolId},school_id.is.null`);

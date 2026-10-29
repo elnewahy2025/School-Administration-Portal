@@ -1,16 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 const { mockResetPasswordForEmail } = vi.hoisted(() => ({
   mockResetPasswordForEmail: vi.fn(),
-}));
-
-vi.mock("next/headers", () => ({
-  headers: vi.fn().mockResolvedValue({
-    get: (key: string) => {
-      if (key === "host") return "localhost:3000";
-      return null;
-    },
-  }),
 }));
 
 vi.mock("@/lib/supabase", () => ({
@@ -27,9 +18,22 @@ vi.mock("@/lib/errors/sanitizeError", () => ({
 
 import { requestPasswordResetAction } from "./requestPasswordResetAction";
 
+function stubEnv() {
+  vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+  vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "anon-key");
+  vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "service-role-key");
+  vi.stubEnv("APP_URL", "https://portal.example.edu");
+  vi.stubEnv("SCHOOL_TIMEZONE", "Asia/Kuwait");
+}
+
 describe("requestPasswordResetAction", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    stubEnv();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("returns error on missing or invalid email format", async () => {
@@ -42,7 +46,7 @@ describe("requestPasswordResetAction", () => {
     expect(mockResetPasswordForEmail).not.toHaveBeenCalled();
   });
 
-  it("calls resetPasswordForEmail with correct redirect URL on valid email", async () => {
+  it("builds the reset link from APP_URL, not from request headers", async () => {
     mockResetPasswordForEmail.mockResolvedValueOnce({ error: null });
 
     const formData = new FormData();
@@ -52,7 +56,20 @@ describe("requestPasswordResetAction", () => {
     expect(result.success).toBe(true);
     expect(result.error).toBeNull();
     expect(mockResetPasswordForEmail).toHaveBeenCalledWith("teacher@school.edu.kw", {
-      redirectTo: "http://localhost:3000/api/auth/callback?next=/reset-password",
+      redirectTo: "https://portal.example.edu/api/auth/callback?next=/reset-password",
+    });
+  });
+
+  it("normalises a trailing slash in APP_URL", async () => {
+    vi.stubEnv("APP_URL", "https://portal.example.edu/");
+    mockResetPasswordForEmail.mockResolvedValueOnce({ error: null });
+
+    const formData = new FormData();
+    formData.append("email", "teacher@school.edu.kw");
+
+    await requestPasswordResetAction({ success: false }, formData);
+    expect(mockResetPasswordForEmail).toHaveBeenCalledWith("teacher@school.edu.kw", {
+      redirectTo: "https://portal.example.edu/api/auth/callback?next=/reset-password",
     });
   });
 

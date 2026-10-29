@@ -5,7 +5,8 @@ export async function getPlatformOwnerUserIds(): Promise<Set<string>> {
   const { data, error } = await admin
     .from("user_role_assignments")
     .select("user_id, roles!inner(key)")
-    .eq("roles.key", "owner");
+    .eq("roles.key", "owner")
+    .is("school_id", null);
 
   if (error || !data) {
     return new Set<string>();

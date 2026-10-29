@@ -36,6 +36,24 @@ describe("GET /api/auth/callback", () => {
     expect(res.headers.get("location")).toBe("http://localhost:3000/ar/reset-password");
   });
 
+  it.each([
+    "//evil.example",
+    "/\\evil.example",
+    "https://evil.example",
+    "javascript:alert(1)",
+    "/ok\r\nSet-Cookie: x=1",
+  ])("refuses to redirect to an off-site next value: %s", async (next) => {
+    mockExchangeCodeForSession.mockResolvedValueOnce({ error: null });
+
+    const req = new Request(
+      `http://localhost:3000/api/auth/callback?code=valid-code&next=${encodeURIComponent(next)}`,
+    );
+    const res = await GET(req);
+
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toBe("http://localhost:3000/dashboard");
+  });
+
   it("redirects to login when code exchange fails", async () => {
     mockExchangeCodeForSession.mockResolvedValueOnce({ error: new Error("invalid code") });
 

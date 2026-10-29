@@ -1,4 +1,5 @@
 import { getCurrentProfile, type ProfileRow } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 
@@ -23,7 +24,7 @@ export async function assertCanViewReports(): Promise<AssertCanViewReportsResult
   }
 
   const perms = await getEffectivePermissions().catch((): string[] => []);
-  const isOwner = perms.includes("settings.platform.update") || perms.includes("roles.manage");
+  const isOwner = await isPlatformOwner(profile.id);
   const isManager =
     perms.includes("settings.school.update") ||
     perms.includes("users.manage") ||

@@ -40,9 +40,7 @@ export async function deleteLocationAction(locationId: string): Promise<ActionRe
     }
 
     if (count === 0) {
-      throw new ConflictError(
-        "Location could not be deleted or does not exist.",
-      );
+      throw new ConflictError("Location could not be deleted or does not exist.");
     }
 
     revalidatePath("/[locale]/settings/locations", "page");

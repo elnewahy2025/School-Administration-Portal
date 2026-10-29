@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { assertCanManageSchoolUsers } from "@/lib/school/assertCanManageSchoolUsers";
+import { assertDepartmentBelongsToSchool } from "@/lib/school/assertDepartmentBelongsToSchool";
 import {
   sanitizeError,
   formatActionErrorResult,
@@ -33,6 +34,9 @@ export async function createUserAction(input: CreateUserInput): Promise<ActionRe
     if (!val.valid) {
       throw new ValidationError(val.error || "Invalid user input");
     }
+
+    // A client-supplied department id must belong to the caller's school.
+    await assertDepartmentBelongsToSchool(input.departmentId, auth.schoolId);
 
     const res = await provisionAuthUser({
       fullName: val.trimmedName,

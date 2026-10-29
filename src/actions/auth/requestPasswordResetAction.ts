@@ -1,6 +1,6 @@
 "use server";
 
-import { headers } from "next/headers";
+import { buildAuthRedirectUrl } from "@/lib/auth/buildAuthRedirectUrl";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { cleanFormField } from "@/lib/validation/cleanFormField";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
@@ -15,12 +15,9 @@ export async function requestPasswordResetAction(
       return { success: false, error: "invalid" };
     }
 
-    const headersList = await headers();
-    const host = headersList.get("x-forwarded-host") ?? headersList.get("host") ?? "localhost:3000";
-    const protocol =
-      headersList.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
-    const origin = `${protocol}://${host}`;
-    const redirectTo = `${origin}/api/auth/callback?next=/reset-password`;
+    // The reset link is built from APP_URL, never from request headers: a
+    // spoofed Host header must not be able to redirect the email.
+    const redirectTo = buildAuthRedirectUrl("/reset-password");
 
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });

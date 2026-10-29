@@ -1,20 +1,26 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseAdminClient } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
-import {
-  sanitizeError,
-  formatActionErrorResult,
-  AuthenticationError,
-  ForbiddenError,
-  ValidationError,
-  mapDatabaseError,
-  type ActionResult,
-} from "@/lib/errors";
+import { mapDissociationError } from "@/lib/school/mapDissociationError";
+import { AuthenticationError } from "@/lib/errors/AuthenticationError";
+import { ForbiddenError } from "@/lib/errors/ForbiddenError";
+import { ValidationError } from "@/lib/errors/ValidationError";
+import { sanitizeError } from "@/lib/errors/sanitizeError";
+import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
+/**
+ * Removes a user from the caller's school.
+ *
+ * The write is a single transaction (`dissociate_school_user`, 0046) executed
+ * with the caller's identity: it verifies `users.manage` on the user's actual
+ * school, refuses to remove the last active administrator, and always
+ * deactivates the account. Previously the service-role client bypassed those
+ * guards and a partial failure could leave the user active without a school
+ * (M-10).
+ */
 export async function deleteUserAction(userId: string): Promise<ActionResult> {
   try {
     const profile = await getCurrentProfile();
@@ -26,37 +32,16 @@ export async function deleteUserAction(userId: string): Promise<ActionResult> {
       throw new ValidationError("Cannot delete your own account");
     }
 
-    if (await isPlatformOwner(userId)) {
-      throw new ForbiddenError("Cannot modify system-protected account");
-    }
-
     const allowed = await hasPermission("users.manage", profile.school_id);
     if (!allowed) {
       throw new ForbiddenError("Unauthorized");
     }
 
-    const admin = createSupabaseAdminClient();
-
-    // Delete role assignments for this user within this school
-    await admin
-      .from("user_role_assignments")
-      .delete()
-      .eq("user_id", userId)
-      .eq("school_id", profile.school_id);
-
-    // Disassociate the user from the school and deactivate
-    const { error } = await admin
-      .from("profiles")
-      .update({
-        school_id: null,
-        department_id: null,
-        is_active: false,
-      })
-      .eq("id", userId)
-      .eq("school_id", profile.school_id);
+    const supabase = await createSupabaseServerClient();
+    const { error } = await supabase.rpc("dissociate_school_user", { p_user_id: userId });
 
     if (error) {
-      throw mapDatabaseError(error);
+      throw mapDissociationError(error);
     }
 
     revalidatePath("/[locale]/settings/users", "page");

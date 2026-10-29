@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { assertCanAssignMaintenance } from "@/lib/maintenance/assertCanAssignMaintenance";
+import { isActiveSchoolMember } from "@/lib/school/isActiveSchoolMember";
 import { parseMaintenanceAssignData } from "@/lib/validation/parseMaintenanceAssignData";
 import { saveMaintenanceAssignment } from "@/lib/maintenance/saveMaintenanceAssignment";
 import { dispatchModuleNotification } from "@/lib/notifications/dispatchModuleNotification";
@@ -29,6 +30,18 @@ export async function assignMaintenanceAction(formData: FormData): Promise<Actio
 
     if (!ticket) {
       throw new NotFoundError("Ticket not found");
+    }
+
+    if (ticket.school_id !== auth.schoolId) {
+      // RLS already hides foreign tickets; this keeps the service-role side
+      // effects below honest even if a policy regresses.
+      throw new NotFoundError("Ticket not found");
+    }
+
+    // The operator id comes from the client. Reject a user from another
+    // tenant before writing the assignment (audit finding M-8).
+    if (!(await isActiveSchoolMember(supabase, operatorId, auth.schoolId))) {
+      throw new ValidationError("The selected operator does not belong to this school");
     }
 
     const res = await saveMaintenanceAssignment(supabase, {
