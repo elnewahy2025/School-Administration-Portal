@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
+import { assertCronAuthorized } from "@/lib/cron/assertCronAuthorized";
 import { withApiErrorHandler } from "@/lib/errors";
 import { pingSupabaseDatabase } from "@/lib/supabase";
 
 async function handleKeepalivePing(request: Request) {
-  const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const authHeader = request.headers.get("authorization");
-    if (authHeader !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  const auth = assertCronAuthorized(request);
+  if (!auth.ok) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status });
   }
 
   const result = await pingSupabaseDatabase();
@@ -20,5 +18,6 @@ async function handleKeepalivePing(request: Request) {
   });
 }
 
+// Only GET: that is what Vercel cron issues, and an unused POST export is just
+// a second unauthenticated surface to keep patched.
 export const GET = withApiErrorHandler(handleKeepalivePing);
-export const POST = withApiErrorHandler(handleKeepalivePing);

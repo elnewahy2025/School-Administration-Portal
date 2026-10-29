@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { AlertTriangleIcon, RefreshCwIcon } from "lucide-react";
+import { reportClientError } from "@/lib/logger/reportClientError";
+import { resolveClientErrorReference } from "@/lib/logger/resolveClientErrorReference";
 
 export default function GlobalError({
   error,
@@ -11,8 +13,13 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // Stable across re-renders, so the code on screen is the code that was logged.
+  const referenceId = resolveClientErrorReference(error);
+
   useEffect(() => {
-    console.error("Global application boundary caught error:", error);
+    // A root-boundary crash happens before any app shell exists; this is the
+    // only place that can still report it.
+    reportClientError(error, "boundary");
   }, [error]);
 
   return (
@@ -30,9 +37,9 @@ export default function GlobalError({
             نواجه صعوبة مؤقتة في تحميل التطبيق. يرجى إعادة المحاولة أو التواصل مع الدعم الفني.
           </p>
 
-          {error.digest && (
+          {referenceId && (
             <div className="mb-6 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 font-mono text-xs text-slate-500">
-              Reference: {error.digest}
+              Reference: {referenceId}
             </div>
           )}
 

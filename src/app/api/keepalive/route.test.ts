@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
@@ -11,14 +11,20 @@ vi.mock("@/lib/supabase", () => ({
 }));
 
 import { GET } from "./route";
+import * as routeModule from "./route";
 
 describe("GET /api/keepalive", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.unstubAllEnvs();
     delete process.env.CRON_SECRET;
   });
 
-  it("returns 200 and success status on ping", async () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("returns 200 and success status on ping outside production", async () => {
     const req = new Request("http://localhost:3000/api/keepalive");
     const response = await GET(req);
 
@@ -30,18 +36,35 @@ describe("GET /api/keepalive", () => {
   });
 
   it("enforces CRON_SECRET when configured", async () => {
-    process.env.CRON_SECRET = "test-secret-123";
+    vi.stubEnv("CRON_SECRET", "test-secret-123");
 
-    // Request without auth header
     const unauthReq = new Request("http://localhost:3000/api/keepalive");
     const unauthRes = await GET(unauthReq);
     expect(unauthRes.status).toBe(401);
 
-    // Request with valid auth header
+    const wrongReq = new Request("http://localhost:3000/api/keepalive", {
+      headers: { Authorization: "Bearer test-secret-124" },
+    });
+    expect((await GET(wrongReq)).status).toBe(401);
+
     const authReq = new Request("http://localhost:3000/api/keepalive", {
       headers: { Authorization: "Bearer test-secret-123" },
     });
-    const authRes = await GET(authReq);
-    expect(authRes.status).toBe(200);
+    expect((await GET(authReq)).status).toBe(200);
+  });
+
+  it("fails closed in production when CRON_SECRET is not configured", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+
+    const req = new Request("http://localhost:3000/api/keepalive");
+    const response = await GET(req);
+
+    expect(response.status).toBe(503);
+    const body = await response.json();
+    expect(body.error).toMatch(/CRON_SECRET/);
+  });
+
+  it("does not expose a second unauthenticated verb", () => {
+    expect(routeModule).not.toHaveProperty("POST");
   });
 });

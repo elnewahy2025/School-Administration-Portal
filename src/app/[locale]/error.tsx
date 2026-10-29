@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { AlertCircleIcon, RefreshCwIcon, HomeIcon } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n";
+import { reportClientError } from "@/lib/logger/reportClientError";
+import { resolveClientErrorReference } from "@/lib/logger/resolveClientErrorReference";
 import { cn } from "cn";
 
 export default function ErrorBoundary({
@@ -16,9 +18,11 @@ export default function ErrorBoundary({
 }) {
   const t = useTranslations("errors");
   const tCommon = useTranslations("common");
+  // Stable across re-renders, so the code on screen is the code that was logged.
+  const referenceId = resolveClientErrorReference(error);
 
   useEffect(() => {
-    console.error("Route segment error boundary captured error:", error);
+    reportClientError(error, "boundary");
   }, [error]);
 
   return (
@@ -34,9 +38,9 @@ export default function ErrorBoundary({
 
         <p className="mb-6 text-sm text-muted-foreground">{t("serverErrorDesc")}</p>
 
-        {error.digest && (
+        {referenceId && (
           <div className="mb-6 rounded-lg border border-border bg-muted/50 px-3 py-2 font-mono text-xs text-muted-foreground">
-            {t("referenceCode", { code: error.digest })}
+            {t("referenceCode", { code: referenceId })}
           </div>
         )}
 
