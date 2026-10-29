@@ -32,6 +32,17 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   devIndicators: false,
+  experimental: {
+    serverActions: {
+      // Restore uploads carry a whole backup in one action call. The client
+      // refuses files above MAX_BACKUP_BYTES (10 MB, src/lib/backup/maxBackupBytes.ts);
+      // this leaves room for the action envelope around that file.
+      bodySizeLimit: "12mb",
+    },
+  },
+  // The E2E gate builds with its own output directory so it never overwrites
+  // the dev server's `.next` cache (and vice versa).
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   turbopack: {
     rules: {
       "*.css": {

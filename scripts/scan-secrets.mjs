@@ -4,7 +4,6 @@ import { join, relative } from "node:path";
 
 const SKIP_DIRS = new Set([
   "node_modules",
-  ".next",
   ".git",
   ".zwork",
   "coverage",
@@ -13,6 +12,11 @@ const SKIP_DIRS = new Set([
   "out",
   "build",
 ]);
+// Next.js build output: `.next`, plus every alternate `distDir` derived from it
+// (the E2E gate builds into `.next-e2e`, see playwright.config.ts). Bundles
+// legitimately contain the inlined public Supabase anon key, which is a JWT and
+// would otherwise be reported as a leaked secret on every run after an E2E.
+const BUILD_OUTPUT_DIR = /^\.next($|-)/;
 const ENV_FILE = /^\.env(\..+)?$/;
 const PATTERNS = [
   {
@@ -59,7 +63,9 @@ function main() {
   const walk = (dir) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       if (entry.isDirectory()) {
-        if (!SKIP_DIRS.has(entry.name)) walk(join(dir, entry.name));
+        if (!SKIP_DIRS.has(entry.name) && !BUILD_OUTPUT_DIR.test(entry.name)) {
+          walk(join(dir, entry.name));
+        }
         continue;
       }
       const rel = relative(process.cwd(), join(dir, entry.name));
