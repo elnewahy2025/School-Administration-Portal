@@ -1,11 +1,24 @@
 import { createClient } from "@supabase/supabase-js";
+import { purgeStaleFixtures } from "./purgeStaleFixtures.mjs";
 
 export function getEnv() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !anon || !service) {
-    throw new Error("Missing Supabase env (run with --env-file=.env.local)");
+    throw new Error(
+      "Missing Supabase env. Run with `npm run test:rls` (local stack) — never point this at production.",
+    );
+  }
+  // This battery writes fixtures, uploads objects and deletes rows. Refuse to
+  // run against anything that is not the local stack, even if the env file
+  // says otherwise.
+  const host = new URL(url).hostname;
+  if (!["127.0.0.1", "localhost", "::1", "0.0.0.0"].includes(host)) {
+    throw new Error(
+      `Refusing to run the destructive RLS battery against non-local host "${host}". ` +
+        "Use `npm run test:rls`, which reads the local stack credentials.",
+    );
   }
   return { url, anon, service };
 }
@@ -85,6 +98,10 @@ const PASSWORD = "Rls-Battery-2026!";
 
 export async function seedFixture(admin) {
   const ts = Date.now();
+  // An earlier aborted run may have left fixtures behind (see
+  // purgeStaleFixtures.mjs); clear them so this run asserts against a known
+  // database instead of inheriting someone else's leftovers.
+  await purgeStaleFixtures(admin);
   const { data: school } = await admin
     .from("schools")
     .insert({ name_ar: "مدرسة الاختبار", name_en: "Battery School", slug: `rls-battery-${ts}` })
