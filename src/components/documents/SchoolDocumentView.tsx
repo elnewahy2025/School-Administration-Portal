@@ -1,23 +1,38 @@
 "use client";
 
-import type { LucideIcon } from "lucide-react";
 import { Link } from "@/i18n";
-import { ArrowRightIcon, ArrowLeftIcon, ClockIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  ArrowLeftIcon,
+  ClockIcon,
+  TargetIcon,
+  UsersRoundIcon,
+  HeartHandshakeIcon,
+} from "lucide-react";
 import { useLocale } from "next-intl";
 import { GoldDots } from "@/components/ui/gold-dots";
 
+export type SchoolDocumentSlug = "operational-plan" | "committees-guide" | "counseling-guide";
+
+const ICON_MAP = {
+  "operational-plan": TargetIcon,
+  "committees-guide": UsersRoundIcon,
+  "counseling-guide": HeartHandshakeIcon,
+};
+
 export function SchoolDocumentView({
+  slug,
   title,
   description,
-  icon: Icon,
 }: {
+  slug: SchoolDocumentSlug;
   title: string;
   description: string;
-  icon: LucideIcon;
 }) {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const BackArrow = isRtl ? ArrowRightIcon : ArrowLeftIcon;
+  const Icon = ICON_MAP[slug] || TargetIcon;
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">

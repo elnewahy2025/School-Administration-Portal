@@ -6,8 +6,8 @@ import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { resolveLayoutNavigationAccess } from "@/lib/auth/resolveLayoutNavigationAccess";
-import { TargetIcon, UsersRoundIcon, HeartHandshakeIcon } from "lucide-react";
 import { SchoolDocumentView } from "@/components/documents/SchoolDocumentView";
+import type { SchoolDocumentSlug } from "@/components/documents/SchoolDocumentView";
 
 const VALID_SLUGS = ["operational-plan", "committees-guide", "counseling-guide"] as const;
 type DocumentSlug = (typeof VALID_SLUGS)[number];
@@ -53,25 +53,22 @@ export default async function SchoolDocumentPage({
     "operational-plan": {
       title: tHome("docOperationalPlanTitle"),
       description: tHome("docOperationalPlanDesc"),
-      icon: TargetIcon,
     },
     "committees-guide": {
       title: tHome("docCommitteesGuideTitle"),
       description: tHome("docCommitteesGuideDesc"),
-      icon: UsersRoundIcon,
     },
     "counseling-guide": {
       title: tHome("docCounselingGuideTitle"),
       description: tHome("docCounselingGuideDesc"),
-      icon: HeartHandshakeIcon,
     },
   }[slug as DocumentSlug];
 
   return (
     <SchoolDocumentView
+      slug={slug as SchoolDocumentSlug}
       title={documentConfig.title}
       description={documentConfig.description}
-      icon={documentConfig.icon}
     />
   );
 }
