@@ -3,6 +3,7 @@
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { PublicInstagramLink } from "@/components/public/PublicInstagramLink";
 import { AppUserMenu } from "./AppUserMenu";
 import { MobileNav } from "./MobileNav";
 import { AppHeaderGreeting } from "./AppHeaderGreeting";
@@ -43,6 +44,7 @@ export function AppHeader({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3">
+        <PublicInstagramLink />
         <NotificationBell unreadCount={unreadNotifications} />
         {isOwner ? (
           <>

@@ -15,4 +15,5 @@ export { PublicDocumentsSection } from "./PublicDocumentsSection";
 export { PublicDocumentCard } from "./PublicDocumentCard";
 export { PublicInstagramLink } from "./PublicInstagramLink";
 export { InstagramIcon } from "./InstagramIcon";
+export { KuwaitMoeLink } from "./KuwaitMoeLink";
 
