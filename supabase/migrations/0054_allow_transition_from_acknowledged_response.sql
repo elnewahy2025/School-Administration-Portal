@@ -115,3 +115,4 @@ $$;
 
 revoke all on function public.submit_circular_response(uuid, uuid, uuid, public.circular_response_type, public.circular_response_status, text) from public, anon;
 grant execute on function public.submit_circular_response(uuid, uuid, uuid, public.circular_response_type, public.circular_response_status, text) to authenticated, service_role;
+

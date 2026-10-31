@@ -1,5 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CircularPriority, CircularResponseType, CircularStatus } from "./types";
+import type {
+  CircularPriority,
+  CircularResponseType,
+  CircularStatus,
+  CircularVisibility,
+} from "./types";
 import { insertCircularTargets } from "./insertCircularTargets";
 
 export async function updateCircularRecord(
@@ -10,6 +15,7 @@ export async function updateCircularRecord(
     title: string;
     body: string;
     priority: CircularPriority;
+    visibility?: CircularVisibility;
     status?: CircularStatus;
     responseType: CircularResponseType;
     publishAt?: string | null;
@@ -26,6 +32,9 @@ export async function updateCircularRecord(
     updated_at: new Date().toISOString(),
   };
 
+  if (params.visibility) {
+    updatePayload.visibility = params.visibility;
+  }
   if (params.status) {
     updatePayload.status = params.status;
   }

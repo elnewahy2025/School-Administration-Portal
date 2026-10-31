@@ -23,7 +23,7 @@ export async function createCircularAction(
       throw new ForbiddenError(auth.error);
     }
 
-    const { title, body, priority, responseType, dueAt, departmentIds } =
+    const { title, body, priority, visibility, responseType, dueAt, departmentIds } =
       parseCircularFormData(formData);
 
     if (!title || !body) {
@@ -38,6 +38,7 @@ export async function createCircularAction(
       title,
       body,
       priority,
+      visibility,
       responseType,
       dueAt,
       createdBy: auth.profileId,

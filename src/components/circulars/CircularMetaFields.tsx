@@ -6,7 +6,20 @@ export function CircularMetaFields() {
   const t = useTranslations("circulars");
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="space-y-1.5">
+        <Label htmlFor="visibility">{t("visibility")}</Label>
+        <select
+          id="visibility"
+          name="visibility"
+          defaultValue="internal"
+          className="h-9 w-full rounded-lg border border-input bg-background px-2.5 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          <option value="internal">{t("visibilityInternal")}</option>
+          <option value="public">{t("visibilityPublic")}</option>
+        </select>
+      </div>
+
       <div className="space-y-1.5">
         <Label htmlFor="priority">{t("priority")}</Label>
         <select

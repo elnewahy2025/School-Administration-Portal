@@ -1,6 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { getPublicSchoolProfile } from "@/lib/school/getPublicSchoolProfile";
 import { getPublicCalendarEvents } from "@/lib/calendar/getPublicCalendarEvents";
+import { getPublicCirculars } from "@/lib/circulars/getPublicCirculars";
 import { getPublicSchoolDocuments } from "@/lib/documents/getPublicSchoolDocuments";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
@@ -17,9 +18,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const isOwner = profile?.id ? await isPlatformOwner(profile.id).catch(() => false) : false;
 
   const school = await getPublicSchoolProfile();
-  const [events, documents] = await Promise.all([
+  const [events, documents, circulars] = await Promise.all([
     getPublicCalendarEvents(school?.id),
     getPublicSchoolDocuments(school?.id),
+    getPublicCirculars(school?.id),
   ]);
 
   return (
@@ -27,7 +29,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <PublicTopBar school={school} events={events} isOwner={isOwner} />
       <main className="flex-1">
         <PublicHero school={school} documents={documents} />
-        <PublicEventsSection events={events} />
+        <PublicEventsSection events={events} circulars={circulars} />
       </main>
       <PublicFooter />
     </div>

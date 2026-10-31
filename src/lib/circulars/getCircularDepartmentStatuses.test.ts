@@ -32,6 +32,7 @@ describe("getCircularDepartmentStatuses", () => {
     body: "Content",
     priority: "normal",
     status: "published",
+    visibility: "internal",
     response_type: "acknowledgement",
     response_instructions: null,
     allow_response_revision: false,

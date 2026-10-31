@@ -104,3 +104,4 @@ describe("CircularResponseBox", () => {
     expect(screen.queryByRole("button", { name: /الرفض/i })).not.toBeInTheDocument();
   });
 });
+

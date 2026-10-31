@@ -14,6 +14,17 @@ describe("parseCircularFormData", () => {
     expect(result.title).toBe("Important Notice");
     expect(result.priority).toBe("high");
     expect(result.responseType).toBe("approval");
+    expect(result.visibility).toBe("internal");
+  });
+
+  it("parses explicit public visibility", () => {
+    const formData = new FormData();
+    formData.append("title", "Public Announcement");
+    formData.append("body", "Open to all students and parents.");
+    formData.append("visibility", "public");
+
+    const result = parseCircularFormData(formData);
+    expect(result.visibility).toBe("public");
   });
 
   it("throws ValidationError when title is missing", () => {

@@ -23,6 +23,7 @@ export { EditCircularFieldsGrid } from "./EditCircularFieldsGrid";
 export { EditCircularForm } from "./EditCircularForm";
 export { CircularMetaFields } from "./CircularMetaFields";
 export { CircularPriorityBadge } from "./CircularPriorityBadge";
+export { CircularVisibilityBadge } from "./CircularVisibilityBadge";
 export { CircularPublishButton } from "./CircularPublishButton";
 export { CircularResponseBanner } from "./CircularResponseBanner";
 export { CircularResponseActions } from "./CircularResponseActions";

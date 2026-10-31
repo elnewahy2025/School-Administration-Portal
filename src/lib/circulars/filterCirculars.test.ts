@@ -12,6 +12,7 @@ function createDummyCircular(overrides: Partial<CircularRow>): CircularRow {
     category: "admin",
     priority: "urgent",
     status: "published",
+    visibility: "internal",
     response_type: "acknowledgement",
     response_instructions: null,
     allow_response_revision: false,

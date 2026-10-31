@@ -65,6 +65,7 @@ export function EditCircularForm({
 
       <EditCircularFieldsGrid
         priority={circular.priority}
+        visibility={circular.visibility}
         status={circular.status}
         dueAt={circular.due_at}
       />

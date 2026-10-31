@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { CircularPriorityBadge } from "./CircularPriorityBadge";
+import { CircularVisibilityBadge } from "./CircularVisibilityBadge";
 import { CircularStatusBadge } from "./CircularStatusBadge";
 import { CircularDetailActions } from "./CircularDetailActions";
 import { CircularAttachmentsList } from "./CircularAttachmentsList";
@@ -34,6 +35,7 @@ export function CircularDetailCard({
             <span className="font-mono text-xs font-semibold text-muted-foreground">
               {circular.ref_number}
             </span>
+            <CircularVisibilityBadge visibility={circular.visibility} />
             <CircularPriorityBadge priority={circular.priority} />
             <CircularStatusBadge status={circular.status} />
           </div>

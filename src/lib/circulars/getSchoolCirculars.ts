@@ -10,7 +10,7 @@ export async function getSchoolCirculars(schoolId?: string | null): Promise<Circ
     .from("circulars")
     .select(
       `
-      id, school_id, ref_number, title, body, category, priority, status,
+      id, school_id, ref_number, title, body, category, priority, status, visibility,
       response_type, response_instructions, allow_response_revision,
       publish_at, due_at, created_by, closed_at, created_at,
       targets:circular_targets(

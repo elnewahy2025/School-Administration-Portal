@@ -8,14 +8,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { CircularPriority, CircularStatus } from "@/lib/circulars/types";
+import type { CircularPriority, CircularStatus, CircularVisibility } from "@/lib/circulars/types";
+import { EditCircularVisibilityField } from "./EditCircularVisibilityField";
 
 export function EditCircularFieldsGrid({
   priority,
+  visibility = "internal",
   status,
   dueAt,
 }: {
   priority: CircularPriority;
+  visibility?: CircularVisibility;
   status: CircularStatus;
   dueAt?: string | null;
 }) {
@@ -39,7 +42,9 @@ export function EditCircularFieldsGrid({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <EditCircularVisibilityField visibility={visibility} />
+
       <div className="space-y-2">
         <Label htmlFor="priority">{t("priority")}</Label>
         <Select name="priority" defaultValue={priority}>

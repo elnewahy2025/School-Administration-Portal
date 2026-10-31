@@ -1,4 +1,8 @@
-import type { CircularPriority, CircularResponseType } from "@/lib/circulars/types";
+import type {
+  CircularPriority,
+  CircularResponseType,
+  CircularVisibility,
+} from "@/lib/circulars/types";
 import { circularSchema } from "./circularSchema";
 import { formatZodError } from "./formatZodError";
 
@@ -14,6 +18,7 @@ export function parseCircularFormData(formData: FormData) {
     title: get("title"),
     body: get("body"),
     priority: get("priority") || "normal",
+    visibility: get("visibility") || "internal",
     responseType: get("response_type") || "acknowledgement",
     dueAt: get("due_at") || null,
     publishAt: get("publish_at") || null,
@@ -28,6 +33,7 @@ export function parseCircularFormData(formData: FormData) {
   return {
     ...parsed.data,
     priority: parsed.data.priority as CircularPriority,
+    visibility: parsed.data.visibility as CircularVisibility,
     responseType: parsed.data.responseType as CircularResponseType,
     status: get("status") || undefined,
   };

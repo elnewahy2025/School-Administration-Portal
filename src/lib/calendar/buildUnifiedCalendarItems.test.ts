@@ -34,6 +34,7 @@ describe("buildUnifiedCalendarItems", () => {
     category: "administrative",
     priority: "high",
     status: "published",
+    visibility: "internal",
     response_type: "acknowledgement",
     response_instructions: null,
     allow_response_revision: false,

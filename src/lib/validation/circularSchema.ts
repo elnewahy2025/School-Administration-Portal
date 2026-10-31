@@ -12,6 +12,7 @@ export const circularSchema = z.object({
     .min(1, "Content is required")
     .max(10000, "Content cannot exceed 10000 characters"),
   priority: z.enum(["low", "normal", "high", "urgent"]),
+  visibility: z.enum(["public", "internal"]).default("internal"),
   responseType: z.enum(["acknowledgement", "approval", "task"]),
   dueAt: z.string().nullable().default(null),
   publishAt: z.string().nullable().default(null),

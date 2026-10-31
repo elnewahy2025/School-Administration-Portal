@@ -24,7 +24,7 @@ export async function updateCircularAction(
       throw new ForbiddenError(auth.error || "Unauthorized");
     }
 
-    const { title, body, priority, responseType, dueAt, publishAt, status, departmentIds } =
+    const { title, body, priority, visibility, responseType, dueAt, publishAt, status, departmentIds } =
       parseCircularFormData(formData);
 
     if (!title || !body) {
@@ -40,6 +40,7 @@ export async function updateCircularAction(
       title,
       body,
       priority,
+      visibility,
       status: status as CircularStatus | undefined,
       responseType,
       publishAt,

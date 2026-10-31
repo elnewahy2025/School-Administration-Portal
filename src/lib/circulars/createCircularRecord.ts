@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CircularPriority, CircularResponseType } from "./types";
+import type { CircularPriority, CircularResponseType, CircularVisibility } from "./types";
 
 export async function createCircularRecord(
   supabase: SupabaseClient,
@@ -8,6 +8,7 @@ export async function createCircularRecord(
     title: string;
     body: string;
     priority: CircularPriority;
+    visibility?: CircularVisibility;
     responseType: CircularResponseType;
     dueAt: string | null;
     createdBy: string;
@@ -31,6 +32,7 @@ export async function createCircularRecord(
       title: params.title,
       body: params.body,
       priority: params.priority,
+      visibility: params.visibility ?? "internal",
       status: "draft",
       response_type: params.responseType,
       due_at: params.dueAt,

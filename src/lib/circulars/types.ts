@@ -1,5 +1,7 @@
 export type CircularPriority = "low" | "normal" | "high" | "urgent";
 
+export type CircularVisibility = "public" | "internal";
+
 export type CircularStatus =
   "draft" | "published" | "in_progress" | "completed" | "overdue" | "archived" | "cancelled";
 
@@ -17,6 +19,7 @@ export type CircularRow = {
   category: string;
   priority: CircularPriority;
   status: CircularStatus;
+  visibility: CircularVisibility;
   response_type: CircularResponseType;
   response_instructions: string | null;
   allow_response_revision: boolean;
