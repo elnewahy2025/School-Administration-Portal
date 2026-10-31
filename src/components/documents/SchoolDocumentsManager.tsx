@@ -57,6 +57,7 @@ export function SchoolDocumentsManager({
       )}
 
       <SchoolDocumentFormDialog
+        key={editingDoc?.id || (isAddOpen ? "new" : "closed")}
         isOpen={isAddOpen || Boolean(editingDoc)}
         onClose={() => {
           setIsAddOpen(false);

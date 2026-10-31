@@ -63,7 +63,11 @@ export function SchoolDocumentFormDialog({
             onDescriptionChange={setDescription}
           />
 
-          <SchoolDocumentFileInput isEditing={isEditing} onFileChange={setFile} />
+          <SchoolDocumentFileInput
+            isEditing={isEditing}
+            currentFileName={existingDoc?.file_name}
+            onFileChange={setFile}
+          />
 
           <div className="flex items-center justify-end gap-2.5 border-t border-border/80 pt-3">
             <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting}>

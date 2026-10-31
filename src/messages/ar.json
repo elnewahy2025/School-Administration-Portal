@@ -831,7 +831,8 @@
     "fileSize": "حجم الملف",
     "allFiles": "جميع الملفات المرفوعة",
     "fileType": "نوع الملف",
-    "category": "القسم"
+    "category": "القسم",
+    "currentFile": "الملف الحالي"
   },
   "underConstruction": {
     "badge": "قيد التطوير والتحديث",

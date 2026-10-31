@@ -831,7 +831,8 @@
     "fileSize": "File Size",
     "allFiles": "All Uploaded Files",
     "fileType": "File Type",
-    "category": "Category"
+    "category": "Category",
+    "currentFile": "Current File"
   },
   "underConstruction": {
     "badge": "Under Construction",
