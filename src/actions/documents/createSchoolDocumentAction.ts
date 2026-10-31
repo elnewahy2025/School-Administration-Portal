@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { assertCanManageDocuments } from "@/lib/documents/assertCanManageDocuments";
 import { uploadDocumentFile } from "@/lib/documents/uploadDocumentFile";
 import { parseDocumentCreateFormData } from "@/lib/documents/parseDocumentCreateFormData";
@@ -22,14 +22,12 @@ export async function createSchoolDocumentAction(
     }
 
     const { slug, title, description, file } = parseDocumentCreateFormData(formData);
-    const supabase = await createSupabaseServerClient();
+    const admin = createSupabaseAdminClient(getActorDetails(auth.profile));
 
-    const uploadRes = await uploadDocumentFile(supabase, file, auth.schoolId, slug);
+    const uploadRes = await uploadDocumentFile(admin, file, auth.schoolId, slug);
     if (uploadRes.error || !uploadRes.path) {
       throw new ValidationError(uploadRes.error || "File upload failed");
     }
-
-    const admin = createSupabaseAdminClient(getActorDetails(auth.profile));
 
     const documentId = await insertSchoolDocumentRecord(admin, {
       schoolId: auth.schoolId,

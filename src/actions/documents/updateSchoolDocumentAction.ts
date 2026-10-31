@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { assertCanManageDocuments } from "@/lib/documents/assertCanManageDocuments";
 import { parseDocumentUpdateFormData } from "@/lib/documents/parseDocumentUpdateFormData";
 import { replaceDocumentFile } from "@/lib/documents/replaceDocumentFile";
@@ -22,7 +22,6 @@ export async function updateSchoolDocumentAction(
     }
 
     const { id, title, description, file } = parseDocumentUpdateFormData(formData);
-    const supabase = await createSupabaseServerClient();
     const admin = createSupabaseAdminClient(getActorDetails(auth.profile));
 
     const existing = await findDocumentForSchool(admin, id, auth.schoolId);
@@ -35,7 +34,7 @@ export async function updateSchoolDocumentAction(
 
     if (file) {
       const fileData = await replaceDocumentFile(
-        supabase,
+        admin,
         file,
         auth.schoolId,
         existing.slug,

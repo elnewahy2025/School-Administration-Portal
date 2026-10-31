@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { assertCanManageDocuments } from "@/lib/documents/assertCanManageDocuments";
 import { findDocumentForSchool } from "@/lib/documents/findDocumentForSchool";
 import { getActorDetails } from "@/lib/documents/getActorDetails";
@@ -24,7 +24,6 @@ export async function deleteSchoolDocumentAction(
       throw new ValidationError("Document ID is required");
     }
 
-    const supabase = await createSupabaseServerClient();
     const admin = createSupabaseAdminClient(getActorDetails(auth.profile));
 
     const existing = await findDocumentForSchool(admin, id, auth.schoolId);
@@ -40,7 +39,7 @@ export async function deleteSchoolDocumentAction(
     }
 
     if (existing.file_path) {
-      await supabase.storage.from("school-documents").remove([existing.file_path]);
+      await admin.storage.from("school-documents").remove([existing.file_path]);
     }
 
     revalidatePath(`/[locale]/documents/${existing.slug}`, "page");
