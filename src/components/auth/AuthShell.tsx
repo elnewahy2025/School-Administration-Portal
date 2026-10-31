@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
-import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { SchoolLogoAvatar } from "@/components/layout/SchoolLogoAvatar";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import {
   CARD_DIAMOND,
   CARD_DIAMOND_ICON,
@@ -28,11 +26,6 @@ export function AuthShell({
 }) {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-primary/5 via-background to-background px-4 py-20">
-      <div className="absolute end-4 top-4 flex items-center gap-2.5 sm:end-8 sm:top-6">
-        <LanguageSwitcher />
-        <ThemeToggle />
-      </div>
-
       <div
         className={`${CARD_SHELL_STATIC} w-full max-w-md px-6 pt-16 pb-8 sm:px-8 sm:pt-[4.5rem]`}
       >

@@ -3,8 +3,6 @@
 import { useTranslations } from "next-intl";
 import { WrenchIcon, RefreshCwIcon, ShieldCheckIcon, ClockIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
-import { ThemeToggle } from "@/components/theme";
 import { GoldDots } from "@/components/ui/gold-dots";
 import {
   CARD_SHELL_STATIC,
@@ -33,10 +31,6 @@ export function UnderConstructionView() {
           <span className="font-heading text-sm font-bold tracking-tight text-foreground sm:text-base">
             {t("poweredBy")}
           </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <LanguageSwitcher />
-          <ThemeToggle />
         </div>
       </header>
 

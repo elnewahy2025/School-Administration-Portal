@@ -2,6 +2,8 @@ import { setRequestLocale } from "next-intl/server";
 import { getPublicSchoolProfile } from "@/lib/school/getPublicSchoolProfile";
 import { getPublicCalendarEvents } from "@/lib/calendar/getPublicCalendarEvents";
 import { getPublicSchoolDocuments } from "@/lib/documents/getPublicSchoolDocuments";
+import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { PublicTopBar } from "@/components/public/PublicTopBar";
 import { PublicHero } from "@/components/public/PublicHero";
 import { PublicEventsSection } from "@/components/public/PublicEventsSection";
@@ -11,6 +13,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   setRequestLocale(locale);
 
+  const profile = await getCurrentProfile().catch(() => null);
+  const isOwner = profile?.id ? await isPlatformOwner(profile.id).catch(() => false) : false;
+
   const school = await getPublicSchoolProfile();
   const [events, documents] = await Promise.all([
     getPublicCalendarEvents(school?.id),
@@ -19,7 +24,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <div className="flex min-h-screen flex-col justify-between scroll-smooth bg-background text-foreground">
-      <PublicTopBar school={school} events={events} />
+      <PublicTopBar school={school} events={events} isOwner={isOwner} />
       <main className="flex-1">
         <PublicHero school={school} documents={documents} />
         <PublicEventsSection events={events} />

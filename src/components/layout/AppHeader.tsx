@@ -44,9 +44,13 @@ export function AppHeader({
 
       <div className="flex items-center gap-2 sm:gap-3">
         <NotificationBell unreadCount={unreadNotifications} />
-        <LanguageSwitcher />
-        <ThemeToggle />
-        <div className="h-5 w-px bg-sidebar-border" />
+        {isOwner ? (
+          <>
+            <LanguageSwitcher />
+            <ThemeToggle />
+            <div className="h-5 w-px bg-sidebar-border" />
+          </>
+        ) : null}
         <AppUserMenu profile={profile} />
       </div>
     </header>

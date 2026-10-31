@@ -35,8 +35,8 @@ export function PublicHero({
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[850px] rounded-full bg-primary/10 blur-3xl animate-ambient-pulse"
       />
 
-      <div className="relative mx-auto w-full max-w-[1720px] text-center space-y-10">
-        <div className="mx-auto max-w-4xl space-y-5 animate-hero-fade-down">
+      <div className="relative mx-auto w-full max-w-[1720px] text-center space-y-8 sm:space-y-12">
+        <div className="mx-auto max-w-4xl space-y-5 pb-4 sm:pb-8 animate-hero-fade-down">
           {hierarchy && (
             <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/80 px-5 py-2 text-xs sm:text-sm font-medium text-muted-foreground shadow-2xs backdrop-blur-xs transition-transform duration-300 hover:scale-105">
               <Building2Icon className="size-4 text-primary" />
@@ -56,7 +56,9 @@ export function PublicHero({
           )}
         </div>
 
-        <PublicHeroCardsGrid school={school} />
+        <div className="pt-8 sm:pt-12">
+          <PublicHeroCardsGrid school={school} />
+        </div>
 
         <PublicDocumentsSection documents={documents} />
       </div>

@@ -14,9 +14,11 @@ import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy"
 export function PublicTopBar({
   school,
   events,
+  isOwner = false,
 }: {
   school: PublicSchoolProfileRow | null;
   events: CalendarEventRow[];
+  isOwner?: boolean;
 }) {
   const locale = useLocale();
   const t = useTranslations("home");
@@ -42,8 +44,12 @@ export function PublicTopBar({
 
         <div className="flex shrink-0 items-center gap-2.5 self-end sm:self-center">
           <PublicInstagramLink url={school?.instagram_url} />
-          <LanguageSwitcher />
-          <ThemeToggle />
+          {isOwner ? (
+            <>
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </>
+          ) : null}
         </div>
       </div>
 
