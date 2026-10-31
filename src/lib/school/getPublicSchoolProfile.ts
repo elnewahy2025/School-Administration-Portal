@@ -9,6 +9,7 @@ export interface PublicSchoolProfileRow {
   timezone: string;
   phone?: string | null;
   email?: string | null;
+  instagram_url?: string | null;
   manager_name_ar?: string | null;
   manager_name_en?: string | null;
   assistant_manager_ar?: string | null;

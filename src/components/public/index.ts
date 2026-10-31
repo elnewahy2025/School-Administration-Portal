@@ -1,5 +1,6 @@
 export { PublicHero } from "./PublicHero";
 export { PublicTopBar } from "./PublicTopBar";
+export { PublicTopBarTicker } from "./PublicTopBarTicker";
 export { PublicHeroCardsGrid } from "./PublicHeroCardsGrid";
 export { PublicHeroSideCard } from "./PublicHeroSideCard";
 export { PublicHeroLeadershipCard } from "./PublicHeroLeadershipCard";
@@ -12,4 +13,6 @@ export { PublicFooter } from "./PublicFooter";
 export { UnderConstructionView } from "./UnderConstructionView";
 export { PublicDocumentsSection } from "./PublicDocumentsSection";
 export { PublicDocumentCard } from "./PublicDocumentCard";
+export { PublicInstagramLink } from "./PublicInstagramLink";
+export { InstagramIcon } from "./InstagramIcon";
 
