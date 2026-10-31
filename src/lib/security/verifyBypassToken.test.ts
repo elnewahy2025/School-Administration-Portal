@@ -40,3 +40,4 @@ describe("verifyBypassToken", () => {
     expect(verifyBypassToken("a.notanumber.signature", secret)).toBe(false);
   });
 });
+

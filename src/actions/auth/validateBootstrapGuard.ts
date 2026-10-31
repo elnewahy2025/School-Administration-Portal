@@ -1,3 +1,5 @@
+import { constantTimeCompare } from "@/lib/security/constantTimeCompare";
+
 /**
  * Validates operational bootstrap security guards for initial platform owner creation.
  * Returns an error code string if unauthorized, or null if eligible.
@@ -14,11 +16,11 @@ export function validateBootstrapGuard(
     return "bootstrap-disabled-in-production";
   }
 
-  if (expectedSecret && bootstrapSecret !== expectedSecret) {
+  if (expectedSecret && (!bootstrapSecret || !constantTimeCompare(bootstrapSecret, expectedSecret))) {
     return "invalid-bootstrap-secret";
   }
 
-  if (allowedEmail && userEmail?.toLowerCase() !== allowedEmail.toLowerCase()) {
+  if (allowedEmail && (!userEmail || !constantTimeCompare(userEmail.toLowerCase(), allowedEmail.toLowerCase()))) {
     return "unauthorized-bootstrap-identity";
   }
 

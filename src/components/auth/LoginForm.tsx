@@ -8,6 +8,7 @@ import { AUTH_BUTTON, AUTH_INPUT } from "@/components/ui/auth-styles";
 
 export function LoginForm() {
   const t = useTranslations("auth");
+  const tErrors = useTranslations("errors");
   const [state, formAction, pending] = useActionState(loginAction, {
     ok: false,
     error: null,
@@ -53,7 +54,11 @@ export function LoginForm() {
       </div>
       {state.error ? (
         <p className="text-sm text-destructive">
-          {state.error === "disabled" ? t("disabled") : t("error")}
+          {state.error === "disabled"
+            ? t("disabled")
+            : state.error === "rate_limited"
+              ? tErrors("rateLimitedDesc")
+              : t("error")}
         </p>
       ) : null}
       <button type="submit" disabled={pending} className={AUTH_BUTTON}>

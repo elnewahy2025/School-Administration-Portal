@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { rateLimitBuckets } from "@/lib/rateLimit/rateLimitBuckets";
 
 vi.mock("server-only", () => ({}));
 
@@ -30,6 +31,7 @@ describe("claimPlatformOwnerAction", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    rateLimitBuckets.clear();
     process.env = { ...originalEnv };
   });
 
@@ -92,5 +94,18 @@ describe("claimPlatformOwnerAction", () => {
 
     const result = await claimPlatformOwnerAction();
     expect(result).toEqual({ ok: false, error: "owner-exists" });
+  });
+
+  it("returns rate_limited when owner claim attempts exceed threshold", async () => {
+    mockGetUser.mockResolvedValue({ data: { user: { id: "u-flood", email: "admin@school.com" } } });
+    mockHasAnyPlatformOwner.mockResolvedValue(true);
+
+    for (let i = 0; i < 5; i++) {
+      const res = await claimPlatformOwnerAction();
+      expect(res.error).toBe("owner-exists");
+    }
+
+    const sixth = await claimPlatformOwnerAction();
+    expect(sixth).toEqual({ ok: false, error: "rate_limited" });
   });
 });

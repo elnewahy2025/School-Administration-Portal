@@ -9,6 +9,7 @@ import { AUTH_BUTTON, AUTH_INPUT } from "@/components/ui/auth-styles";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("auth");
+  const tErrors = useTranslations("errors");
   const [state, formAction, pending] = useActionState(requestPasswordResetAction, {
     success: false,
     error: null,
@@ -47,7 +48,11 @@ export function ForgotPasswordForm() {
         />
       </label>
 
-      {state.error && <p className="text-sm text-destructive">{t("error")}</p>}
+      {state.error && (
+        <p className="text-sm text-destructive">
+          {state.error === "rate_limited" ? tErrors("rateLimitedDesc") : t("error")}
+        </p>
+      )}
 
       <button type="submit" disabled={pending} className={AUTH_BUTTON}>
         {pending && <Loader2Icon className="size-4 animate-spin" />}

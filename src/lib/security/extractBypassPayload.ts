@@ -31,3 +31,4 @@ export async function extractBypassPayload(request: NextRequest): Promise<Bypass
     clear: queryClear,
   };
 }
+

@@ -17,3 +17,4 @@ describe("createBypassToken", () => {
     expect(token1).not.toBe(token2);
   });
 });
+

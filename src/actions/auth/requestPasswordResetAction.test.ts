@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { rateLimitBuckets } from "@/lib/rateLimit/rateLimitBuckets";
 
 const { mockResetPasswordForEmail } = vi.hoisted(() => ({
   mockResetPasswordForEmail: vi.fn(),
@@ -29,6 +30,7 @@ function stubEnv() {
 describe("requestPasswordResetAction", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    rateLimitBuckets.clear();
     stubEnv();
   });
 
@@ -82,5 +84,24 @@ describe("requestPasswordResetAction", () => {
     const result = await requestPasswordResetAction({ success: false }, formData);
     expect(result.success).toBe(false);
     expect(result.error).toBe("failed");
+  });
+
+  it("returns rate_limited when request threshold is exceeded", async () => {
+    mockResetPasswordForEmail.mockResolvedValue({ error: null });
+
+    const makeFormData = () => {
+      const fd = new FormData();
+      fd.append("email", "teacher@school.edu.kw");
+      return fd;
+    };
+
+    for (let i = 0; i < 3; i++) {
+      const res = await requestPasswordResetAction({ success: false }, makeFormData());
+      expect(res.success).toBe(true);
+    }
+
+    const fourthResult = await requestPasswordResetAction({ success: false }, makeFormData());
+    expect(fourthResult.success).toBe(false);
+    expect(fourthResult.error).toBe("rate_limited");
   });
 });

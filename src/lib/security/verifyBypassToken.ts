@@ -39,3 +39,4 @@ export function verifyBypassToken(
 
   return constantTimeCompare(signature, expectedSignature);
 }
+
