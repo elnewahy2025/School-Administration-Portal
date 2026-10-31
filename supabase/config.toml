@@ -55,6 +55,11 @@ public = true
 file_size_limit = "5MiB"
 allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
 
+[storage.buckets.school-documents]
+public = true
+file_size_limit = "20MiB"
+allowed_mime_types = ["image/jpeg", "image/png", "image/webp", "application/pdf"]
+
 [analytics]
 enabled = false
 
