@@ -10,7 +10,7 @@ export function OperationalPlanIcon({ className = "", ...props }: SVGProps<SVGSV
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className={`text-gold ${className}`.trim()}
+      className={`custom-doc-icon text-gold ${className}`.trim()}
       {...props}
     >
       {/* Coordinate axes */}

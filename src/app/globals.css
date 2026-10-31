@@ -52,6 +52,8 @@
   --color-card: var(--card);
   --color-gold: var(--gold);
   --color-gold-foreground: var(--gold-foreground);
+  --color-icon-bg: var(--icon-bg);
+  --color-icon-bg-foreground: var(--icon-bg-foreground);
   --color-action-foreground: var(--action-foreground);
   --color-card-bar: var(--card-bar);
   --color-card-bar-foreground: var(--card-bar-foreground);
@@ -74,16 +76,18 @@
   --card-foreground: #0e121d;
   --popover: #ffffff;
   --popover-foreground: #0e121d;
-  --primary: #14254a;
+  --primary: #182c55;
   --primary-foreground: #ffffff;
   --secondary: #e4e9f2;
-  --secondary-foreground: #14254a;
+  --secondary-foreground: #182c55;
   --muted: #f1f1f1;
   --muted-foreground: #4d5765;
   --accent: #e4e9f2;
-  --accent-foreground: #14254a;
+  --accent-foreground: #182c55;
   --gold: #ffcd35;
-  --gold-foreground: #14254a;
+  --gold-foreground: #182c55;
+  --icon-bg: #182c55;
+  --icon-bg-foreground: #ffcd35;
   --destructive: #dc3545;
   --destructive-foreground: #ffffff;
   --success: #28a745;
@@ -97,16 +101,16 @@
   --border: #e4e4e4;
   --input: #c6cedd;
   --ring: #0b6eda;
-  --chart-1: #14254a;
+  --chart-1: #182c55;
   --chart-2: #48a0d8;
   --chart-3: #7c3aed;
   --chart-4: #ffcd35;
   --chart-5: #4d5765;
   --radius: 0.625rem;
-  --sidebar: #14254a;
+  --sidebar: #182c55;
   --sidebar-foreground: #f8fafc;
   --sidebar-primary: #ffcd35;
-  --sidebar-primary-foreground: #14254a;
+  --sidebar-primary-foreground: #182c55;
   --sidebar-accent: #1d3666;
   --sidebar-accent-foreground: #ffcd35;
   --sidebar-border: #223259;
@@ -285,6 +289,8 @@
 .dark,
 .emerald,
 .midnight {
+  --icon-bg: #182c55;
+  --icon-bg-foreground: #ffcd35;
   --action-from: var(--primary);
   --action-to: var(--primary);
   --action-foreground: var(--primary-foreground);
@@ -363,14 +369,35 @@
     color: var(--primary-foreground) !important;
   }
 
-  /* Unified Gold Visual Identity for all UI icons across all pages */
-  svg.lucide:not([data-no-gold]):not(.text-destructive):not(.text-destructive-foreground):not(.text-red-500):not(.text-red-600) {
+  /* Unified Gold Visual Identity & Blue (#182C55) Background for all UI icons across all pages & functions */
+  svg.lucide:not([data-no-bg]):not(.text-destructive):not(.text-destructive-foreground):not(.text-red-500):not(.text-red-600),
+  svg.custom-doc-icon:not([data-no-bg]) {
     color: var(--gold, #ffcd35);
+    background-color: var(--icon-bg, #182c55);
+    border-radius: 0.375rem;
+    padding: 0.2rem;
+    box-sizing: content-box;
+  }
+
+  /* When an icon is already nested inside an icon-badge container with the blue background, remove redundant inner background and padding */
+  [class*="bg-primary"] > svg.lucide,
+  [class*="bg-primary"] > svg.custom-doc-icon,
+  [class*="bg-icon-bg"] > svg.lucide,
+  [class*="bg-icon-bg"] > svg.custom-doc-icon,
+  [class*="bg-sidebar"] > svg.lucide,
+  [class*="bg-sidebar"] > svg.custom-doc-icon,
+  .no-icon-bg svg.lucide,
+  .no-icon-bg svg.custom-doc-icon {
+    background-color: transparent;
+    padding: 0;
+    box-sizing: border-box;
   }
 
   svg.lucide.text-destructive,
   svg.lucide.text-red-500,
   svg.lucide.text-red-600 {
     color: var(--destructive, #dc3545) !important;
+    background-color: transparent !important;
+    padding: 0 !important;
   }
 }
