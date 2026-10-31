@@ -16,9 +16,16 @@ describe("KuwaitMoeLink", () => {
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
 
-  it("renders Kuwait emblem image", () => {
+  it("renders Kuwait emblem image on the right of the text (dir=ltr)", () => {
     render(<KuwaitMoeLink />);
+    const link = screen.getByRole("link", {
+      name: "وزارة التربية - دولة الكويت | Ministry of Education",
+    });
+    expect(link).toHaveAttribute("dir", "ltr");
     const img = screen.getByAltText("شعار دولة الكويت - وزارة التربية");
     expect(img).toHaveAttribute("src", "/images/kuwait-emblem.svg");
+    expect(screen.getByText("وزارة التربية")).toBeInTheDocument();
+    expect(screen.getByText("Ministry of Education")).toBeInTheDocument();
+    expect(screen.getByText("State of Kuwait | دولة الكويت")).toBeInTheDocument();
   });
 });

@@ -9,12 +9,13 @@ export function KuwaitMoeLink({
       href="https://www.moe.edu.kw/"
       target="_blank"
       rel="noopener noreferrer"
-      className={`group flex items-center gap-2.5 text-end transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${className}`}
+      dir="ltr"
+      className={`group inline-flex items-center gap-3 text-right transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold ${className}`}
       title="وزارة التربية - دولة الكويت | Ministry of Education"
       aria-label="وزارة التربية - دولة الكويت | Ministry of Education"
       {...props}
     >
-      <div className="flex flex-col items-end leading-tight text-sidebar-foreground">
+      <div className="flex flex-col items-end text-right leading-tight text-sidebar-foreground">
         <span className="text-xs sm:text-sm font-extrabold tracking-tight">
           وزارة التربية
         </span>
@@ -30,7 +31,7 @@ export function KuwaitMoeLink({
       <img
         src="/images/kuwait-emblem.svg"
         alt="شعار دولة الكويت - وزارة التربية"
-        className="size-10 sm:size-12 shrink-0 drop-shadow-sm transition-transform duration-200 group-hover:scale-105"
+        className="size-12 sm:size-14 shrink-0 drop-shadow-sm transition-transform duration-200 group-hover:scale-105"
       />
     </a>
   );
