@@ -35,7 +35,17 @@
     "moduleCalendarDesc": "مواعيد الاختبارات، الفعاليات المدرسية العامة، والاجتماعات الدورية في تقويم تفاعلي موحد.",
     "managerTitle": "مديرة المدرسة",
     "assistantManager1Title": "المديرة المساعدة الفنية",
-    "assistantManager2Title": "المديرة المساعدة الإدارية"
+    "assistantManager2Title": "المديرة المساعدة الإدارية",
+    "documentsEyebrow": "مرفقات رسمية",
+    "documentsTitle": "أدلة ووثائق المدرسة",
+    "documentsSubtitle": "اضغط على أي دليل لعرضه — أو استخدم قائمة «أدلة وثائق المدرسة» في الأعلى من أي صفحة.",
+    "documentViewAction": "عرض الوثيقة",
+    "docOperationalPlanTitle": "الخطة التشغيلية",
+    "docOperationalPlanDesc": "أهداف الخطة السنوية ومؤشرات الأداء والتنفيذ.",
+    "docCommitteesGuideTitle": "دليل إجراءات اللجان",
+    "docCommitteesGuideDesc": "تشكيل اللجان المدرسية ومهامها وآلية عملها.",
+    "docCounselingGuideTitle": "دليل الإرشاد المدرسي",
+    "docCounselingGuideDesc": "برامج الإرشاد الطلابي والخدمات النفسية والتربوية."
   },
   "theme": {
     "toDark": "التبديل إلى الوضع الداكن",

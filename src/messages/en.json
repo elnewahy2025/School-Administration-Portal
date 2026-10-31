@@ -35,7 +35,17 @@
     "moduleCalendarDesc": "Institutional milestones, public announcements, exams, and departmental meetings in one synchronized hub.",
     "managerTitle": "School Principal",
     "assistantManager1Title": "Assistant Principal 1",
-    "assistantManager2Title": "Assistant Principal 2"
+    "assistantManager2Title": "Assistant Principal 2",
+    "documentsEyebrow": "Official Attachments",
+    "documentsTitle": "School Guides & Documents",
+    "documentsSubtitle": "Click on any guide to view it — or use the 'School Guides & Documents' menu at the top of any page.",
+    "documentViewAction": "View Document",
+    "docOperationalPlanTitle": "Operational Plan",
+    "docOperationalPlanDesc": "Annual plan goals, performance indicators, and execution.",
+    "docCommitteesGuideTitle": "Committees Procedures Guide",
+    "docCommitteesGuideDesc": "Formation of school committees, duties, and workflow.",
+    "docCounselingGuideTitle": "School Counseling Guide",
+    "docCounselingGuideDesc": "Student counseling programs, psychological, and educational services."
   },
   "theme": {
     "toDark": "Switch to dark mode",

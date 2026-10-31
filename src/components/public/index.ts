@@ -10,4 +10,6 @@ export { PublicEventCard } from "./PublicEventCard";
 export { PublicSectionTitle } from "./PublicSectionTitle";
 export { PublicFooter } from "./PublicFooter";
 export { UnderConstructionView } from "./UnderConstructionView";
+export { PublicDocumentsSection } from "./PublicDocumentsSection";
+export { PublicDocumentCard } from "./PublicDocumentCard";
 

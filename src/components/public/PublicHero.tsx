@@ -7,6 +7,7 @@ import { resolveLocalizedText } from "@/lib/school/resolveLocalizedText";
 import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
 import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy";
 import { PublicHeroCardsGrid } from "./PublicHeroCardsGrid";
+import { PublicDocumentsSection } from "./PublicDocumentsSection";
 
 export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }) {
   const locale = useLocale();
@@ -59,6 +60,8 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
         </div>
 
         <PublicHeroCardsGrid school={school} />
+
+        <PublicDocumentsSection />
       </div>
     </section>
   );
