@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { shouldThrottleNotification } from "./shouldThrottleNotification";
 import type { CreateNotificationInput } from "./types";
 
@@ -10,7 +11,7 @@ export async function isNotificationThrottled(
     return false;
   }
 
-  const { data: existing } = await supabase
+  const { data: existing, error } = await supabase
     .from("notifications")
     .select("created_at")
     .eq("user_id", input.userId)
@@ -21,6 +22,10 @@ export async function isNotificationThrottled(
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  if (error) {
+    throw mapDatabaseError(error);
+  }
 
   if (!existing) return false;
   return shouldThrottleNotification(existing.created_at);

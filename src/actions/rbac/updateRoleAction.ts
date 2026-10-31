@@ -4,6 +4,7 @@ import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { assertCanUpdateRoleRecord } from "./assertCanUpdateRoleRecord";
 import { syncRolePermissions } from "./syncRolePermissions";
 import {
   sanitizeError,
@@ -11,6 +12,7 @@ import {
   AuthenticationError,
   ForbiddenError,
   ValidationError,
+  mapDatabaseError,
   type ActionResult,
 } from "@/lib/errors";
 
@@ -36,22 +38,15 @@ export async function updateRoleAction(
     }
 
     const supabase = await createSupabaseServerClient();
-    const { data: role } = await supabase
-      .from("roles")
-      .select("id, is_system, school_id")
-      .eq("id", roleId)
-      .single();
-
-    if (!role || role.is_system || role.school_id !== profile.school_id) {
-      throw new ForbiddenError("Cannot modify system or unauthorized roles");
-    }
+    await assertCanUpdateRoleRecord(supabase, roleId, profile.school_id);
 
     const { error: updateError } = await supabase
       .from("roles")
       .update({ name: trimmedName })
       .eq("id", roleId);
+
     if (updateError) {
-      throw updateError;
+      throw mapDatabaseError(updateError);
     }
 
     await syncRolePermissions(supabase, roleId, permissionKeys);
@@ -59,7 +54,7 @@ export async function updateRoleAction(
     revalidateSettingsPath("users");
     return { success: true };
   } catch (err: unknown) {
-    const sanitized = sanitizeError(err, { action: "updateRoleAction", roleId });
-    return formatActionErrorResult(sanitized);
+    const appError = sanitizeError(err);
+    return formatActionErrorResult(appError);
   }
 }

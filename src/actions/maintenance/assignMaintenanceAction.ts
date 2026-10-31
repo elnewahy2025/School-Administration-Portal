@@ -7,8 +7,8 @@ import { isActiveSchoolMember } from "@/lib/school/isActiveSchoolMember";
 import { parseMaintenanceAssignData } from "@/lib/validation/parseMaintenanceAssignData";
 import { saveMaintenanceAssignment } from "@/lib/maintenance/saveMaintenanceAssignment";
 import { dispatchModuleNotification } from "@/lib/notifications/dispatchModuleNotification";
+import { fetchAssignableTicket } from "./fetchAssignableTicket";
 import { ValidationError } from "@/lib/errors/ValidationError";
-import { NotFoundError } from "@/lib/errors/NotFoundError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
@@ -22,21 +22,7 @@ export async function assignMaintenanceAction(formData: FormData): Promise<Actio
     }
 
     const supabase = await createSupabaseServerClient();
-    const { data: ticket } = await supabase
-      .from("maintenance_requests")
-      .select("id, school_id, status, priority, assigned_operator_id")
-      .eq("id", requestId)
-      .single();
-
-    if (!ticket) {
-      throw new NotFoundError("Ticket not found");
-    }
-
-    if (ticket.school_id !== auth.schoolId) {
-      // RLS already hides foreign tickets; this keeps the service-role side
-      // effects below honest even if a policy regresses.
-      throw new NotFoundError("Ticket not found");
-    }
+    const ticket = await fetchAssignableTicket(supabase, requestId, auth.schoolId);
 
     // The operator id comes from the client. Reject a user from another
     // tenant before writing the assignment (audit finding M-8).
@@ -60,7 +46,7 @@ export async function assignMaintenanceAction(formData: FormData): Promise<Actio
       throw mapDatabaseError(res.error, "Failed to assign ticket");
     }
 
-    if (operatorId && operatorId !== auth.profileId) {
+    if (operatorId && operatorId !== ticket.assigned_operator_id) {
       void dispatchModuleNotification({
         recipientUserIds: [operatorId],
         schoolId: auth.schoolId,

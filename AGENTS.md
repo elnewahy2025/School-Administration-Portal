@@ -141,7 +141,7 @@ If the root cause cannot be established, do not pretend it has been fixed. Expla
 Never hardcode:
 
 - User-specific or tenant-specific information.
-- Student records, attendance records, financial information, or report results.
+- Financial information, or report results.
 - Dashboard statistics, KPIs, chart values, or calculated metrics.
 - User roles, permissions, or authorization decisions.
 - Database records or API responses intended to represent live application data.
@@ -229,8 +229,8 @@ Security is mandatory, not optional.
 2. Never trust client-side permission checks as the actual security boundary.
 3. Enforce authorization on the server for every protected operation.
 4. Validate resource ownership and access permissions before reading or modifying data.
-5. Preserve tenant isolation across database queries, APIs, background jobs, exports, reports, and storage.
-6. Never allow users to access another tenant's information by manipulating IDs, URLs, request bodies, or API parameters.
+5. Preserve user isolation across database queries, APIs, background jobs, exports, reports, and storage.
+6. Never allow users to access another user's information by manipulating IDs, URLs, request bodies, or API parameters.
 7. Apply least-privilege access.
 8. Never expose credentials, secrets, private records, or sensitive information in client-side code, logs, or error responses.
 9. Validate all external and user-provided inputs.

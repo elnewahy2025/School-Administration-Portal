@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 /**
  * Resolves the fallback tenant for a platform owner.
@@ -12,13 +13,17 @@ import { createSupabaseServerClient } from "@/lib/supabase";
  */
 export async function getFirstActiveSchoolId(): Promise<string | null> {
   const supabase = await createSupabaseServerClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("schools")
     .select("id")
     .eq("is_active", true)
     .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
+
+  if (error) {
+    throw mapDatabaseError(error);
+  }
 
   return data?.id ?? null;
 }

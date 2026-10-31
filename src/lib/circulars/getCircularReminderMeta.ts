@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 export async function getCircularReminderMeta(
   supabase: SupabaseClient,
@@ -8,11 +9,15 @@ export async function getCircularReminderMeta(
     return { title: "", ref: "" };
   }
 
-  const { data: circ } = await supabase
+  const { data: circ, error } = await supabase
     .from("circulars")
     .select("title, ref_number")
     .eq("id", circularId)
     .maybeSingle();
+
+  if (error) {
+    throw mapDatabaseError(error);
+  }
 
   return {
     title: circ?.title ?? "",

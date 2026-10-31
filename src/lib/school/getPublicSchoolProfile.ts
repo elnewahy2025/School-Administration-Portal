@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 export interface PublicSchoolProfileRow {
   id: string;
@@ -39,9 +40,13 @@ export async function getPublicSchoolProfile(
       "id, name_ar, name_en, slug, logo_path, timezone, phone, email, manager_name_ar, manager_name_en, assistant_manager_ar, assistant_manager_en, assistant_manager_2_ar, assistant_manager_2_en, address_ar, address_en, academic_year, public_description, vision, mission, vision_ar, vision_en, mission_ar, mission_en, objectives",
     );
 
-  const { data } = schoolId
+  const { data, error } = schoolId
     ? await query.eq("id", schoolId).maybeSingle()
     : await query.limit(1).maybeSingle();
+
+  if (error) {
+    throw mapDatabaseError(error);
+  }
 
   return (data as PublicSchoolProfileRow | null) ?? null;
 }

@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { getFirstActiveSchoolId } from "./getFirstActiveSchoolId";
 
 export type SchoolRow = {
@@ -37,20 +38,29 @@ export async function getCurrentSchool(schoolId?: string | null): Promise<School
     return null;
   }
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("schools")
     .select(SCHOOL_FIELDS)
     .eq("id", targetId)
     .maybeSingle();
 
+  if (error) {
+    throw mapDatabaseError(error);
+  }
+
   const school = (data as SchoolRow | null) ?? null;
 
   if (school) {
-    const { data: settings } = await supabase
+    const { data: settings, error: settingsError } = await supabase
       .from("school_settings")
       .select("academic_year")
       .eq("school_id", school.id)
       .maybeSingle();
+
+    if (settingsError) {
+      throw mapDatabaseError(settingsError);
+    }
+
     if (settings?.academic_year) {
       school.academic_year = settings.academic_year;
     }

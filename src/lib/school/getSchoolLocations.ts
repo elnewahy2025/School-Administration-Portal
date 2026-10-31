@@ -16,12 +16,17 @@ export async function getSchoolLocations(schoolId?: string | null): Promise<Loca
   const supabase = await createSupabaseServerClient();
   let resolvedId = schoolId;
   if (!resolvedId) {
-    const { data: firstSchool } = await supabase
+    const { data: firstSchool, error: firstSchoolError } = await supabase
       .from("schools")
       .select("id")
       .eq("is_active", true)
       .limit(1)
       .maybeSingle();
+
+    if (firstSchoolError) {
+      throw mapDatabaseError(firstSchoolError);
+    }
+
     resolvedId = firstSchool?.id ?? null;
   }
   if (!resolvedId) return [];

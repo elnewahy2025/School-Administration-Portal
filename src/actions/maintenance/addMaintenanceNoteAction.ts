@@ -27,11 +27,15 @@ export async function addMaintenanceNoteAction(formData: FormData): Promise<Acti
     }
 
     const supabase = await createSupabaseServerClient();
-    const { data: ticket } = await supabase
+    const { data: ticket, error: ticketError } = await supabase
       .from("maintenance_requests")
       .select("id, school_id, reporter_id, assigned_operator_id")
       .eq("id", requestId)
-      .single();
+      .maybeSingle();
+
+    if (ticketError) {
+      throw mapDatabaseError(ticketError);
+    }
 
     if (!ticket) {
       throw new NotFoundError("Ticket not found");

@@ -10,8 +10,8 @@ import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatA
 export async function markAllNotificationsReadAction(): Promise<ActionResult> {
   try {
     const supabase = await createSupabaseServerClient();
-    const { data: userRes } = await supabase.auth.getUser();
-    if (!userRes.user) {
+    const { data: userRes, error: userError } = await supabase.auth.getUser();
+    if (userError || !userRes?.user) {
       throw new AuthenticationError("Unauthorized");
     }
 

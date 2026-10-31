@@ -1,6 +1,7 @@
 "use server";
 
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 
@@ -19,11 +20,14 @@ export async function loginAction(
     const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
     if (error) return { ok: false, error: "invalid" };
 
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("is_active")
       .eq("id", data.user.id)
       .maybeSingle();
+    if (profileError) {
+      throw mapDatabaseError(profileError);
+    }
     if (profile && profile.is_active === false) {
       await supabase.auth.signOut();
       return { ok: false, error: "disabled" };

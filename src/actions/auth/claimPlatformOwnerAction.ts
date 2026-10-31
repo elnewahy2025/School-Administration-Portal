@@ -12,8 +12,8 @@ export async function claimPlatformOwnerAction(bootstrapSecret?: string): Promis
 }> {
   try {
     const supabase = await createSupabaseServerClient();
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData.user) return { ok: false, error: "unauthenticated" };
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData?.user) return { ok: false, error: "unauthenticated" };
 
     const guardError = validateBootstrapGuard(userData.user.email, bootstrapSecret);
     if (guardError) return { ok: false, error: guardError };

@@ -8,10 +8,10 @@ import { isLegalTransition } from "@/lib/maintenance/isLegalTransition";
 import { parseMaintenanceTransitionData } from "@/lib/validation/parseMaintenanceTransitionData";
 import { assertCanTransitionStatus } from "@/lib/maintenance/assertCanTransitionStatus";
 import { applyMaintenanceStatusChange } from "@/lib/maintenance/applyMaintenanceStatusChange";
+import { fetchTicketForTransition } from "./fetchTicketForTransition";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
 import { ValidationError } from "@/lib/errors/ValidationError";
-import { NotFoundError } from "@/lib/errors/NotFoundError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
@@ -29,15 +29,7 @@ export async function updateMaintenanceStatusAction(formData: FormData): Promise
     }
 
     const supabase = await createSupabaseServerClient();
-    const { data: ticket } = await supabase
-      .from("maintenance_requests")
-      .select("id, school_id, status, reporter_id, assigned_operator_id")
-      .eq("id", requestId)
-      .single();
-
-    if (!ticket) {
-      throw new NotFoundError("Ticket not found");
-    }
+    const ticket = await fetchTicketForTransition(supabase, requestId);
 
     if (!isLegalTransition(ticket.status, targetStatus)) {
       throw new ValidationError(`Illegal transition from ${ticket.status} to ${targetStatus}`);

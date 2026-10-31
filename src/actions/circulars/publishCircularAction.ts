@@ -37,10 +37,14 @@ export async function publishCircularAction(circularId: string): Promise<ActionR
       throw mapDatabaseError(error);
     }
 
-    const { data: targets } = await supabase
+    const { data: targets, error: targetsError } = await supabase
       .from("circular_targets")
       .select("department:departments(head_profile_id)")
       .eq("circular_id", circularId);
+
+    if (targetsError) {
+      throw mapDatabaseError(targetsError);
+    }
 
     type TargetHead = { department: { head_profile_id: string | null } | null };
     const headIds = ((targets ?? []) as unknown as TargetHead[])

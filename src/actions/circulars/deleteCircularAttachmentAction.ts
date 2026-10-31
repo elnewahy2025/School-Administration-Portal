@@ -3,10 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
-import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
+import { assertCanDeleteAttachment } from "./assertCanDeleteAttachment";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
-import { ForbiddenError } from "@/lib/errors/ForbiddenError";
 import { DatabaseError } from "@/lib/errors/DatabaseError";
 import { NotFoundError } from "@/lib/errors/NotFoundError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
@@ -23,24 +21,20 @@ export async function deleteCircularAttachmentAction(
       throw new AuthenticationError("Unauthorized");
     }
 
-    const perms = await getEffectivePermissions(profile.school_id);
-    const isOwner = await isPlatformOwner(profile.id);
-    const canEdit =
-      isOwner || perms.includes("circular.create") || perms.includes("circular.publish");
-    if (!canEdit) {
-      throw new ForbiddenError("Unauthorized");
-    }
+    await assertCanDeleteAttachment(profile.school_id, profile.id);
 
     const supabase = await createSupabaseServerClient();
-    const { data: attachment } = await supabase
+    const { data: attachment, error: readError } = await supabase
       .from("circular_attachments")
       .select("path")
       .eq("id", attachmentId)
       .maybeSingle();
 
+    if (readError) {
+      throw mapDatabaseError(readError);
+    }
+
     if (attachment) {
-      // The bucket now has a DELETE policy (0045). Surface a failure instead of
-      // removing the row and leaving the private object behind (H-16).
       const { error: removeError } = await supabase.storage
         .from("circular-attachments")
         .remove([attachment.path]);
@@ -55,6 +49,7 @@ export async function deleteCircularAttachmentAction(
       .eq("id", attachmentId)
       .select("id")
       .maybeSingle();
+
     if (error) {
       throw mapDatabaseError(error);
     }
