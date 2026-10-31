@@ -27,7 +27,7 @@ export function SchoolDocumentRowActions({
         className="gap-1 text-xs"
         title={t("preview")}
       >
-        <EyeIcon className="size-3.5" />
+        <EyeIcon className="size-3.5 text-gold" />
         <span className="hidden md:inline">{t("preview")}</span>
       </Button>
 
@@ -38,7 +38,7 @@ export function SchoolDocumentRowActions({
         className="gap-1 text-xs"
         title={t("print")}
       >
-        <PrinterIcon className="size-3.5 text-primary" />
+        <PrinterIcon className="size-3.5 text-gold" />
         <span className="hidden md:inline">{t("print")}</span>
       </Button>
 
@@ -49,7 +49,7 @@ export function SchoolDocumentRowActions({
         className="gap-1 text-xs"
         title={t("editDocument")}
       >
-        <PencilIcon className="size-3.5" />
+        <PencilIcon className="size-3.5 text-gold" />
         <span className="hidden md:inline">{t("editDocument")}</span>
       </Button>
 

@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export function CommitteesGuideIcon(props: SVGProps<SVGSVGElement>) {
+export function CommitteesGuideIcon({ className = "", ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -10,6 +10,7 @@ export function CommitteesGuideIcon(props: SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      className={`text-gold ${className}`.trim()}
       {...props}
     >
       {/* Three committee members: heads */}
@@ -35,3 +36,4 @@ export function CommitteesGuideIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+

@@ -53,7 +53,7 @@ export function CalendarEventsView({
             onClick={() => setViewMode("month")}
             className="gap-1.5"
           >
-            <CalendarDaysIcon className="size-4" />
+            <CalendarDaysIcon className="size-4 text-gold" />
             <span>{t("monthView")}</span>
           </Button>
           <Button
@@ -62,7 +62,7 @@ export function CalendarEventsView({
             onClick={() => setViewMode("list")}
             className="gap-1.5"
           >
-            <ListIcon className="size-4" />
+            <ListIcon className="size-4 text-gold" />
             <span>{t("listView")}</span>
           </Button>
         </div>

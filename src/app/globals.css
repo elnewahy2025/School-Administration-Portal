@@ -362,4 +362,15 @@
     background-color: var(--primary) !important;
     color: var(--primary-foreground) !important;
   }
+
+  /* Unified Gold Visual Identity for all UI icons across all pages */
+  svg.lucide:not([data-no-gold]):not(.text-destructive):not(.text-destructive-foreground):not(.text-red-500):not(.text-red-600) {
+    color: var(--gold, #ffcd35);
+  }
+
+  svg.lucide.text-destructive,
+  svg.lucide.text-red-500,
+  svg.lucide.text-red-600 {
+    color: var(--destructive, #dc3545) !important;
+  }
 }

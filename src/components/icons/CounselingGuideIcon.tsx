@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export function CounselingGuideIcon(props: SVGProps<SVGSVGElement>) {
+export function CounselingGuideIcon({ className = "", ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -10,6 +10,7 @@ export function CounselingGuideIcon(props: SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      className={`text-gold ${className}`.trim()}
       {...props}
     >
       {/* Speech bubble with lightbulb on top right */}
@@ -34,3 +35,4 @@ export function CounselingGuideIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+

@@ -57,7 +57,7 @@ export function ReportFiltersBar({
 
       <div className="flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-          <ArrowDownUpIcon className="size-3.5 text-primary" />
+          <ArrowDownUpIcon className="size-3.5 text-gold" />
           <span>Sort:</span>
         </div>
 

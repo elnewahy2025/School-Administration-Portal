@@ -27,3 +27,4 @@ describe("Document Icons", () => {
     expect(svg).toHaveClass("size-6");
   });
 });
+

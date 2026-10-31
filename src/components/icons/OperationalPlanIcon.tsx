@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-export function OperationalPlanIcon(props: SVGProps<SVGSVGElement>) {
+export function OperationalPlanIcon({ className = "", ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -10,6 +10,7 @@ export function OperationalPlanIcon(props: SVGProps<SVGSVGElement>) {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      className={`text-gold ${className}`.trim()}
       {...props}
     >
       {/* Coordinate axes */}
@@ -38,3 +39,4 @@ export function OperationalPlanIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+

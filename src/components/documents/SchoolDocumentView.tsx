@@ -51,18 +51,18 @@ export function SchoolDocumentView({
           href="/dashboard"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
-          <BackArrow className="size-4" />
+          <BackArrow className="size-4 text-gold" />
           <span>{isRtl ? "العودة للوحة التحكم" : "Back to Dashboard"}</span>
         </Link>
       </div>
 
       <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-card/60 p-12 text-center shadow-xs">
-        <div className="mb-4 grid size-16 place-items-center rounded-2xl bg-primary/10 text-primary shadow-xs">
-          <Icon className="size-8" strokeWidth={2} />
+        <div className="mb-4 grid size-16 place-items-center rounded-2xl bg-gold/15 text-gold shadow-xs">
+          <Icon className="size-8 text-gold" strokeWidth={2} />
         </div>
 
         <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
-          <ClockIcon className="size-3.5" />
+          <ClockIcon className="size-3.5 text-gold" />
           <span>{isRtl ? "قيد التجهيز والإعداد" : "Under Preparation"}</span>
         </div>
 

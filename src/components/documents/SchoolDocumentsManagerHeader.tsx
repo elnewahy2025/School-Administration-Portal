@@ -59,12 +59,12 @@ export function SchoolDocumentsManagerHeader({
           href="/dashboard"
           className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
-          <BackArrow className="size-4" />
+          <BackArrow className="size-4 text-gold" />
           <span>{isRtl ? "لوحة التحكم" : "Dashboard"}</span>
         </Link>
 
         <Button onClick={onAdd} className="gap-1.5 text-xs shadow-sm sm:text-sm">
-          <PlusIcon className="size-4" />
+          <PlusIcon className="size-4 text-gold" />
           <span>{t("addDocument")}</span>
         </Button>
       </div>

@@ -52,9 +52,9 @@ export function ExportCsvButton({
       className={`${chipClass(false)} gap-2 text-xs disabled:pointer-events-none disabled:opacity-50`}
     >
       {isExporting ? (
-        <Loader2Icon className="size-3.5 animate-spin" />
+        <Loader2Icon className="size-3.5 animate-spin text-gold" />
       ) : (
-        <DownloadIcon className="size-3.5" />
+        <DownloadIcon className="size-3.5 text-gold" />
       )}
       <span>{isExporting ? t("exporting") : t("exportCsv")}</span>
     </button>
