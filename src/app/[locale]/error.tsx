@@ -7,7 +7,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n";
 import { reportClientError } from "@/lib/logger/reportClientError";
 import { resolveClientErrorReference } from "@/lib/logger/resolveClientErrorReference";
-import { cn } from "cn";
+import { cn } from "@/lib/cn";
 
 export default function ErrorBoundary({
   error,

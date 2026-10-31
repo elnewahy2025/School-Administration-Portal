@@ -2,7 +2,7 @@
 
 import { usePathname } from "@/i18n";
 import { Link } from "@/i18n";
-import { cn } from "cn";
+import { cn } from "@/lib/cn";
 import { isNavLinkActive } from "./isNavLinkActive";
 
 export function NavLink({

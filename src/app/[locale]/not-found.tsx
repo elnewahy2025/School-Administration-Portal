@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { FileQuestionIcon, HomeIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n";
-import { cn } from "cn";
+import { cn } from "@/lib/cn";
 
 export default function NotFoundPage() {
   const t = useTranslations("errors");

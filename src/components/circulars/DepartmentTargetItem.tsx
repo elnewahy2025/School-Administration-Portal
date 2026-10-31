@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { cn } from "cn";
+import { cn } from "@/lib/cn";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function DepartmentTargetItem({

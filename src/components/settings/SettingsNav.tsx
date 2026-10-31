@@ -2,7 +2,7 @@
 
 import { usePathname, Link } from "@/i18n";
 import { useTranslations } from "next-intl";
-import { cn } from "cn";
+import { cn } from "@/lib/cn";
 import { buildSettingsTabs } from "./buildSettingsTabs";
 
 export function SettingsNav({

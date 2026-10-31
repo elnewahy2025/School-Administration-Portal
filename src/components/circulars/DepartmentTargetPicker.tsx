@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { CheckCheckIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { cn } from "cn";
+import { cn } from "@/lib/cn";
 import { DepartmentTargetItem } from "./DepartmentTargetItem";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
