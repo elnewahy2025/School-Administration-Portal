@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { isUnderConstruction } from "./isUnderConstruction";
+import { createBypassToken } from "@/lib/security/createBypassToken";
 
 vi.mock("next/headers", () => ({
   cookies: vi.fn(),
@@ -46,16 +47,30 @@ describe("isUnderConstruction", () => {
     expect(result).toBe(false);
   });
 
-  it("returns false on Vercel when bypass cookie matches secret", async () => {
+  it("returns false on Vercel when bypass cookie has valid signed token", async () => {
+    process.env.VERCEL = "1";
+    process.env.UNDER_CONSTRUCTION_BYPASS_SECRET = "secret-123";
+
+    const validToken = createBypassToken("secret-123");
+    const { cookies } = await import("next/headers");
+    vi.mocked(cookies).mockResolvedValue({
+      get: (name: string) => (name === "bypass_construction" ? { value: validToken } : undefined),
+    } as unknown as Awaited<ReturnType<typeof cookies>>);
+
+    const result = await isUnderConstruction();
+    expect(result).toBe(false);
+  });
+
+  it("returns true on Vercel when bypass cookie has invalid signature", async () => {
     process.env.VERCEL = "1";
     process.env.UNDER_CONSTRUCTION_BYPASS_SECRET = "secret-123";
 
     const { cookies } = await import("next/headers");
     vi.mocked(cookies).mockResolvedValue({
-      get: (name: string) => (name === "bypass_construction" ? { value: "secret-123" } : undefined),
+      get: (name: string) => (name === "bypass_construction" ? { value: "invalid-token" } : undefined),
     } as unknown as Awaited<ReturnType<typeof cookies>>);
 
     const result = await isUnderConstruction();
-    expect(result).toBe(false);
+    expect(result).toBe(true);
   });
 });

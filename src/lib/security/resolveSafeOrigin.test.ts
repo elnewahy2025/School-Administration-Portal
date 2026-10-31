@@ -17,3 +17,4 @@ describe("resolveSafeOrigin", () => {
     expect(resolveSafeOrigin("not a url")).toBeNull();
   });
 });
+
