@@ -16,7 +16,7 @@ A modern, enterprise-grade school management platform built for modern education
 | **Theming Engine**          | `next-themes` supporting 5 curated themes (Royal Navy [Default], Classic Light, Slate Dark, Emerald Academy, Midnight OLED)            |
 | **Internationalization**    | `next-intl` (Arabic `ar` RTL default + English `en` LTR) with locale prefix routing                                                    |
 | **Validation & Security**   | [Zod 4](https://zod.dev/) type-safe schemas · Server-only guardrail modules · Strict RLS SQL isolation                                 |
-| **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (253 tests across 88 suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
+| **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (651 tests across 206 test suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
 | **Mobile & PWA**            | Progressive Web App manifest, Service Worker offline caching, install banner                                                           |
 
 ---

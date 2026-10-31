@@ -9,3 +9,4 @@ export function getCalendarItemTitle(item: UnifiedCalendarItem, locale: string):
   }
   return item.event.title_en || item.event.title_ar;
 }
+

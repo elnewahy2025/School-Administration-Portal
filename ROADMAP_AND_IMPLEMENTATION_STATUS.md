@@ -97,11 +97,38 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 - **Centralized Error Handling:** Typed `AppError` taxonomy with standardized error-code catalog, automatic database error mapping, and user-friendly bilingual toast feedback.
 - **Zero Mock / Zero Fake Policy:** All implementations connect directly to PostgreSQL database tables, authenticated Supabase sessions, and live RLS policies.
 - **Verification Suite:**
-  - 39 Vitest test suites (121 unit and component tests passing).
-  - ESLint with zero errors and zero warnings.
+  - 206 Vitest test suites (651 unit and component tests passing, 0 failures).
+  - ESLint with zero errors and zero warnings (Rule #1 single-export enforced).
   - Prettier formatting validated.
   - Strict TypeScript compiler (`tsc --noEmit`) passing with zero type issues.
-  - Next.js production build (`next build`) generating all 40 static and dynamic routes cleanly.
+  - Next.js production build (`next build`) generating all 54 static and dynamic routes cleanly.
+
+---
+
+### E. Code Quality & Security Inspection Remediation (October 2026)
+
+All 20 issues identified in the Comprehensive Code Inspection (`School Admin Portal Code Inspection (Frontend + Backend).md`) were resolved and verified:
+
+1. **Internal `cn` Implementation:** Replaced `cn` third-party import across 18 UI components with internal `clsx` + `twMerge` implementation (`src/lib/cn.ts`).
+2. **Data Layer Chunking & In-Query Protection:** Added `chunkArray.ts` to batch array operations in chunks of 100, preventing URL length overflows in Supabase REST queries.
+3. **Structured Error Handling:** Replaced query error swallowing with structured `logError` across profile, school, location, attachment, and reminder queries.
+4. **Nonce-Based Content Security Policy:** Enforced CSP headers via Edge proxy `src/proxy.ts` and `next.config.mjs`.
+5. **Hardened Maintenance Bypass:** Converted `/api/bypass` to POST with HMAC-SHA256 signed tokens and constant-time comparison.
+6. **Authentication Route Throttling:** Added `checkAuthRateLimit.ts` protecting against credential stuffing and brute-force attempts.
+7. **Complete UI Internationalization:** Eliminated all hard-coded English strings across AppShell, notifications, filters, achievements, and calendar.
+8. **Foreign-Key Indexing:** Added migration `0056_add_missing_foreign_key_indexes.sql` indexing 31 foreign-key columns.
+9. **School Documents Access Hardening:** Migration `0057_harden_school_documents_policies.sql` added `is_published` status and restricted anonymous access to published documents from active schools.
+10. **Batch Attachment URLs:** Replaced sequential `createSignedUrl` loops with batch `createSignedUrls(paths, 3600)`.
+11. **Exhaustive Audit Export:** Created `fetchAllSchoolAuditLogs.ts` with range-paginated loops and enforced `Cache-Control: no-store`.
+12. **Authorized Deep Health Checks:** Protected `/api/health?deep=1` requiring Bearer secret or authenticated Platform Owner.
+13. **Normalized Ignore Rules & Packaging:** Converted `.gitignore` to Unix LF and created `scripts/createArchive.mjs` (`npm run archive`).
+14. **Migration Sequence Verification:** Verified all 57 migrations follow strict numerical ordering.
+15. **Image Optimization:** Converted all raw `<img>` tags to `next/image` with responsive dimensions.
+16. **Explicit Button Attributes:** Added `type="button"` to all interactive buttons.
+17. **Standardized Modal Escape & A11y:** Applied `useDrawerEscape` with body scroll lock and `role="dialog"` + `aria-modal="true"` to all custom modals.
+18. **Audit Logger Observability:** Replaced direct `console.*` calls with structured `logError` in audit modules.
+19. **Type-Safe Query Filters:** Removed `any` in `applyAuditQueryFilters.ts` with `FilterableAuditQuery` interface.
+20. **Client Environment Access:** Routed Supabase URL lookups through `getClientEnv()`.
 
 ---
 
@@ -178,14 +205,14 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 
 ## 4. Verification & Testing Matrix
 
-| Suite               | Target                           | Status      | Passing                     |
-| ------------------- | -------------------------------- | ----------- | --------------------------- |
-| RLS Battery         | Supabase Auth & RLS Harness      | **PASSING** | 85 / 85 checks passed       |
-| Unit & Integration  | Vitest                           | **PASSING** | 125 / 125 tests (41 suites) |
-| Linter & Modularity | ESLint + D11 Single-Export       | **PASSING** | 0 errors, 0 warnings        |
-| Code Formatting     | Prettier                         | **PASSING** | 100% compliant              |
-| Type Safety         | TypeScript (`tsc --noEmit`)      | **PASSING** | 0 errors                    |
-| Production Build    | Next.js Turbopack (`next build`) | **PASSING** | 41 routes compiled          |
+| Suite               | Target                           | Status      | Passing                       |
+| ------------------- | -------------------------------- | ----------- | ----------------------------- |
+| RLS Battery         | Supabase Auth & RLS Harness      | **PASSING** | 85 / 85 checks passed         |
+| Unit & Integration  | Vitest                           | **PASSING** | 651 / 651 tests (206 suites)  |
+| Linter & Modularity | ESLint + D11 Single-Export       | **PASSING** | 0 errors, 0 warnings          |
+| Code Formatting     | Prettier                         | **PASSING** | 100% compliant                |
+| Type Safety         | TypeScript (`tsc --noEmit`)      | **PASSING** | 0 errors                      |
+| Production Build    | Next.js Turbopack (`next build`) | **PASSING** | 54 routes compiled cleanly    |
 
 ---
 

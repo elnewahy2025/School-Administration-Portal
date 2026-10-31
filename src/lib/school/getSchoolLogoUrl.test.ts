@@ -27,3 +27,4 @@ describe("getSchoolLogoUrl", () => {
     );
   });
 });
+
