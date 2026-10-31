@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { FileSpreadsheetIcon, FileTextIcon, ListIcon } from "lucide-react";
+import { HeartHandshakeIcon, TargetIcon, UsersRoundIcon } from "lucide-react";
 import { PublicDocumentCard } from "./PublicDocumentCard";
 
 export function PublicDocumentsSection() {
@@ -30,7 +30,7 @@ export function PublicDocumentsSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-6 lg:gap-8 pt-8 items-stretch">
         <div className="h-full animate-hero-fade-up delay-200">
           <PublicDocumentCard
-            icon={ListIcon}
+            icon={TargetIcon}
             title={t("docOperationalPlanTitle")}
             description={t("docOperationalPlanDesc")}
             actionLabel={t("documentViewAction")}
@@ -38,7 +38,7 @@ export function PublicDocumentsSection() {
         </div>
         <div className="h-full animate-hero-fade-up delay-350">
           <PublicDocumentCard
-            icon={FileSpreadsheetIcon}
+            icon={UsersRoundIcon}
             title={t("docCommitteesGuideTitle")}
             description={t("docCommitteesGuideDesc")}
             actionLabel={t("documentViewAction")}
@@ -46,7 +46,7 @@ export function PublicDocumentsSection() {
         </div>
         <div className="h-full animate-hero-fade-up delay-500">
           <PublicDocumentCard
-            icon={FileTextIcon}
+            icon={HeartHandshakeIcon}
             title={t("docCounselingGuideTitle")}
             description={t("docCounselingGuideDesc")}
             actionLabel={t("documentViewAction")}

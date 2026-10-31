@@ -137,7 +137,11 @@
     "backup": "Backup & Restore",
     "notifications": "Notifications",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "schoolDocuments": "Guides & Documents",
+    "operationalPlan": "Operational Plan",
+    "committeesGuide": "Committees Guide",
+    "counselingGuide": "Counseling Guide"
   },
   "settings": {
     "title": "Settings",

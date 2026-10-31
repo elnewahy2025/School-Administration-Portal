@@ -16,12 +16,14 @@ export function MobileNav({
   canManageSettings,
   canViewReports,
   canBackupRestore = false,
+  canViewDocuments = false,
 }: {
   school: SchoolRow | null;
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
   canBackupRestore?: boolean;
+  canViewDocuments?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const isMounted = useIsMounted();
@@ -51,6 +53,7 @@ export function MobileNav({
           canManageSettings={canManageSettings}
           canViewReports={canViewReports}
           canBackupRestore={canBackupRestore}
+          canViewDocuments={canViewDocuments}
           onClose={() => setIsOpen(false)}
         />
       ) : null}

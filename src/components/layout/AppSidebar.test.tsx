@@ -15,6 +15,10 @@ vi.mock("next-intl", () => ({
       achievements: "Achievements",
       reports: "Reports",
       settings: "Settings",
+      schoolDocuments: "School Documents",
+      operationalPlan: "Operational Plan",
+      committeesGuide: "Committees Guide",
+      counselingGuide: "Counseling Guide",
     };
     return map[key] || key;
   },
@@ -59,5 +63,39 @@ describe("AppSidebar", () => {
     expect(screen.getByText("مدرسة الأمل الثانوية-بنات")).toBeDefined();
     expect(screen.queryByText(/دولة الكويت/)).toBeNull();
     expect(screen.queryByText(/وزارة التربية/)).toBeNull();
+  });
+
+  it("does not render school document links when canViewDocuments is false", () => {
+    render(
+      <AppSidebar
+        school={mockSchool}
+        isOwner={false}
+        canManageSettings={false}
+        canViewReports={false}
+        canViewDocuments={false}
+      />,
+    );
+
+    expect(screen.queryByText("School Documents")).toBeNull();
+    expect(screen.queryByText("Operational Plan")).toBeNull();
+    expect(screen.queryByText("Committees Guide")).toBeNull();
+    expect(screen.queryByText("Counseling Guide")).toBeNull();
+  });
+
+  it("renders school document links when canViewDocuments is true", () => {
+    render(
+      <AppSidebar
+        school={mockSchool}
+        isOwner={true}
+        canManageSettings={true}
+        canViewReports={true}
+        canViewDocuments={true}
+      />,
+    );
+
+    expect(screen.getByText("School Documents")).toBeDefined();
+    expect(screen.getByText("Operational Plan")).toBeDefined();
+    expect(screen.getByText("Committees Guide")).toBeDefined();
+    expect(screen.getByText("Counseling Guide")).toBeDefined();
   });
 });

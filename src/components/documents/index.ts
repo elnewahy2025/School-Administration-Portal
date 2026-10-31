@@ -1,0 +1,1 @@
+export { SchoolDocumentView } from "./SchoolDocumentView";

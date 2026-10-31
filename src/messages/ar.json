@@ -137,7 +137,11 @@
     "backup": "النسخ الاحتياطي والاستعادة",
     "notifications": "الإشعارات",
     "openMenu": "فتح القائمة",
-    "closeMenu": "إغلاق القائمة"
+    "closeMenu": "إغلاق القائمة",
+    "schoolDocuments": "أدلة ووثائق المدرسة",
+    "operationalPlan": "الخطة التشغيلية",
+    "committeesGuide": "دليل إجراءات اللجان",
+    "counselingGuide": "دليل الإرشاد المدرسي"
   },
   "settings": {
     "title": "الإعدادات",

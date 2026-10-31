@@ -12,18 +12,21 @@ import {
   DatabaseIcon,
 } from "lucide-react";
 import { NavLink } from "./NavLink";
+import { NavDocumentLinks } from "./NavDocumentLinks";
 
 export function MobileNavLinks({
   isOwner = false,
   canManageSettings,
   canViewReports,
   canBackupRestore = false,
+  canViewDocuments = false,
   onSelect,
 }: {
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
   canBackupRestore?: boolean;
+  canViewDocuments?: boolean;
   onSelect: () => void;
 }) {
   const t = useTranslations("nav");
@@ -50,6 +53,7 @@ export function MobileNavLinks({
       {canViewReports ? (
         <NavLink href="/reports" label={t("reports")} icon={BarChart3Icon} onClick={onSelect} />
       ) : null}
+      {canViewDocuments ? <NavDocumentLinks onSelect={onSelect} /> : null}
       {canManageSettings ? (
         <NavLink
           href="/settings"

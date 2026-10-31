@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { MobileNavDrawerHeader } from "./MobileNavDrawerHeader";
 import { MobileNavLinks } from "./MobileNavLinks";
+import { useDrawerEscape } from "./useDrawerEscape";
 import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
 export function MobileNavDrawer({
@@ -16,6 +16,7 @@ export function MobileNavDrawer({
   canManageSettings,
   canViewReports,
   canBackupRestore = false,
+  canViewDocuments = false,
   onClose,
 }: {
   school: SchoolRow | null;
@@ -26,26 +27,11 @@ export function MobileNavDrawer({
   canManageSettings: boolean;
   canViewReports: boolean;
   canBackupRestore?: boolean;
+  canViewDocuments?: boolean;
   onClose: () => void;
 }) {
   const t = useTranslations("nav");
-
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose]);
+  useDrawerEscape(onClose);
 
   return createPortal(
     <div
@@ -74,6 +60,7 @@ export function MobileNavDrawer({
             canManageSettings={canManageSettings}
             canViewReports={canViewReports}
             canBackupRestore={canBackupRestore}
+            canViewDocuments={canViewDocuments}
             onSelect={onClose}
           />
         </div>

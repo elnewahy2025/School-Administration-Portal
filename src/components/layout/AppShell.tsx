@@ -11,6 +11,7 @@ export function AppShell({
   canManageSettings,
   canViewReports,
   canBackupRestore = false,
+  canViewDocuments = false,
   unreadNotifications = 0,
 }: {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export function AppShell({
   canManageSettings: boolean;
   canViewReports: boolean;
   canBackupRestore?: boolean;
+  canViewDocuments?: boolean;
   unreadNotifications?: number;
 }) {
   return (
@@ -36,6 +38,7 @@ export function AppShell({
         canManageSettings={canManageSettings}
         canViewReports={canViewReports}
         canBackupRestore={canBackupRestore}
+        canViewDocuments={canViewDocuments}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <AppHeader
@@ -45,6 +48,7 @@ export function AppShell({
           canManageSettings={canManageSettings}
           canViewReports={canViewReports}
           canBackupRestore={canBackupRestore}
+          canViewDocuments={canViewDocuments}
           unreadNotifications={unreadNotifications}
         />
         <main

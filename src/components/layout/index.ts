@@ -9,6 +9,8 @@ export { MobileNav } from "./MobileNav";
 export { MobileNavDrawer } from "./MobileNavDrawer";
 export { MobileNavDrawerHeader } from "./MobileNavDrawerHeader";
 export { MobileNavLinks } from "./MobileNavLinks";
+export { NavDocumentLinks } from "./NavDocumentLinks";
 export { NavLink } from "./NavLink";
 export { SchoolLogoAvatar } from "./SchoolLogoAvatar";
+export { useDrawerEscape } from "./useDrawerEscape";
 export { useIsMounted } from "./useIsMounted";

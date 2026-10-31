@@ -41,11 +41,12 @@ export default async function AuthenticatedAppLayout({
     assertCanManageBackup().catch(() => ({ allowed: false })),
   ]);
 
-  const { canViewReports, canManageSettings } = resolveLayoutNavigationAccess(
-    isOwner,
-    permissions,
-    Boolean(profile?.school_id),
-  );
+  const { canViewReports, canManageSettings, canViewDocuments } =
+    resolveLayoutNavigationAccess(
+      isOwner,
+      permissions,
+      Boolean(profile?.school_id),
+    );
   const canBackupRestore = backupAccess.allowed;
 
   return (
@@ -58,6 +59,7 @@ export default async function AuthenticatedAppLayout({
         canManageSettings={canManageSettings}
         canViewReports={canViewReports}
         canBackupRestore={canBackupRestore}
+        canViewDocuments={canViewDocuments}
         unreadNotifications={unreadNotifications}
       >
         {children}

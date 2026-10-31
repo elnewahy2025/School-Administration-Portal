@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { NavLink } from "./NavLink";
+import { NavDocumentLinks } from "./NavDocumentLinks";
 import { SchoolLogoAvatar } from "./SchoolLogoAvatar";
 import { resolveSchoolName } from "@/lib/school/resolveSchoolName";
 import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy";
@@ -20,16 +21,18 @@ import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
 export function AppSidebar({
   school,
-  isOwner = false,
+  isOwner,
   canManageSettings,
   canViewReports,
-  canBackupRestore = false,
+  canBackupRestore,
+  canViewDocuments,
 }: {
   school: SchoolRow | null;
   isOwner?: boolean;
   canManageSettings: boolean;
   canViewReports: boolean;
   canBackupRestore?: boolean;
+  canViewDocuments?: boolean;
 }) {
   const t = useTranslations("nav");
   const locale = useLocale();
@@ -67,6 +70,7 @@ export function AppSidebar({
         {canViewReports ? (
           <NavLink href="/reports" label={t("reports")} icon={BarChart3Icon} />
         ) : null}
+        {canViewDocuments ? <NavDocumentLinks /> : null}
         {canManageSettings ? (
           <NavLink
             href="/settings"
