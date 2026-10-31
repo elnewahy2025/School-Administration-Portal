@@ -26,7 +26,7 @@ export function SchoolDocumentPreviewDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="flex max-w-4xl flex-col overflow-hidden p-0 sm:max-h-[92vh]">
+      <DialogContent showCloseButton={false} className="flex max-w-4xl flex-col overflow-hidden p-0 sm:max-h-[92vh]">
         <DialogHeader className="border-b border-border/80 bg-muted/30 p-4 sm:p-5">
           <div className="flex items-center justify-between gap-4">
             <div>

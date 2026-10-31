@@ -39,7 +39,7 @@ export function SchoolDocumentFormDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-lg p-6">
+      <DialogContent showCloseButton={false} className="max-w-lg p-6">
         <DialogHeader className="flex flex-row items-center justify-between border-b border-border/80 pb-3">
           <DialogTitle className="text-lg font-bold text-foreground">
             {isEditing ? t("editDocument") : t("addDocument")}
