@@ -54,6 +54,33 @@ describe("GET /api/health", () => {
     expect(await response.json()).toMatchObject({ status: "degraded", database: "unreachable" });
   });
 
+  it("rejects unauthorized deep health checks when secret is configured", async () => {
+    vi.stubEnv("HEALTH_CHECK_SECRET", "super-secret");
+
+    const response = await GET(new Request("http://localhost:3000/api/health?deep=1"));
+
+    expect(response.status).toBe(401);
+    expect(mockPing).not.toHaveBeenCalled();
+  });
+
+  it("permits authorized deep health checks with matching Bearer token", async () => {
+    vi.stubEnv("HEALTH_CHECK_SECRET", "super-secret");
+    mockPing.mockResolvedValueOnce({
+      success: true,
+      latencyMs: 5,
+      timestamp: "2026-10-28T00:00:00.000Z",
+    });
+
+    const response = await GET(
+      new Request("http://localhost:3000/api/health?deep=1", {
+        headers: { authorization: "Bearer super-secret" },
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(mockPing).toHaveBeenCalledTimes(1);
+  });
+
   it("says the version is unknown instead of inventing one", async () => {
     vi.unstubAllEnvs();
 
