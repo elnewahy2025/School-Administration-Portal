@@ -1,4 +1,5 @@
 import type { AnchorHTMLAttributes } from "react";
+import Image from "next/image";
 
 export function KuwaitMoeLink({
   className = "",
@@ -27,10 +28,11 @@ export function KuwaitMoeLink({
         </span>
       </div>
 
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src="/images/kuwait-emblem.svg"
         alt="شعار دولة الكويت - وزارة التربية"
+        width={56}
+        height={56}
         className="size-12 sm:size-14 shrink-0 drop-shadow-sm transition-transform duration-200 group-hover:scale-105"
       />
     </a>

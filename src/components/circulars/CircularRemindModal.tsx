@@ -54,6 +54,7 @@ export function CircularRemindModal({
     <div className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-scrim/60 p-4 backdrop-blur-xs duration-200 fade-in">
       <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl">
         <button
+          type="button"
           onClick={onClose}
           disabled={isPending}
           className="absolute end-4 top-4 text-muted-foreground hover:text-foreground"

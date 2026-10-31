@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ZoomInIcon } from "lucide-react";
 import type { AttachmentKind } from "@/lib/circulars/getAttachmentKind";
@@ -24,10 +25,12 @@ export function CircularAttachmentEmbeddedView({
         onClick={onExpand}
         className="group relative flex cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-border bg-muted/20 p-2 transition-colors hover:border-primary/50"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={publicUrl}
           alt={fileName}
+          width={800}
+          height={600}
+          unoptimized
           className="max-h-[550px] w-auto max-w-full rounded-md object-contain transition-transform duration-200 group-hover:scale-[1.005]"
         />
         <div className="absolute inset-0 flex items-center justify-center bg-scrim/25 opacity-0 transition-opacity group-hover:opacity-100">

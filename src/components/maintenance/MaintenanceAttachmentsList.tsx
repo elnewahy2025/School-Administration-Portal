@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ExternalLinkIcon, ImageIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -33,10 +34,12 @@ export function MaintenanceAttachmentsList({
           >
             {att.public_url ? (
               <div className="aspect-video w-full overflow-hidden rounded-md bg-scrim/5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={att.public_url}
                   alt={att.kind}
+                  width={400}
+                  height={225}
+                  unoptimized
                   className="size-full object-cover transition group-hover:scale-105"
                 />
               </div>

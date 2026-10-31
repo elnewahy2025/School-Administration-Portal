@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { GraduationCapIcon } from "lucide-react";
 import type { SchoolRow } from "@/lib/school/getCurrentSchool";
@@ -22,10 +23,12 @@ export function SchoolLogoAvatar({
       <div
         className={`flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background p-1 shadow-xs ${className}`}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={logoUrl}
           alt={school?.name_ar || school?.name_en || t("schoolLogoAlt")}
+          width={40}
+          height={40}
+          unoptimized
           className="size-full object-contain"
         />
       </div>

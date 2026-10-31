@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { XIcon, DownloadIcon, PrinterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -67,10 +68,12 @@ export function AttachmentPreviewModal({
 
       <div className="flex flex-1 items-center justify-center overflow-auto rounded-xl bg-background/5 p-2">
         {kind === "image" ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
+          <Image
             src={publicUrl}
             alt={fileName}
+            width={1200}
+            height={800}
+            unoptimized
             className="max-h-[80vh] w-auto max-w-full rounded-lg object-contain shadow-2xl"
           />
         ) : (

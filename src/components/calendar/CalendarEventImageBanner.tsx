@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export function CalendarEventImageBanner({
   imagePath,
   altText,
@@ -11,8 +13,14 @@ export function CalendarEventImageBanner({
 
   return (
     <div className="overflow-hidden rounded-lg border border-border">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={imagePath} alt={altText} className="max-h-48 w-full object-cover" />
+      <Image
+        src={imagePath}
+        alt={altText}
+        width={800}
+        height={300}
+        unoptimized
+        className="max-h-48 w-full object-cover"
+      />
     </div>
   );
 }

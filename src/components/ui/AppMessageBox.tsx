@@ -43,6 +43,7 @@ export function AppMessageBox() {
         <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary/30 via-primary to-primary/30" />
 
         <button
+          type="button"
           onClick={cancelMessageBox}
           className="absolute end-4 top-4 cursor-pointer rounded-lg p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
           aria-label={t("close")}

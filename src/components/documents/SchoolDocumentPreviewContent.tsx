@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { FileTextIcon } from "lucide-react";
 import type { SchoolDocumentRow } from "@/lib/documents/types";
@@ -27,10 +28,12 @@ export function SchoolDocumentPreviewContent({
   if (isImage) {
     return (
       <div className="flex w-full justify-center">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={fileUrl}
           alt={currentDoc.title}
+          width={1000}
+          height={800}
+          unoptimized
           className="max-h-[68vh] w-auto max-w-full rounded-lg border border-border/80 object-contain shadow-md"
         />
       </div>

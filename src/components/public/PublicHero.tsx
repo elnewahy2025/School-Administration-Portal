@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Building2Icon } from "lucide-react";
 import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile";
@@ -46,10 +47,12 @@ export function PublicHero({
 
           {logoUrl && (
             <div className="flex justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={logoUrl}
                 alt={displayTitle}
+                width={112}
+                height={112}
+                unoptimized
                 className="size-24 sm:size-28 rounded-full border border-border/80 bg-card object-contain p-1.5 shadow-md ring-4 ring-primary/5 transition-transform duration-500 hover:scale-105"
               />
             </div>

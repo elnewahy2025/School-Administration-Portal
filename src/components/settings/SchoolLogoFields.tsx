@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ImageIcon, UploadIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
@@ -38,8 +39,14 @@ export function SchoolLogoFields({
       <div className="flex flex-col items-center gap-4 sm:flex-row">
         <div className="relative flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted/50 shadow-inner">
           {displayUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={displayUrl} alt="Logo preview" className="size-full object-contain p-1" />
+            <Image
+              src={displayUrl}
+              alt="Logo preview"
+              width={80}
+              height={80}
+              unoptimized
+              className="size-full object-contain p-1"
+            />
           ) : (
             <ImageIcon className="size-8 text-muted-foreground/60" />
           )}
