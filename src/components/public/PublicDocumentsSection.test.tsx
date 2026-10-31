@@ -1,10 +1,11 @@
 import React from "react";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { PublicDocumentsSection } from "./PublicDocumentsSection";
+import type { SchoolDocumentRow } from "@/lib/documents/types";
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => {
+  useTranslations: (namespace?: string) => (key: string) => {
     const messages: Record<string, string> = {
       documentsEyebrow: "مرفقات رسمية",
       documentsTitle: "أدلة ووثائق المدرسة",
@@ -17,7 +18,14 @@ vi.mock("next-intl", () => ({
       docCommitteesGuideDesc: "تشكيل اللجان المدرسية ومهامها وآلية عملها.",
       docCounselingGuideTitle: "دليل الإرشاد المدرسي",
       docCounselingGuideDesc: "برامج الإرشاد الطلابي والخدمات النفسية والتربوية.",
+      print: "طباعة",
+      download: "تحميل",
+      close: "إغلاق",
+      noDocumentsPublic: "لم يتم رفع مستندات رسمية في هذا القسم حتى الآن.",
     };
+    if (namespace === "documents") {
+      return messages[key] || key;
+    }
     return messages[key] || key;
   },
 }));
@@ -51,6 +59,35 @@ describe("PublicDocumentsSection", () => {
 
     const actionButtons = screen.getAllByText("عرض الوثيقة");
     expect(actionButtons).toHaveLength(3);
+  });
+
+  it("opens the preview dialog when an action button is clicked", () => {
+    const mockDocs: SchoolDocumentRow[] = [
+      {
+        id: "d1",
+        school_id: "s1",
+        slug: "operational-plan",
+        title: "الخطة التشغيلية 2026",
+        description: "تفاصيل الخطة",
+        file_path: "s1/plan.pdf",
+        file_name: "plan.pdf",
+        file_size: 1024,
+        mime_type: "application/pdf",
+        created_by: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        file_url: "https://example.com/plan.pdf",
+      },
+    ];
+
+    render(<PublicDocumentsSection documents={mockDocs} />);
+
+    const actionButtons = screen.getAllByText("عرض الوثيقة");
+    fireEvent.click(actionButtons[0]);
+
+    expect(screen.getByText(/الخطة التشغيلية 2026/)).toBeDefined();
+    expect(screen.getByText("طباعة")).toBeDefined();
+    expect(screen.getByText("تحميل")).toBeDefined();
   });
 });
 

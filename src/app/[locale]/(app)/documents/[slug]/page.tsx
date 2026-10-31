@@ -6,8 +6,9 @@ import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { resolveLayoutNavigationAccess } from "@/lib/auth/resolveLayoutNavigationAccess";
-import { SchoolDocumentView } from "@/components/documents/SchoolDocumentView";
-import type { SchoolDocumentSlug } from "@/components/documents/SchoolDocumentView";
+import { getSchoolDocumentsBySlug } from "@/lib/documents/getSchoolDocumentsBySlug";
+import { SchoolDocumentsManager } from "@/components/documents/SchoolDocumentsManager";
+import type { SchoolDocumentSlug } from "@/lib/documents/types";
 
 const VALID_SLUGS = ["operational-plan", "committees-guide", "counseling-guide"] as const;
 type DocumentSlug = (typeof VALID_SLUGS)[number];
@@ -47,7 +48,10 @@ export default async function SchoolDocumentPage({
     return null;
   }
 
-  const tHome = await getTranslations({ locale, namespace: "home" });
+  const [tHome, documents] = await Promise.all([
+    getTranslations({ locale, namespace: "home" }),
+    getSchoolDocumentsBySlug(schoolId, slug as SchoolDocumentSlug),
+  ]);
 
   const documentConfig = {
     "operational-plan": {
@@ -65,10 +69,11 @@ export default async function SchoolDocumentPage({
   }[slug as DocumentSlug];
 
   return (
-    <SchoolDocumentView
+    <SchoolDocumentsManager
       slug={slug as SchoolDocumentSlug}
       title={documentConfig.title}
       description={documentConfig.description}
+      documents={documents}
     />
   );
 }

@@ -41,12 +41,11 @@ export default async function AuthenticatedAppLayout({
     assertCanManageBackup().catch(() => ({ allowed: false })),
   ]);
 
-  const { canViewReports, canManageSettings, canViewDocuments } =
-    resolveLayoutNavigationAccess(
-      isOwner,
-      permissions,
-      Boolean(profile?.school_id),
-    );
+  const { canViewReports, canManageSettings, canViewDocuments } = resolveLayoutNavigationAccess(
+    isOwner,
+    permissions,
+    Boolean(profile?.school_id),
+  );
   const canBackupRestore = backupAccess.allowed;
 
   return (

@@ -28,4 +28,3 @@ describe("resolveLayoutNavigationAccess", () => {
     expect(access.canViewDocuments).toBe(false);
   });
 });
-

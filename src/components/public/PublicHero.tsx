@@ -8,8 +8,15 @@ import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
 import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy";
 import { PublicHeroCardsGrid } from "./PublicHeroCardsGrid";
 import { PublicDocumentsSection } from "./PublicDocumentsSection";
+import type { SchoolDocumentRow } from "@/lib/documents/types";
 
-export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }) {
+export function PublicHero({
+  school,
+  documents = [],
+}: {
+  school: PublicSchoolProfileRow | null;
+  documents?: SchoolDocumentRow[];
+}) {
   const locale = useLocale();
   const t = useTranslations("home");
 
@@ -61,7 +68,7 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
 
         <PublicHeroCardsGrid school={school} />
 
-        <PublicDocumentsSection />
+        <PublicDocumentsSection documents={documents} />
       </div>
     </section>
   );

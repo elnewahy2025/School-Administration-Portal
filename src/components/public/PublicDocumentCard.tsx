@@ -12,12 +12,14 @@ export function PublicDocumentCard({
   title,
   description,
   actionLabel,
+  onAction,
 }: {
   icon: LucideIcon;
   badge?: string;
   title: string;
   description: string;
   actionLabel: string;
+  onAction?: () => void;
 }) {
   return (
     <div className={`${CARD_SHELL} h-full w-full justify-between p-6 pt-14 pb-6`}>
@@ -41,6 +43,7 @@ export function PublicDocumentCard({
 
       <button
         type="button"
+        onClick={onAction}
         className="mt-6 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0b5cce] px-6 py-2.5 text-xs font-bold text-amber-300 shadow-[0_4px_14px_rgba(11,92,206,0.35),0_2px_0_#ffcd35] transition-all duration-300 hover:scale-[1.03] hover:brightness-110 hover:shadow-[0_6px_20px_rgba(11,92,206,0.45),0_2px_0_#ffcd35] active:scale-95 sm:text-sm"
       >
         <span>{actionLabel}</span>

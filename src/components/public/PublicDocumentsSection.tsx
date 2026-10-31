@@ -1,11 +1,29 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { HeartHandshakeIcon, TargetIcon, UsersRoundIcon } from "lucide-react";
 import { PublicDocumentCard } from "./PublicDocumentCard";
+import { SchoolDocumentPreviewDialog } from "@/components/documents/SchoolDocumentPreviewDialog";
+import type { SchoolDocumentRow, SchoolDocumentSlug } from "@/lib/documents/types";
 
-export function PublicDocumentsSection() {
+export function PublicDocumentsSection({
+  documents = [],
+}: {
+  documents?: SchoolDocumentRow[];
+}) {
   const t = useTranslations("home");
+  const [activeSlug, setActiveSlug] = useState<SchoolDocumentSlug | null>(null);
+
+  const getSlugTitle = (slug: SchoolDocumentSlug) => {
+    if (slug === "operational-plan") return t("docOperationalPlanTitle");
+    if (slug === "committees-guide") return t("docCommitteesGuideTitle");
+    return t("docCounselingGuideTitle");
+  };
+
+  const activeDocuments = activeSlug
+    ? documents.filter((doc) => doc.slug === activeSlug)
+    : [];
 
   return (
     <section aria-label={t("documentsTitle")} className="w-full space-y-6 pt-4 sm:pt-6">
@@ -34,6 +52,7 @@ export function PublicDocumentsSection() {
             title={t("docOperationalPlanTitle")}
             description={t("docOperationalPlanDesc")}
             actionLabel={t("documentViewAction")}
+            onAction={() => setActiveSlug("operational-plan")}
           />
         </div>
         <div className="h-full animate-hero-fade-up delay-350">
@@ -42,6 +61,7 @@ export function PublicDocumentsSection() {
             title={t("docCommitteesGuideTitle")}
             description={t("docCommitteesGuideDesc")}
             actionLabel={t("documentViewAction")}
+            onAction={() => setActiveSlug("committees-guide")}
           />
         </div>
         <div className="h-full animate-hero-fade-up delay-500">
@@ -50,9 +70,19 @@ export function PublicDocumentsSection() {
             title={t("docCounselingGuideTitle")}
             description={t("docCounselingGuideDesc")}
             actionLabel={t("documentViewAction")}
+            onAction={() => setActiveSlug("counseling-guide")}
           />
         </div>
       </div>
+
+      {activeSlug ? (
+        <SchoolDocumentPreviewDialog
+          isOpen={Boolean(activeSlug)}
+          onClose={() => setActiveSlug(null)}
+          documents={activeDocuments}
+          categoryTitle={getSlugTitle(activeSlug)}
+        />
+      ) : null}
     </section>
   );
 }

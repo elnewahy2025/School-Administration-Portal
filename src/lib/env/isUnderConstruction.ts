@@ -30,4 +30,3 @@ export async function isUnderConstruction(): Promise<boolean> {
 
   return true;
 }
-

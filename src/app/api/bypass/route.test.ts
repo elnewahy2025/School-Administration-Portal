@@ -48,4 +48,3 @@ describe("GET /api/bypass", () => {
     expect(cookie?.value).toBe("");
   });
 });
-
