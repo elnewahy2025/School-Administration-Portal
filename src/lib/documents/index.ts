@@ -1,5 +1,6 @@
 export { assertCanManageDocuments } from "./assertCanManageDocuments";
 export { getPublicDocumentUrl } from "./getPublicDocumentUrl";
+export { getActorDetails } from "./getActorDetails";
 export { getPublicSchoolDocuments } from "./getPublicSchoolDocuments";
 export { getSchoolDocumentsBySlug } from "./getSchoolDocumentsBySlug";
 export { uploadDocumentFile } from "./uploadDocumentFile";

@@ -1,11 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 import { assertCanManageDocuments } from "@/lib/documents/assertCanManageDocuments";
 import { parseDocumentUpdateFormData } from "@/lib/documents/parseDocumentUpdateFormData";
 import { replaceDocumentFile } from "@/lib/documents/replaceDocumentFile";
-import { ValidationError } from "@/lib/errors/ValidationError";
+import { findDocumentForSchool } from "@/lib/documents/findDocumentForSchool";
+import { getActorDetails } from "@/lib/documents/getActorDetails";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
@@ -22,17 +23,9 @@ export async function updateSchoolDocumentAction(
 
     const { id, title, description, file } = parseDocumentUpdateFormData(formData);
     const supabase = await createSupabaseServerClient();
+    const admin = createSupabaseAdminClient(getActorDetails(auth.profile));
 
-    const { data: existing, error: fetchError } = await supabase
-      .from("school_documents")
-      .select("id, school_id, slug, file_path")
-      .eq("id", id)
-      .eq("school_id", auth.schoolId)
-      .single();
-
-    if (fetchError || !existing) {
-      throw new ValidationError("Document not found");
-    }
+    const existing = await findDocumentForSchool(admin, id, auth.schoolId);
 
     const updatePayload: Record<string, unknown> = {
       title,
@@ -51,7 +44,7 @@ export async function updateSchoolDocumentAction(
       Object.assign(updatePayload, fileData);
     }
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await admin
       .from("school_documents")
       .update(updatePayload)
       .eq("id", id)

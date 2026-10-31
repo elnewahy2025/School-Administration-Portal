@@ -24,6 +24,7 @@ vi.mock("@/lib/documents/insertSchoolDocumentRecord", () => ({
 
 vi.mock("@/lib/supabase", () => ({
   createSupabaseServerClient: vi.fn().mockResolvedValue({}),
+  createSupabaseAdminClient: vi.fn().mockReturnValue({}),
 }));
 
 import { createSchoolDocumentAction } from "./createSchoolDocumentAction";

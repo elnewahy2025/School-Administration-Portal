@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase";
 import { assertCanManageDocuments } from "@/lib/documents/assertCanManageDocuments";
+import { findDocumentForSchool } from "@/lib/documents/findDocumentForSchool";
+import { getActorDetails } from "@/lib/documents/getActorDetails";
 import { ValidationError } from "@/lib/errors/ValidationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
@@ -23,19 +25,11 @@ export async function deleteSchoolDocumentAction(
     }
 
     const supabase = await createSupabaseServerClient();
+    const admin = createSupabaseAdminClient(getActorDetails(auth.profile));
 
-    const { data: existing, error: fetchError } = await supabase
-      .from("school_documents")
-      .select("id, school_id, slug, file_path")
-      .eq("id", id)
-      .eq("school_id", auth.schoolId)
-      .single();
+    const existing = await findDocumentForSchool(admin, id, auth.schoolId);
 
-    if (fetchError || !existing) {
-      throw new ValidationError("Document not found");
-    }
-
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await admin
       .from("school_documents")
       .delete()
       .eq("id", id)

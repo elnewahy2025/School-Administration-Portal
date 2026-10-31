@@ -32,49 +32,29 @@ create policy school_documents_insert on public.school_documents
   for insert to authenticated
   with check (
     public.is_platform_owner()
-    or (
-      public.is_school_member(school_id)
-      and (
-        public.has_permission('settings.school.update', school_id)
-        or public.has_permission('users.manage', school_id)
-      )
-    )
+    or public.has_permission('settings.school.update', school_id)
+    or public.has_permission('users.manage', school_id)
   );
 
 create policy school_documents_update on public.school_documents
   for update to authenticated
   using (
     public.is_platform_owner()
-    or (
-      public.is_school_member(school_id)
-      and (
-        public.has_permission('settings.school.update', school_id)
-        or public.has_permission('users.manage', school_id)
-      )
-    )
+    or public.has_permission('settings.school.update', school_id)
+    or public.has_permission('users.manage', school_id)
   )
   with check (
     public.is_platform_owner()
-    or (
-      public.is_school_member(school_id)
-      and (
-        public.has_permission('settings.school.update', school_id)
-        or public.has_permission('users.manage', school_id)
-      )
-    )
+    or public.has_permission('settings.school.update', school_id)
+    or public.has_permission('users.manage', school_id)
   );
 
 create policy school_documents_delete on public.school_documents
   for delete to authenticated
   using (
     public.is_platform_owner()
-    or (
-      public.is_school_member(school_id)
-      and (
-        public.has_permission('settings.school.update', school_id)
-        or public.has_permission('users.manage', school_id)
-      )
-    )
+    or public.has_permission('settings.school.update', school_id)
+    or public.has_permission('users.manage', school_id)
   );
 
 -- 3. Audit trail trigger.

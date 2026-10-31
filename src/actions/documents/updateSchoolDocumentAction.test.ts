@@ -22,6 +22,9 @@ vi.mock("@/lib/supabase", () => ({
   createSupabaseServerClient: vi.fn().mockResolvedValue({
     from: (...args: unknown[]) => mockFrom(...args),
   }),
+  createSupabaseAdminClient: vi.fn().mockReturnValue({
+    from: (...args: unknown[]) => mockFrom(...args),
+  }),
 }));
 
 import { updateSchoolDocumentAction } from "./updateSchoolDocumentAction";
