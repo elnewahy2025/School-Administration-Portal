@@ -11,7 +11,12 @@ vi.mock("@/i18n", () => ({
 }));
 
 vi.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key,
+  useTranslations: () => (key: string) => {
+    if (key === "auditFilterAction") return "Filter by action (e.g. update, insert)";
+    if (key === "auditFilterEntity") return "Entity type (e.g. profiles, roles)";
+    if (key === "auditFilterActor") return "Actor name or email";
+    return key;
+  },
 }));
 
 import { AuditLogFiltersBar } from "./AuditLogFiltersBar";

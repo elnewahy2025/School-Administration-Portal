@@ -53,7 +53,7 @@ export function NotificationItem({ notification }: { notification: NotificationR
       <div className="flex-1 space-y-1">
         <div className="flex flex-wrap items-center gap-2">
           <NotificationBadge type={notification.type} />
-          {isUnread && <span className="size-2 rounded-full bg-primary" aria-label="Unread" />}
+          {isUnread && <span className="size-2 rounded-full bg-primary" aria-label={t("unread")} />}
           <span className="text-xs text-muted-foreground">{formattedDate}</span>
         </div>
         <h4 className="text-sm font-semibold text-foreground">{content.title}</h4>

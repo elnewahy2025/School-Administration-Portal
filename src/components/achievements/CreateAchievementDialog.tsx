@@ -9,6 +9,7 @@ import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function CreateAchievementDialog({ departments }: { departments: DepartmentRow[] }) {
   const t = useTranslations("achievements");
+  const tCommon = useTranslations("common");
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -34,7 +35,7 @@ export function CreateAchievementDialog({ departments }: { departments: Departme
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsOpen(false)}
-                aria-label="Close"
+                aria-label={tCommon("close")}
               >
                 <XIcon className="size-5" />
               </Button>

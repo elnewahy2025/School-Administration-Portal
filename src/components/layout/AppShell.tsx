@@ -1,9 +1,10 @@
+import { getTranslations } from "next-intl/server";
 import { AppSidebar } from "./AppSidebar";
 import { AppHeader } from "./AppHeader";
 import type { ProfileRow } from "@/lib/auth/getCurrentProfile";
 import type { SchoolRow } from "@/lib/school/getCurrentSchool";
 
-export function AppShell({
+export async function AppShell({
   children,
   profile,
   school,
@@ -24,13 +25,15 @@ export function AppShell({
   canViewDocuments?: boolean;
   unreadNotifications?: number;
 }) {
+  const t = await getTranslations("common");
+
   return (
     <div className="flex h-screen h-dvh w-full overflow-hidden bg-background text-foreground">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:shadow-lg focus:outline-hidden"
       >
-        Skip to main content
+        {t("skipToMain")}
       </a>
       <AppSidebar
         school={school}

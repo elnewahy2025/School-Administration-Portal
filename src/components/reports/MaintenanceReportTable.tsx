@@ -37,7 +37,7 @@ export function MaintenanceReportTable({ rows }: { rows: MaintenanceReportRow[] 
             <TableHead>{t("table.location")}</TableHead>
             <TableHead>{t("table.department")}</TableHead>
             <TableHead>{t("table.operator")}</TableHead>
-            <TableHead className="text-end">Hours</TableHead>
+            <TableHead className="text-end">{t("table.hours")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

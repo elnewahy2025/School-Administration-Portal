@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Building2Icon, CalendarIcon, AwardIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { AchievementCategoryBadge } from "./AchievementCategoryBadge";
@@ -14,6 +14,7 @@ export function AchievementCard({
   onClick: () => void;
 }) {
   const locale = useLocale();
+  const t = useTranslations("achievements");
 
   const deptName = achievement.department
     ? locale === "ar"
@@ -37,7 +38,7 @@ export function AchievementCard({
           {achievement.visibility === "public" && (
             <span className="flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold text-success">
               <AwardIcon className="size-3" />
-              <span>Public</span>
+              <span>{t("publicBadge")}</span>
             </span>
           )}
         </div>

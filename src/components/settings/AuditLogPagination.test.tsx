@@ -10,6 +10,17 @@ vi.mock("@/i18n", () => ({
   usePathname: () => "/settings/audit",
 }));
 
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string, params?: Record<string, unknown>) => {
+    if (key === "auditTotalEntries") return `${params?.count} total entries`;
+    if (key === "auditPageOf")
+      return `Page ${params?.page} of ${params?.totalPages} (${params?.totalCount} entries)`;
+    if (key === "auditPrevious") return "Previous";
+    if (key === "auditNext") return "Next";
+    return key;
+  },
+}));
+
 import { AuditLogPagination } from "./AuditLogPagination";
 
 describe("AuditLogPagination", () => {

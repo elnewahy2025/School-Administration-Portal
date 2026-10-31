@@ -67,7 +67,7 @@ export function CalendarMonthView({ items, onSelectItem, onViewMore }: CalendarM
           type="button"
           onClick={prevMonth}
           className={NAV_BUTTON}
-          aria-label="Previous month"
+          aria-label={t("previousMonth")}
         >
           <ChevronLeftIcon className="size-5 rtl:rotate-180" />
         </button>
@@ -81,7 +81,7 @@ export function CalendarMonthView({ items, onSelectItem, onViewMore }: CalendarM
             {t("today")}
           </button>
         </div>
-        <button type="button" onClick={nextMonth} className={NAV_BUTTON} aria-label="Next month">
+        <button type="button" onClick={nextMonth} className={NAV_BUTTON} aria-label={t("nextMonth")}>
           <ChevronRightIcon className="size-5 rtl:rotate-180" />
         </button>
       </div>

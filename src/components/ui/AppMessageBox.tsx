@@ -45,7 +45,7 @@ export function AppMessageBox() {
         <button
           onClick={cancelMessageBox}
           className="absolute end-4 top-4 cursor-pointer rounded-lg p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          aria-label="Close"
+          aria-label={t("close")}
         >
           <XIcon className="size-5" />
         </button>

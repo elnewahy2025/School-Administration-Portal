@@ -10,6 +10,7 @@ import type { AuditLogFilters } from "@/lib/school/getSchoolAuditLogs";
 
 export function AuditLogFiltersBar({ initialFilters }: { initialFilters?: AuditLogFilters }) {
   const t = useTranslations("common");
+  const tSettings = useTranslations("settings");
   const form = useAuditLogFilters(initialFilters);
 
   return (
@@ -19,7 +20,7 @@ export function AuditLogFiltersBar({ initialFilters }: { initialFilters?: AuditL
     >
       <div className="flex min-w-40 flex-1 flex-col gap-1">
         <Input
-          placeholder="Filter by action (e.g. update, insert)"
+          placeholder={tSettings("auditFilterAction")}
           value={form.action}
           onChange={(e) => form.setAction(e.target.value)}
           className="h-9 text-xs"
@@ -28,7 +29,7 @@ export function AuditLogFiltersBar({ initialFilters }: { initialFilters?: AuditL
 
       <div className="flex min-w-36 flex-1 flex-col gap-1">
         <Input
-          placeholder="Entity type (e.g. profiles, roles)"
+          placeholder={tSettings("auditFilterEntity")}
           value={form.entityType}
           onChange={(e) => form.setEntityType(e.target.value)}
           className="h-9 text-xs"
@@ -37,7 +38,7 @@ export function AuditLogFiltersBar({ initialFilters }: { initialFilters?: AuditL
 
       <div className="flex min-w-36 flex-1 flex-col gap-1">
         <Input
-          placeholder="Actor name or email"
+          placeholder={tSettings("auditFilterActor")}
           value={form.actorLabel}
           onChange={(e) => form.setActorLabel(e.target.value)}
           className="h-9 text-xs"

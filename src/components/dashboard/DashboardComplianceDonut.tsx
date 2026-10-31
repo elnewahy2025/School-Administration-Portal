@@ -29,7 +29,7 @@ export function DashboardComplianceDonut({
         <svg
           viewBox="0 0 200 200"
           className="size-full -rotate-90 transition-transform duration-500"
-          aria-label="Department Compliance Donut Chart"
+          aria-label={centerLabel}
         >
           <circle
             cx="100"

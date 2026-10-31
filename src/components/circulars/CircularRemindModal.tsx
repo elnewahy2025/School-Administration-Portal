@@ -21,6 +21,7 @@ export function CircularRemindModal({
   onClose: () => void;
 }) {
   const t = useTranslations("circulars");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [targetType, setTargetType] = useState<"pending" | "all">("pending");
   const [customMessage, setCustomMessage] = useState("");
@@ -56,7 +57,7 @@ export function CircularRemindModal({
           onClick={onClose}
           disabled={isPending}
           className="absolute end-4 top-4 text-muted-foreground hover:text-foreground"
-          aria-label="Close"
+          aria-label={tCommon("close")}
         >
           <XIcon className="size-5" />
         </button>

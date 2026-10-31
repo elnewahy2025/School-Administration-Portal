@@ -24,6 +24,7 @@ export function AchievementDetailDialog({
   onClose: () => void;
 }) {
   const t = useTranslations("achievements");
+  const tCommon = useTranslations("common");
   const [isEditing, setIsEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -58,7 +59,7 @@ export function AchievementDetailDialog({
               <p className="mt-0.5 text-sm text-muted-foreground">{achievement.title_en}</p>
             )}
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close">
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label={tCommon("close")}>
             <XIcon className="size-5" />
           </Button>
         </div>

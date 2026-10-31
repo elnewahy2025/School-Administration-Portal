@@ -38,7 +38,7 @@ export function AchievementDetailMetaGrid({ achievement }: { achievement: School
       <div className="flex items-center gap-2">
         <UserIcon className="size-4 shrink-0 text-muted-foreground" />
         <div>
-          <div className="text-muted-foreground">Recorded By</div>
+          <div className="text-muted-foreground">{t("recordedBy")}</div>
           <div className="font-semibold text-foreground">
             {achievement.creator?.full_name ?? "—"}
           </div>

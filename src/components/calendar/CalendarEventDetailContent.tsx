@@ -61,7 +61,7 @@ export function CalendarEventDetailContent({
         <Link href={`/${locale}/calendar/${event.id}`}>
           <Button className="gap-2">
             <ExternalLinkIcon className="size-4" />
-            <span>View Full Event</span>
+            <span>{tCal("actions.viewFull")}</span>
           </Button>
         </Link>
       </div>

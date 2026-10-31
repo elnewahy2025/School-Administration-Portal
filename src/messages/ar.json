@@ -46,7 +46,9 @@
     "docCommitteesGuideTitle": "دليل إجراءات اللجان",
     "docCommitteesGuideDesc": "تشكيل اللجان المدرسية ومهامها وآلية عملها.",
     "docCounselingGuideTitle": "دليل الإرشاد المدرسي",
-    "docCounselingGuideDesc": "برامج الإرشاد الطلابي والخدمات النفسية والتربوية."
+    "docCounselingGuideDesc": "برامج الإرشاد الطلابي والخدمات النفسية والتربوية.",
+    "previousMonth": "الشهر السابق",
+    "nextMonth": "الشهر التالي"
   },
   "theme": {
     "toDark": "التبديل إلى الوضع الداكن",
@@ -240,7 +242,14 @@
     "actor": "المنفّذ",
     "action": "الإجراء",
     "entity": "الكيان",
-    "date": "التاريخ والوقت"
+    "date": "التاريخ والوقت",
+    "auditFilterAction": "تصفية حسب الإجراء (مثل update, insert)",
+    "auditFilterEntity": "نوع الكيان (مثل profiles, roles)",
+    "auditFilterActor": "اسم المنفذ أو البريد الإلكتروني",
+    "auditTotalEntries": "إجمالي السجلات: {count}",
+    "auditPageOf": "صفحة {page} من {totalPages} ({totalCount} سجل)",
+    "auditPrevious": "السابق",
+    "auditNext": "التالي"
   },
   "circulars": {
     "title": "النشرات والتعاميم الإدارية",
@@ -502,8 +511,12 @@
       "publish": "نشر الفعالية",
       "cancel": "إلغاء الفعالية",
       "archive": "أرشفة",
-      "edit": "تعديل الفعالية"
+      "edit": "تعديل الفعالية",
+      "viewFull": "عرض كامل الفعالية"
     },
+    "previousMonth": "الشهر السابق",
+    "nextMonth": "الشهر التالي",
+    "locationPlaceholder": "المسرح المدرسي / القاعة الرئيسية",
     "recurrence": "تكرار الفعالية",
     "recurrenceFreq": "التكرار",
     "recurrenceNone": "لا يتكرر (مرة واحدة)",
@@ -562,12 +575,15 @@
       "sports": "رياضي وبطولات",
       "community": "مجتمعي وتطوعي",
       "other": "إنجاز آخر"
-    }
+    },
+    "recordedBy": "سُجِّل بواسطة",
+    "publicBadge": "عام"
   },
   "notifications": {
     "title": "الإشعارات",
     "subtitle": "متابعة التنبيهات والمهام الموجهة إليك وآخر التحديثات",
     "unreadCount": "{count} غير مقروء",
+    "unread": "غير مقروء",
     "markAllRead": "تحديد الكل كمقروء",
     "markRead": "تحديد كمقروء",
     "viewDetails": "عرض التفاصيل",
@@ -654,7 +670,8 @@
       "createdAt": "تاريخ الإنشاء",
       "resolvedAt": "تاريخ الإنجاز",
       "ref": "الرقم المرجعي",
-      "dueDate": "تاريخ الاستحقاق"
+      "dueDate": "تاريخ الاستحقاق",
+      "hours": "الساعات"
     },
     "noData": "لا توجد بيانات متوفرة لمعايير التصفية المحددة."
   },
@@ -725,7 +742,10 @@
     "close": "إغلاق",
     "error": "حدث خطأ غير متوقع",
     "retry": "إعادة المحاولة",
-    "goHome": "العودة للرئيسية"
+    "goHome": "العودة للرئيسية",
+    "skipToMain": "الانتقال إلى المحتوى الرئيسي",
+    "clear": "مسح التصفية",
+    "schoolLogoAlt": "شعار المدرسة"
   },
   "errors": {
     "unexpected": "حدث خطأ غير متوقع أثناء معالجة طلبك.",

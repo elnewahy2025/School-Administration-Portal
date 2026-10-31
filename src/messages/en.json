@@ -46,7 +46,9 @@
     "docCommitteesGuideTitle": "Committees Procedures Guide",
     "docCommitteesGuideDesc": "Formation of school committees, duties, and workflow.",
     "docCounselingGuideTitle": "School Counseling Guide",
-    "docCounselingGuideDesc": "Student counseling programs, psychological, and educational services."
+    "docCounselingGuideDesc": "Student counseling programs, psychological, and educational services.",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
   },
   "theme": {
     "toDark": "Switch to dark mode",
@@ -240,7 +242,14 @@
     "actor": "Actor",
     "action": "Action",
     "entity": "Entity",
-    "date": "Date & Time"
+    "date": "Date & Time",
+    "auditFilterAction": "Filter by action (e.g. update, insert)",
+    "auditFilterEntity": "Entity type (e.g. profiles, roles)",
+    "auditFilterActor": "Actor name or email",
+    "auditTotalEntries": "{count} total entries",
+    "auditPageOf": "Page {page} of {totalPages} ({totalCount} entries)",
+    "auditPrevious": "Previous",
+    "auditNext": "Next"
   },
   "circulars": {
     "title": "Administrative Bulletins & Circulars",
@@ -501,8 +510,12 @@
       "publish": "Publish Event",
       "cancel": "Cancel Event",
       "archive": "Archive",
-      "edit": "Edit Event"
+      "edit": "Edit Event",
+      "viewFull": "View Full Event"
     },
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "locationPlaceholder": "Auditorium / Hall A",
     "recurrence": "Recurrence",
     "recurrenceFreq": "Repeats",
     "recurrenceNone": "Does not repeat",
@@ -561,12 +574,15 @@
       "sports": "Sports & Athletics",
       "community": "Community & Volunteer",
       "other": "Other Milestone"
-    }
+    },
+    "recordedBy": "Recorded By",
+    "publicBadge": "Public"
   },
   "notifications": {
     "title": "Notifications",
     "subtitle": "Track important alerts, assigned tasks, and school updates",
     "unreadCount": "{count} unread",
+    "unread": "Unread",
     "markAllRead": "Mark all as read",
     "markRead": "Mark as read",
     "viewDetails": "View Details",
@@ -653,7 +669,8 @@
       "createdAt": "Created Date",
       "resolvedAt": "Resolved Date",
       "ref": "Reference #",
-      "dueDate": "Due Date"
+      "dueDate": "Due Date",
+      "hours": "Hours"
     },
     "noData": "No data available for the selected filters."
   },
@@ -724,7 +741,10 @@
     "close": "Close",
     "error": "An unexpected error occurred",
     "retry": "Retry",
-    "goHome": "Return to Home"
+    "goHome": "Return to Home",
+    "skipToMain": "Skip to main content",
+    "clear": "Clear",
+    "schoolLogoAlt": "School logo"
   },
   "errors": {
     "unexpected": "An unexpected error occurred while processing your request.",

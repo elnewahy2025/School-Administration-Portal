@@ -21,6 +21,8 @@ export function PublicCalendarTopBar({
   const monthName = currentDate.toLocaleDateString(intlLocale, { month: "long" });
   const year = currentDate.getFullYear();
   const todayLabel = locale === "ar" ? "اليوم" : "Today";
+  const prevMonthLabel = locale === "ar" ? "الشهر السابق" : "Previous month";
+  const nextMonthLabel = locale === "ar" ? "الشهر التالي" : "Next month";
 
   return (
     <div className="flex items-center justify-between gap-3 bg-[#0c1f44] px-4 py-3.5 text-white sm:px-6">
@@ -41,7 +43,7 @@ export function PublicCalendarTopBar({
         <button
           type="button"
           onClick={locale === "ar" ? onNextMonth : onPrevMonth}
-          aria-label="Previous / Next"
+          aria-label={locale === "ar" ? nextMonthLabel : prevMonthLabel}
           className="flex size-7 items-center justify-center rounded-md text-white/80 transition hover:bg-white/10 hover:text-white"
         >
           <ChevronRightIcon className="size-4" />
@@ -49,7 +51,7 @@ export function PublicCalendarTopBar({
         <button
           type="button"
           onClick={locale === "ar" ? onPrevMonth : onNextMonth}
-          aria-label="Next / Previous"
+          aria-label={locale === "ar" ? prevMonthLabel : nextMonthLabel}
           className="flex size-7 items-center justify-center rounded-md text-white/80 transition hover:bg-white/10 hover:text-white"
         >
           <ChevronLeftIcon className="size-4" />

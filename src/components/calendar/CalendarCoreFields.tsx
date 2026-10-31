@@ -79,7 +79,7 @@ export function CalendarCoreFields({
             id="location"
             name="location"
             defaultValue={defaultLocation ?? ""}
-            placeholder="Auditorium / Hall A"
+            placeholder={t("locationPlaceholder")}
           />
         </div>
       </div>

@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { SearchIcon, XIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { buildAchievementCategoryOptions } from "./buildAchievementCategoryOptions";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function AchievementFilterBar({
@@ -24,17 +25,10 @@ export function AchievementFilterBar({
   departments: DepartmentRow[];
 }) {
   const t = useTranslations("achievements");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
 
-  const categories = [
-    { key: "all", label: t("allCategories") },
-    { key: "academic", label: t("categories.academic") },
-    { key: "competition", label: t("categories.competition") },
-    { key: "scientific", label: t("categories.scientific") },
-    { key: "sports", label: t("categories.sports") },
-    { key: "community", label: t("categories.community") },
-    { key: "other", label: t("categories.other") },
-  ];
+  const categories = buildAchievementCategoryOptions(t);
 
   const hasActiveFilters =
     searchQuery !== "" || selectedCategory !== "all" || selectedDepartment !== "all";
@@ -86,7 +80,7 @@ export function AchievementFilterBar({
         {hasActiveFilters && (
           <Button variant="ghost" size="sm" onClick={clearFilters} className="h-9 gap-1 text-xs">
             <XIcon className="size-3.5" />
-            <span>Clear</span>
+            <span>{tCommon("clear")}</span>
           </Button>
         )}
       </div>

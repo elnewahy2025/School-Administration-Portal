@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ export function AuditLogPagination({
   totalCount: number;
   filters?: AuditLogFilters;
 }) {
+  const t = useTranslations("settings");
   const router = useRouter();
   const pathname = usePathname();
 
@@ -29,7 +31,7 @@ export function AuditLogPagination({
   if (totalPages <= 1) {
     return (
       <div className="flex items-center justify-between px-2 text-xs text-muted-foreground">
-        <span>{totalCount} total entries</span>
+        <span>{t("auditTotalEntries", { count: totalCount })}</span>
       </div>
     );
   }
@@ -37,7 +39,7 @@ export function AuditLogPagination({
   return (
     <div className="flex items-center justify-between px-2 text-xs text-muted-foreground">
       <span>
-        Page {page} of {totalPages} ({totalCount} entries)
+        {t("auditPageOf", { page, totalPages, totalCount })}
       </span>
       <div className="flex items-center gap-2">
         <Button
@@ -48,8 +50,8 @@ export function AuditLogPagination({
           onClick={() => navigateToPage(page - 1)}
           className="h-8 gap-1 text-xs"
         >
-          <ChevronLeftIcon className="size-3.5" />
-          <span>Previous</span>
+          <ChevronLeftIcon className="size-3.5 rtl:rotate-180" />
+          <span>{t("auditPrevious")}</span>
         </Button>
         <Button
           type="button"
@@ -59,8 +61,8 @@ export function AuditLogPagination({
           onClick={() => navigateToPage(page + 1)}
           className="h-8 gap-1 text-xs"
         >
-          <span>Next</span>
-          <ChevronRightIcon className="size-3.5" />
+          <span>{t("auditNext")}</span>
+          <ChevronRightIcon className="size-3.5 rtl:rotate-180" />
         </Button>
       </div>
     </div>
