@@ -1,4 +1,5 @@
 import { createSupabaseAdminClient } from "@/lib/supabase/createSupabaseAdminClient";
+import { logError } from "@/lib/logger";
 
 export type CredentialAuditInput = {
   schoolId?: string | null;
@@ -26,6 +27,11 @@ export async function recordCredentialAudit(input: CredentialAuditInput): Promis
   });
 
   if (error) {
-    console.error(`[Audit] Could not record credential audit (${input.action}):`, error.message);
+    logError(error, {
+      scope: "recordCredentialAudit",
+      action: input.action,
+      actorId: input.actorId,
+      entityId: input.entityId,
+    });
   }
 }

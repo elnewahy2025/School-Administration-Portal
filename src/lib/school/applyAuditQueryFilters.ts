@@ -1,12 +1,18 @@
 import type { AuditLogFilters } from "./getSchoolAuditLogs";
 
-export function applyAuditQueryFilters<T>(
+export interface FilterableAuditQuery {
+  eq(column: string, value: unknown): this;
+  ilike(column: string, pattern: string): this;
+  gte(column: string, value: unknown): this;
+  lte(column: string, value: unknown): this;
+}
+
+export function applyAuditQueryFilters<T extends FilterableAuditQuery>(
   query: T,
   schoolId?: string | null,
   filters?: AuditLogFilters,
 ): T {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let q: any = query;
+  let q = query;
   if (schoolId) {
     q = q.eq("school_id", schoolId);
   }

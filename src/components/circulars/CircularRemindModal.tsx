@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { XIcon } from "lucide-react";
 import { remindCircularAction } from "@/actions/circulars/remindCircularAction";
+import { useDrawerEscape } from "@/components/layout/useDrawerEscape";
 import { CircularRemindHeader } from "./CircularRemindHeader";
 import { CircularRemindTargetSelector } from "./CircularRemindTargetSelector";
 import { CircularRemindFooter } from "./CircularRemindFooter";
@@ -25,6 +26,8 @@ export function CircularRemindModal({
   const [isPending, startTransition] = useTransition();
   const [targetType, setTargetType] = useState<"pending" | "all">("pending");
   const [customMessage, setCustomMessage] = useState("");
+
+  useDrawerEscape(onClose, open);
 
   if (!open) return null;
 
@@ -51,7 +54,11 @@ export function CircularRemindModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-scrim/60 p-4 backdrop-blur-xs duration-200 fade-in">
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-scrim/60 p-4 backdrop-blur-xs duration-200 fade-in"
+    >
       <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl">
         <button
           type="button"

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { ImageIcon, UploadIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
 
 export function SchoolLogoFields({
   logoPath,
@@ -17,11 +18,7 @@ export function SchoolLogoFields({
   const t = useTranslations("settings");
   const [preview, setPreview] = useState<string | null>(null);
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const currentLogoUrl =
-    logoPath && supabaseUrl
-      ? `${supabaseUrl}/storage/v1/object/public/public-assets/${logoPath}`
-      : null;
+  const currentLogoUrl = getSchoolLogoUrl(logoPath);
   const displayUrl = preview ?? currentLogoUrl;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

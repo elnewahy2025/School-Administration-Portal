@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
+
+vi.mock("@/lib/logger", () => ({
+  logError: vi.fn(),
+}));
+
+import { logError } from "@/lib/logger";
 import { setAuditActor } from "./setAuditActor";
 
 describe("setAuditActor", () => {
@@ -35,14 +41,13 @@ describe("setAuditActor", () => {
   });
 
   it("warns on error without throwing", async () => {
-    const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-    mockRpc.mockResolvedValue({ error: { message: "Permission denied" } });
+    const errorObj = { message: "Permission denied" };
+    mockRpc.mockResolvedValue({ error: errorObj });
 
     await expect(setAuditActor(mockClient, "user-789")).resolves.toBeUndefined();
-    expect(consoleSpy).toHaveBeenCalledWith(
-      "[Audit] Failed to set audit actor context:",
-      "Permission denied",
-    );
-    consoleSpy.mockRestore();
+    expect(logError).toHaveBeenCalledWith(errorObj, {
+      scope: "setAuditActor",
+      actorId: "user-789",
+    });
   });
 });

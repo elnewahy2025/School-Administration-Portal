@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { XIcon, DownloadIcon, PrinterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDrawerEscape } from "@/components/layout/useDrawerEscape";
 import { printAttachment } from "@/lib/circulars/printAttachment";
 import { downloadAttachmentFile } from "@/lib/circulars/downloadAttachmentFile";
 import type { AttachmentKind } from "@/lib/circulars/getAttachmentKind";
@@ -22,6 +23,7 @@ export function AttachmentPreviewModal({
   kind: AttachmentKind;
 }) {
   const t = useTranslations("circulars");
+  useDrawerEscape(onClose, open && Boolean(publicUrl));
   if (!open || !publicUrl) return null;
 
   return (

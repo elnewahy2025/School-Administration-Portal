@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 
-export function useDrawerEscape(onClose: () => void) {
+export function useDrawerEscape(onClose: () => void, enabled = true) {
   useEffect(() => {
+    if (!enabled) return;
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -18,5 +19,5 @@ export function useDrawerEscape(onClose: () => void) {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, enabled]);
 }

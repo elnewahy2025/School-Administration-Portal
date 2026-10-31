@@ -29,6 +29,9 @@ describe("applyAuditQueryFilters", () => {
   it("returns query untouched when no school or filters", () => {
     const mockQuery = {
       eq: vi.fn().mockReturnThis(),
+      ilike: vi.fn().mockReturnThis(),
+      gte: vi.fn().mockReturnThis(),
+      lte: vi.fn().mockReturnThis(),
     };
 
     const res = applyAuditQueryFilters(mockQuery);

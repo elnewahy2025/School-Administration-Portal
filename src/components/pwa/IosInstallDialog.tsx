@@ -1,23 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { X, Smartphone, Compass } from "lucide-react";
+import { useDrawerEscape } from "@/components/layout/useDrawerEscape";
 import { IosInstallStepList } from "./IosInstallStepList";
 
 export function IosInstallDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const t = useTranslations("pwa");
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  useDrawerEscape(onClose, isOpen);
 
   if (!isOpen) return null;
 

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { logError } from "@/lib/logger";
 
 export async function setAuditActor(
   supabase: SupabaseClient,
@@ -11,6 +12,9 @@ export async function setAuditActor(
   });
 
   if (error) {
-    console.warn("[Audit] Failed to set audit actor context:", error.message);
+    logError(error, {
+      scope: "setAuditActor",
+      actorId,
+    });
   }
 }

@@ -8,6 +8,11 @@ vi.mock("@/lib/supabase/createSupabaseAdminClient", () => ({
   })),
 }));
 
+vi.mock("@/lib/logger", () => ({
+  logError: vi.fn(),
+}));
+
+import { logError } from "@/lib/logger";
 import { recordCredentialAudit } from "./recordCredentialAudit";
 
 describe("recordCredentialAudit", () => {
@@ -40,8 +45,8 @@ describe("recordCredentialAudit", () => {
   });
 
   it("handles logging errors without throwing", async () => {
-    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    mockInsert.mockResolvedValue({ error: { message: "DB write failed" } });
+    const errorObj = { message: "DB write failed" };
+    mockInsert.mockResolvedValue({ error: errorObj });
 
     await expect(
       recordCredentialAudit({
@@ -51,7 +56,11 @@ describe("recordCredentialAudit", () => {
       }),
     ).resolves.toBeUndefined();
 
-    expect(errorSpy).toHaveBeenCalled();
-    errorSpy.mockRestore();
+    expect(logError).toHaveBeenCalledWith(errorObj, {
+      scope: "recordCredentialAudit",
+      action: "credentials.password_reset",
+      actorId: "user-2",
+      entityId: "user-2",
+    });
   });
 });

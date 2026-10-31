@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { InfoIcon, Loader2 } from "lucide-react";
+import { useDrawerEscape } from "@/components/layout/useDrawerEscape";
 import { RestoreConfirmHeader } from "./RestoreConfirmHeader";
 import { RestoreMetadataSummary } from "./RestoreMetadataSummary";
 import { RestoreDiffSummary } from "./RestoreDiffSummary";
@@ -25,6 +26,8 @@ export function RestoreConfirmDialog({
   onConfirm: () => void;
 }) {
   const t = useTranslations("backup");
+
+  useDrawerEscape(onClose, isOpen && Boolean(payload));
 
   if (!isOpen || !payload) return null;
 
