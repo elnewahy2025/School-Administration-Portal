@@ -6,7 +6,6 @@ import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile
 import { resolveLocalizedText } from "@/lib/school/resolveLocalizedText";
 import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
 import { parseSchoolNameHierarchy } from "@/lib/school/parseSchoolNameHierarchy";
-import { PublicHeroCapabilities } from "./PublicHeroCapabilities";
 import { PublicHeroCardsGrid } from "./PublicHeroCardsGrid";
 
 export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }) {
@@ -60,8 +59,6 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
         </div>
 
         <PublicHeroCardsGrid school={school} />
-
-        <PublicHeroCapabilities />
       </div>
     </section>
   );
