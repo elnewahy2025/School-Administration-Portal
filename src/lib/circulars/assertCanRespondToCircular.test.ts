@@ -45,3 +45,4 @@ describe("assertCanRespondToCircular", () => {
     expect(result).toEqual({ schoolId: "s-1", departmentId: "d-1" });
   });
 });
+

@@ -21,3 +21,4 @@ export async function assertCanRespondToCircular(
 
   return { schoolId: profile.school_id, departmentId: profile.department_id };
 }
+
