@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { logError } from "@/lib/logger";
 import type { MaintenanceAttachmentRow } from "./types";
 
 export async function getMaintenanceAttachments(
@@ -15,25 +16,30 @@ export async function getMaintenanceAttachments(
   if (error) {
     throw mapDatabaseError(error);
   }
-  if (!data) {
+  if (!data || data.length === 0) {
     return [];
   }
 
-  const items: MaintenanceAttachmentRow[] = [];
-  for (const item of data) {
-    const { data: signed, error: signError } = await supabase.storage
-      .from("maintenance-photos")
-      .createSignedUrl(item.path, 3600);
+  const paths = data.map((item) => item.path);
+  const { data: signedList, error: signError } = await supabase.storage
+    .from("maintenance-photos")
+    .createSignedUrls(paths, 3600);
 
-    if (signError) {
-      console.warn(`[StorageWarning] Failed to create signed URL for photo ${item.id}: ${signError.message}`);
-    }
-
-    items.push({
-      ...item,
-      public_url: signed?.signedUrl ?? undefined,
-    });
+  if (signError) {
+    logError(signError, { requestId, pathsCount: paths.length });
   }
 
-  return items;
+  const urlMap = new Map<string, string>();
+  if (signedList) {
+    for (const item of signedList) {
+      if (item.signedUrl && item.path) {
+        urlMap.set(item.path, item.signedUrl);
+      }
+    }
+  }
+
+  return data.map((item) => ({
+    ...item,
+    public_url: urlMap.get(item.path),
+  }));
 }

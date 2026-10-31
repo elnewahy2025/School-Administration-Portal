@@ -1,5 +1,6 @@
 import { createSupabaseServerClient, createSupabaseAdminClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { logError } from "@/lib/logger";
 import type { CircularAttachmentRow } from "./types";
 
 export async function getCircularAttachments(circularId: string): Promise<CircularAttachmentRow[]> {
@@ -13,26 +14,31 @@ export async function getCircularAttachments(circularId: string): Promise<Circul
   if (error) {
     throw mapDatabaseError(error);
   }
-  if (!data) {
+  if (!data || data.length === 0) {
     return [];
   }
 
   const adminClient = createSupabaseAdminClient();
-  const items: CircularAttachmentRow[] = [];
-  for (const item of data) {
-    const { data: signed, error: signError } = await adminClient.storage
-      .from("circular-attachments")
-      .createSignedUrl(item.path, 86400);
+  const paths = data.map((item) => item.path);
+  const { data: signedList, error: signError } = await adminClient.storage
+    .from("circular-attachments")
+    .createSignedUrls(paths, 3600);
 
-    if (signError) {
-      console.warn(`[StorageWarning] Failed to create signed URL for attachment ${item.id}: ${signError.message}`);
-    }
-
-    items.push({
-      ...(item as CircularAttachmentRow),
-      public_url: signed?.signedUrl ?? undefined,
-    });
+  if (signError) {
+    logError(signError, { circularId, pathsCount: paths.length });
   }
 
-  return items;
+  const urlMap = new Map<string, string>();
+  if (signedList) {
+    for (const item of signedList) {
+      if (item.signedUrl && item.path) {
+        urlMap.set(item.path, item.signedUrl);
+      }
+    }
+  }
+
+  return data.map((item) => ({
+    ...(item as CircularAttachmentRow),
+    public_url: urlMap.get(item.path),
+  }));
 }
