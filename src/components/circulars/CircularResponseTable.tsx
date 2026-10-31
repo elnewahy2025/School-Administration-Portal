@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { buildResponseItems } from "@/lib/circulars/buildResponseItems";
+import { computeResponseFilterCounts } from "@/lib/circulars/computeResponseFilterCounts";
+import { filterCircularResponseItems } from "@/lib/circulars/filterCircularResponseItems";
 import type { CircularResponseRow } from "@/lib/circulars/types";
 import type { DepartmentResponseStatus } from "@/lib/circulars/getCircularDepartmentStatuses";
 import { CircularResponseFilterBar, type ResponseFilterTab } from "./CircularResponseFilterBar";
@@ -30,12 +32,8 @@ export function CircularResponseTable({
     );
   }
 
-  const respondedCount = items.filter((i) => i.hasResponded).length;
-  const filtered = items.filter((i) => {
-    if (filter === "responded") return i.hasResponded;
-    if (filter === "pending") return !i.hasResponded;
-    return true;
-  });
+  const counts = computeResponseFilterCounts(items);
+  const filtered = filterCircularResponseItems(items, filter);
 
   const statusLabels: Record<string, string> = {
     pending: t("pending"),
@@ -53,8 +51,10 @@ export function CircularResponseTable({
           filter={filter}
           setFilter={setFilter}
           totalCount={items.length}
-          respondedCount={respondedCount}
-          pendingCount={items.length - respondedCount}
+          respondedCount={counts.respondedCount}
+          acknowledgedCount={counts.acknowledgedCount}
+          rejectedCount={counts.rejectedCount}
+          pendingCount={counts.pendingCount}
         />
       )}
 

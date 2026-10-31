@@ -10,7 +10,6 @@ import { getSchoolCalendarEvents } from "@/lib/calendar/getSchoolCalendarEvents"
 import { getSchoolAchievements } from "@/lib/achievements/getSchoolAchievements";
 import {
   DashboardStatsGrid,
-  DashboardQuickActions,
   DashboardRecentCirculars,
   DashboardRecentMaintenance,
   DashboardAchievementsWidget,
@@ -45,8 +44,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   ]);
 
   const achievements = isOwner ? await getSchoolAchievements(schoolId) : [];
-  const { canCircular, canMaintenance, canCalendar, canViewCompliance } =
-    resolveDashboardPermissions(isOwner, perms);
+  const { canViewCompliance } = resolveDashboardPermissions(isOwner, perms);
 
   const complianceData =
     canViewCompliance && schoolId
@@ -61,13 +59,6 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
         eventsCount={events.length}
         achievementsCount={achievements.length}
         isOwner={isOwner}
-      />
-
-      <DashboardQuickActions
-        canCreateCircular={canCircular}
-        canCreateMaintenance={canMaintenance}
-        canCreateCalendar={canCalendar}
-        canManageAchievements={isOwner}
       />
 
       {complianceData && <DashboardComplianceWidget data={complianceData} />}

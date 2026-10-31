@@ -25,6 +25,7 @@ export { CircularMetaFields } from "./CircularMetaFields";
 export { CircularPriorityBadge } from "./CircularPriorityBadge";
 export { CircularPublishButton } from "./CircularPublishButton";
 export { CircularResponseBanner } from "./CircularResponseBanner";
+export { CircularResponseActions } from "./CircularResponseActions";
 export { CircularResponseBox } from "./CircularResponseBox";
 export { CircularResponseFilterBar } from "./CircularResponseFilterBar";
 export { CircularResponseTable } from "./CircularResponseTable";

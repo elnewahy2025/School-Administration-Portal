@@ -3,8 +3,6 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { CheckCircle2Icon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { submitCircularResponseAction } from "@/actions/circulars/submitCircularResponseAction";
@@ -13,8 +11,8 @@ import type {
   CircularResponseType,
   CircularResponseRow,
 } from "@/lib/circulars/types";
-import { CircularApprovalResponse } from "./CircularApprovalResponse";
 import { CircularResponseBanner } from "./CircularResponseBanner";
+import { CircularResponseActions } from "./CircularResponseActions";
 
 export function CircularResponseBox({
   circularId,
@@ -51,6 +49,11 @@ export function CircularResponseBox({
     });
   };
 
+  const isAcknowledged = existingResponse?.status === "acknowledged";
+  const hasFinalResponse = Boolean(
+    existingResponse && existingResponse.status !== "acknowledged",
+  );
+
   return (
     <Card className="border border-border bg-card">
       <CardHeader>
@@ -64,36 +67,15 @@ export function CircularResponseBox({
           <CircularResponseBanner response={existingResponse} statusLabel={t("responseStatus")} />
         ) : null}
 
-        {responseType === "acknowledgement" ? (
-          <Button
-            onClick={() => handleResponse("acknowledged")}
-            disabled={isPending}
-            className="w-full gap-2 sm:w-auto"
-          >
-            <CheckCircle2Icon className="size-4" />
-            <span>{t("ackAction")}</span>
-          </Button>
-        ) : null}
-
-        {responseType === "approval" ? (
-          <CircularApprovalResponse
+        {!hasFinalResponse ? (
+          <CircularResponseActions
+            responseType={responseType}
             reason={reason}
             onReasonChange={setReason}
-            onApprove={() => handleResponse("approved")}
-            onReject={() => handleResponse("rejected")}
+            onResponse={handleResponse}
             isPending={isPending}
+            isAcknowledged={isAcknowledged}
           />
-        ) : null}
-
-        {responseType === "task" ? (
-          <Button
-            onClick={() => handleResponse("completed")}
-            disabled={isPending}
-            className="w-full gap-2 sm:w-auto"
-          >
-            <CheckCircle2Icon className="size-4" />
-            <span>{t("statusCompleted")}</span>
-          </Button>
         ) : null}
       </CardContent>
     </Card>
