@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-react";
 import { ArrowRightIcon } from "lucide-react";
 import {
   CARD_DIAMOND_ICON,
@@ -14,7 +13,7 @@ export function PublicDocumentCard({
   actionLabel,
   onAction,
 }: {
-  icon: LucideIcon;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number | string }>;
   badge?: string;
   title: string;
   description: string;

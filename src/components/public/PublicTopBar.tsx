@@ -30,7 +30,7 @@ export function PublicTopBar({
   const description = school?.public_description || t("subtitle");
 
   return (
-    <header className="relative z-30 border-b-4 border-gold bg-[linear-gradient(90deg,var(--topbar-from,var(--sidebar)),var(--topbar-to,var(--sidebar)))] text-sidebar-foreground">
+    <header className="sticky top-0 z-50 border-b-4 border-gold bg-[linear-gradient(90deg,var(--topbar-from,var(--sidebar)),var(--topbar-to,var(--sidebar)))] text-sidebar-foreground shadow-md">
       <div className="mx-auto grid w-full max-w-[1720px] grid-cols-1 items-center gap-4 px-4 py-3 sm:px-8 md:grid-cols-3 lg:px-12 xl:px-16">
         <div className="flex items-center justify-center md:justify-start">
           <KuwaitMoeLink />

@@ -45,7 +45,7 @@ export function MobileNavDrawer({
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="fixed inset-y-0 start-0 z-[60] flex h-dvh w-72 max-w-[85vw] flex-col border-e border-sidebar-border bg-sidebar text-sidebar-foreground shadow-2xl transition-transform duration-200">
+      <div className="fixed inset-y-0 start-0 z-[60] flex h-dvh w-72 max-w-[85vw] flex-col border-e-4 border-gold bg-sidebar text-sidebar-foreground shadow-2xl transition-transform duration-200">
         <MobileNavDrawerHeader
           school={school}
           schoolName={schoolName}

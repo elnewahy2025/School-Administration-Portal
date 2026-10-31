@@ -41,7 +41,7 @@ export function AppSidebar({
   const displayName = primaryName || schoolName;
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-e border-sidebar-border bg-sidebar text-sidebar-foreground md:flex">
+    <aside className="hidden w-64 shrink-0 flex-col border-e-4 border-gold bg-sidebar text-sidebar-foreground md:flex">
       <div className="flex h-16 items-center gap-3 border-b border-sidebar-border px-6">
         <SchoolLogoAvatar school={school} />
         <div className="flex flex-col overflow-hidden">

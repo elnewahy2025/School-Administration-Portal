@@ -3,7 +3,6 @@
 import { usePathname } from "@/i18n";
 import { Link } from "@/i18n";
 import { cn } from "cn";
-import type { LucideIcon } from "lucide-react";
 import { isNavLinkActive } from "./isNavLinkActive";
 
 export function NavLink({
@@ -17,7 +16,7 @@ export function NavLink({
 }: {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: React.ComponentType<{ className?: string }>;
   badge?: number | string;
   exact?: boolean;
   excludedPrefixes?: string[];
@@ -52,8 +51,8 @@ export function NavLink({
       )}
       <Icon
         className={cn(
-          "size-5 shrink-0 transition-[opacity,transform] duration-300",
-          isActive ? "opacity-100" : "opacity-60 group-hover:scale-110 group-hover:opacity-100",
+          "size-5 shrink-0 text-gold transition-[opacity,transform] duration-300",
+          isActive ? "opacity-100" : "opacity-85 group-hover:scale-110 group-hover:opacity-100",
         )}
       />
     </Link>

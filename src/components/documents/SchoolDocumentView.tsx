@@ -6,18 +6,20 @@ import {
   ArrowLeftIcon,
   ClockIcon,
   TargetIcon,
-  UsersRoundIcon,
-  HeartHandshakeIcon,
 } from "lucide-react";
 import { useLocale } from "next-intl";
 import { GoldDots } from "@/components/ui/gold-dots";
 
+import { OperationalPlanIcon } from "@/components/icons/OperationalPlanIcon";
+import { CommitteesGuideIcon } from "@/components/icons/CommitteesGuideIcon";
+import { CounselingGuideIcon } from "@/components/icons/CounselingGuideIcon";
+
 export type SchoolDocumentSlug = "operational-plan" | "committees-guide" | "counseling-guide";
 
 const ICON_MAP = {
-  "operational-plan": TargetIcon,
-  "committees-guide": UsersRoundIcon,
-  "counseling-guide": HeartHandshakeIcon,
+  "operational-plan": OperationalPlanIcon,
+  "committees-guide": CommitteesGuideIcon,
+  "counseling-guide": CounselingGuideIcon,
 };
 
 export function SchoolDocumentView({

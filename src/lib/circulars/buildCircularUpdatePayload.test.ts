@@ -31,3 +31,4 @@ describe("buildCircularUpdatePayload", () => {
     expect(payload.visibility).toBeUndefined();
   });
 });
+

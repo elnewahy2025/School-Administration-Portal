@@ -7,17 +7,18 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
   TargetIcon,
-  UsersRoundIcon,
-  HeartHandshakeIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GoldDots } from "@/components/ui/gold-dots";
+import { OperationalPlanIcon } from "@/components/icons/OperationalPlanIcon";
+import { CommitteesGuideIcon } from "@/components/icons/CommitteesGuideIcon";
+import { CounselingGuideIcon } from "@/components/icons/CounselingGuideIcon";
 import type { SchoolDocumentSlug } from "@/lib/documents/types";
 
 const ICON_MAP = {
-  "operational-plan": TargetIcon,
-  "committees-guide": UsersRoundIcon,
-  "counseling-guide": HeartHandshakeIcon,
+  "operational-plan": OperationalPlanIcon,
+  "committees-guide": CommitteesGuideIcon,
+  "counseling-guide": CounselingGuideIcon,
 };
 
 export function SchoolDocumentsManagerHeader({
@@ -40,8 +41,8 @@ export function SchoolDocumentsManagerHeader({
   return (
     <div className="flex flex-col justify-between gap-4 border-b border-border/60 pb-5 sm:flex-row sm:items-center">
       <div className="flex items-start gap-3.5">
-        <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary shadow-xs">
-          <CategoryIcon className="size-6" strokeWidth={2.2} />
+        <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gold/15 text-gold shadow-xs">
+          <CategoryIcon className="size-6 text-gold" strokeWidth={2.2} />
         </div>
 
         <div>

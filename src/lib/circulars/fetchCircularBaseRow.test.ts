@@ -40,3 +40,4 @@ describe("fetchCircularBaseRow", () => {
     expect(row).toEqual({ id: "c-1", title: "Test", visibility: "internal" });
   });
 });
+
