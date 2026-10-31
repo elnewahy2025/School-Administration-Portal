@@ -22,6 +22,7 @@ export async function getSchoolDocumentsBySlug(
       file_name,
       file_size,
       mime_type,
+      is_published,
       created_by,
       created_at,
       updated_at,

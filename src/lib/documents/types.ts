@@ -10,6 +10,7 @@ export interface SchoolDocumentRow {
   file_name: string;
   file_size: number;
   mime_type: string;
+  is_published?: boolean;
   created_by: string | null;
   created_at: string;
   updated_at: string;

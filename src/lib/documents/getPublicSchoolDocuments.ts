@@ -21,12 +21,14 @@ export async function getPublicSchoolDocuments(
       file_name,
       file_size,
       mime_type,
+      is_published,
       created_by,
       created_at,
       updated_at
     `,
     )
     .eq("school_id", schoolId)
+    .eq("is_published", true)
     .order("created_at", { ascending: false });
 
   if (error || !data) return [];
