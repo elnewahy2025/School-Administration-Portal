@@ -1,22 +1,37 @@
 import type { SVGProps } from "react";
 
-export function InstagramIcon({ className = "size-4", ...props }: SVGProps<SVGSVGElement>) {
+export function InstagramIcon({ className = "size-8", ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
       className={className}
       aria-hidden="true"
       {...props}
     >
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+      <defs>
+        <radialGradient id="instagram-gradient" r="150%" cx="30%" cy="107%">
+          <stop stopColor="#fdf497" offset="0%" />
+          <stop stopColor="#fdf497" offset="5%" />
+          <stop stopColor="#fd5949" offset="45%" />
+          <stop stopColor="#d6249f" offset="60%" />
+          <stop stopColor="#285aeb" offset="90%" />
+        </radialGradient>
+      </defs>
+      <rect width="24" height="24" rx="6.5" ry="6.5" fill="url(#instagram-gradient)" />
+      <rect
+        x="4.5"
+        y="4.5"
+        width="15"
+        height="15"
+        rx="4.2"
+        ry="4.2"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="1.75"
+      />
+      <circle cx="12" cy="12" r="3.75" fill="none" stroke="#ffffff" strokeWidth="1.75" />
+      <circle cx="16.5" cy="7.5" r="1.15" fill="#ffffff" />
     </svg>
   );
 }

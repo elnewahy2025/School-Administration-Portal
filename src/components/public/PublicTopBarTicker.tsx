@@ -28,3 +28,4 @@ export function PublicTopBarTicker({ events }: { events: CalendarEventRow[] }) {
     </div>
   );
 }
+
