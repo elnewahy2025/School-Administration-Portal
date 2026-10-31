@@ -73,3 +73,4 @@ describe("getCurrentProfile", () => {
     expect(profile?.department_name_ar).toBe("العلوم");
   });
 });
+

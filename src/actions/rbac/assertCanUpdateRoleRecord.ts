@@ -21,3 +21,4 @@ export async function assertCanUpdateRoleRecord(
     throw new ForbiddenError("Cannot modify system or unauthorized roles");
   }
 }
+

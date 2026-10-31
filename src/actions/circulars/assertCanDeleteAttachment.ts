@@ -15,3 +15,4 @@ export async function assertCanDeleteAttachment(
     throw new ForbiddenError("Unauthorized");
   }
 }
+
