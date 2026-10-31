@@ -832,7 +832,18 @@
     "allFiles": "All Uploaded Files",
     "fileType": "File Type",
     "category": "Category",
-    "currentFile": "Current File"
+    "currentFile": "Current File",
+    "titleRequired": "Please enter the document title",
+    "fileRequired": "Please select a file to upload",
+    "invalidFileFormat": "Invalid file format. Allowed: PDF, PNG, JPG, WebP",
+    "fileTooLarge": "File exceeds the 20MB limit",
+    "fileMismatch": "File content does not match its declared type",
+    "documentCreated": "Document added successfully",
+    "documentUpdated": "Document updated successfully",
+    "documentDeleted": "Document deleted successfully",
+    "saveError": "Failed to save document. Please try again.",
+    "deleteError": "Failed to delete document. Please try again.",
+    "unauthorizedError": "Unauthorized to manage school documents"
   },
   "underConstruction": {
     "badge": "Under Construction",

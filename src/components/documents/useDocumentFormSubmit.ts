@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { createSchoolDocumentAction } from "@/actions/documents/createSchoolDocumentAction";
 import { updateSchoolDocumentAction } from "@/actions/documents/updateSchoolDocumentAction";
+import { resolveDocumentErrorMessage } from "@/lib/documents/resolveDocumentErrorMessage";
 import type { SchoolDocumentRow, SchoolDocumentSlug } from "@/lib/documents/types";
 
 export function useDocumentFormSubmit({
@@ -27,12 +29,12 @@ export function useDocumentFormSubmit({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
-      setErrorMessage(t("documentTitle"));
+      setErrorMessage(t("titleRequired"));
       return;
     }
 
     if (!existingDoc && !file) {
-      setErrorMessage(t("selectFile"));
+      setErrorMessage(t("fileRequired"));
       return;
     }
 
@@ -58,10 +60,13 @@ export function useDocumentFormSubmit({
     setIsSubmitting(false);
 
     if (result.success) {
+      toast.success(existingDoc ? t("documentUpdated") : t("documentCreated"));
       onSuccess();
       onClose();
     } else {
-      setErrorMessage(result.error);
+      const friendlyError = resolveDocumentErrorMessage(result.error, t);
+      setErrorMessage(friendlyError);
+      toast.error(friendlyError);
     }
   };
 

@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { AlertTriangleIcon, Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { deleteSchoolDocumentAction } from "@/actions/documents/deleteSchoolDocumentAction";
+import { resolveDocumentErrorMessage } from "@/lib/documents/resolveDocumentErrorMessage";
 
 export function SchoolDocumentDeleteDialog({
   isOpen,
@@ -34,10 +36,13 @@ export function SchoolDocumentDeleteDialog({
     setIsDeleting(false);
 
     if (result.success) {
+      toast.success(t("documentDeleted"));
       onSuccess();
       onClose();
     } else {
-      setErrorMessage(result.error);
+      const friendlyError = resolveDocumentErrorMessage(result.error, t);
+      setErrorMessage(friendlyError);
+      toast.error(friendlyError);
     }
   };
 

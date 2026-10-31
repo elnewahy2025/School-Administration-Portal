@@ -832,7 +832,18 @@
     "allFiles": "جميع الملفات المرفوعة",
     "fileType": "نوع الملف",
     "category": "القسم",
-    "currentFile": "الملف الحالي"
+    "currentFile": "الملف الحالي",
+    "titleRequired": "يرجى إدخال عنوان المستند",
+    "fileRequired": "يرجى اختيار ملف لرفعه",
+    "invalidFileFormat": "صيغة الملف غير مدعومة. الصيغ المسموح بها: PDF، PNG، JPG، WebP",
+    "fileTooLarge": "حجم الملف يتجاوز الحد الأقصى المسموح به (20 ميغابايت)",
+    "fileMismatch": "محتوى الملف لا يتطابق مع نوعه المعلن",
+    "documentCreated": "تمت إضافة المستند بنجاح",
+    "documentUpdated": "تم تحديث المستند بنجاح",
+    "documentDeleted": "تم حذف المستند بنجاح",
+    "saveError": "حدث خطأ أثناء حفظ المستند. يرجى المحاولة مرة أخرى.",
+    "deleteError": "حدث خطأ أثناء حذف المستند. يرجى المحاولة مرة أخرى.",
+    "unauthorizedError": "غير مصرح لك بإدارة وثائق المدرسة"
   },
   "underConstruction": {
     "badge": "قيد التطوير والتحديث",
