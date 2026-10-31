@@ -18,6 +18,7 @@
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "ping:supabase": "node --env-file=.env.local scripts/ping-supabase.mjs",
     "icons:generate": "node scripts/generate-icons.mjs",
+    "archive": "node scripts/createArchive.mjs",
     "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run scan:secrets && npm run build"
   },
   "dependencies": {
