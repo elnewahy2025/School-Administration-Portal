@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { warnOnDataTruncation } from "@/lib/supabase/warnOnDataTruncation";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { CircularRow } from "./types";
 
@@ -50,14 +51,18 @@ export async function getSchoolCirculars(schoolId?: string | null): Promise<Circ
         throw mapDatabaseError(fallback.error);
       }
 
-      return (fallback.data as unknown as CircularRow[]).map((row) => ({
+      const mapped = (fallback.data as unknown as CircularRow[]).map((row) => ({
         ...row,
         visibility: row.visibility ?? "internal",
       }));
+      warnOnDataTruncation(mapped.length, "getSchoolCirculars.fallback");
+      return mapped;
     }
 
     throw mapDatabaseError(error);
   }
 
-  return (data as unknown as CircularRow[]) ?? [];
+  const result = (data as unknown as CircularRow[]) ?? [];
+  warnOnDataTruncation(result.length, "getSchoolCirculars");
+  return result;
 }

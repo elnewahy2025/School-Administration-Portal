@@ -1,4 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { warnOnDataTruncation } from "@/lib/supabase/warnOnDataTruncation";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { computeAverageResolutionTime } from "./computeAverageResolutionTime";
 import { mapMaintenanceReportRows } from "./mapMaintenanceReportRows";
 import { applyMaintenanceReportFilters } from "./applyMaintenanceReportFilters";
@@ -37,8 +39,14 @@ export async function getMaintenanceReportData(
     .order("created_at", { ascending: false });
 
   const query = applyMaintenanceReportFilters(baseQuery, filters);
-  const { data } = await query;
+  const { data, error } = await query;
+
+  if (error) {
+    throw mapDatabaseError(error);
+  }
+
   const rawList = (data ?? []) as unknown as RawMaintenanceItem[];
+  warnOnDataTruncation(rawList.length, "getMaintenanceReportData");
 
   const { rows, priorityBreakdown, statusBreakdown } = mapMaintenanceReportRows(rawList);
 

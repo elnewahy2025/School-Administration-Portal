@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { warnOnDataTruncation } from "@/lib/supabase/warnOnDataTruncation";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { MaintenanceRequestRow } from "./types";
 
@@ -29,5 +30,7 @@ export async function getSchoolMaintenanceRequests(
     throw mapDatabaseError(error);
   }
 
-  return (data as unknown as MaintenanceRequestRow[]) ?? [];
+  const result = (data as unknown as MaintenanceRequestRow[]) ?? [];
+  warnOnDataTruncation(result.length, "getSchoolMaintenanceRequests");
+  return result;
 }

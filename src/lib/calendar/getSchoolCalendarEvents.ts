@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { warnOnDataTruncation } from "@/lib/supabase/warnOnDataTruncation";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { CalendarEventRow } from "./types";
 
@@ -25,5 +26,7 @@ export async function getSchoolCalendarEvents(
     throw mapDatabaseError(error);
   }
 
-  return (data as unknown as CalendarEventRow[]) ?? [];
+  const result = (data as unknown as CalendarEventRow[]) ?? [];
+  warnOnDataTruncation(result.length, "getSchoolCalendarEvents");
+  return result;
 }
