@@ -29,4 +29,3 @@ describe("validateClientFile", () => {
     expect(result.error).toContain("Invalid file format");
   });
 });
-

@@ -16,4 +16,3 @@ export function validateFormDataFiles(
   }
   return { valid: true };
 }
-

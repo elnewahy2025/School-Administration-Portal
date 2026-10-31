@@ -6,6 +6,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme";
 import { ServiceWorkerRegister, PwaInstallBanner } from "@/components/pwa";
 import { MessageBoxHost } from "@/components/ui/MessageBoxHost";
+import { UnderConstructionView } from "@/components/public/UnderConstructionView";
+import { isUnderConstruction } from "@/lib/env/isUnderConstruction";
 import { routing } from "@/i18n";
 import en from "../../messages/en.json";
 import ar from "../../messages/ar.json";
@@ -82,6 +84,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  const underConstruction = await isUnderConstruction();
 
   return (
     <html
@@ -99,7 +102,7 @@ export default async function LocaleLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={locale === "ar" ? ar : en}>
-            {children}
+            {underConstruction ? <UnderConstructionView /> : children}
             <MessageBoxHost />
             <PwaInstallBanner />
             <ServiceWorkerRegister />

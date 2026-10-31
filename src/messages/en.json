@@ -786,5 +786,14 @@
     "restoreNeverDeletes": "Restore only inserts or updates records. It never deletes a record that is missing from the file.",
     "notDisasterRecovery": "This JSON file is a per-school configuration export, not a disaster-recovery backup. For full recovery, use `supabase db dump` as described in the runbook.",
     "restoreSuccessWithSnapshot": "Database restored: {count} records across {tables} tables. Pre-restore snapshot: {id}"
+  },
+  "underConstruction": {
+    "badge": "Under Construction",
+    "title": "Portal Under Construction",
+    "subtitle": "We are currently setting up the portal and preparing administrative services for launch. We will be live soon.",
+    "status": "System Setup in Progress",
+    "contact": "For inquiries, please contact the administration.",
+    "backHome": "Refresh Status",
+    "poweredBy": "School Administration Portal"
   }
 }

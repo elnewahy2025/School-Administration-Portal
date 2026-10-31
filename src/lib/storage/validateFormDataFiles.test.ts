@@ -23,4 +23,3 @@ describe("validateFormDataFiles", () => {
     expect(result.error).toContain("Invalid file format");
   });
 });
-

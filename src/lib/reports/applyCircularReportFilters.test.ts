@@ -32,4 +32,3 @@ describe("applyCircularReportFilters", () => {
     expect(query.lte).toHaveBeenCalledWith("created_at", "2026-01-31T23:59:59.999Z");
   });
 });
-
