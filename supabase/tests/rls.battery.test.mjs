@@ -1373,6 +1373,260 @@ try {
     directLeave.error?.message ?? JSON.stringify(activeLeaverAfter),
   );
 
+  // -- 0048/0049: regression guards for this batch -------------------------
+  // The zero-argument form must resolve to exactly one function. Before 0048
+  // the school-scoped overload left `effective_permission_keys()` ambiguous,
+  // and the application's permission load silently degraded to "no
+  // permissions" for every non-owner.
+  const { data: allPerms, error: allPermsErr } = await adminC.rpc("effective_permission_keys");
+  check(
+    "effective_permission_keys() resolves to a single function (0048)",
+    !allPermsErr && Array.isArray(allPerms) && allPerms.length > 0,
+    allPermsErr?.message ?? `n=${allPerms?.length ?? 0}`,
+  );
+
+  // School scoping (M10): the admin holds a School-1 assignment only, so asking
+  // for School 2 must return nothing.
+  const { data: otherSchoolPerms, error: otherPermsErr } = await adminC.rpc(
+    "effective_permission_keys",
+    { p_school: fx.school2Id },
+  );
+  check(
+    "effective_permission_keys(school) excludes another school's keys (M10)",
+    !otherPermsErr && Array.isArray(otherSchoolPerms) && otherSchoolPerms.length === 0,
+    otherPermsErr?.message ?? `n=${otherSchoolPerms?.length ?? 0}`,
+  );
+
+  // 0036 stays in force: nothing in the application writes `file_metadata`, and
+  // 0048 must not re-open the member-writable policy.
+  await expectDenied("a school member cannot insert file_metadata (0036)", () =>
+    staffC
+      .from("file_metadata")
+      .insert({
+        school_id: fx.schoolId,
+        bucket: "maintenance-photos",
+        path: `${fx.schoolId}/forged/file.png`,
+        owner_id: fx.users.staff1.id,
+        purpose: "report",
+      })
+      .select("id"),
+  );
+
+  // `roles.key` is globally unique, so a school-scoped role cannot shadow a
+  // system key and capture circulars targeted at it. The policy allows this
+  // insert (valid key domain, caller holds roles.manage), so the rejection has
+  // to come from the unique index itself: code 23505.
+  const { error: shadowErr } = await adminC
+    .from("roles")
+    .insert({ name: "Staff clone", key: "staff", school_id: fx.schoolId, is_system: false })
+    .select("id");
+  check(
+    "a role cannot shadow the system key 'staff' (N11)",
+    shadowErr?.code === "23505",
+    shadowErr?.message ?? "the insert succeeded",
+  );
+
+  // Positive control: a genuinely new key is still allowed.
+  const newKey = `battery-new-${ts}`;
+  const { data: newRole, error: newRoleErr } = await adminC
+    .from("roles")
+    .insert({ name: "Battery new role", key: newKey, school_id: fx.schoolId, is_system: false })
+    .select("id")
+    .single();
+  check(
+    "a genuinely new role key is still allowed (N11)",
+    !newRoleErr && Boolean(newRole?.id),
+    newRoleErr?.message ?? "inserted",
+  );
+  if (newRole?.id) await admin.from("roles").delete().eq("id", newRole.id);
+
+  // `circular_targets.role_key` must stay inside the seeded domain.
+  const { error: badRoleKeyErr } = await admin
+    .from("circular_targets")
+    .insert({ circular_id: fx.c1, school_id: fx.schoolId, role_key: "not-a-role" })
+    .select("id");
+  check(
+    "circular_targets rejects an unknown role_key (N11)",
+    Boolean(badRoleKeyErr) && badRoleKeyErr.code === "23514",
+    badRoleKeyErr?.message ?? "the insert succeeded",
+  );
+
+  // 0049: a response may only be attributed to a department the responder
+  // actually holds. A fresh circular keeps the positive control independent of
+  // the acknowledgement the head already recorded above.
+  const { data: c4 } = await admin
+    .from("circulars")
+    .insert({
+      school_id: fx.schoolId,
+      ref_number: `CIR-${ts}-4`,
+      title: "C4 published for IT",
+      body: "b",
+      status: "published",
+      publish_at: new Date().toISOString(),
+      allow_response_revision: true,
+      created_by: fx.users.admin.id,
+    })
+    .select("id")
+    .single();
+  await admin
+    .from("circular_targets")
+    .insert({ circular_id: c4.id, school_id: fx.schoolId, department_id: fx.d1Id });
+
+  // The head is given a school-wide assignment first: that is the case the
+  // tautological predicate used to let through, because `ura.department_id =
+  // department_id` resolved to `ura.department_id = ura.department_id`.
+  await admin.from("user_role_assignments").insert({
+    user_id: fx.users.head.id,
+    role_id: fx.roleIds.department_head,
+    school_id: fx.schoolId,
+    department_id: null,
+  });
+  await expectDenied("a response cannot be attributed to a foreign department (0049)", () =>
+    headC
+      .from("circular_responses")
+      .insert({
+        circular_id: c4.id,
+        school_id: fx.schoolId,
+        department_id: fx.d2Id,
+        responder_id: fx.users.head.id,
+        response_type: "acknowledgement",
+        status: "acknowledged",
+      })
+      .select("id"),
+  );
+
+  // The same responder, targeting their own department, is still allowed.
+  const { data: ownResponse, error: ownResponseErr } = await headC
+    .from("circular_responses")
+    .insert({
+      circular_id: c4.id,
+      school_id: fx.schoolId,
+      department_id: fx.d1Id,
+      responder_id: fx.users.head.id,
+      response_type: "acknowledgement",
+      status: "acknowledged",
+    })
+    .select("id")
+    .single();
+  check(
+    "a response for the responder's own department is allowed (0049)",
+    !ownResponseErr && Boolean(ownResponse?.id),
+    ownResponseErr?.message ?? "inserted",
+  );
+
+  // 0050 / FI-08: Transactional RPC rotation preserves is_latest on failure.
+  const { data: revResp, error: revErr } = await headC.rpc("submit_circular_response", {
+    p_circular_id: c4.id,
+    p_school_id: fx.schoolId,
+    p_department_id: fx.d1Id,
+    p_response_type: "acknowledgement",
+    p_status: "acknowledged",
+    p_reason: null,
+  });
+  check(
+    "submit_circular_response RPC rotates previous response (0050)",
+    !revErr && Boolean(revResp?.id) && revResp.is_latest === true,
+    revErr?.message ?? "rotated",
+  );
+
+  const { data: prevRow } = await admin
+    .from("circular_responses")
+    .select("is_latest")
+    .eq("id", ownResponse.id)
+    .single();
+  check(
+    "previous response is marked not latest after successful RPC (0050)",
+    prevRow?.is_latest === false,
+    `expected false, got ${prevRow?.is_latest}`,
+  );
+
+  // A failed revision (e.g. rejection with missing reason) rolls back and preserves revResp as latest
+  const { error: failedRevErr } = await headC.rpc("submit_circular_response", {
+    p_circular_id: c4.id,
+    p_school_id: fx.schoolId,
+    p_department_id: fx.d1Id,
+    p_response_type: "acknowledgement",
+    p_status: "rejected",
+    p_reason: null,
+  });
+  check(
+    "submit_circular_response rejects invalid status (0050)",
+    Boolean(failedRevErr),
+    failedRevErr ? "failed as expected" : "unexpected success",
+  );
+
+  const { data: currentLatest } = await admin
+    .from("circular_responses")
+    .select("id, is_latest")
+    .eq("id", revResp.id)
+    .single();
+  check(
+    "failed RPC preserves previous is_latest row (FI-08)",
+    currentLatest?.is_latest === true,
+    `expected true, got ${currentLatest?.is_latest}`,
+  );
+
+  // Foreign department cannot be targeted by head
+  const { error: foreignDeptRpcErr } = await headC.rpc("submit_circular_response", {
+    p_circular_id: c4.id,
+    p_school_id: fx.schoolId,
+    p_department_id: fx.d2Id,
+    p_response_type: "acknowledgement",
+    p_status: "acknowledged",
+    p_reason: null,
+  });
+  check(
+    "submit_circular_response rejects foreign department (0050)",
+    Boolean(foreignDeptRpcErr),
+    foreignDeptRpcErr ? "failed as expected" : "unexpected success",
+  );
+
+  // D-3: achievements are a school-administrator action; members read.
+  await expectDenied("a member cannot create an achievement (D-3)", () =>
+    staffC
+      .from("school_achievements")
+      .insert({ school_id: fx.schoolId, title_ar: "x", created_by: fx.users.staff1.id })
+      .select("id"),
+  );
+
+  const { data: adminAchievement, error: adminAchievementErr } = await adminC
+    .from("school_achievements")
+    .insert({ school_id: fx.schoolId, title_ar: "x", created_by: fx.users.admin.id })
+    .select("id")
+    .single();
+  check(
+    "a school administrator can create an achievement (D-3)",
+    !adminAchievementErr && Boolean(adminAchievement?.id),
+    adminAchievementErr?.message ?? "inserted",
+  );
+  if (adminAchievement?.id) {
+    await admin.from("school_achievements").delete().eq("id", adminAchievement.id);
+  }
+
+  // N11: the trigger is the single writer of `assigned_operator_id`, and it
+  // must clear the column when the assignment is revoked.
+  const { data: operatorBefore } = await admin
+    .from("maintenance_requests")
+    .select("assigned_operator_id")
+    .eq("id", fx.mr1)
+    .single();
+  await admin
+    .from("maintenance_assignments")
+    .update({ is_active: false })
+    .eq("request_id", fx.mr1)
+    .eq("school_id", fx.schoolId);
+  const { data: operatorAfter } = await admin
+    .from("maintenance_requests")
+    .select("assigned_operator_id")
+    .eq("id", fx.mr1)
+    .single();
+  check(
+    "revoking an assignment clears the request operator (N11)",
+    operatorBefore?.assigned_operator_id === fx.users.operator.id &&
+      operatorAfter?.assigned_operator_id === null,
+    `${operatorBefore?.assigned_operator_id} -> ${operatorAfter?.assigned_operator_id}`,
+  );
+
   await adminC.storage.from("public-assets").remove([calendarPath]);
 } finally {
   if (fx) await cleanup(admin, fx);

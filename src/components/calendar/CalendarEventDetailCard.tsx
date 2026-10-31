@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { CalendarEventCategoryBadge } from "./CalendarEventCategoryBadge";
 import { CalendarEventStatusBadge } from "./CalendarEventStatusBadge";
 import { CalendarVisibilityBadge } from "./CalendarVisibilityBadge";
@@ -18,10 +19,15 @@ export function CalendarEventDetailCard({
   const t = useTranslations("calendar");
 
   return (
-    <div className="space-y-6 rounded-lg border border-border bg-card p-6 shadow-xs">
+    <div className="relative space-y-6 overflow-hidden rounded-xl border border-border bg-card p-6 pt-8 shadow-[0_12px_30px_rgba(20,37,74,.10)]">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,var(--action-from,#0b63d6),var(--action-to,#0a2f7a))]"
+      />
       <div className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{event.title_ar}</h1>
+          <h1 className="font-heading text-2xl font-extrabold text-primary">{event.title_ar}</h1>
+          <div className="mt-2 h-0.5 w-24 rounded-full bg-[linear-gradient(90deg,var(--rule-from,#b88a2a),var(--action-to,#0a2f7a))]" />
           {event.title_en && (
             <p className="mt-0.5 text-sm text-muted-foreground">{event.title_en}</p>
           )}
@@ -35,8 +41,9 @@ export function CalendarEventDetailCard({
 
       {event.description && (
         <div className="space-y-1.5">
-          <h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          <h3 className="flex items-center gap-2 text-xs font-extrabold text-primary">
             {t("eventDescription")}
+            <GoldDots />
           </h3>
           <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground">
             {event.description}

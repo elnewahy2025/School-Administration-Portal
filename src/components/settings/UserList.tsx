@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { UserPlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,17 +31,25 @@ export function UserList({
 }: UserListProps) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
-  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const [, startTransition] = useTransition();
+  const [pendingUserId, setPendingUserId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<SchoolUserRow | null>(null);
 
   const handleToggle = (id: string, currentStatus: boolean) => {
+    setPendingUserId(id);
     startTransition(async () => {
-      const res = await toggleUserActiveAction(id, currentStatus);
-      if (res.success) {
-        toast.success(tCommon("saved"));
-      } else {
-        toast.error(res.error ?? tCommon("error"));
+      try {
+        const res = await toggleUserActiveAction(id, currentStatus);
+        if (res.success) {
+          toast.success(tCommon("saved"));
+          router.refresh();
+        } else {
+          toast.error(res.error ?? tCommon("error"));
+        }
+      } finally {
+        setPendingUserId(null);
       }
     });
   };
@@ -65,7 +74,7 @@ export function UserList({
           users={users}
           currentUserId={currentUserId}
           canManage={canManage}
-          isPending={isPending}
+          pendingUserId={pendingUserId}
           onEdit={(user) => setEditingUser(user)}
           onToggle={handleToggle}
         />

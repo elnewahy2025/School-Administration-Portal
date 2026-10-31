@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { CheckCircle2Icon, ArrowLeftIcon, Loader2Icon } from "lucide-react";
 import { Link } from "@/i18n";
 import { requestPasswordResetAction } from "@/actions/auth/requestPasswordResetAction";
+import { AUTH_BUTTON, AUTH_INPUT } from "@/components/ui/auth-styles";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("auth");
@@ -42,17 +43,13 @@ export function ForgotPasswordForm() {
           autoComplete="email"
           dir="ltr"
           placeholder="user@example.com"
-          className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:ring-1 focus:ring-ring focus:outline-none"
+          className={AUTH_INPUT}
         />
       </label>
 
       {state.error && <p className="text-sm text-destructive">{t("error")}</p>}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="flex h-9 items-center justify-center gap-2 rounded-md bg-primary text-sm font-medium text-primary-foreground disabled:opacity-50"
-      >
+      <button type="submit" disabled={pending} className={AUTH_BUTTON}>
         {pending && <Loader2Icon className="size-4 animate-spin" />}
         <span>{pending ? t("sending") : t("sendResetLink")}</span>
       </button>

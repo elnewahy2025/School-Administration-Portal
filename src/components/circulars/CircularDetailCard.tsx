@@ -1,12 +1,12 @@
 import { useTranslations } from "next-intl";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { resolveRoleDisplayName } from "@/lib/rbac/resolveRoleDisplayName";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { CircularPriorityBadge } from "./CircularPriorityBadge";
 import { CircularStatusBadge } from "./CircularStatusBadge";
 import { CircularDetailActions } from "./CircularDetailActions";
 import { CircularAttachmentsList } from "./CircularAttachmentsList";
 import { CircularDetailMetaGrid } from "./CircularDetailMetaGrid";
+import { CircularDetailTargets } from "./CircularDetailTargets";
 import type { CircularDetail } from "@/lib/circulars/getCircularById";
 
 export function CircularDetailCard({
@@ -21,17 +21,13 @@ export function CircularDetailCard({
   totalDepartments?: number;
 }) {
   const t = useTranslations("circulars");
-  const tRbac = useTranslations("rbac");
-
-  const isAllTargets =
-    !circular.targets ||
-    circular.targets.length === 0 ||
-    (typeof totalDepartments === "number" &&
-      totalDepartments > 0 &&
-      circular.targets.length >= totalDepartments);
 
   return (
     <Card className="border border-border bg-card">
+      <div
+        aria-hidden="true"
+        className="-mt-(--card-spacing) h-1.5 bg-[linear-gradient(90deg,var(--action-from,#0b63d6),var(--action-to,#0a2f7a))]"
+      />
       <CardHeader className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
@@ -41,7 +37,10 @@ export function CircularDetailCard({
             <CircularPriorityBadge priority={circular.priority} />
             <CircularStatusBadge status={circular.status} />
           </div>
-          <CardTitle className="text-xl font-bold">{circular.title}</CardTitle>
+          <CardTitle className="font-heading text-xl font-extrabold text-primary">
+            {circular.title}
+          </CardTitle>
+          <div className="h-0.5 w-24 rounded-full bg-[linear-gradient(90deg,var(--rule-from,#b88a2a),var(--action-to,#0a2f7a))]" />
         </div>
         <CircularDetailActions circular={circular} canPublish={canPublish} canManage={canManage} />
       </CardHeader>
@@ -52,33 +51,14 @@ export function CircularDetailCard({
           responseType={circular.response_type}
         />
 
-        <div className="space-y-2">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase">
-            {t("targetedDepartments")}
-          </h3>
-          <div className="flex flex-wrap gap-1.5">
-            {isAllTargets ? (
-              <Badge variant="secondary" className="font-semibold">
-                {t("allDepartments")}
-              </Badge>
-            ) : (
-              circular.targets.map((tgt) => (
-                <Badge key={tgt.id} variant="secondary">
-                  {tgt.department_name ??
-                    (tgt.role_key
-                      ? resolveRoleDisplayName(tgt.role_key, tRbac)
-                      : t("allDepartments"))}
-                </Badge>
-              ))
-            )}
-          </div>
-        </div>
+        <CircularDetailTargets circular={circular} totalDepartments={totalDepartments} />
 
         <div className="space-y-2">
-          <h3 className="text-xs font-semibold text-muted-foreground uppercase">
+          <h3 className="flex items-center gap-2 text-xs font-extrabold text-primary">
             {t("circularBody")}
+            <GoldDots />
           </h3>
-          <div className="rounded-lg border border-border bg-background p-4 text-sm leading-relaxed whitespace-pre-wrap text-foreground">
+          <div className="rounded-lg border-y border-s-4 border-e border-border border-s-gold bg-background p-4 text-sm leading-relaxed whitespace-pre-wrap text-foreground">
             {circular.body}
           </div>
         </div>

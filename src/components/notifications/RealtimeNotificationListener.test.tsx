@@ -6,7 +6,7 @@ import { RealtimeNotificationListener } from "./RealtimeNotificationListener";
 const mockRefresh = vi.fn();
 const mockPush = vi.fn();
 
-vi.mock("next/navigation", () => ({
+vi.mock("@/i18n", () => ({
   useRouter: () => ({
     refresh: mockRefresh,
     push: mockPush,
@@ -14,7 +14,6 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("next-intl", () => ({
-  useLocale: () => "ar",
   useTranslations: () => (key: string) => key,
 }));
 
@@ -86,8 +85,17 @@ describe("RealtimeNotificationListener", () => {
       "تعميم عاجل",
       expect.objectContaining({
         description: "يرجى الاطلاع والرد",
+        action: expect.objectContaining({
+          label: "view",
+          onClick: expect.any(Function),
+        }),
       }),
     );
+
+    const callArgs = vi.mocked(toast.info).mock.calls[0];
+    const options = callArgs?.[1] as { action?: { onClick?: () => void } } | undefined;
+    options?.action?.onClick?.();
+    expect(mockPush).toHaveBeenCalledWith("/circulars/circ-456");
     expect(mockRefresh).toHaveBeenCalled();
   });
 });

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 /**
  * Ids of the roles owned by a school, used to scope `role_permissions`.
@@ -14,7 +15,7 @@ export async function resolveScopedRoleIds(
 
   const { data, error } = await admin.from("roles").select("id").eq("school_id", schoolId);
   if (error) {
-    throw new Error(`Could not list the school's roles: ${error.message}`);
+    throw mapDatabaseError(error, "Could not list the school's roles");
   }
 
   return ((data ?? []) as { id: string }[]).map((role) => role.id);

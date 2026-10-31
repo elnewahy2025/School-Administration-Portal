@@ -1,9 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { hasValidFileSignature } from "@/lib/storage/hasValidFileSignature";
+import { maintenancePhotoRules } from "./maintenancePhotoRules";
+import { validateStorageUpload } from "@/lib/storage/validateStorageUpload";
 import { insertMaintenanceAttachment } from "./insertMaintenanceAttachment";
-
-const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp"];
-const MAX_BYTES = 10 * 1024 * 1024;
 
 export async function uploadMaintenancePhoto(
   supabase: SupabaseClient,
@@ -15,16 +13,9 @@ export async function uploadMaintenancePhoto(
     kind: "report" | "evidence";
   },
 ): Promise<{ error?: string }> {
-  if (!ALLOWED_MIME.includes(params.photo.type)) {
-    return { error: "Invalid photo format. Only JPG, PNG, and WebP allowed." };
-  }
-  if (params.photo.size > MAX_BYTES) {
-    return { error: "Photo exceeds 10MB limit." };
-  }
-
-  const fileBuffer = await params.photo.arrayBuffer();
-  if (!hasValidFileSignature(new Uint8Array(fileBuffer), params.photo.type)) {
-    return { error: "Photo content does not match its declared type." };
+  const validation = await validateStorageUpload(params.photo, maintenancePhotoRules);
+  if (!validation.ok) {
+    return { error: validation.error };
   }
 
   const cleanName = params.photo.name.replace(/[^a-zA-Z0-9.-]/g, "_");
@@ -33,7 +24,7 @@ export async function uploadMaintenancePhoto(
 
   const { error: uploadError } = await supabase.storage
     .from("maintenance-photos")
-    .upload(storagePath, fileBuffer, {
+    .upload(storagePath, validation.bytes, {
       contentType: params.photo.type,
       upsert: false,
     });

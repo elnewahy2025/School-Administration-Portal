@@ -1,6 +1,8 @@
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+
 type PageResult<T> = {
   data: T[] | null;
-  error: { message: string } | null;
+  error: { message: string; code?: string } | null;
 };
 
 /**
@@ -22,7 +24,7 @@ export async function readAllPages<T>(
   for (let from = 0; ; from += pageSize) {
     const { data, error } = await buildPage(from);
     if (error) {
-      throw new Error(`${context}: ${error.message}`);
+      throw mapDatabaseError(error, `${context}: ${error.message}`);
     }
 
     const batch = data ?? [];

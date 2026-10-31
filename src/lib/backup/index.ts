@@ -3,7 +3,6 @@ export { exportDatabaseBackup } from "./exportDatabaseBackup";
 export { restoreDatabaseBackup } from "./restoreDatabaseBackup";
 export { backupSchema } from "./backupSchema";
 export { fetchTableData } from "./fetchTableData";
-export { filterRowsForManager } from "./filterRowsForManager";
 export { computeRestoreDiff } from "./computeRestoreDiff";
 export { validateBackupPayload } from "./validateBackupPayload";
 export { writeBackupAudit } from "./writeBackupAudit";

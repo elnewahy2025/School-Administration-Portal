@@ -9,7 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { createCircularAction } from "@/actions/circulars/createCircularAction";
+import { circularDocumentRules } from "@/lib/circulars/circularDocumentRules";
+import { validateFormDataFiles } from "@/lib/storage/validateFormDataFiles";
 import { DepartmentTargetPicker } from "./DepartmentTargetPicker";
 import { CircularMetaFields } from "./CircularMetaFields";
 import { CircularFileUpload } from "./CircularFileUpload";
@@ -22,6 +25,15 @@ export function CreateCircularForm({ departments }: { departments: DepartmentRow
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
+    const validation = validateFormDataFiles(formData, "documents", {
+      allowedMimes: circularDocumentRules.allowedMime,
+      maxBytes: circularDocumentRules.maxBytes,
+    });
+    if (!validation.valid) {
+      toast.error(validation.error);
+      return;
+    }
+
     startTransition(async () => {
       const res = await createCircularAction(formData);
       if (res.success && res.circularId) {
@@ -34,10 +46,7 @@ export function CreateCircularForm({ departments }: { departments: DepartmentRow
   };
 
   return (
-    <form
-      action={handleSubmit}
-      className="flex flex-col gap-6 rounded-lg border border-border bg-card p-6"
-    >
+    <form action={handleSubmit} className={`${PANEL} flex flex-col gap-6 p-6 sm:p-8`}>
       <div className="space-y-2">
         <Label htmlFor="title">{t("circularTitle")}</Label>
         <Input id="title" name="title" required placeholder={t("titlePlaceholder")} />

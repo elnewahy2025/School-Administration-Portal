@@ -6,10 +6,16 @@ import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 type CalendarMonthGridProps = {
   currentDate: Date;
   items: UnifiedCalendarItem[];
-  onSelectItem?: (item: UnifiedCalendarItem) => void;
+  selectedDate: Date | null;
+  onSelectDate: (date: Date) => void;
 };
 
-export function CalendarMonthGrid({ currentDate, items, onSelectItem }: CalendarMonthGridProps) {
+export function CalendarMonthGrid({
+  currentDate,
+  items,
+  selectedDate,
+  onSelectDate,
+}: CalendarMonthGridProps) {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
@@ -19,12 +25,11 @@ export function CalendarMonthGrid({ currentDate, items, onSelectItem }: Calendar
 
   const cells = [];
   for (let i = 0; i < firstDayIndex; i++) {
-    const isWeekend = i % 7 === 5 || i % 7 === 6;
     cells.push({
       day: 0,
-      isCurrentMonth: false,
       isToday: false,
-      isWeekend,
+      isSelected: false,
+      isWeekend: false,
       dayItems: [] as UnifiedCalendarItem[],
     });
   }
@@ -32,6 +37,11 @@ export function CalendarMonthGrid({ currentDate, items, onSelectItem }: Calendar
   for (let d = 1; d <= totalDays; d++) {
     const isToday =
       today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+    const isSelected =
+      selectedDate !== null &&
+      selectedDate.getFullYear() === year &&
+      selectedDate.getMonth() === month &&
+      selectedDate.getDate() === d;
     const dayOfWeek = (firstDayIndex + d - 1) % 7;
     const isWeekend = dayOfWeek === 5 || dayOfWeek === 6;
 
@@ -42,20 +52,20 @@ export function CalendarMonthGrid({ currentDate, items, onSelectItem }: Calendar
       );
     });
 
-    cells.push({ day: d, isCurrentMonth: true, isToday, isWeekend, dayItems });
+    cells.push({ day: d, isToday, isSelected, isWeekend, dayItems });
   }
 
   return (
-    <div className="grid grid-cols-7 border-s border-t border-border">
+    <div className="grid grid-cols-7 gap-y-1 bg-[color:var(--panel,var(--muted))] px-2 py-3 sm:px-4">
       {cells.map((cell, idx) => (
         <CalendarMonthDayCell
           key={idx}
           day={cell.day}
-          isCurrentMonth={cell.isCurrentMonth}
           isToday={cell.isToday}
+          isSelected={cell.isSelected}
           isWeekend={cell.isWeekend}
           dayItems={cell.dayItems}
-          onSelectItem={onSelectItem}
+          onSelect={() => onSelectDate(new Date(year, month, cell.day))}
         />
       ))}
     </div>

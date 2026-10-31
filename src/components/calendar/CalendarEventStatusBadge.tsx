@@ -9,7 +9,7 @@ export function CalendarEventStatusBadge({ status }: { status: CalendarStatus })
 
   if (status === "published") {
     return (
-      <Badge variant="default" className="bg-emerald-600 text-white">
+      <Badge variant="default" className="bg-success text-success-foreground">
         {t("published")}
       </Badge>
     );

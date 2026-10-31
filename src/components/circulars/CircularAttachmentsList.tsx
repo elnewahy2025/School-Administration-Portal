@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { deleteCircularAttachmentAction } from "@/actions/circulars/deleteCircularAttachmentAction";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { CircularAttachmentItem } from "./CircularAttachmentItem";
 import type { CircularAttachmentRow } from "@/lib/circulars/types";
 
@@ -34,8 +35,9 @@ export function CircularAttachmentsList({
 
   return (
     <div className="space-y-3">
-      <h3 className="text-xs font-semibold text-muted-foreground uppercase">
+      <h3 className="flex items-center gap-2 text-xs font-extrabold text-primary">
         {t("attachments")} ({attachments.length})
+        <GoldDots />
       </h3>
       <div className="flex flex-col gap-6">
         {attachments.map((att) => (

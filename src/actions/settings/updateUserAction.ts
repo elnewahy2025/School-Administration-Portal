@@ -1,18 +1,19 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseAdminClient } from "@/lib/supabase";
 import { validateUserUpdateInput } from "@/lib/school/validateUserUpdateInput";
 import { assertCanManageUser } from "@/lib/school/assertCanManageUser";
 import { assertDepartmentBelongsToSchool } from "@/lib/school/assertDepartmentBelongsToSchool";
 import { persistUserUpdates } from "@/lib/school/persistUserUpdates";
 import { applyUserRoleUpdate } from "@/lib/school/applyUserRoleUpdate";
+import { recordCredentialAudit } from "@/lib/audit/recordCredentialAudit";
 import {
   sanitizeError,
   formatActionErrorResult,
   ForbiddenError,
   ValidationError,
-  AppError,
+  mapDatabaseError,
   type ActionResult,
 } from "@/lib/errors";
 
@@ -47,15 +48,24 @@ export async function updateUserAction(input: UpdateUserInput): Promise<ActionRe
 
     await assertDepartmentBelongsToSchool(input.departmentId, check.schoolId);
 
-    const adminClient = createSupabaseAdminClient();
+    const adminClient = createSupabaseAdminClient({ actorId: check.currentUserId });
     const res = await persistUserUpdates(adminClient, check.schoolId, input);
     if (!res.success) {
-      throw new AppError(res.error || "Failed to update user");
+      throw mapDatabaseError(res.error, "Failed to update user");
     }
 
     await applyUserRoleUpdate(input.userId, check.schoolId, check.currentUserId, input.roleKey);
 
-    revalidatePath("/[locale]/settings/users", "page");
+    if (input.password) {
+      await recordCredentialAudit({
+        schoolId: check.schoolId,
+        actorId: check.currentUserId,
+        action: "credentials.password_reset",
+        entityId: input.userId,
+      });
+    }
+
+    revalidateSettingsPath("users");
     return { success: true };
   } catch (err: unknown) {
     const sanitized = sanitizeError(err, { action: "updateUserAction", userId: input.userId });

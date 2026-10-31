@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { submitCircularResponseAction } from "@/actions/circulars/submitCircularResponseAction";
 import type {
   CircularResponseStatus,
@@ -53,7 +54,10 @@ export function CircularResponseBox({
   return (
     <Card className="border border-border bg-card">
       <CardHeader>
-        <CardTitle className="text-base">{t("respond")}</CardTitle>
+        <CardTitle className="flex items-center gap-2.5 font-heading text-base font-extrabold text-primary">
+          <span>{t("respond")}</span>
+          <GoldDots />
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {existingResponse ? (

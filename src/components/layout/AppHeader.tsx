@@ -27,7 +27,7 @@ export function AppHeader({
   unreadNotifications?: number;
 }) {
   return (
-    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-card/80 px-4 backdrop-blur-md sm:px-6">
+    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b-4 border-gold bg-[linear-gradient(90deg,var(--topbar-from,var(--sidebar)),var(--topbar-to,var(--sidebar)))] px-4 text-sidebar-foreground sm:px-6">
       <div className="flex items-center gap-3">
         <MobileNav
           school={school}
@@ -43,7 +43,7 @@ export function AppHeader({
         <NotificationBell unreadCount={unreadNotifications} />
         <LanguageSwitcher />
         <ThemeToggle />
-        <div className="h-5 w-px bg-border" />
+        <div className="h-5 w-px bg-sidebar-border" />
         <AppUserMenu profile={profile} />
       </div>
     </header>

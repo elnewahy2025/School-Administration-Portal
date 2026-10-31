@@ -26,15 +26,18 @@ export function CircularTableRow({
   const attachmentsCount = circular.attachments?.length ?? 0;
 
   return (
-    <TableRow className="group hover:bg-muted/30">
-      <TableCell className="font-mono text-xs font-semibold text-foreground">
+    <TableRow className="group transition-colors hover:bg-[color:var(--panel,var(--muted))] [&>td]:px-3 [&>td]:py-3">
+      <TableCell className="font-mono text-xs font-semibold text-primary">
         <Link href={`/circulars/${circular.id}`} className="hover:underline">
           {circular.ref_number}
         </Link>
       </TableCell>
       <TableCell className="max-w-xs font-medium text-foreground">
         <div className="flex items-center gap-1.5 truncate">
-          <Link href={`/circulars/${circular.id}`} className="truncate hover:underline">
+          <Link
+            href={`/circulars/${circular.id}`}
+            className="truncate hover:text-primary hover:underline"
+          >
             {circular.title}
           </Link>
           {attachmentsCount > 0 ? (

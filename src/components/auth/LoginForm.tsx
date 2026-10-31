@@ -4,6 +4,7 @@ import { useActionState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { loginAction } from "@/actions/auth/loginAction";
 import { Link, useRouter } from "@/i18n";
+import { AUTH_BUTTON, AUTH_INPUT } from "@/components/ui/auth-styles";
 
 export function LoginForm() {
   const t = useTranslations("auth");
@@ -27,7 +28,7 @@ export function LoginForm() {
           required
           autoComplete="email"
           dir="ltr"
-          className="h-9 rounded-md border border-input bg-background px-3"
+          className={AUTH_INPUT}
         />
       </label>
       <label className="flex flex-col gap-1 text-sm">
@@ -39,7 +40,7 @@ export function LoginForm() {
           minLength={6}
           autoComplete="current-password"
           dir="ltr"
-          className="h-9 rounded-md border border-input bg-background px-3"
+          className={AUTH_INPUT}
         />
       </label>
       <div className="flex justify-end">
@@ -55,11 +56,7 @@ export function LoginForm() {
           {state.error === "disabled" ? t("disabled") : t("error")}
         </p>
       ) : null}
-      <button
-        type="submit"
-        disabled={pending}
-        className="h-9 rounded-md bg-primary text-primary-foreground disabled:opacity-50"
-      >
+      <button type="submit" disabled={pending} className={AUTH_BUTTON}>
         {t("signIn")}
       </button>
     </form>

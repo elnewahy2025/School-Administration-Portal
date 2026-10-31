@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { AchievementFormFields } from "./AchievementFormFields";
 import { createAchievementAction } from "@/actions/achievements/createAchievementAction";
+import { calendarImageRules } from "@/lib/calendar/calendarImageRules";
+import { validateClientFile } from "@/lib/storage/validateClientFile";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
 export function CreateAchievementForm({
@@ -22,6 +24,18 @@ export function CreateAchievementForm({
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
+    const imageFile = formData.get("image") as File | null;
+    if (imageFile && imageFile.size > 0) {
+      const validation = validateClientFile(imageFile, {
+        allowedMimes: calendarImageRules.allowedMime,
+        maxBytes: calendarImageRules.maxBytes,
+      });
+      if (!validation.valid) {
+        toast.error(validation.error);
+        return;
+      }
+    }
+
     startTransition(async () => {
       const res = await createAchievementAction(formData);
       if (res.success) {

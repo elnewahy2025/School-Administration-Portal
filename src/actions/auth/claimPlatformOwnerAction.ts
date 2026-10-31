@@ -18,7 +18,10 @@ export async function claimPlatformOwnerAction(bootstrapSecret?: string): Promis
     const guardError = validateBootstrapGuard(userData.user.email, bootstrapSecret);
     if (guardError) return { ok: false, error: guardError };
 
-    const admin = createSupabaseAdminClient();
+    const admin = createSupabaseAdminClient({
+      actorId: userData.user.id,
+      actorLabel: userData.user.email,
+    });
     try {
       if (await hasAnyPlatformOwner()) return { ok: false, error: "owner-exists" };
     } catch {

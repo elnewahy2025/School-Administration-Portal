@@ -19,7 +19,7 @@ export function MaintenanceTableRow({ ticket }: { ticket: MaintenanceRequestRow 
   const locationLabel = formatLocation(ticket.location);
 
   return (
-    <TableRow>
+    <TableRow className="group transition-colors hover:bg-[color:var(--panel,var(--muted))] [&>td]:px-3 [&>td]:py-3">
       <TableCell className="font-mono text-xs font-semibold text-primary">
         {ticket.ticket_number}
       </TableCell>

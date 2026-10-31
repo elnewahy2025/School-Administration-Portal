@@ -13,6 +13,7 @@ type CalendarDateTimeFieldsProps = {
   defaultEndsAt?: string;
   defaultAllDay?: boolean;
   defaultVisibility?: CalendarVisibility;
+  workingDays?: number[] | null;
 };
 
 export function CalendarDateTimeFields({
@@ -20,12 +21,13 @@ export function CalendarDateTimeFields({
   defaultEndsAt,
   defaultAllDay,
   defaultVisibility,
+  workingDays,
 }: CalendarDateTimeFieldsProps) {
   const t = useTranslations("calendar");
   const tVis = useTranslations("calendar.visibilities");
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isWeekendDay(e.target.value)) {
+    if (isWeekendDay(e.target.value, workingDays)) {
       e.target.value = "";
       toast.error(t("weekendNotAllowed"));
     }
@@ -68,7 +70,7 @@ export function CalendarDateTimeFields({
             id="visibility"
             name="visibility"
             defaultValue={defaultVisibility ?? "internal"}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
+            className="h-9 w-full rounded-lg border border-input bg-background px-2.5 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <option value="internal">{tVis("internal")}</option>
             <option value="public">{tVis("public")}</option>

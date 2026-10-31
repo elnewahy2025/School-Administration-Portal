@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -36,7 +36,7 @@ export async function toggleLocationStatusAction(
       throw mapDatabaseError(error);
     }
 
-    revalidatePath("/[locale]/settings/locations", "page");
+    revalidateSettingsPath("locations");
     return { success: true };
   } catch (err: unknown) {
     const appError = sanitizeError(err);

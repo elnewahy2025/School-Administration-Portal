@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
@@ -40,7 +40,7 @@ export async function toggleUserActiveAction(
       throw new ForbiddenError("Unauthorized");
     }
 
-    const admin = createSupabaseAdminClient();
+    const admin = createSupabaseAdminClient({ actorId: profile.id });
 
     // Deactivating a school's only administrator would lock everyone else out.
     if (currentStatus) {
@@ -65,7 +65,7 @@ export async function toggleUserActiveAction(
       throw new NotFoundError("User not found in this school");
     }
 
-    revalidatePath("/[locale]/settings/users", "page");
+    revalidateSettingsPath("users");
     return { success: true };
   } catch (err: unknown) {
     const sanitized = sanitizeError(err, { action: "toggleUserActiveAction", targetUserId });

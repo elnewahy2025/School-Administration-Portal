@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import { PermissionCategoriesList } from "./PermissionCategoriesList";
 export function CreateRoleForm({ onClose }: { onClose: () => void }) {
   const t = useTranslations("rbac");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const [name, setName] = useState("");
   const [key, setKey] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
@@ -36,6 +38,7 @@ export function CreateRoleForm({ onClose }: { onClose: () => void }) {
         setKey("");
         setSelectedKeys(new Set());
         onClose();
+        router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
       }

@@ -32,7 +32,7 @@ export function AppMessageBox() {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-black/60 p-4 backdrop-blur-xs duration-200 fade-in"
+      className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-scrim/60 p-4 backdrop-blur-xs duration-200 fade-in"
       onKeyDown={(e) => {
         if (e.key === "Escape") cancelMessageBox();
       }}

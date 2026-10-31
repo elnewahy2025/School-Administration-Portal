@@ -7,8 +7,9 @@ import { parseMaintenanceFormData } from "@/lib/validation/parseMaintenanceFormD
 import { createMaintenanceRecord } from "@/lib/maintenance/createMaintenanceRecord";
 import { insertMaintenanceUpdate } from "@/lib/maintenance/insertMaintenanceUpdate";
 import { handleOptionalPhoto } from "@/lib/maintenance/handleOptionalPhoto";
+import { assertValidMaintenancePhoto } from "@/lib/maintenance/assertValidMaintenancePhoto";
 import { ValidationError } from "@/lib/errors/ValidationError";
-import { AppError } from "@/lib/errors/AppError";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
@@ -23,6 +24,8 @@ export async function createMaintenanceAction(
     if (!title || !description) {
       throw new ValidationError("Title and description are required");
     }
+
+    await assertValidMaintenancePhoto(photo);
 
     const supabase = await createSupabaseServerClient();
     const res = await createMaintenanceRecord(supabase, {
@@ -39,16 +42,20 @@ export async function createMaintenanceAction(
     });
 
     if (res.error || !res.requestId) {
-      throw new AppError(res.error || "Failed to create maintenance ticket");
+      throw mapDatabaseError(res.error, "Failed to create maintenance ticket");
     }
 
     const requestId = res.requestId;
-    await handleOptionalPhoto(supabase, photo, {
+    const photoResult = await handleOptionalPhoto(supabase, photo, {
       schoolId: auth.schoolId,
       requestId,
       uploadedBy: auth.profileId,
       kind: "report",
     });
+
+    if (photoResult.error) {
+      throw mapDatabaseError(photoResult.error, "Failed to upload maintenance photo");
+    }
 
     await insertMaintenanceUpdate(supabase, {
       requestId,

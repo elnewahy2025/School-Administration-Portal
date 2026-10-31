@@ -1,4 +1,5 @@
 import { createSupabaseAdminClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 export async function hasAnyPlatformOwner(): Promise<boolean> {
   const admin = createSupabaseAdminClient();
@@ -11,6 +12,6 @@ export async function hasAnyPlatformOwner(): Promise<boolean> {
     .select("id, roles!inner(key)", { count: "exact", head: true })
     .eq("roles.key", "owner")
     .is("school_id", null);
-  if (error) throw new Error(`Platform owner check failed: ${error.message}`);
+  if (error) throw mapDatabaseError(error, "Platform owner check failed");
   return (count ?? 0) > 0;
 }

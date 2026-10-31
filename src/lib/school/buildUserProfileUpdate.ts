@@ -13,13 +13,18 @@ export function buildUserProfileUpdate(input: {
   departmentId?: string | null;
   isActive?: boolean;
 }) {
-  return {
+  const payload: Record<string, unknown> = {
     full_name: input.fullName.trim(),
     email: input.email ? input.email.trim().toLowerCase() : null,
     phone: input.phone ? input.phone.trim() : null,
     job_title: input.jobTitle ? input.jobTitle.trim() : null,
     department_id: input.departmentId || null,
-    is_active: input.isActive ?? true,
     updated_at: new Date().toISOString(),
   };
+
+  if (input.isActive !== undefined) {
+    payload.is_active = input.isActive;
+  }
+
+  return payload;
 }

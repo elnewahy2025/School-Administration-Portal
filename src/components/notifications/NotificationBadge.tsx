@@ -8,10 +8,7 @@ export function NotificationBadge({ type }: { type: NotificationType }) {
 
   if (type === "circular") {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400"
-      >
+      <Badge variant="outline" className="gap-1 border-info/30 bg-info/10 text-info">
         <FileTextIcon className="size-3" />
         <span>{t("circular")}</span>
       </Badge>
@@ -20,10 +17,7 @@ export function NotificationBadge({ type }: { type: NotificationType }) {
 
   if (type === "maintenance") {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400"
-      >
+      <Badge variant="outline" className="gap-1 border-warning/30 bg-warning/10 text-warning">
         <WrenchIcon className="size-3" />
         <span>{t("maintenance")}</span>
       </Badge>
@@ -32,10 +26,7 @@ export function NotificationBadge({ type }: { type: NotificationType }) {
 
   if (type === "calendar") {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-purple-500/30 bg-purple-500/10 text-purple-600 dark:text-purple-400"
-      >
+      <Badge variant="outline" className="gap-1 border-chart-3/30 bg-chart-3/10 text-chart-3">
         <CalendarIcon className="size-3" />
         <span>{t("calendar")}</span>
       </Badge>

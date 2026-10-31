@@ -16,11 +16,13 @@ export async function saveMaintenanceAssignment(
     notes?: string | null;
   },
 ): Promise<{ error?: string }> {
-  await supabase
+  const { error: deactError } = await supabase
     .from("maintenance_assignments")
     .update({ is_active: false })
     .eq("request_id", params.requestId)
     .eq("school_id", params.schoolId);
+
+  if (deactError) return { error: deactError.message };
 
   const { error: assignError } = await supabase.from("maintenance_assignments").insert({
     request_id: params.requestId,
@@ -34,8 +36,10 @@ export async function saveMaintenanceAssignment(
   if (assignError) return { error: assignError.message };
 
   const targetStatus = params.currentStatus === "submitted" ? "assigned" : params.currentStatus;
+  // `assigned_operator_id` is written by the `trg_sync_maintenance_assignment`
+  // trigger (0048), which owns that column. Writing it here as well created a
+  // window where the request named the previous operator during rotation.
   const updatePayload: Record<string, unknown> = {
-    assigned_operator_id: params.operatorId,
     status: targetStatus,
     updated_at: new Date().toISOString(),
   };

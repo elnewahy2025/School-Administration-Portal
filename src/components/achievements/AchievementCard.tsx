@@ -35,7 +35,7 @@ export function AchievementCard({
         <div className="flex items-start justify-between gap-2">
           <AchievementCategoryBadge category={achievement.category} />
           {achievement.visibility === "public" && (
-            <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+            <span className="flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold text-success">
               <AwardIcon className="size-3" />
               <span>Public</span>
             </span>

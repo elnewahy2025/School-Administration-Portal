@@ -13,7 +13,7 @@ export function CircularMetaFields() {
           id="priority"
           name="priority"
           defaultValue="normal"
-          className="w-full rounded-md border border-border bg-background p-2 text-sm"
+          className="h-9 w-full rounded-lg border border-input bg-background px-2.5 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <option value="urgent">{t("priorityUrgent")}</option>
           <option value="high">{t("priorityHigh")}</option>
@@ -28,7 +28,7 @@ export function CircularMetaFields() {
           id="response_type"
           name="response_type"
           defaultValue="acknowledgement"
-          className="w-full rounded-md border border-border bg-background p-2 text-sm"
+          className="h-9 w-full rounded-lg border border-input bg-background px-2.5 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <option value="acknowledgement">{t("responseTypeAck")}</option>
           <option value="approval">{t("responseTypeApproval")}</option>

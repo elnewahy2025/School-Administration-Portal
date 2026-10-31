@@ -35,7 +35,7 @@ export function RestoreConfirmDialog({
       role="dialog"
       aria-modal="true"
       data-testid="restore-confirm-dialog"
-      className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200 fade-in"
+      className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-scrim/60 p-4 backdrop-blur-sm duration-200 fade-in"
       onClick={onClose}
     >
       <div

@@ -13,39 +13,39 @@ const STATUS_VARIANTS: Record<
 > = {
   submitted: {
     variant: "secondary",
-    className: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200",
+    className: "bg-secondary text-secondary-foreground",
   },
   triaged: {
     variant: "secondary",
-    className: "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200",
+    className: "bg-chart-3/15 text-chart-3",
   },
   assigned: {
     variant: "secondary",
-    className: "bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-200",
+    className: "bg-chart-2/15 text-chart-2",
   },
   in_progress: {
     variant: "default",
-    className: "bg-amber-500 text-white dark:bg-amber-600",
+    className: "bg-warning text-warning-foreground",
   },
   waiting_for_parts: {
     variant: "outline",
-    className: "border-amber-500 text-amber-700 dark:text-amber-300",
+    className: "border-warning text-warning",
   },
   resolved: {
     variant: "default",
-    className: "bg-emerald-600 text-white dark:bg-emerald-700",
+    className: "bg-success text-success-foreground",
   },
   closed: {
     variant: "outline",
-    className: "bg-slate-50 text-slate-600 dark:bg-slate-900 dark:text-slate-400 border-border",
+    className: "bg-muted/50 text-muted-foreground dark:bg-muted border-border",
   },
   reopened: {
     variant: "destructive",
-    className: "bg-rose-500 text-white dark:bg-rose-600",
+    className: "bg-destructive text-destructive-foreground",
   },
   rejected: {
     variant: "destructive",
-    className: "bg-red-700 text-white",
+    className: "bg-destructive text-destructive-foreground",
   },
 };
 

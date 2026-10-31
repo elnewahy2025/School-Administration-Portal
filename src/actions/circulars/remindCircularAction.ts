@@ -48,7 +48,7 @@ export async function remindCircularAction(
       recipientUserIds: filteredRecipients,
       schoolId: auth.schoolId,
       type: "circular",
-      title: "تذكير عاجل: استجابة تعميم إداري",
+      title: "circular_reminder",
       body,
       entityType: "circular",
       entityId: payload.circularId ?? null,

@@ -1,5 +1,10 @@
 export { getCurrentSchool, type SchoolRow } from "./getCurrentSchool";
-export { getSchoolAuditLogs, type AuditLogRow } from "./getSchoolAuditLogs";
+export {
+  getSchoolAuditLogs,
+  type AuditLogRow,
+  type AuditLogFilters,
+  type AuditLogResult,
+} from "./getSchoolAuditLogs";
 export { getSchoolDepartments, type DepartmentRow } from "./getSchoolDepartments";
 export { getSchoolFullDetails, type SchoolFullDetails } from "./getSchoolFullDetails";
 export { getSchoolLocations, type LocationRow } from "./getSchoolLocations";
@@ -17,3 +22,4 @@ export { persistUserUpdates } from "./persistUserUpdates";
 export { syncAuthUserUpdates } from "./syncAuthUserUpdates";
 export { validateUserUpdateInput } from "./validateUserUpdateInput";
 export { parseSchoolNameHierarchy } from "./parseSchoolNameHierarchy";
+export { formatSchoolDate } from "./formatSchoolDate";

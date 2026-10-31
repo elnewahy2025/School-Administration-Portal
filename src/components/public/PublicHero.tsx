@@ -2,8 +2,6 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Building2Icon } from "lucide-react";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
-import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile";
 import { resolveLocalizedText } from "@/lib/school/resolveLocalizedText";
 import { getSchoolLogoUrl } from "@/lib/school/getSchoolLogoUrl";
@@ -23,13 +21,8 @@ export function PublicHero({ school }: { school: PublicSchoolProfileRow | null }
   return (
     <section
       id="overview"
-      className="relative overflow-hidden border-b border-border/50 bg-gradient-to-b from-primary/5 via-background to-background px-4 sm:px-8 lg:px-12 xl:px-16 pt-16 pb-16 sm:pt-20 sm:pb-24"
+      className="relative overflow-hidden border-b border-border/50 bg-gradient-to-b from-primary/5 via-background to-background px-4 sm:px-8 lg:px-12 xl:px-16 pt-14 pb-16 sm:pt-16 sm:pb-24"
     >
-      <div className="absolute top-6 end-6 sm:end-10 lg:end-14 xl:end-16 flex items-center gap-2.5 z-20">
-        <LanguageSwitcher />
-        <ThemeToggle />
-      </div>
-
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[850px] rounded-full bg-primary/10 blur-3xl animate-ambient-pulse"

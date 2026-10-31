@@ -2,17 +2,27 @@
 
 import { useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
+import { toast } from "sonner";
 import { CheckCheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { markAllNotificationsReadAction } from "@/actions/notifications/markAllNotificationsReadAction";
 
 export function NotificationHeader({ unreadCount }: { unreadCount: number }) {
   const t = useTranslations("notifications");
+  const tCommon = useTranslations("common");
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleMarkAll = () => {
     startTransition(async () => {
-      await markAllNotificationsReadAction();
+      const res = await markAllNotificationsReadAction();
+      if (res.success) {
+        toast.success(tCommon("saved"));
+        router.refresh();
+      } else {
+        toast.error(res.error ?? tCommon("error"));
+      }
     });
   };
 

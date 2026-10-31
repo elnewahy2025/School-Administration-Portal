@@ -16,10 +16,10 @@ export function CircularTable({
   const tCommon = useTranslations("common");
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-xs">
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_12px_30px_rgba(20,37,74,.10)]">
       <Table>
         <TableHeader>
-          <TableRow className="bg-muted/40">
+          <TableRow className="border-b-0 bg-[linear-gradient(90deg,var(--topbar-from,var(--sidebar)),var(--topbar-to,var(--sidebar)))] hover:bg-transparent [&_th]:h-11 [&_th]:px-3 [&_th]:font-bold [&_th]:text-sidebar-foreground">
             <TableHead className="w-28">{t("refNumber")}</TableHead>
             <TableHead>{t("circularTitle")}</TableHead>
             <TableHead className="w-24">{t("priority")}</TableHead>

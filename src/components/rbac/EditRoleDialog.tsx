@@ -2,11 +2,13 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { ShieldCheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { updateRoleAction } from "@/actions/rbac/updateRoleAction";
 import type { SchoolRoleRow } from "@/lib/rbac/getSchoolRoles";
 import { resolveRoleDisplayName } from "@/lib/rbac/resolveRoleDisplayName";
@@ -23,12 +25,11 @@ export function EditRoleDialog({
 }) {
   const t = useTranslations("rbac");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const initialName = role.is_system ? resolveRoleDisplayName(role.key, t, role.name) : role.name;
   const [name, setName] = useState(initialName);
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set(role.permissions));
   const [isPending, startTransition] = useTransition();
-
-  if (!isOpen) return null;
 
   const handleToggle = (permKey: string) => {
     setSelectedKeys((prev) => {
@@ -46,6 +47,7 @@ export function EditRoleDialog({
       if (res.success) {
         toast.success(tCommon("saved"));
         onClose();
+        router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
       }
@@ -53,15 +55,16 @@ export function EditRoleDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative w-full max-w-xl space-y-4 rounded-xl border border-border bg-card p-6 shadow-xl">
-        <h3 className="flex items-center gap-2 text-lg font-semibold text-foreground">
-          <ShieldCheckIcon className="size-5 text-primary" />
-          <span>{role.is_system ? t("viewRole") : t("editRole")}</span>
-        </h3>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <ShieldCheckIcon className="size-5 text-primary" />
+            <span>{role.is_system ? t("viewRole") : t("editRole")}</span>
+          </DialogTitle>
+        </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <div className="space-y-1.5">
             <Label htmlFor="edit_role_name">{t("roleName")}</Label>
             <Input
@@ -93,7 +96,7 @@ export function EditRoleDialog({
             )}
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

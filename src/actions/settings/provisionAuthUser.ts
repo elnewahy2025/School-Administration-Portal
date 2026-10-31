@@ -15,7 +15,7 @@ export type ProvisionUserParams = {
 };
 
 export async function provisionAuthUser(params: ProvisionUserParams) {
-  const admin = createSupabaseAdminClient();
+  const admin = createSupabaseAdminClient({ actorId: params.callerId });
   const authResult = await createProvisionedAuthUser(admin, params);
   if ("error" in authResult) {
     return { success: false, error: authResult.error };

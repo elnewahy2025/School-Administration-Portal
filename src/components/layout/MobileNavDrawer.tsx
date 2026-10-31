@@ -55,7 +55,7 @@ export function MobileNavDrawer({
       aria-label={t("portal")}
     >
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-200"
+        className="fixed inset-0 bg-scrim/60 backdrop-blur-xs transition-opacity duration-200"
         onClick={onClose}
         aria-hidden="true"
       />

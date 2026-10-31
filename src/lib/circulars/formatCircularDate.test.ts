@@ -15,4 +15,9 @@ describe("formatCircularDate", () => {
     const formattedAr = formatCircularDate("2026-10-22T10:00:00Z", "ar");
     expect(formattedAr.length).toBeGreaterThan(0);
   });
+
+  it("formats with custom dateFormat when supplied", () => {
+    const formatted = formatCircularDate("2026-10-22T10:00:00Z", "en", "dd/MM/yyyy");
+    expect(formatted).toBe("22/10/2026");
+  });
 });

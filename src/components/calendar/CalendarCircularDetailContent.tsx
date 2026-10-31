@@ -41,7 +41,7 @@ export function CalendarCircularDetailContent({
 
       <div className="space-y-2 rounded-lg border border-border/60 bg-muted/30 p-3.5 text-xs text-muted-foreground">
         {formattedDeadline && (
-          <div className="flex items-center gap-2 font-medium text-rose-500">
+          <div className="flex items-center gap-2 font-medium text-destructive">
             <ClockIcon className="size-4 shrink-0" />
             <span>Deadline: {formattedDeadline}</span>
           </div>

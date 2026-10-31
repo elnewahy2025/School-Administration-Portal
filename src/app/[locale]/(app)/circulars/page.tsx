@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n";
 import { PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
@@ -27,20 +28,20 @@ export default async function CircularsPage({ params }: { params: Promise<{ loca
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("title")}</h1>
-          <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
-        </div>
-        {canCreate ? (
-          <Link href="/circulars/new">
-            <Button className="gap-2">
-              <PlusIcon className="size-4" />
-              <span>{t("newCircular")}</span>
-            </Button>
-          </Link>
-        ) : null}
-      </div>
+      <PageHeader
+        title={t("title")}
+        subtitle={t("subtitle")}
+        action={
+          canCreate ? (
+            <Link href="/circulars/new">
+              <Button className="gap-2">
+                <PlusIcon className="size-4" />
+                <span>{t("newCircular")}</span>
+              </Button>
+            </Link>
+          ) : null
+        }
+      />
 
       <CircularList circulars={circulars} departments={departments} canManage={canCreate} />
     </div>

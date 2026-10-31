@@ -51,4 +51,17 @@ describe("assertValidCalendarInput", () => {
       }),
     ).toBe("End time must be after or equal to start time");
   });
+
+  it("respects custom workingDays when validating", () => {
+    // Custom Mon-Fri: [1, 2, 3, 4, 5]. Friday is working day.
+    const res = assertValidCalendarInput(
+      {
+        titleAr: "فعالية الجمعة",
+        startsAt: "2026-11-20T08:00:00",
+        endsAt: "2026-11-20T10:00:00",
+      },
+      [1, 2, 3, 4, 5],
+    );
+    expect(res).toBeNull();
+  });
 });

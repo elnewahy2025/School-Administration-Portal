@@ -7,23 +7,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { GoldDots } from "@/components/ui/gold-dots";
+import {
+  TABLE_BODY_ROW,
+  TABLE_HEAD_ROW,
+  TABLE_WRAP,
+  EMPTY_PANEL,
+} from "@/components/ui/table-styles";
 import type { DepartmentComplianceItem } from "@/lib/reports/types";
 
 export function DepartmentComplianceTable({ items }: { items: DepartmentComplianceItem[] }) {
   const t = useTranslations("reports");
 
   if (!items.length) {
-    return <p className="text-sm text-muted-foreground">{t("noData")}</p>;
+    return <div className={EMPTY_PANEL}>{t("noData")}</div>;
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-card">
-      <div className="border-b border-border bg-muted/40 px-4 py-3">
-        <h3 className="text-sm font-semibold text-foreground">{t("complianceTable")}</h3>
+    <div className={TABLE_WRAP}>
+      <div className="flex items-center gap-2.5 border-b border-border bg-[color:var(--panel,var(--muted))] px-4 py-3.5">
+        <h3 className="font-heading text-base font-extrabold text-primary">
+          {t("complianceTable")}
+        </h3>
+        <GoldDots />
       </div>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className={TABLE_HEAD_ROW}>
             <TableHead>{t("table.department")}</TableHead>
             <TableHead className="text-center">{t("table.targeted")}</TableHead>
             <TableHead className="text-center">{t("table.responded")}</TableHead>
@@ -33,23 +43,19 @@ export function DepartmentComplianceTable({ items }: { items: DepartmentComplian
         </TableHeader>
         <TableBody>
           {items.map((item) => (
-            <TableRow key={item.departmentId}>
+            <TableRow key={item.departmentId} className={TABLE_BODY_ROW}>
               <TableCell className="font-medium text-foreground">{item.departmentName}</TableCell>
               <TableCell className="text-center">{item.targetedCount}</TableCell>
-              <TableCell className="text-center text-emerald-600 dark:text-emerald-400">
-                {item.respondedCount}
-              </TableCell>
-              <TableCell className="text-center text-amber-600 dark:text-amber-400">
-                {item.pendingCount}
-              </TableCell>
+              <TableCell className="text-center text-success">{item.respondedCount}</TableCell>
+              <TableCell className="text-center text-warning">{item.pendingCount}</TableCell>
               <TableCell className="text-end font-semibold">
                 <span
                   className={
                     item.complianceRatePercent >= 80
-                      ? "text-emerald-600 dark:text-emerald-400"
+                      ? "text-success"
                       : item.complianceRatePercent >= 50
-                        ? "text-amber-600 dark:text-amber-400"
-                        : "text-rose-600 dark:text-rose-400"
+                        ? "text-warning"
+                        : "text-destructive"
                   }
                 >
                   {item.complianceRatePercent}%

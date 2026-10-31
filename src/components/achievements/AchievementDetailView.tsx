@@ -48,7 +48,7 @@ export function AchievementDetailView({
                 size="sm"
                 onClick={onDelete}
                 disabled={isPending}
-                className="gap-1.5 text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:hover:bg-rose-950/20"
+                className="gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/20"
               >
                 <Trash2Icon className="size-4" />
                 <span>{t("delete")}</span>

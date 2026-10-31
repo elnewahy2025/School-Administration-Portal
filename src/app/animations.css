@@ -100,3 +100,42 @@
     transform: none !important;
   }
 }
+
+@keyframes tickerLtr {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes tickerRtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.animate-ticker {
+  display: inline-block;
+  padding-inline-start: 100%;
+  animation: tickerLtr 28s linear infinite;
+}
+
+[dir="rtl"] .animate-ticker {
+  animation-name: tickerRtl;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ticker {
+    animation: none;
+    padding-inline-start: 0;
+  }
+}

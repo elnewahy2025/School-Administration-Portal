@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { UserCheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { assignMaintenanceAction } from "@/actions/maintenance/assignMaintenanceAction";
@@ -48,10 +49,11 @@ export function MaintenanceAssignSection({
   };
 
   return (
-    <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-xs">
-      <div className="flex items-center gap-2 border-b border-border pb-3">
+    <div className="space-y-4 rounded-xl border border-border bg-card p-6 shadow-[0_12px_30px_rgba(20,37,74,.10)]">
+      <div className="flex items-center gap-2.5 border-b border-border pb-3">
         <UserCheckIcon className="size-5 text-primary" />
-        <h3 className="font-semibold text-foreground">{t("actions.assign")}</h3>
+        <h3 className="font-heading font-extrabold text-primary">{t("actions.assign")}</h3>
+        <GoldDots />
       </div>
 
       {!hasOperators && <MaintenanceNoOperatorsAlert />}
@@ -71,7 +73,7 @@ export function MaintenanceAssignSection({
               name="priority"
               defaultValue={currentPriority}
               disabled={isPending}
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
+              className="h-9 w-full rounded-lg border border-input bg-background px-2.5 text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-50"
             >
               {PRIORITY_KEYS.map((p) => (
                 <option key={p} value={p}>

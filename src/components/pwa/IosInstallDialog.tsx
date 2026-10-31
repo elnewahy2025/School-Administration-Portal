@@ -26,7 +26,7 @@ export function IosInstallDialog({ isOpen, onClose }: { isOpen: boolean; onClose
       role="dialog"
       aria-modal="true"
       aria-labelledby="ios-install-title"
-      className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-black/60 p-4 backdrop-blur-sm duration-200 fade-in"
+      className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-scrim/60 p-4 backdrop-blur-sm duration-200 fade-in"
       onClick={onClose}
     >
       <div

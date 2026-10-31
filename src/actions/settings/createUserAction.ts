@@ -1,13 +1,13 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { assertCanManageSchoolUsers } from "@/lib/school/assertCanManageSchoolUsers";
 import { assertDepartmentBelongsToSchool } from "@/lib/school/assertDepartmentBelongsToSchool";
 import {
   sanitizeError,
   formatActionErrorResult,
   ValidationError,
-  AppError,
+  mapDatabaseError,
   type ActionResult,
 } from "@/lib/errors";
 import { provisionAuthUser } from "./provisionAuthUser";
@@ -50,10 +50,10 @@ export async function createUserAction(input: CreateUserInput): Promise<ActionRe
     });
 
     if (!res.success) {
-      throw new AppError(res.error || "Failed to create user");
+      throw mapDatabaseError(res.error, "Failed to create user");
     }
 
-    revalidatePath("/[locale]/settings/users", "page");
+    revalidateSettingsPath("users");
     return { success: true };
   } catch (err: unknown) {
     const sanitized = sanitizeError(err, { action: "createUserAction", email: input.email });

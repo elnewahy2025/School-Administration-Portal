@@ -3,7 +3,8 @@ import { redirect } from "@/i18n";
 import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
-import { SchoolLogoAvatar } from "@/components/layout/SchoolLogoAvatar";
+import { AuthShell } from "@/components/auth/AuthShell";
+import { MailIcon } from "lucide-react";
 
 export default async function ForgotPasswordPage({
   params,
@@ -21,20 +22,14 @@ export default async function ForgotPasswordPage({
   const schoolName = school ? (locale === "ar" ? school.name_ar : school.name_en) : null;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
-      <div className="flex flex-col items-center gap-3 text-center">
-        <SchoolLogoAvatar school={school} className="size-16" iconClassName="size-8" />
-        {schoolName && (
-          <h2 className="max-w-sm text-lg font-bold whitespace-pre-line text-foreground">
-            {schoolName}
-          </h2>
-        )}
-      </div>
-      <div className="text-center">
-        <h1 className="text-2xl font-semibold text-foreground">{t("forgotPasswordTitle")}</h1>
-        <p className="mt-1 max-w-sm text-xs text-muted-foreground">{t("forgotPasswordDesc")}</p>
-      </div>
+    <AuthShell
+      school={school}
+      schoolName={schoolName}
+      icon={<MailIcon className="size-5" />}
+      title={t("forgotPasswordTitle")}
+      description={t("forgotPasswordDesc")}
+    >
       <ForgotPasswordForm />
-    </main>
+    </AuthShell>
   );
 }

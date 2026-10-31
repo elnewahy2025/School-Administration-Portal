@@ -15,17 +15,17 @@ const PRIORITY_STYLES: Record<
 > = {
   emergency: {
     variant: "destructive",
-    className: "bg-red-600 text-white dark:bg-red-700 animate-pulse",
+    className: "bg-destructive text-destructive-foreground animate-pulse",
     icon: AlertCircleIcon,
   },
   urgent: {
     variant: "default",
-    className: "bg-amber-600 text-white dark:bg-amber-700",
+    className: "bg-warning text-warning-foreground",
     icon: AlertTriangleIcon,
   },
   medium: {
     variant: "secondary",
-    className: "bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200",
+    className: "bg-info/15 text-info",
     icon: InfoIcon,
   },
   deferrable: {

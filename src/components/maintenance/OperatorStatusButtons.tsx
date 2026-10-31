@@ -28,7 +28,7 @@ export function OperatorStatusButtons({
         size="sm"
         disabled={isPending}
         onClick={() => onDirectTransition("in_progress")}
-        className="bg-amber-600 text-white"
+        className="bg-warning text-warning-foreground"
       >
         <PlayIcon className="size-4" />
         <span>{t("startWork")}</span>
@@ -52,7 +52,7 @@ export function OperatorStatusButtons({
           size="sm"
           disabled={isPending}
           onClick={() => onOpenAction("resolved")}
-          className="bg-emerald-600 text-white"
+          className="bg-success text-success-foreground"
         >
           <CheckCircle2Icon className="size-4" />
           <span>{t("resolve")}</span>

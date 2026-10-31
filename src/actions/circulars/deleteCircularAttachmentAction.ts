@@ -7,7 +7,7 @@ import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
-import { AppError } from "@/lib/errors/AppError";
+import { DatabaseError } from "@/lib/errors/DatabaseError";
 import { NotFoundError } from "@/lib/errors/NotFoundError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
@@ -23,7 +23,7 @@ export async function deleteCircularAttachmentAction(
       throw new AuthenticationError("Unauthorized");
     }
 
-    const perms = await getEffectivePermissions().catch((): string[] => []);
+    const perms = await getEffectivePermissions(profile.school_id);
     const isOwner = await isPlatformOwner(profile.id);
     const canEdit =
       isOwner || perms.includes("circular.create") || perms.includes("circular.publish");
@@ -45,7 +45,7 @@ export async function deleteCircularAttachmentAction(
         .from("circular-attachments")
         .remove([attachment.path]);
       if (removeError) {
-        throw new AppError("Could not delete the stored file. Please try again.");
+        throw new DatabaseError("Could not delete the stored file. Please try again.");
       }
     }
 

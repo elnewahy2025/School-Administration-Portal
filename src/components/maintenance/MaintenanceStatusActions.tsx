@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { MaintenanceStatusButtons } from "./MaintenanceStatusButtons";
 import { MaintenanceReasonForm } from "./MaintenanceReasonForm";
 import { updateMaintenanceStatusAction } from "@/actions/maintenance/updateMaintenanceStatusAction";
@@ -51,9 +52,12 @@ export function MaintenanceStatusActions({
   const canReopen = isReporter || canAssign || canClose;
 
   return (
-    <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-xs">
-      <h3 className="border-b border-border pb-3 font-semibold text-foreground">
-        {t("actions.startWork")} / {t("status")}
+    <div className="space-y-4 rounded-xl border border-border bg-card p-6 shadow-[0_12px_30px_rgba(20,37,74,.10)]">
+      <h3 className="flex items-center gap-2.5 border-b border-border pb-3 font-heading font-extrabold text-primary">
+        <span>
+          {t("actions.startWork")} / {t("status")}
+        </span>
+        <GoldDots />
       </h3>
 
       <MaintenanceStatusButtons

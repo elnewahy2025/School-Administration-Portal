@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ArrowLeftIcon, UploadIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { CalendarCoreFields } from "./CalendarCoreFields";
@@ -14,11 +15,16 @@ import { CalendarDateTimeFields } from "./CalendarDateTimeFields";
 import { formatDateTimeInput } from "@/lib/calendar/formatDateTimeInput";
 import { isWeekendDay } from "@/lib/calendar/isWeekendDay";
 import { updateCalendarEventAction } from "@/actions/calendar/updateCalendarEventAction";
+import { calendarImageRules } from "@/lib/calendar/calendarImageRules";
+import { validateClientFile } from "@/lib/storage/validateClientFile";
 import type { CalendarEventRow } from "@/lib/calendar/types";
 
-type EditCalendarEventFormProps = { event: CalendarEventRow };
+type EditCalendarEventFormProps = {
+  event: CalendarEventRow;
+  workingDays?: number[] | null;
+};
 
-export function EditCalendarEventForm({ event }: EditCalendarEventFormProps) {
+export function EditCalendarEventForm({ event, workingDays }: EditCalendarEventFormProps) {
   const t = useTranslations("calendar");
   const tCommon = useTranslations("common");
   const locale = useLocale();
@@ -28,9 +34,21 @@ export function EditCalendarEventForm({ event }: EditCalendarEventFormProps) {
   const handleSubmit = (formData: FormData) => {
     const startsAt = String(formData.get("starts_at") || "");
     const endsAt = String(formData.get("ends_at") || "");
-    if (isWeekendDay(startsAt) || isWeekendDay(endsAt)) {
+    if (isWeekendDay(startsAt, workingDays) || isWeekendDay(endsAt, workingDays)) {
       toast.error(t("weekendNotAllowed"));
       return;
+    }
+
+    const imageFile = formData.get("image") as File | null;
+    if (imageFile && imageFile.size > 0) {
+      const validation = validateClientFile(imageFile, {
+        allowedMimes: calendarImageRules.allowedMime,
+        maxBytes: calendarImageRules.maxBytes,
+      });
+      if (!validation.valid) {
+        toast.error(validation.error);
+        return;
+      }
     }
 
     startTransition(async () => {
@@ -55,7 +73,7 @@ export function EditCalendarEventForm({ event }: EditCalendarEventFormProps) {
         </Button>
       </Link>
 
-      <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-xs">
+      <div className={`${PANEL} space-y-4 p-6 sm:p-8`}>
         <CalendarCoreFields
           defaultCategory={event.category}
           defaultTitleAr={event.title_ar}
@@ -68,6 +86,7 @@ export function EditCalendarEventForm({ event }: EditCalendarEventFormProps) {
           defaultEndsAt={formatDateTimeInput(event.ends_at)}
           defaultAllDay={event.all_day}
           defaultVisibility={event.visibility}
+          workingDays={workingDays}
         />
 
         <div className="space-y-2 border-t border-border pt-4">

@@ -5,6 +5,14 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Trash2Icon, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { deleteCircularAction } from "@/actions/circulars/deleteCircularAction";
 
 export function CircularDeleteDialog({
@@ -22,8 +30,6 @@ export function CircularDeleteDialog({
   const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
 
-  if (!open) return null;
-
   const handleDelete = () => {
     startTransition(async () => {
       const res = await deleteCircularAction(circularId);
@@ -38,19 +44,21 @@ export function CircularDeleteDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-      <div className="w-full max-w-md space-y-4 rounded-xl border border-border bg-card p-6 shadow-xl">
-        <div className="flex items-center gap-3 text-destructive">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-            <Trash2Icon className="size-5" />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader className="gap-3">
+          <div className="flex items-center gap-3 text-destructive">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
+              <Trash2Icon className="size-5" />
+            </div>
+            <div>
+              <DialogTitle>{t("confirmDeleteTitle")}</DialogTitle>
+              <DialogDescription>{t("confirmDeleteDesc")}</DialogDescription>
+            </div>
           </div>
-          <div>
-            <h3 className="text-base font-semibold text-foreground">{t("confirmDeleteTitle")}</h3>
-            <p className="text-xs text-muted-foreground">{t("confirmDeleteDesc")}</p>
-          </div>
-        </div>
+        </DialogHeader>
 
-        <div className="flex justify-end gap-2 pt-2">
+        <DialogFooter className="pt-2">
           <Button
             type="button"
             variant="outline"
@@ -73,8 +81,8 @@ export function CircularDeleteDialog({
             )}
             <span>{tCommon("delete")}</span>
           </Button>
-        </div>
-      </div>
-    </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

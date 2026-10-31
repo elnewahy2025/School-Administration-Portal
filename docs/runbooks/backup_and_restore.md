@@ -60,7 +60,7 @@ Run this at least once per quarter, and always before a major release.
 3. Point a local `.env.local` at the throwaway project and run:
 
    ```bash
-   npm run test:rls   # 119 authorization checks
+   npm run test:rls   # 132 authorization checks (the battery prints its own total)
    npm run test:e2e   # authenticated workflows
    ```
 

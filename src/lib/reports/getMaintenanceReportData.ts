@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from "@/lib/supabase";
 import { computeAverageResolutionTime } from "./computeAverageResolutionTime";
 import { mapMaintenanceReportRows } from "./mapMaintenanceReportRows";
 import { applyMaintenanceReportFilters } from "./applyMaintenanceReportFilters";
+import type { RawMaintenanceItem } from "./toMaintenanceReportRow";
 import type { ReportFilterParams, MaintenanceReportSummaryData } from "./types";
 
 export async function getMaintenanceReportData(
@@ -37,8 +38,7 @@ export async function getMaintenanceReportData(
 
   const query = applyMaintenanceReportFilters(baseQuery, filters);
   const { data } = await query;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rawList = (data ?? []) as any[];
+  const rawList = (data ?? []) as unknown as RawMaintenanceItem[];
 
   const { rows, priorityBreakdown, statusBreakdown } = mapMaintenanceReportRows(rawList);
 

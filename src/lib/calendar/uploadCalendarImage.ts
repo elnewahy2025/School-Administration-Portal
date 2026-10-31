@@ -1,33 +1,27 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { hasValidFileSignature } from "@/lib/storage/hasValidFileSignature";
-
-const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp"];
-const MAX_BYTES = 5 * 1024 * 1024; // 5MB
+import { validateStorageUpload } from "@/lib/storage/validateStorageUpload";
+import { calendarImageRules } from "./calendarImageRules";
 
 export async function uploadCalendarImage(
   supabase: SupabaseClient,
   file: File,
   schoolId: string,
+  folder = "calendar",
 ): Promise<{ path?: string; error?: string }> {
-  if (!ALLOWED_MIME.includes(file.type)) {
-    return { error: "Invalid image format. Allowed: JPG, PNG, and WebP." };
-  }
-  if (file.size > MAX_BYTES) {
-    return { error: "Image exceeds 5MB limit." };
-  }
-
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  if (!hasValidFileSignature(bytes, file.type)) {
-    return { error: "File content does not match its image type." };
+  const validation = await validateStorageUpload(file, calendarImageRules);
+  if (!validation.ok) {
+    return { error: validation.error };
   }
 
   const cleanName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-  const path = `${schoolId}/calendar/${Date.now()}_${cleanName}`;
+  const path = `${schoolId}/${folder}/${Date.now()}_${cleanName}`;
 
-  const { error: uploadError } = await supabase.storage.from("public-assets").upload(path, bytes, {
-    contentType: file.type,
-    upsert: false,
-  });
+  const { error: uploadError } = await supabase.storage
+    .from("public-assets")
+    .upload(path, validation.bytes, {
+      contentType: file.type,
+      upsert: false,
+    });
 
   if (uploadError) {
     return { error: uploadError.message };

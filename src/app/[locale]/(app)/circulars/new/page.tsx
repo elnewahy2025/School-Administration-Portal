@@ -1,7 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n";
-import { ArrowLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -29,17 +27,12 @@ export default async function NewCircularPage({ params }: { params: Promise<{ lo
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <Link href="/circulars">
-          <Button variant="ghost" size="icon" aria-label={t("backToList")}>
-            <ArrowLeftIcon className="size-4 rtl:rotate-180" />
-          </Button>
-        </Link>
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("newCircular")}</h1>
-          <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
-        </div>
-      </div>
+      <PageHeader
+        title={t("newCircular")}
+        subtitle={t("subtitle")}
+        backHref="/circulars"
+        backLabel={t("backToList")}
+      />
 
       <CreateCircularForm departments={departments} />
     </div>

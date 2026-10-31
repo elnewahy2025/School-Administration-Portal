@@ -52,8 +52,8 @@ export async function publishCircularAction(circularId: string): Promise<ActionR
         recipientUserIds: headIds,
         schoolId: profile.school_id,
         type: "circular",
-        title: "تعميم إداري جديد",
-        body: "تم نشر تعميم إداري جديد يتطلب مراجعة واستجابة قسمكم",
+        title: "circular_published",
+        body: "circular_published",
         entityType: "circular",
         entityId: circularId,
       });

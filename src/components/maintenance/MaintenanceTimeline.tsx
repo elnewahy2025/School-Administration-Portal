@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { MessageSquareIcon, ArrowRightIcon, UserIcon } from "lucide-react";
+import { GoldDots } from "@/components/ui/gold-dots";
 import type { MaintenanceUpdateRow } from "@/lib/maintenance/types";
 
 export function MaintenanceTimeline({ updates }: { updates: MaintenanceUpdateRow[] }) {
@@ -13,13 +14,16 @@ export function MaintenanceTimeline({ updates }: { updates: MaintenanceUpdateRow
   }
 
   return (
-    <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-xs">
-      <h3 className="border-b border-border pb-3 font-semibold text-foreground">{t("timeline")}</h3>
+    <div className="space-y-4 rounded-xl border border-border bg-card p-6 shadow-[0_12px_30px_rgba(20,37,74,.10)]">
+      <h3 className="flex items-center gap-2.5 border-b border-border pb-3 font-heading font-extrabold text-primary">
+        <span>{t("timeline")}</span>
+        <GoldDots />
+      </h3>
 
       <div className="space-y-4">
         {updates.map((up) => (
           <div key={up.id} className="relative flex items-start gap-3 ps-2">
-            <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(135deg,var(--action-from,#0b63d6),var(--action-to,#0a2f7a))] text-[color:var(--action-foreground,#fff)]">
               {up.kind === "note" ? (
                 <MessageSquareIcon className="size-3.5" />
               ) : (

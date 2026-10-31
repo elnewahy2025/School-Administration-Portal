@@ -23,7 +23,7 @@ export function RestoreUploadCard() {
     <>
       <div className="flex flex-col justify-between rounded-2xl border border-border bg-card p-6 shadow-sm">
         <div className="space-y-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-warning/10 text-warning">
             <UploadCloud className="h-6 w-6" />
           </div>
           <div className="space-y-1.5">

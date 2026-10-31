@@ -29,7 +29,7 @@ export function CircularAttachmentItem({
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-xs">
       <div className="flex items-center justify-between border-b border-border/60 pb-3">
         <div className="flex min-w-0 items-center gap-2.5">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-[linear-gradient(135deg,var(--action-from,#0b63d6),var(--action-to,#0a2f7a))] text-[color:var(--action-foreground,#fff)]">
             <FileTextIcon className="size-4" />
           </div>
           <div className="min-w-0">

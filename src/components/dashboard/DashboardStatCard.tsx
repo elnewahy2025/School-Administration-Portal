@@ -1,8 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRightIcon, type LucideIcon } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { useTranslations } from "next-intl";
+import { ArrowRightIcon, type LucideIcon } from "lucide-react";
+import {
+  CARD_DIAMOND_ICON,
+  CARD_DIAMOND_SM,
+  CARD_FOOTER_BAR,
+  CARD_RULE,
+  CARD_SHELL,
+} from "@/components/ui/diamond-card-styles";
 
 export interface DashboardStatItem {
   title: string;
@@ -14,24 +21,26 @@ export interface DashboardStatItem {
 }
 
 export function DashboardStatCard({ item }: { item: DashboardStatItem }) {
+  const t = useTranslations("dashboard");
   const Icon = item.icon;
   return (
-    <Link href={item.href} className="group">
-      <Card className="h-full border-border bg-card transition-all hover:border-primary/50 hover:shadow-md">
-        <CardContent className="space-y-3 p-5">
-          <div className="flex items-center justify-between">
-            <div className={`flex size-10 items-center justify-center rounded-lg ${item.accent}`}>
-              <Icon className="size-5" />
-            </div>
-            <ArrowUpRightIcon className="size-4 text-muted-foreground opacity-0 transition-all group-hover:text-primary group-hover:opacity-100 rtl:-rotate-90" />
-          </div>
-          <div>
-            <div className="text-2xl font-bold tracking-tight text-foreground">{item.count}</div>
-            <div className="mt-0.5 text-sm font-semibold text-foreground">{item.title}</div>
-            <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{item.desc}</p>
-          </div>
-        </CardContent>
-      </Card>
+    <Link
+      href={item.href}
+      className={`${CARD_SHELL} h-full px-5 pt-12 pb-0 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold`}
+    >
+      <div className={CARD_DIAMOND_SM}>
+        <Icon className={`size-6 ${CARD_DIAMOND_ICON}`} />
+      </div>
+      <div className="text-3xl font-extrabold tracking-tight text-foreground">{item.count}</div>
+      <div className="mt-1 text-sm font-bold text-foreground">{item.title}</div>
+      <div className={`mt-3 ${CARD_RULE}`} />
+      <p className="mb-4 line-clamp-2 flex-1 text-xs leading-relaxed text-muted-foreground">
+        {item.desc}
+      </p>
+      <span className={CARD_FOOTER_BAR}>
+        <span>{t("viewAll")}</span>
+        <ArrowRightIcon className="size-4 transition-transform duration-[400ms] group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+      </span>
     </Link>
   );
 }

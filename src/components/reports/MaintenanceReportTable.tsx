@@ -8,6 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  TABLE_BODY_ROW,
+  TABLE_HEAD_ROW,
+  TABLE_WRAP,
+  EMPTY_PANEL,
+} from "@/components/ui/table-styles";
 import { MaintenancePriorityBadge } from "@/components/maintenance/MaintenancePriorityBadge";
 import { MaintenanceStatusBadge } from "@/components/maintenance/MaintenanceStatusBadge";
 import type { MaintenanceReportRow } from "@/lib/reports/types";
@@ -16,18 +22,14 @@ export function MaintenanceReportTable({ rows }: { rows: MaintenanceReportRow[] 
   const t = useTranslations("reports");
 
   if (!rows.length) {
-    return (
-      <div className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-        {t("noData")}
-      </div>
-    );
+    return <div className={EMPTY_PANEL}>{t("noData")}</div>;
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-card">
+    <div className={TABLE_WRAP}>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className={TABLE_HEAD_ROW}>
             <TableHead>{t("table.ticket")}</TableHead>
             <TableHead>{t("table.title")}</TableHead>
             <TableHead>{t("table.priority")}</TableHead>
@@ -40,8 +42,8 @@ export function MaintenanceReportTable({ rows }: { rows: MaintenanceReportRow[] 
         </TableHeader>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell className="font-mono text-xs text-muted-foreground">
+            <TableRow key={row.id} className={TABLE_BODY_ROW}>
+              <TableCell className="font-mono text-xs font-semibold text-primary">
                 <Link
                   href={`/maintenance/${row.id}`}
                   className="hover:text-primary hover:underline"

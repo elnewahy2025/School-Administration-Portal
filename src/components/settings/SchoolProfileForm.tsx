@@ -22,7 +22,6 @@ export function SchoolProfileForm({
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
   const router = useRouter();
-  const [formVersion, setFormVersion] = useState(0);
   const [activeTab, setActiveTab] = useState<SchoolProfileTabId>("identity");
   const [isPending, startTransition] = useTransition();
 
@@ -31,7 +30,6 @@ export function SchoolProfileForm({
       const res = await updateSchoolAction(formData);
       if (res.success) {
         toast.success(tCommon("saved"));
-        setFormVersion((v) => v + 1);
         router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
@@ -39,8 +37,10 @@ export function SchoolProfileForm({
     });
   };
 
+  const formKey = `${school.id}-${school.updated_at ?? ""}-${school.name_ar}-${school.name_en}`;
+
   return (
-    <form key={`${school.id}-${formVersion}`} action={handleSubmit} className="flex flex-col gap-6">
+    <form key={formKey} action={handleSubmit} className="flex flex-col gap-6">
       <SchoolProfileSubTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
       <div className="rounded-2xl border border-border bg-card p-6 shadow-xs">

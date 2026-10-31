@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { getCalendarEventById } from "@/lib/calendar/getCalendarEventById";
 import { EditCalendarEventForm } from "@/components/calendar/EditCalendarEventForm";
 
@@ -28,9 +29,10 @@ export default async function EditCalendarEventPage({
     notFound();
   }
 
-  const [hasManagePerm, isOwner] = await Promise.all([
+  const [hasManagePerm, isOwner, schoolDetails] = await Promise.all([
     hasPermission("calendar.manage", profile.school_id).catch(() => false),
     isPlatformOwner(profile.id),
+    getSchoolFullDetails(profile.school_id).catch(() => null),
   ]);
 
   const canManage = isOwner || hasManagePerm;
@@ -52,7 +54,7 @@ export default async function EditCalendarEventPage({
         </div>
       </div>
 
-      <EditCalendarEventForm event={event} />
+      <EditCalendarEventForm event={event} workingDays={schoolDetails?.working_days} />
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   SettingsIcon,
   DatabaseIcon,
 } from "lucide-react";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { NavLink } from "./NavLink";
 import { SchoolLogoAvatar } from "./SchoolLogoAvatar";
 import { resolveSchoolName } from "@/lib/school/resolveSchoolName";
@@ -51,7 +52,11 @@ export function AppSidebar({
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1.5 overflow-y-auto p-4">
+      <nav className="flex-1 space-y-3 overflow-y-auto p-4">
+        <h3 className="mb-1 flex items-center gap-2.5 px-1 font-heading text-base font-extrabold text-sidebar-foreground">
+          <span>{t("menu")}</span>
+          <GoldDots />
+        </h3>
         <NavLink href="/dashboard" label={t("dashboard")} icon={LayoutDashboardIcon} />
         <NavLink href="/circulars" label={t("circulars")} icon={FileTextIcon} />
         <NavLink href="/maintenance" label={t("maintenance")} icon={WrenchIcon} />

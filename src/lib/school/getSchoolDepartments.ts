@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 export type DepartmentRow = {
   id: string;
@@ -10,27 +11,17 @@ export type DepartmentRow = {
 };
 
 export async function getSchoolDepartments(schoolId?: string | null): Promise<DepartmentRow[]> {
-  const supabase = await createSupabaseServerClient();
-  let resolvedId = schoolId;
-  if (!resolvedId) {
-    const { data: firstSchool } = await supabase
-      .from("schools")
-      .select("id")
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-    resolvedId = firstSchool?.id ?? null;
-  }
-  if (!resolvedId) return [];
+  if (!schoolId) return [];
 
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("departments")
     .select("id, school_id, name_ar, name_en, is_active, created_at")
-    .eq("school_id", resolvedId)
+    .eq("school_id", schoolId)
     .order("created_at", { ascending: true });
 
   if (error) {
-    throw new Error(`Failed to fetch departments: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   return (data as DepartmentRow[]) ?? [];

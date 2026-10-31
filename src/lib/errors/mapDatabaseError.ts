@@ -4,35 +4,42 @@ import { NotFoundError } from "./NotFoundError";
 import { ValidationError } from "./ValidationError";
 import { ForbiddenError } from "./ForbiddenError";
 import { DatabaseError } from "./DatabaseError";
+import { extractDbErrorCode } from "./extractDbErrorCode";
 
-type DbErrorLike = {
-  code?: string;
-  message?: string;
-  details?: string;
-  hint?: string;
+type ErrorFactory = (correlationId?: string) => AppError;
+
+const CODE_ERROR_FACTORIES: Record<string, ErrorFactory> = {
+  "23505": (corr) => new ConflictError("A record with this identifier already exists", corr),
+  "23503": (corr) => new NotFoundError("A referenced record does not exist", corr),
+  "23502": (corr) => new ValidationError("Required field missing", undefined, corr),
+  "42501": (corr) => new ForbiddenError("Insufficient permissions to complete operation", corr),
+  "22P02": (corr) => new ValidationError("Invalid data format or value", undefined, corr),
+  "23514": (corr) => new ValidationError("Data violates validation constraints", undefined, corr),
+  PGRST116: (corr) => new NotFoundError("Requested record not found", corr),
 };
 
-export function mapDatabaseError(error: unknown, correlationId?: string): AppError {
+export function mapDatabaseError(
+  error: unknown,
+  fallbackMessageOrCorrelationId?: string,
+  providedCorrelationId?: string,
+): AppError {
   if (error instanceof AppError) return error;
 
-  const dbErr = error as DbErrorLike;
-  const code = dbErr?.code;
+  let fallbackMessage = "Database operation failed";
+  let correlationId = providedCorrelationId;
 
-  if (code === "23505") {
-    return new ConflictError("A record with this identifier already exists", correlationId);
-  }
-  if (code === "23503") {
-    return new NotFoundError("A referenced record does not exist", correlationId);
-  }
-  if (code === "23502") {
-    return new ValidationError("Required field missing", undefined, correlationId);
-  }
-  if (code === "42501") {
-    return new ForbiddenError("Insufficient permissions to complete operation", correlationId);
-  }
-  if (code === "PGRST116") {
-    return new NotFoundError("Requested record not found", correlationId);
+  if (fallbackMessageOrCorrelationId) {
+    if (fallbackMessageOrCorrelationId.startsWith("corr_")) {
+      correlationId = fallbackMessageOrCorrelationId;
+    } else {
+      fallbackMessage = fallbackMessageOrCorrelationId;
+    }
   }
 
-  return new DatabaseError("Database operation failed", correlationId, error);
+  const code = extractDbErrorCode(error);
+  if (code && CODE_ERROR_FACTORIES[code]) {
+    return CODE_ERROR_FACTORIES[code](correlationId);
+  }
+
+  return new DatabaseError(fallbackMessage, correlationId, error);
 }

@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GoldDots } from "@/components/ui/gold-dots";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
 import { getCircularById } from "@/lib/circulars/getCircularById";
@@ -32,7 +33,7 @@ export default async function CircularDetailPage({
   const [circular, responses, perms, departments, isOwner] = await Promise.all([
     getCircularById(id),
     getCircularResponses(id).catch(() => []),
-    getEffectivePermissions().catch((): string[] => []),
+    getEffectivePermissions(profile?.school_id).catch((): string[] => []),
     getSchoolDepartments(profile?.school_id).catch(() => []),
     isCurrentUserPlatformOwner(profile?.id),
   ]);
@@ -78,8 +79,9 @@ export default async function CircularDetailPage({
       {canViewResponses && (
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-lg font-semibold tracking-tight text-foreground">
-              {t("responses")}
+            <h3 className="flex items-center gap-2.5 font-heading text-lg font-extrabold tracking-tight text-primary">
+              <span>{t("responses")}</span>
+              <GoldDots />
             </h3>
             {shouldShowCircularReminder(canManage, canPublish, circular.status) ? (
               <CircularRemindButton circularId={circular.id} circularTitle={circular.title} />

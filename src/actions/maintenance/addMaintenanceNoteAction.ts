@@ -10,7 +10,7 @@ import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
 import { ValidationError } from "@/lib/errors/ValidationError";
 import { NotFoundError } from "@/lib/errors/NotFoundError";
-import { AppError } from "@/lib/errors/AppError";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
@@ -56,7 +56,7 @@ export async function addMaintenanceNoteAction(formData: FormData): Promise<Acti
     });
 
     if (res.error) {
-      throw new AppError(res.error);
+      throw mapDatabaseError(res.error, "Failed to add note");
     }
 
     revalidatePath(`/[locale]/maintenance/${requestId}`, "page");

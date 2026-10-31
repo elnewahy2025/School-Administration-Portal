@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { FileTextIcon, ArrowRightIcon } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { GoldDots } from "@/components/ui/gold-dots";
+import { LIST_ROW } from "@/components/ui/diamond-card-styles";
 import { CircularPriorityBadge, CircularStatusBadge } from "@/components/circulars";
 import type { CircularRow } from "@/lib/circulars/types";
 
@@ -14,10 +16,11 @@ export function DashboardRecentCirculars({ circulars }: { circulars: CircularRow
   return (
     <Card className="border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
-        <div className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2.5 text-base font-extrabold text-primary">
           <FileTextIcon className="size-4 text-primary" />
-          <CardTitle className="text-base font-bold">{t("recentCirculars")}</CardTitle>
-        </div>
+          <span>{t("recentCirculars")}</span>
+          <GoldDots />
+        </CardTitle>
         <Link
           href={`/${locale}/circulars`}
           className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
@@ -34,7 +37,7 @@ export function DashboardRecentCirculars({ circulars }: { circulars: CircularRow
             <Link
               key={c.id}
               href={`/${locale}/circulars/${c.id}`}
-              className="flex items-center justify-between gap-3 rounded-lg border border-border/60 bg-muted/20 p-3 transition-colors hover:border-primary/40 hover:bg-accent/40"
+              className={`flex items-center justify-between gap-3 p-3 ${LIST_ROW}`}
             >
               <div className="min-w-0 flex-1">
                 <div className="mb-1 flex items-center gap-2">

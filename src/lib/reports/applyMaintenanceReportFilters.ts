@@ -1,12 +1,12 @@
 import type { ReportFilterParams } from "./types";
+import type { ReportFilterQuery } from "./applyCircularReportFilters";
 
-export function applyMaintenanceReportFilters(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  query: any,
+export function applyMaintenanceReportFilters<T extends ReportFilterQuery<T>>(
+  query: T,
   filters: ReportFilterParams,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): any {
+): T {
   let q = query;
+  if (filters.departmentId) q = q.eq("reporter_department_id", filters.departmentId);
   if (filters.status) q = q.eq("status", filters.status);
   if (filters.category) q = q.eq("category", filters.category);
   if (filters.from) q = q.gte("created_at", filters.from);

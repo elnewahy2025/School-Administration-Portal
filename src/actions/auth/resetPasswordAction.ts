@@ -3,6 +3,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { cleanFormField } from "@/lib/validation/cleanFormField";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
+import { recordCredentialAudit } from "@/lib/audit/recordCredentialAudit";
 
 export async function resetPasswordAction(
   _prev: { success: boolean; error?: string | null },
@@ -21,11 +22,20 @@ export async function resetPasswordAction(
     }
 
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.updateUser({ password });
+    const { data: updateData, error } = await supabase.auth.updateUser({ password });
 
     if (error) {
       sanitizeError(error, { action: "resetPasswordAction" });
       return { success: false, error: "failed" };
+    }
+
+    if (updateData?.user) {
+      await recordCredentialAudit({
+        actorId: updateData.user.id,
+        actorLabel: updateData.user.email,
+        action: "credentials.password_change",
+        entityId: updateData.user.id,
+      });
     }
 
     return { success: true, error: null };

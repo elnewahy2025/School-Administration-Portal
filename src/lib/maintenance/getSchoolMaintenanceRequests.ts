@@ -1,22 +1,13 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { MaintenanceRequestRow } from "./types";
 
 export async function getSchoolMaintenanceRequests(
   schoolId?: string | null,
 ): Promise<MaintenanceRequestRow[]> {
-  const supabase = await createSupabaseServerClient();
-  let resolvedId = schoolId;
-  if (!resolvedId) {
-    const { data: firstSchool } = await supabase
-      .from("schools")
-      .select("id")
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-    resolvedId = firstSchool?.id ?? null;
-  }
-  if (!resolvedId) return [];
+  if (!schoolId) return [];
 
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("maintenance_requests")
     .select(
@@ -31,11 +22,11 @@ export async function getSchoolMaintenanceRequests(
       assigned_operator:profiles!maintenance_requests_assigned_operator_id_fkey(id, full_name, email)
     `,
     )
-    .eq("school_id", resolvedId)
+    .eq("school_id", schoolId)
     .order("created_at", { ascending: false });
 
   if (error) {
-    throw new Error(`Failed to fetch maintenance requests: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   return (data as unknown as MaintenanceRequestRow[]) ?? [];

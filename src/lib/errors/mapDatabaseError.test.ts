@@ -32,10 +32,32 @@ describe("mapDatabaseError", () => {
     expect(err.statusCode).toBe(403);
   });
 
+  it("maps Postgres 22P02 invalid text representation to ValidationError", () => {
+    const err = mapDatabaseError(
+      { code: "22P02", message: "invalid input syntax for type uuid" },
+      "corr_4b",
+    );
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err.statusCode).toBe(422);
+  });
+
+  it("maps Postgres 23514 check constraint violation to ValidationError", () => {
+    const err = mapDatabaseError({ code: "23514", message: "fails check constraint" }, "corr_4c");
+    expect(err).toBeInstanceOf(ValidationError);
+    expect(err.statusCode).toBe(422);
+  });
+
   it("maps PostgREST PGRST116 single row not found to NotFoundError", () => {
     const err = mapDatabaseError({ code: "PGRST116", message: "0 rows" }, "corr_5");
     expect(err).toBeInstanceOf(NotFoundError);
     expect(err.statusCode).toBe(404);
+  });
+
+  it("maps unknown database errors to DatabaseError with custom fallbackMessage", () => {
+    const err = mapDatabaseError("raw error string", "Failed to save record");
+    expect(err).toBeInstanceOf(DatabaseError);
+    expect(err.message).toBe("Failed to save record");
+    expect(err.statusCode).toBe(500);
   });
 
   it("maps unknown database errors to DatabaseError", () => {

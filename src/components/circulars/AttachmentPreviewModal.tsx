@@ -27,9 +27,9 @@ export function AttachmentPreviewModal({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex animate-in flex-col bg-black/85 p-4 backdrop-blur-sm fade-in-0 sm:p-6"
+      className="fixed inset-0 z-50 flex animate-in flex-col bg-scrim/85 p-4 backdrop-blur-sm fade-in-0 sm:p-6"
     >
-      <div className="flex items-center justify-between pb-4 text-white">
+      <div className="flex items-center justify-between pb-4 text-scrim-foreground">
         <h3 className="max-w-md truncate text-sm font-semibold">{fileName}</h3>
         <div className="flex items-center gap-2">
           <Button
@@ -37,7 +37,7 @@ export function AttachmentPreviewModal({
             variant="ghost"
             size="sm"
             onClick={() => downloadAttachmentFile(publicUrl, fileName)}
-            className="text-white hover:bg-white/10"
+            className="text-scrim-foreground hover:bg-scrim-foreground/10"
           >
             <DownloadIcon className="size-4" />
             <span className="hidden sm:inline">{t("downloadAttachment")}</span>
@@ -47,7 +47,7 @@ export function AttachmentPreviewModal({
             variant="ghost"
             size="sm"
             onClick={() => printAttachment(publicUrl)}
-            className="text-white hover:bg-white/10"
+            className="text-scrim-foreground hover:bg-scrim-foreground/10"
           >
             <PrinterIcon className="size-4" />
             <span className="hidden sm:inline">{t("printAttachment")}</span>
@@ -57,7 +57,7 @@ export function AttachmentPreviewModal({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="size-8 text-white hover:bg-white/10"
+            className="size-8 text-scrim-foreground hover:bg-scrim-foreground/10"
             aria-label={t("closePreview")}
           >
             <XIcon className="size-5" />

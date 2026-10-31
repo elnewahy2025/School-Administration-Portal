@@ -1,11 +1,15 @@
 import type { ReportFilterParams } from "./types";
 
-export function applyCircularReportFilters(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  query: any,
+export type ReportFilterQuery<T> = {
+  eq: (column: string, value: unknown) => T;
+  gte: (column: string, value: unknown) => T;
+  lte: (column: string, value: unknown) => T;
+};
+
+export function applyCircularReportFilters<T extends ReportFilterQuery<T>>(
+  query: T,
   filters: ReportFilterParams,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): any {
+): T {
   let q = query;
   if (filters.status) q = q.eq("status", filters.status);
   if (filters.category) q = q.eq("category", filters.category);

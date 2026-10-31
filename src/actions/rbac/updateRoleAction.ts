@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -56,7 +56,7 @@ export async function updateRoleAction(
 
     await syncRolePermissions(supabase, roleId, permissionKeys);
 
-    revalidatePath("/[locale]/settings/users", "page");
+    revalidateSettingsPath("users");
     return { success: true };
   } catch (err: unknown) {
     const sanitized = sanitizeError(err, { action: "updateRoleAction", roleId });

@@ -10,6 +10,7 @@ export interface RecurrenceParams {
   frequency?: CalendarRecurrenceFrequency;
   untilDate?: string | null;
   maxCount?: number;
+  workingDays?: number[] | null;
 }
 
 export function computeRecurringEventInstances(
@@ -20,7 +21,7 @@ export function computeRecurringEventInstances(
 
   const { freq, untilTimestamp, countLimit } = resolveRecurrenceLimits(params);
   if (freq === "none") {
-    if (isWeekendDay(dates.start)) return [];
+    if (isWeekendDay(dates.start, params.workingDays)) return [];
     return [{ startsAt: params.startsAt, endsAt: params.endsAt }];
   }
 
@@ -35,7 +36,7 @@ export function computeRecurringEventInstances(
       break;
     }
 
-    if (!isWeekendDay(currentStart)) {
+    if (!isWeekendDay(currentStart, params.workingDays)) {
       instances.push({
         startsAt: currentStart.toISOString(),
         endsAt: new Date(currentStart.getTime() + dates.durationMs).toISOString(),

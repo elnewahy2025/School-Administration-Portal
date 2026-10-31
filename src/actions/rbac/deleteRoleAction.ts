@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -9,7 +9,7 @@ import {
   formatActionErrorResult,
   AuthenticationError,
   ForbiddenError,
-  AppError,
+  ValidationError,
   mapDatabaseError,
   type ActionResult,
 } from "@/lib/errors";
@@ -30,7 +30,7 @@ export async function deleteRoleAction(roleId: string): Promise<ActionResult> {
     const supabase = await createSupabaseServerClient();
     const canDelete = await assertCanDeleteRoleRecord(supabase, roleId, profile.school_id);
     if (!canDelete.allowed) {
-      throw new AppError(canDelete.error || "Cannot delete role");
+      throw new ValidationError(canDelete.error || "Cannot delete role");
     }
 
     const { error } = await supabase.from("roles").delete().eq("id", roleId);
@@ -38,7 +38,7 @@ export async function deleteRoleAction(roleId: string): Promise<ActionResult> {
       throw mapDatabaseError(error);
     }
 
-    revalidatePath("/[locale]/settings/users", "page");
+    revalidateSettingsPath("users");
     return { success: true };
   } catch (err: unknown) {
     const sanitized = sanitizeError(err, { action: "deleteRoleAction", roleId });

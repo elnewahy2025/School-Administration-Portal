@@ -32,7 +32,7 @@ export function CircularResponseFilterBar({
         <Button
           variant={filter === "responded" ? "default" : "outline"}
           size="sm"
-          className="h-8 text-xs text-emerald-600 dark:text-emerald-400"
+          className="h-8 text-xs text-success"
           onClick={() => setFilter("responded")}
         >
           {t("respondedFilter")} ({respondedCount})
@@ -40,7 +40,7 @@ export function CircularResponseFilterBar({
         <Button
           variant={filter === "pending" ? "default" : "outline"}
           size="sm"
-          className="h-8 text-xs text-rose-600 dark:text-rose-400"
+          className="h-8 text-xs text-destructive"
           onClick={() => setFilter("pending")}
         >
           {t("notRespondedFilter")} ({pendingCount})

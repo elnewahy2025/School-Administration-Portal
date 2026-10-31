@@ -10,7 +10,7 @@ export function MaintenanceReportSummary({ data }: { data: MaintenanceReportSumm
     data.avgResolutionTimeHours !== null ? `${data.avgResolutionTimeHours} hrs` : "—";
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-x-5 gap-y-12 pt-8 sm:grid-cols-2 lg:grid-cols-4">
       <ReportKpiCard title={t("totalTickets")} value={data.totalTickets} icon={WrenchIcon} />
       <ReportKpiCard
         title={t("openTickets")}

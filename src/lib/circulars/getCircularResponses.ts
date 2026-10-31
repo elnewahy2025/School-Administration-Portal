@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { CircularResponseRow, CircularResponseType, CircularResponseStatus } from "./types";
 
 type ResponseJoinResult = {
@@ -28,7 +29,7 @@ export async function getCircularResponses(circularId: string): Promise<Circular
     .order("submitted_at", { ascending: false });
 
   if (error) {
-    throw new Error(`Failed to fetch responses: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   const rawRows = (data as unknown as ResponseJoinResult[]) ?? [];

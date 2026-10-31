@@ -32,9 +32,7 @@ export function CircularResponseTableRow({
         <Badge
           variant={row.variant}
           className={
-            row.hasResponded
-              ? ""
-              : "border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-400"
+            row.hasResponded ? "" : "border-destructive/20 bg-destructive/10 text-destructive"
           }
         >
           {row.label}

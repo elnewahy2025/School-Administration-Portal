@@ -27,7 +27,7 @@ export function CalendarCategoryFilterBar({
           onClick={() => onSelectCategory(cat)}
           className="gap-1.5"
         >
-          {cat === "circular" && <FileTextIcon className="size-3.5 text-indigo-500" />}
+          {cat === "circular" && <FileTextIcon className="size-3.5 text-chart-4" />}
           {cat === "all"
             ? t("title")
             : cat === "circular"

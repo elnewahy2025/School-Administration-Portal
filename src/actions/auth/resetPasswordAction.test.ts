@@ -16,7 +16,12 @@ vi.mock("@/lib/errors/sanitizeError", () => ({
   sanitizeError: vi.fn(),
 }));
 
+vi.mock("@/lib/audit/recordCredentialAudit", () => ({
+  recordCredentialAudit: vi.fn().mockResolvedValue(undefined),
+}));
+
 import { resetPasswordAction } from "./resetPasswordAction";
+import { recordCredentialAudit } from "@/lib/audit/recordCredentialAudit";
 
 describe("resetPasswordAction", () => {
   beforeEach(() => {
@@ -46,7 +51,10 @@ describe("resetPasswordAction", () => {
   });
 
   it("updates password successfully when inputs are valid and match", async () => {
-    mockUpdateUser.mockResolvedValueOnce({ error: null });
+    mockUpdateUser.mockResolvedValueOnce({
+      data: { user: { id: "usr-1", email: "user@school.org" } },
+      error: null,
+    });
 
     const formData = new FormData();
     formData.append("password", "NewSecurePassword123!");
@@ -56,6 +64,12 @@ describe("resetPasswordAction", () => {
     expect(result.success).toBe(true);
     expect(result.error).toBeNull();
     expect(mockUpdateUser).toHaveBeenCalledWith({ password: "NewSecurePassword123!" });
+    expect(recordCredentialAudit).toHaveBeenCalledWith({
+      actorId: "usr-1",
+      actorLabel: "user@school.org",
+      action: "credentials.password_change",
+      entityId: "usr-1",
+    });
   });
 
   it("handles Supabase auth error gracefully", async () => {

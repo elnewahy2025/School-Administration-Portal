@@ -22,9 +22,9 @@ export function MaintenanceDetailMetaGrid({ ticket }: { ticket: MaintenanceReque
   );
 
   return (
-    <div className="grid grid-cols-1 gap-4 border-t border-border pt-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 rounded-xl border border-border bg-[color:var(--panel,var(--muted))] p-4 sm:grid-cols-2 lg:grid-cols-4">
       <div className="flex items-start gap-2.5">
-        <MapPinIcon className="mt-0.5 size-4 text-muted-foreground" />
+        <MapPinIcon className="mt-0.5 size-4 text-primary" />
         <div className="text-xs">
           <div className="text-muted-foreground">{t("location")}</div>
           <div className="font-medium text-foreground">{locationLabel}</div>
@@ -33,7 +33,7 @@ export function MaintenanceDetailMetaGrid({ ticket }: { ticket: MaintenanceReque
       </div>
 
       <div className="flex items-start gap-2.5">
-        <TagIcon className="mt-0.5 size-4 text-muted-foreground" />
+        <TagIcon className="mt-0.5 size-4 text-primary" />
         <div className="text-xs">
           <div className="text-muted-foreground">{t("category")}</div>
           <div className="font-medium text-foreground">{categoryLabel}</div>
@@ -44,7 +44,7 @@ export function MaintenanceDetailMetaGrid({ ticket }: { ticket: MaintenanceReque
       </div>
 
       <div className="flex items-start gap-2.5">
-        <UserIcon className="mt-0.5 size-4 text-muted-foreground" />
+        <UserIcon className="mt-0.5 size-4 text-primary" />
         <div className="text-xs">
           <div className="text-muted-foreground">{t("reporter")}</div>
           <div className="font-medium text-foreground">{reporterLabel}</div>
@@ -55,7 +55,7 @@ export function MaintenanceDetailMetaGrid({ ticket }: { ticket: MaintenanceReque
       </div>
 
       <div className="flex items-start gap-2.5">
-        <CalendarIcon className="mt-0.5 size-4 text-muted-foreground" />
+        <CalendarIcon className="mt-0.5 size-4 text-primary" />
         <div className="text-xs">
           <div className="text-muted-foreground">{t("createdAt")}</div>
           <div className="font-medium text-foreground">{createdDate}</div>

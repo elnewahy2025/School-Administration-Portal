@@ -88,6 +88,6 @@ describe("assignUserRole", () => {
 
     await expect(
       assignUserRole(supabase, "user-1", "school-123", "admin-1", "teacher"),
-    ).rejects.toThrow("Failed to update user role assignment: DB write timeout");
+    ).rejects.toThrow("Failed to update user role assignment");
   });
 });

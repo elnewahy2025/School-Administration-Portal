@@ -30,7 +30,7 @@ export function ReportDateFilterControls({
       <select
         value={dateMode}
         onChange={(e) => onChange({ dateMode: e.target.value as ReportDateMode })}
-        className="h-9 rounded-md border border-input bg-background px-2.5 py-1 text-xs shadow-xs focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
+        className="h-9 rounded-lg border border-input bg-background px-2.5 text-xs transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
       >
         <option value="all">{t("allTime")}</option>
         <option value="month">{t("byMonth")}</option>

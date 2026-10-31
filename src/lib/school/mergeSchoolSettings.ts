@@ -1,4 +1,5 @@
 import type { SchoolRow } from "./getCurrentSchool";
+import { resolveNarrativePair } from "./resolveNarrativePair";
 
 export type SchoolSettingsRow = {
   academic_year?: string | null;
@@ -11,6 +12,7 @@ export type SchoolSettingsRow = {
   public_description?: string | null;
   working_days?: number[] | null;
   date_format?: string | null;
+  updated_at?: string | null;
 };
 
 export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsRow | null) {
@@ -30,14 +32,15 @@ export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsR
       public_description: null,
       working_days: defaultWorkingDays,
       date_format: defaultDateFormat,
+      updated_at: school.updated_at ?? null,
     };
   }
 
   return {
     ...school,
     academic_year: settings.academic_year,
-    vision: settings.vision_ar || settings.vision || null,
-    mission: settings.mission_ar || settings.mission || null,
+    vision: resolveNarrativePair(settings.vision_ar, settings.vision),
+    mission: resolveNarrativePair(settings.mission_ar, settings.mission),
     vision_ar: settings.vision_ar,
     vision_en: settings.vision_en,
     mission_ar: settings.mission_ar,
@@ -45,5 +48,6 @@ export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsR
     public_description: settings.public_description,
     working_days: settings.working_days ?? defaultWorkingDays,
     date_format: settings.date_format ?? defaultDateFormat,
+    updated_at: settings.updated_at ?? school.updated_at ?? null,
   };
 }

@@ -4,16 +4,18 @@ import { useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n";
 import { toast } from "sonner";
-import { SaveIcon, Loader2Icon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { updateCircularAction } from "@/actions/circulars/updateCircularAction";
+import { circularDocumentRules } from "@/lib/circulars/circularDocumentRules";
+import { validateFormDataFiles } from "@/lib/storage/validateFormDataFiles";
 import { DepartmentTargetPicker } from "./DepartmentTargetPicker";
 import { CircularFileUpload } from "./CircularFileUpload";
 import { CircularAttachmentsList } from "./CircularAttachmentsList";
 import { EditCircularFieldsGrid } from "./EditCircularFieldsGrid";
+import { EditCircularActions } from "./EditCircularActions";
 import type { CircularDetail } from "@/lib/circulars/getCircularById";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
@@ -30,6 +32,15 @@ export function EditCircularForm({
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
+    const validation = validateFormDataFiles(formData, "documents", {
+      allowedMimes: circularDocumentRules.allowedMime,
+      maxBytes: circularDocumentRules.maxBytes,
+    });
+    if (!validation.valid) {
+      toast.error(validation.error);
+      return;
+    }
+
     startTransition(async () => {
       const res = await updateCircularAction(circular.id, formData);
       if (res.success) {
@@ -46,10 +57,7 @@ export function EditCircularForm({
     .filter((id): id is string => Boolean(id));
 
   return (
-    <form
-      action={handleSubmit}
-      className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 shadow-xs"
-    >
+    <form action={handleSubmit} className={`${PANEL} flex flex-col gap-6 p-6 sm:p-8`}>
       <div className="space-y-2">
         <Label htmlFor="title">{t("circularTitle")}</Label>
         <Input id="title" name="title" required defaultValue={circular.title} />
@@ -82,24 +90,10 @@ export function EditCircularForm({
 
       <CircularFileUpload />
 
-      <div className="flex justify-end gap-3 pt-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.push(`/circulars/${circular.id}`)}
-          disabled={isPending}
-        >
-          {tCommon("cancel")}
-        </Button>
-        <Button type="submit" disabled={isPending} className="gap-2">
-          {isPending ? (
-            <Loader2Icon className="size-4 animate-spin" />
-          ) : (
-            <SaveIcon className="size-4" />
-          )}
-          <span>{tCommon("save")}</span>
-        </Button>
-      </div>
+      <EditCircularActions
+        isPending={isPending}
+        onCancel={() => router.push(`/circulars/${circular.id}`)}
+      />
     </form>
   );
 }

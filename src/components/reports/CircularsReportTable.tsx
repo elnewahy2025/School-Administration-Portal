@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TABLE_HEAD_ROW, TABLE_WRAP, EMPTY_PANEL } from "@/components/ui/table-styles";
 import { CircularReportTableRow } from "./CircularReportTableRow";
 import type { CircularReportRow } from "@/lib/reports/types";
 
@@ -7,18 +8,14 @@ export function CircularsReportTable({ rows }: { rows: CircularReportRow[] }) {
   const t = useTranslations("reports");
 
   if (!rows.length) {
-    return (
-      <div className="rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-        {t("noData")}
-      </div>
-    );
+    return <div className={EMPTY_PANEL}>{t("noData")}</div>;
   }
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-card">
+    <div className={TABLE_WRAP}>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className={TABLE_HEAD_ROW}>
             <TableHead>{t("table.ref")}</TableHead>
             <TableHead>{t("table.title")}</TableHead>
             <TableHead>{t("table.priority")}</TableHead>

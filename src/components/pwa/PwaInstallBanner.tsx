@@ -27,14 +27,14 @@ export function PwaInstallBanner() {
         aria-label={t("bannerAriaLabel")}
         className="fixed right-4 bottom-4 left-4 z-50 mx-auto max-w-md animate-in duration-300 fade-in slide-in-from-bottom-4 sm:right-6 sm:left-auto"
       >
-        <div className="flex items-center justify-between gap-3 rounded-2xl border border-zinc-800 bg-zinc-900/95 p-4 shadow-2xl backdrop-blur-md">
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-background/15 bg-foreground/95 p-4 shadow-2xl backdrop-blur-md">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
               <Download className="h-5 w-5" />
             </div>
             <div className="text-right ltr:text-left rtl:text-right">
-              <h3 className="text-sm font-semibold text-zinc-100">{t("bannerTitle")}</h3>
-              <p className="text-xs text-zinc-400">
+              <h3 className="text-sm font-semibold text-background">{t("bannerTitle")}</h3>
+              <p className="text-xs text-background/70">
                 {isIos ? t("bannerSubtitleIos") : t("bannerSubtitle")}
               </p>
             </div>
@@ -47,7 +47,7 @@ export function PwaInstallBanner() {
                 onClick={openIosGuide}
                 title={t("howToInstallIos")}
                 aria-label={t("howToInstallIos")}
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200"
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-background/70 transition hover:bg-background/10 hover:text-background"
               >
                 <HelpCircle className="h-4 w-4" />
               </button>
@@ -63,7 +63,7 @@ export function PwaInstallBanner() {
               type="button"
               onClick={dismiss}
               aria-label={t("dismissAriaLabel")}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-200"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-background/70 transition hover:bg-background/10 hover:text-background"
             >
               <X className="h-4 w-4" />
             </button>

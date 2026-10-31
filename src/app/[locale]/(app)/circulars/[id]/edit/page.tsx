@@ -1,8 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n";
-import { ArrowLeftIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getCircularById } from "@/lib/circulars/getCircularById";
@@ -25,7 +23,7 @@ export default async function EditCircularPage({
   const [circular, departments, perms, isOwner] = await Promise.all([
     getCircularById(id),
     getSchoolDepartments(profile.school_id),
-    getEffectivePermissions().catch((): string[] => []),
+    getEffectivePermissions(profile.school_id).catch((): string[] => []),
     isPlatformOwner(profile.id),
   ]);
 
@@ -37,17 +35,14 @@ export default async function EditCircularPage({
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <Link href={`/circulars/${circular.id}`}>
-          <Button variant="ghost" size="icon" aria-label={t("backToList")}>
-            <ArrowLeftIcon className="size-4 rtl:rotate-180" />
-          </Button>
-        </Link>
-        <div className="flex flex-col">
-          <h1 className="text-xl font-bold tracking-tight text-foreground">{t("editCircular")}</h1>
+      <PageHeader
+        title={t("editCircular")}
+        meta={
           <span className="font-mono text-xs text-muted-foreground">{circular.ref_number}</span>
-        </div>
-      </div>
+        }
+        backHref={`/circulars/${circular.id}`}
+        backLabel={t("backToList")}
+      />
 
       <EditCircularForm circular={circular} departments={departments} />
     </div>

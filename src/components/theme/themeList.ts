@@ -1,6 +1,6 @@
 export interface PortalThemeItem {
   readonly id: string;
-  readonly labelKey: "alNada" | "light" | "dark" | "emerald" | "midnight";
+  readonly labelKey: "alNada" | "light" | "dark" | "emerald" | "midnight" | "moe";
   readonly sidebarColor: string;
   readonly primaryColor: string;
   readonly canvasColor: string;
@@ -41,5 +41,12 @@ export const PORTAL_THEMES: readonly PortalThemeItem[] = [
     sidebarColor: "#050811",
     primaryColor: "#06b6d4",
     canvasColor: "#020617",
+  },
+  {
+    id: "moe",
+    labelKey: "moe",
+    sidebarColor: "#14254a",
+    primaryColor: "#ffcd35",
+    canvasColor: "#ffffff",
   },
 ];

@@ -47,7 +47,7 @@ export function CircularList({
       />
 
       {filteredAndSorted.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-border bg-[color:var(--panel,var(--card))] p-12 text-center text-muted-foreground">
           {circulars.length === 0 ? t("noCirculars") : t("noMatchingCirculars")}
         </div>
       ) : (

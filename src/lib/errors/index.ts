@@ -19,4 +19,3 @@ export {
   type ActionSuccessResult,
   type ActionResult,
 } from "./formatActionErrorResult";
-export { withActionErrorHandler, type ServerAction } from "./withActionErrorHandler";

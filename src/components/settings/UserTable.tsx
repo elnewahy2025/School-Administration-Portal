@@ -9,14 +9,14 @@ export function UserTable({
   users,
   currentUserId,
   canManage,
-  isPending,
+  pendingUserId,
   onEdit,
   onToggle,
 }: {
   users: SchoolUserRow[];
   currentUserId?: string | null;
   canManage: boolean;
-  isPending: boolean;
+  pendingUserId?: string | null;
   onEdit: (user: SchoolUserRow) => void;
   onToggle: (id: string, currentStatus: boolean) => void;
 }) {
@@ -43,7 +43,7 @@ export function UserTable({
               user={user}
               isSelf={user.id === currentUserId}
               canManage={canManage}
-              isPending={isPending}
+              isPending={user.id === pendingUserId}
               onEdit={() => onEdit(user)}
               onToggle={onToggle}
             />

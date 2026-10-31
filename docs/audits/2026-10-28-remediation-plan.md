@@ -233,11 +233,27 @@ Add to the RLS battery (local-only) one negative test per bypass:
 | 5.5  | Row-count checks on `deleteUserAction` / `toggleUserActiveAction`.                                                         | A 0-row update returns "not found", not success                 |
 | 5.6  | Departments: last-admin guard on dissociation; deactivate on dissociate.                                                   | A school cannot be left without an active admin                 |
 
+**Status — 2026-10-31: COMPLETE (locally verified).**
+
+- **5.1 —** `image/svg+xml` removed from all buckets and allowlists; magic bytes signature checks enforced via `hasValidFileSignature`.
+- **5.2 —** Storage write policies entity-bound (`0046_storage_scope_hardening.sql`), FI-06 recorded as `0036` reaffirmed (owner-only `file_metadata`).
+- **5.3 —** Storage DELETE policies for `circular-attachments` and `maintenance-photos` in place (`0045_storage_delete_policies.sql`); `remove()` failures surfaced as typed errors; orphan sweep script operational.
+- **5.4 —** Transactional circular response rotation (`0050_submit_circular_response.sql`) and target pipeline integrity checks verified.
+- **5.5 —** User mutations verify row counts and throw typed `NotFoundError` / `ValidationError` on mismatched IDs.
+- **5.6 —** Last-admin guard on dissociation and active status handling verified (`buildUserProfileUpdate`).
+
 ---
 
 ## Phase 6 — Audit trail and observability quality
 
-**Effort:** 2 days.
+**Status:** Completed (31 Oct 2026).
+
+- **6.1 —** Migration `0052_audit_trail_hardening.sql` added `set_audit_actor()` and updated `audit_row_change()` to read `app.actor_id` / `app.actor_label` and request headers (`x-actor-id`, `x-actor-label`). `createSupabaseAdminClient` now accepts actor options and propagates headers on service-role calls.
+- **6.2 —** Credential changes (password reset/update) audited via `recordCredentialAudit`; backup export/restore auditable via `writeBackupAudit`; role and role_permissions changes audited with tenant-scoped role resolution.
+- **6.3 —** Cascade deletes on security-critical tables (`user_role_assignments`, `role_permissions`, `roles`, `profiles`) are no longer skipped during deep triggers (`pg_trigger_depth() > 1`).
+- **6.4 —** Actor identity snapshot (`full_name (email)`) is stored at write time in `actor_label`, ensuring historical attribution survives profile deletion.
+- **6.5 —** Stored metadata minimized for `school_settings` (strips large policy blobs and copy) and `profiles` (protects PII). Added audit coverage triggers for `school_achievements`, `maintenance_assignments`, `circular_responses`, and `circular_attachments`.
+- **6.6 —** Audit page `/settings/audit` access aligned with RLS (`isPlatformOwner` or `hasPermission("audit.view", schoolId)`). Added search filters (action, entity type, actor, date range), pagination, and CSV export via `/api/audit/export`.
 
 | Task | Change                                                                                                               |
 | ---- | -------------------------------------------------------------------------------------------------------------------- |

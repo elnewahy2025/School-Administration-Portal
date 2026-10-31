@@ -3,6 +3,7 @@ import { setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { CreateCalendarEventForm } from "@/components/calendar/CreateCalendarEventForm";
 
 export default async function NewCalendarEventPage({
@@ -18,9 +19,10 @@ export default async function NewCalendarEventPage({
     redirect(`/${locale}/login`);
   }
 
-  const [hasManagePerm, isOwner] = await Promise.all([
+  const [hasManagePerm, isOwner, schoolDetails] = await Promise.all([
     hasPermission("calendar.manage", profile.school_id).catch(() => false),
     isPlatformOwner(profile.id),
+    getSchoolFullDetails(profile.school_id).catch(() => null),
   ]);
 
   const canManage = isOwner || hasManagePerm;
@@ -31,7 +33,7 @@ export default async function NewCalendarEventPage({
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">
-      <CreateCalendarEventForm />
+      <CreateCalendarEventForm workingDays={schoolDetails?.working_days} />
     </div>
   );
 }

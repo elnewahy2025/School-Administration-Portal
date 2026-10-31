@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { AchievementFormFields } from "./AchievementFormFields";
 import { updateAchievementAction } from "@/actions/achievements/updateAchievementAction";
+import { calendarImageRules } from "@/lib/calendar/calendarImageRules";
+import { validateClientFile } from "@/lib/storage/validateClientFile";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 import type { SchoolAchievementRow } from "@/lib/achievements/types";
 
@@ -25,6 +27,18 @@ export function EditAchievementForm({
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
+    const imageFile = formData.get("image") as File | null;
+    if (imageFile && imageFile.size > 0) {
+      const validation = validateClientFile(imageFile, {
+        allowedMimes: calendarImageRules.allowedMime,
+        maxBytes: calendarImageRules.maxBytes,
+      });
+      if (!validation.valid) {
+        toast.error(validation.error);
+        return;
+      }
+    }
+
     startTransition(async () => {
       const res = await updateAchievementAction(achievement.id, formData);
       if (res.success) {

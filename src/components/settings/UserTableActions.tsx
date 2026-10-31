@@ -33,7 +33,7 @@ export function UserTableActions({
 
   if (isOwner) {
     return (
-      <span className="flex items-center justify-end gap-1 text-xs font-medium text-amber-500">
+      <span className="flex items-center justify-end gap-1 text-xs font-medium text-warning">
         <ShieldCheckIcon className="size-3.5" />
         <span>{t("ownerProtected")}</span>
       </span>

@@ -5,13 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import type { CalendarCategory } from "@/lib/calendar/types";
 
 const CATEGORY_COLORS: Record<CalendarCategory, string> = {
-  academic: "bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200",
-  exam: "bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-200",
-  holiday: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200",
-  meeting: "bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200",
-  activity: "bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-200",
-  event: "bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-200",
-  other: "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200",
+  academic: "bg-info/15 text-info",
+  exam: "bg-chart-3/15 text-chart-3",
+  holiday: "bg-success/15 text-success",
+  meeting: "bg-warning/15 text-warning",
+  activity: "bg-destructive/15 text-destructive",
+  event: "bg-chart-2/15 text-chart-2",
+  other: "bg-secondary text-secondary-foreground",
 };
 
 export function CalendarEventCategoryBadge({ category }: { category: CalendarCategory }) {

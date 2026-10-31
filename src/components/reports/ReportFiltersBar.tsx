@@ -2,7 +2,8 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowDownUpIcon, RotateCcwIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PANEL } from "@/components/ui/diamond-card-styles";
+import { chipClass } from "@/components/ui/segment-styles";
 import { ReportDateFilterControls } from "./ReportDateFilterControls";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 import type { ReportFilterState, SortDirection } from "@/lib/reports/types";
@@ -28,7 +29,9 @@ export function ReportFiltersBar({
     filters.departmentSort !== "none";
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-border bg-card/60 p-3 lg:flex-row lg:items-center lg:justify-between">
+    <div
+      className={`${PANEL} flex flex-col gap-3 p-4 lg:flex-row lg:items-center lg:justify-between`}
+    >
       <div className="flex flex-wrap items-center gap-2">
         <ReportDateFilterControls
           dateMode={filters.dateMode}
@@ -41,7 +44,7 @@ export function ReportFiltersBar({
         <select
           value={filters.departmentId}
           onChange={(e) => onFilterChange({ departmentId: e.target.value })}
-          className="h-9 rounded-md border border-input bg-background px-2.5 py-1 text-xs shadow-xs focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
+          className="h-9 rounded-lg border border-input bg-background px-2.5 text-xs transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <option value="all">{t("allDepartments")}</option>
           {departments.map((d) => (
@@ -61,7 +64,7 @@ export function ReportFiltersBar({
         <select
           value={filters.dateSort}
           onChange={(e) => onFilterChange({ dateSort: e.target.value as SortDirection })}
-          className="h-9 rounded-md border border-input bg-background px-2.5 py-1 text-xs shadow-xs focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
+          className="h-9 rounded-lg border border-input bg-background px-2.5 text-xs transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <option value="desc">{t("newestFirst")}</option>
           <option value="asc">{t("oldestFirst")}</option>
@@ -70,7 +73,7 @@ export function ReportFiltersBar({
         <select
           value={filters.departmentSort}
           onChange={(e) => onFilterChange({ departmentSort: e.target.value as SortDirection })}
-          className="h-9 rounded-md border border-input bg-background px-2.5 py-1 text-xs shadow-xs focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
+          className="h-9 rounded-lg border border-input bg-background px-2.5 text-xs transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <option value="none">{t("defaultOrder")}</option>
           <option value="asc">{t("deptAsc")}</option>
@@ -78,10 +81,10 @@ export function ReportFiltersBar({
         </select>
 
         {isFiltered && (
-          <Button variant="ghost" size="sm" onClick={onReset} className="h-9 gap-1 text-xs">
+          <button type="button" onClick={onReset} className={`${chipClass(false)} gap-1 text-xs`}>
             <RotateCcwIcon className="size-3.5" />
             <span>{t("reset")}</span>
-          </Button>
+          </button>
         )}
       </div>
     </div>

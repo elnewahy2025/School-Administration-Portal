@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 export async function hasPermission(
   key: string,
@@ -11,6 +12,6 @@ export async function hasPermission(
     p_school: schoolId ?? null,
     p_department: departmentId ?? null,
   });
-  if (error) throw new Error(`Permission check failed: ${error.message}`);
+  if (error) throw mapDatabaseError(error, "Permission check failed");
   return Boolean(data);
 }

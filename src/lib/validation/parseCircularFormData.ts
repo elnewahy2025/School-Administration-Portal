@@ -1,4 +1,6 @@
 import type { CircularPriority, CircularResponseType } from "@/lib/circulars/types";
+import { circularSchema } from "./circularSchema";
+import { formatZodError } from "./formatZodError";
 
 export function parseCircularFormData(formData: FormData) {
   const get = (k: string) => {
@@ -8,14 +10,25 @@ export function parseCircularFormData(formData: FormData) {
 
   const departmentIds = formData.getAll("department_ids").map(String).filter(Boolean);
 
-  return {
+  const rawInput = {
     title: get("title"),
     body: get("body"),
-    priority: (get("priority") || "normal") as CircularPriority,
-    responseType: (get("response_type") || "acknowledgement") as CircularResponseType,
+    priority: get("priority") || "normal",
+    responseType: get("response_type") || "acknowledgement",
     dueAt: get("due_at") || null,
     publishAt: get("publish_at") || null,
-    status: get("status") || undefined,
     departmentIds,
+  };
+
+  const parsed = circularSchema.safeParse(rawInput);
+  if (!parsed.success) {
+    throw formatZodError(parsed.error);
+  }
+
+  return {
+    ...parsed.data,
+    priority: parsed.data.priority as CircularPriority,
+    responseType: parsed.data.responseType as CircularResponseType,
+    status: get("status") || undefined,
   };
 }

@@ -8,7 +8,7 @@ export function MessageBoxIcon({ type }: { type: MessageBoxType }) {
     case "error":
       return <OctagonXIcon className="size-6 text-destructive" />;
     case "warning":
-      return <TriangleAlertIcon className="size-6 text-amber-500 dark:text-amber-400" />;
+      return <TriangleAlertIcon className="size-6 text-warning" />;
     case "info":
     default:
       return <InfoIcon className="size-6 text-primary" />;

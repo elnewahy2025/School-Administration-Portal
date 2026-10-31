@@ -19,7 +19,6 @@ export { SchoolProfileForm } from "./SchoolProfileForm";
 export { SchoolProfilePanels } from "./SchoolProfilePanels";
 export { SchoolProfileSubTabs } from "./SchoolProfileSubTabs";
 export { SettingsNav } from "./SettingsNav";
-export { UserFormFields } from "./UserFormFields";
 export { UserList } from "./UserList";
 export { UserTableActions } from "./UserTableActions";
 export { UserTableRow } from "./UserTableRow";

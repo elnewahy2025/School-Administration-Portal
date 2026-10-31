@@ -1,4 +1,5 @@
 import { createSupabaseAdminClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import {
   mapSchoolUserRows,
   type RawProfileQueryResult,
@@ -36,7 +37,7 @@ export async function getSchoolUsers(schoolId?: string | null): Promise<SchoolUs
   ]);
 
   if (error) {
-    throw new Error(`Failed to fetch users: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   const ownerUserIds = new Set((ownerAssignments ?? []).map((a) => a.user_id));

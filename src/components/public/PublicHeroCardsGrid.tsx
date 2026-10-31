@@ -20,8 +20,7 @@ export function PublicHeroCardsGrid({ school }: { school: PublicSchoolProfileRow
       {data.vision ? (
         <div className="h-full animate-hero-fade-up delay-200">
           <PublicHeroSideCard
-            icon={<CompassIcon className="size-5" />}
-            iconClass="border-blue-500/20 bg-blue-500/10 text-blue-600 dark:text-blue-400"
+            icon={CompassIcon}
             title={t("vision")}
             content={data.vision}
           />
@@ -47,8 +46,7 @@ export function PublicHeroCardsGrid({ school }: { school: PublicSchoolProfileRow
       {data.mission ? (
         <div className="h-full animate-hero-fade-up delay-450">
           <PublicHeroSideCard
-            icon={<TargetIcon className="size-5" />}
-            iconClass="border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+            icon={TargetIcon}
             title={t("mission")}
             content={data.mission}
           />

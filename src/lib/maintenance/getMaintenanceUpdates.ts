@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { MaintenanceUpdateRow } from "./types";
 
 export async function getMaintenanceUpdates(requestId: string): Promise<MaintenanceUpdateRow[]> {
@@ -15,7 +16,7 @@ export async function getMaintenanceUpdates(requestId: string): Promise<Maintena
     .order("created_at", { ascending: true });
 
   if (error) {
-    throw new Error(`Failed to fetch maintenance updates: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   return (data as unknown as MaintenanceUpdateRow[]) ?? [];

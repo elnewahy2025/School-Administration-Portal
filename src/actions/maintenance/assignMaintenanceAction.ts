@@ -9,7 +9,7 @@ import { saveMaintenanceAssignment } from "@/lib/maintenance/saveMaintenanceAssi
 import { dispatchModuleNotification } from "@/lib/notifications/dispatchModuleNotification";
 import { ValidationError } from "@/lib/errors/ValidationError";
 import { NotFoundError } from "@/lib/errors/NotFoundError";
-import { AppError } from "@/lib/errors/AppError";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
@@ -57,7 +57,7 @@ export async function assignMaintenanceAction(formData: FormData): Promise<Actio
     });
 
     if (res.error) {
-      throw new AppError(res.error);
+      throw mapDatabaseError(res.error, "Failed to assign ticket");
     }
 
     if (operatorId && operatorId !== auth.profileId) {
@@ -65,8 +65,8 @@ export async function assignMaintenanceAction(formData: FormData): Promise<Actio
         recipientUserIds: [operatorId],
         schoolId: auth.schoolId,
         type: "maintenance",
-        title: "تم إسناد بلاغ صيانة جديد لك",
-        body: `تم إسناد البلاغ إليك للمتابعة والإنجاز`,
+        title: "maintenance_assigned",
+        body: "maintenance_assigned",
         entityType: "maintenance_request",
         entityId: requestId,
       });

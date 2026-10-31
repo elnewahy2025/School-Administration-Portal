@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { createSupabaseBrowserClient } from "@/lib/supabase/createSupabaseBrowserClient";
 import { resolveNotificationHref } from "@/lib/notifications/resolveNotificationHref";
+import { resolveNotificationText } from "@/lib/notifications/resolveNotificationText";
 import type { NotificationRow } from "@/lib/notifications/types";
 
 export function RealtimeNotificationListener({ userId }: { userId: string }) {
   const router = useRouter();
-  const locale = useLocale();
   const t = useTranslations("notifications");
 
   useEffect(() => {
@@ -32,13 +32,14 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
         (payload) => {
           const row = payload.new as NotificationRow;
           const href = resolveNotificationHref(row);
+          const content = resolveNotificationText(row, t);
 
-          toast.info(row.title, {
-            description: row.body ?? undefined,
+          toast.info(content.title, {
+            description: content.body ?? undefined,
             action: href
               ? {
                   label: t("view"),
-                  onClick: () => router.push(`/${locale}${href}`),
+                  onClick: () => router.push(href),
                 }
               : undefined,
           });
@@ -51,7 +52,7 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [userId, locale, router, t]);
+  }, [userId, router, t]);
 
   return null;
 }

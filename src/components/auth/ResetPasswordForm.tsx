@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { CheckCircle2Icon, Loader2Icon } from "lucide-react";
 import { Link } from "@/i18n";
 import { resetPasswordAction } from "@/actions/auth/resetPasswordAction";
+import { AUTH_BUTTON, AUTH_INPUT } from "@/components/ui/auth-styles";
 
 export function ResetPasswordForm() {
   const t = useTranslations("auth");
@@ -50,7 +51,7 @@ export function ResetPasswordForm() {
           minLength={6}
           autoComplete="new-password"
           dir="ltr"
-          className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:ring-1 focus:ring-ring focus:outline-none"
+          className={AUTH_INPUT}
         />
       </label>
 
@@ -63,17 +64,13 @@ export function ResetPasswordForm() {
           minLength={6}
           autoComplete="new-password"
           dir="ltr"
-          className="h-9 rounded-md border border-input bg-background px-3 text-sm focus:ring-1 focus:ring-ring focus:outline-none"
+          className={AUTH_INPUT}
         />
       </label>
 
       {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="flex h-9 items-center justify-center gap-2 rounded-md bg-primary text-sm font-medium text-primary-foreground disabled:opacity-50"
-      >
+      <button type="submit" disabled={pending} className={AUTH_BUTTON}>
         {pending && <Loader2Icon className="size-4 animate-spin" />}
         <span>{pending ? t("sending") : t("saveNewPassword")}</span>
       </button>

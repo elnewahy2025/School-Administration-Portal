@@ -2,6 +2,13 @@
 
 import { useTranslations } from "next-intl";
 import { UserCheckIcon } from "lucide-react";
+import {
+  CARD_DIAMOND,
+  CARD_DIAMOND_ICON,
+  CARD_HERO_PADDING,
+  CARD_RULE,
+  CARD_SHELL,
+} from "./publicCardStyles";
 
 export function PublicHeroLeadershipCard({
   manager,
@@ -16,14 +23,15 @@ export function PublicHeroLeadershipCard({
   const tSettings = useTranslations("settings");
 
   return (
-    <div className="group relative flex w-full flex-col items-center rounded-3xl border border-border/80 bg-card/75 p-6 sm:p-8 shadow-xs backdrop-blur-md transition-all duration-300 hover:border-primary/40 hover:shadow-lg space-y-4 text-center">
-      <div className="flex size-12 items-center justify-center rounded-2xl border border-purple-500/20 bg-purple-500/10 text-purple-600 dark:text-purple-400 shadow-2xs transition-transform duration-300 group-hover:scale-110">
-        <UserCheckIcon className="size-5" />
+    <div className={`${CARD_SHELL} ${CARD_HERO_PADDING} w-full`}>
+      <div className={CARD_DIAMOND}>
+        <UserCheckIcon className={`size-5 ${CARD_DIAMOND_ICON}`} />
       </div>
-      <h3 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">
+      <h3 className="mb-3 text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
         {tSettings("leadership")}
       </h3>
-      <div className="space-y-2 text-sm sm:text-base text-muted-foreground leading-relaxed">
+      <div className={CARD_RULE} />
+      <div className="flex-1 space-y-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
         {manager && (
           <p>
             {t("managerTitle")}: <span className="font-semibold text-foreground">{manager}</span>

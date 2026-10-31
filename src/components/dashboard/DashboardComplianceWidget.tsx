@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { PieChartIcon } from "lucide-react";
+import { GoldDots } from "@/components/ui/gold-dots";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { DashboardComplianceDonut } from "./DashboardComplianceDonut";
 import { DashboardComplianceDeptsCard } from "./DashboardComplianceDeptsCard";
 import { CircularRemindButton } from "@/components/circulars/CircularRemindButton";
@@ -27,16 +29,17 @@ export function DashboardComplianceWidget({ data }: { data: DashboardComplianceD
   const remindCircularTitle = selectedCircular?.title;
 
   return (
-    <div className="flex flex-col gap-5 rounded-2xl border border-border/80 bg-card p-5 shadow-xs">
+    <div className={`${PANEL} flex flex-col gap-5 p-5 sm:p-6`}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <div className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <PieChartIcon className="size-4" />
             </div>
-            <h2 className="text-base font-bold tracking-tight text-foreground sm:text-lg">
+            <h2 className="font-heading text-base font-extrabold tracking-tight text-primary sm:text-lg">
               {t("circularCompliance")}
             </h2>
+            <GoldDots />
           </div>
           <p className="text-xs text-muted-foreground">{t("circularComplianceDesc")}</p>
         </div>

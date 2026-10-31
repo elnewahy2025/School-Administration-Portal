@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
 export type LocationRow = {
   id: string;
@@ -33,7 +34,7 @@ export async function getSchoolLocations(schoolId?: string | null): Promise<Loca
     .order("room", { ascending: true });
 
   if (error) {
-    throw new Error(`Failed to fetch locations: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   return (data as LocationRow[]) ?? [];

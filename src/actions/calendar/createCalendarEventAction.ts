@@ -3,23 +3,26 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { assertCanManageCalendar } from "@/lib/calendar/assertCanManageCalendar";
+import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { parseCalendarFormData } from "@/lib/validation/parseCalendarFormData";
 import { assertValidCalendarInput } from "@/lib/calendar/assertValidCalendarInput";
 import { computeRecurringEventInstances } from "@/lib/calendar/computeRecurringEventInstances";
 import { createCalendarEventSeries } from "@/lib/calendar/createCalendarEventSeries";
 import { uploadCalendarImage } from "@/lib/calendar/uploadCalendarImage";
 import { ValidationError } from "@/lib/errors/ValidationError";
+import { DatabaseError } from "@/lib/errors/DatabaseError";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
-import { AppError } from "@/lib/errors/AppError";
 
 export async function createCalendarEventAction(
   formData: FormData,
 ): Promise<ActionResult<{ eventId: string }>> {
   try {
     const auth = await assertCanManageCalendar();
+    const schoolDetails = await getSchoolFullDetails(auth.schoolId).catch(() => null);
     const data = parseCalendarFormData(formData);
-    const validationError = assertValidCalendarInput(data);
+    const validationError = assertValidCalendarInput(data, schoolDetails?.working_days);
     if (validationError) {
       throw new ValidationError(validationError);
     }
@@ -30,7 +33,7 @@ export async function createCalendarEventAction(
     if (data.image) {
       const uploadRes = await uploadCalendarImage(supabase, data.image, auth.schoolId);
       if (uploadRes.error) {
-        throw new AppError(uploadRes.error);
+        throw mapDatabaseError(uploadRes.error, "Failed to upload calendar image");
       }
       imagePath = uploadRes.path ?? null;
     }
@@ -41,6 +44,7 @@ export async function createCalendarEventAction(
       frequency: data.recurrenceFreq,
       untilDate: data.recurrenceUntil,
       maxCount: data.recurrenceCount,
+      workingDays: schoolDetails?.working_days,
     });
 
     const res = await createCalendarEventSeries(supabase, {
@@ -58,10 +62,10 @@ export async function createCalendarEventAction(
     });
 
     if (res.error) {
-      throw new AppError(res.error);
+      throw mapDatabaseError(res.error, "Failed to create calendar event");
     }
     if (!res.firstEventId) {
-      throw new AppError("Failed to create calendar event");
+      throw new DatabaseError("Failed to create calendar event");
     }
 
     revalidatePath("/[locale]/calendar", "page");

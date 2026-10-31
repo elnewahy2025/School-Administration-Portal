@@ -1,6 +1,63 @@
 import { useTranslations } from "next-intl";
-import { Badge } from "@/components/ui/badge";
 import type { DepartmentCompactItem } from "@/lib/reports/types";
+
+const TONES = {
+  success: {
+    panel: "border-s-success",
+    dot: "bg-success",
+    title: "text-success",
+    count: "bg-success/15 text-success",
+  },
+  destructive: {
+    panel: "border-s-destructive",
+    dot: "bg-destructive",
+    title: "text-destructive",
+    count: "bg-destructive/15 text-destructive",
+  },
+} as const;
+
+function DepartmentPanel({
+  tone,
+  title,
+  items,
+  emptyMark,
+}: {
+  tone: keyof typeof TONES;
+  title: string;
+  items: DepartmentCompactItem[];
+  emptyMark: string;
+}) {
+  const c = TONES[tone];
+
+  return (
+    <div
+      className={`space-y-3 rounded-xl border-y border-s-4 border-e border-border ${c.panel} bg-card p-4 shadow-[0_6px_16px_rgba(20,37,74,.08)]`}
+    >
+      <div className="flex items-center gap-2.5">
+        <span className={`text-sm font-extrabold ${c.title}`}>{title}</span>
+        <span className={`rounded-full px-2.5 py-0.5 text-xs font-extrabold ${c.count}`}>
+          {items.length}
+        </span>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {items.length > 0 ? (
+          items.map((d) => (
+            <span
+              key={d.id}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-[linear-gradient(135deg,var(--card),var(--muted))] px-2.5 py-1 text-xs font-bold text-foreground"
+            >
+              <i aria-hidden="true" className={`size-1.5 rounded-full ${c.dot}`} />
+              {d.name}
+            </span>
+          ))
+        ) : (
+          <span className={`text-sm font-extrabold ${c.title}`}>{emptyMark}</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function CircularReportExpandedDepts({
   responded,
@@ -13,47 +70,18 @@ export function CircularReportExpandedDepts({
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div className="space-y-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-3">
-        <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-          {t("respondedDepartments")} ({responded.length})
-        </span>
-        <div className="flex flex-wrap gap-1.5 pt-1">
-          {responded.length > 0 ? (
-            responded.map((d) => (
-              <Badge
-                key={d.id}
-                variant="secondary"
-                className="border-emerald-500/30 bg-emerald-500/15 text-xs text-emerald-700 dark:text-emerald-300"
-              >
-                {d.name}
-              </Badge>
-            ))
-          ) : (
-            <span className="text-xs text-muted-foreground">—</span>
-          )}
-        </div>
-      </div>
-
-      <div className="space-y-1.5 rounded-lg border border-rose-500/20 bg-rose-500/5 p-3">
-        <span className="text-xs font-semibold text-rose-700 dark:text-rose-400">
-          {t("pendingDepartments")} ({pending.length})
-        </span>
-        <div className="flex flex-wrap gap-1.5 pt-1">
-          {pending.length > 0 ? (
-            pending.map((d) => (
-              <Badge
-                key={d.id}
-                variant="destructive"
-                className="border-rose-500/30 bg-rose-500/15 text-xs text-rose-700 dark:text-rose-300"
-              >
-                {d.name}
-              </Badge>
-            ))
-          ) : (
-            <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">✓</span>
-          )}
-        </div>
-      </div>
+      <DepartmentPanel
+        tone="success"
+        title={t("respondedDepartments")}
+        items={responded}
+        emptyMark="—"
+      />
+      <DepartmentPanel
+        tone="destructive"
+        title={t("pendingDepartments")}
+        items={pending}
+        emptyMark="✓"
+      />
     </div>
   );
 }

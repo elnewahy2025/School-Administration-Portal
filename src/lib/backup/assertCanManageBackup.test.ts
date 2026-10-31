@@ -5,8 +5,6 @@ vi.mock("server-only", () => ({}));
 import { assertCanManageBackup } from "./assertCanManageBackup";
 import * as getCurrentProfileModule from "@/lib/auth/getCurrentProfile";
 import * as isPlatformOwnerModule from "@/lib/auth/isPlatformOwner";
-import * as isSchoolManagerModule from "@/lib/auth/isSchoolManager";
-import * as getUserRoleKeyModule from "@/lib/rbac/getUserRoleKey";
 
 describe("assertCanManageBackup", () => {
   beforeEach(() => {
@@ -19,7 +17,6 @@ describe("assertCanManageBackup", () => {
     const res = await assertCanManageBackup();
     expect(res.allowed).toBe(false);
     expect(res.isOwner).toBe(false);
-    expect(res.isManager).toBe(false);
   });
 
   it("allows access if user is platform owner", async () => {
@@ -33,8 +30,6 @@ describe("assertCanManageBackup", () => {
       is_active: true,
     });
     vi.spyOn(isPlatformOwnerModule, "isPlatformOwner").mockResolvedValue(true);
-    vi.spyOn(isSchoolManagerModule, "isSchoolManager").mockResolvedValue(false);
-    vi.spyOn(getUserRoleKeyModule, "getUserRoleKey").mockResolvedValue("owner");
 
     const res = await assertCanManageBackup();
     expect(res.allowed).toBe(true);
@@ -69,12 +64,9 @@ describe("assertCanManageBackup", () => {
       is_active: true,
     });
     vi.spyOn(isPlatformOwnerModule, "isPlatformOwner").mockResolvedValue(false);
-    vi.spyOn(isSchoolManagerModule, "isSchoolManager").mockResolvedValue(false);
-    vi.spyOn(getUserRoleKeyModule, "getUserRoleKey").mockResolvedValue("staff");
 
     const res = await assertCanManageBackup();
     expect(res.allowed).toBe(false);
     expect(res.isOwner).toBe(false);
-    expect(res.isManager).toBe(false);
   });
 });

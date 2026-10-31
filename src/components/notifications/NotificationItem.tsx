@@ -2,21 +2,26 @@
 
 import { useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/i18n";
+import { Link, useRouter } from "@/i18n";
+import { toast } from "sonner";
 import { CheckIcon, ExternalLinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NotificationBadge } from "./NotificationBadge";
 import { resolveNotificationHref } from "@/lib/notifications/resolveNotificationHref";
+import { resolveNotificationText } from "@/lib/notifications/resolveNotificationText";
 import { markNotificationReadAction } from "@/actions/notifications/markNotificationReadAction";
 import type { NotificationRow } from "@/lib/notifications/types";
 
 export function NotificationItem({ notification }: { notification: NotificationRow }) {
   const t = useTranslations("notifications");
+  const tCommon = useTranslations("common");
   const locale = useLocale();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const isUnread = !notification.read_at;
   const href = resolveNotificationHref(notification);
+  const content = resolveNotificationText(notification, t);
   const formattedDate = new Date(notification.created_at).toLocaleString(
     locale === "ar" ? "ar-EG" : "en-US",
     {
@@ -27,7 +32,13 @@ export function NotificationItem({ notification }: { notification: NotificationR
 
   const handleMarkRead = () => {
     startTransition(async () => {
-      await markNotificationReadAction(notification.id);
+      const res = await markNotificationReadAction(notification.id);
+      if (res.success) {
+        toast.success(tCommon("saved"));
+        router.refresh();
+      } else {
+        toast.error(res.error ?? tCommon("error"));
+      }
     });
   };
 
@@ -45,9 +56,9 @@ export function NotificationItem({ notification }: { notification: NotificationR
           {isUnread && <span className="size-2 rounded-full bg-primary" aria-label="Unread" />}
           <span className="text-xs text-muted-foreground">{formattedDate}</span>
         </div>
-        <h4 className="text-sm font-semibold text-foreground">{notification.title}</h4>
-        {notification.body && (
-          <p className="text-xs leading-relaxed text-muted-foreground">{notification.body}</p>
+        <h4 className="text-sm font-semibold text-foreground">{content.title}</h4>
+        {content.body && (
+          <p className="text-xs leading-relaxed text-muted-foreground">{content.body}</p>
         )}
       </div>
 

@@ -1,20 +1,11 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { CircularRow } from "./types";
 
 export async function getSchoolCirculars(schoolId?: string | null): Promise<CircularRow[]> {
-  const supabase = await createSupabaseServerClient();
-  let resolvedId = schoolId;
-  if (!resolvedId) {
-    const { data: firstSchool } = await supabase
-      .from("schools")
-      .select("id")
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-    resolvedId = firstSchool?.id ?? null;
-  }
-  if (!resolvedId) return [];
+  if (!schoolId) return [];
 
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("circulars")
     .select(
@@ -31,11 +22,11 @@ export async function getSchoolCirculars(schoolId?: string | null): Promise<Circ
       )
     `,
     )
-    .eq("school_id", resolvedId)
+    .eq("school_id", schoolId)
     .order("created_at", { ascending: false });
 
   if (error) {
-    throw new Error(`Failed to fetch circulars: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   return (data as unknown as CircularRow[]) ?? [];

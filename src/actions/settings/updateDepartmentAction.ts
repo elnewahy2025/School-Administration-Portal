@@ -1,12 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
+import { departmentSchema, formatZodError } from "@/lib/validation";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
-import { ValidationError } from "@/lib/errors/ValidationError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
@@ -29,14 +30,15 @@ export async function updateDepartmentAction(
 
     const trimmedAr = nameAr.trim();
     const trimmedEn = nameEn.trim();
-    if (!trimmedAr || !trimmedEn) {
-      throw new ValidationError("Both Arabic and English names are required");
+    const parsed = departmentSchema.safeParse({ nameAr: trimmedAr, nameEn: trimmedEn });
+    if (!parsed.success) {
+      throw formatZodError(parsed.error);
     }
 
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase
       .from("departments")
-      .update({ name_ar: trimmedAr, name_en: trimmedEn })
+      .update({ name_ar: parsed.data.nameAr, name_en: parsed.data.nameEn })
       .eq("id", departmentId)
       .eq("school_id", profile.school_id);
 
@@ -44,8 +46,10 @@ export async function updateDepartmentAction(
       throw mapDatabaseError(error);
     }
 
-    revalidatePath("/[locale]/settings/departments", "page");
-    revalidatePath("/[locale]/circulars/new", "page");
+    revalidateSettingsPath("departments");
+    revalidatePath("/circulars/new");
+    revalidatePath("/en/circulars/new");
+    revalidatePath("/[locale]/(app)/circulars/new", "page");
     return { success: true };
   } catch (err: unknown) {
     const appError = sanitizeError(err);

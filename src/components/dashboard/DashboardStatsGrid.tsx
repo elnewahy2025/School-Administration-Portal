@@ -27,7 +27,7 @@ export function DashboardStatsGrid({
       desc: t("activeCircularsDesc"),
       href: `/${locale}/circulars`,
       icon: FileTextIcon,
-      accent: "text-blue-500 bg-blue-500/10",
+      accent: "text-info bg-info/10",
     },
     {
       title: t("openMaintenance"),
@@ -35,7 +35,7 @@ export function DashboardStatsGrid({
       desc: t("openMaintenanceDesc"),
       href: `/${locale}/maintenance`,
       icon: WrenchIcon,
-      accent: "text-amber-500 bg-amber-500/10",
+      accent: "text-warning bg-warning/10",
     },
     {
       title: t("upcomingEvents"),
@@ -43,7 +43,7 @@ export function DashboardStatsGrid({
       desc: t("upcomingEventsDesc"),
       href: `/${locale}/calendar`,
       icon: CalendarDaysIcon,
-      accent: "text-purple-500 bg-purple-500/10",
+      accent: "text-chart-3 bg-chart-3/10",
     },
     ...(isOwner && achievementsCount !== undefined
       ? [
@@ -53,7 +53,7 @@ export function DashboardStatsGrid({
             desc: t("achievementsDesc"),
             href: `/${locale}/achievements`,
             icon: AwardIcon,
-            accent: "text-emerald-500 bg-emerald-500/10",
+            accent: "text-success bg-success/10",
           },
         ]
       : []),
@@ -63,8 +63,8 @@ export function DashboardStatsGrid({
     <div
       className={
         isOwner
-          ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-          : "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          ? "grid grid-cols-1 gap-x-5 gap-y-12 pt-8 sm:grid-cols-2 lg:grid-cols-4"
+          : "grid grid-cols-1 gap-x-5 gap-y-12 pt-8 sm:grid-cols-2 lg:grid-cols-3"
       }
     >
       {items.map((item) => (

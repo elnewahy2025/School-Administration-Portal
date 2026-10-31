@@ -51,7 +51,7 @@ export function CalendarActionButtons({
           size="sm"
           disabled={isPending}
           onClick={() => executeAction(publishCalendarEventAction)}
-          className="gap-1.5 bg-emerald-600 text-white"
+          className="gap-1.5 bg-success text-success-foreground"
         >
           <SendIcon className="size-3.5 rtl:rotate-180" />
           <span>{t("publish")}</span>

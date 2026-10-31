@@ -29,4 +29,12 @@ describe("parseCalendarFormData", () => {
     expect(parsed.recurrenceUntil).toBe("2026-12-31");
     expect(parsed.recurrenceCount).toBe(8);
   });
+
+  it("throws ValidationError when title_ar is missing", () => {
+    const formData = new FormData();
+    formData.append("starts_at", "2026-11-01T10:00");
+    formData.append("ends_at", "2026-11-01T11:00");
+
+    expect(() => parseCalendarFormData(formData)).toThrow();
+  });
 });

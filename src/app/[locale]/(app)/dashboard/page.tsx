@@ -37,7 +37,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
   const schoolId = profile.school_id;
   const [perms, circulars, maintenance, events, isOwner] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
+    getEffectivePermissions(schoolId).catch((): string[] => []),
     getSchoolCirculars(schoolId),
     getSchoolMaintenanceRequests(schoolId),
     getSchoolCalendarEvents(schoolId),

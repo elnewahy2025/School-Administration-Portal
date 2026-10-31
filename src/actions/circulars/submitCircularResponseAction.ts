@@ -44,21 +44,13 @@ export async function submitCircularResponseAction({
     }
 
     const supabase = await createSupabaseServerClient();
-    await supabase
-      .from("circular_responses")
-      .update({ is_latest: false })
-      .eq("circular_id", circularId)
-      .eq("department_id", profile.department_id);
-
-    const { error } = await supabase.from("circular_responses").insert({
-      circular_id: circularId,
-      school_id: profile.school_id,
-      department_id: profile.department_id,
-      responder_id: profile.id,
-      response_type: responseType,
-      status,
-      reason: reason?.trim() || null,
-      is_latest: true,
+    const { error } = await supabase.rpc("submit_circular_response", {
+      p_circular_id: circularId,
+      p_school_id: profile.school_id,
+      p_department_id: profile.department_id,
+      p_response_type: responseType,
+      p_status: status,
+      p_reason: reason?.trim() || null,
     });
 
     if (error) {

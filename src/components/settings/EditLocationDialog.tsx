@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { updateLocationAction } from "@/actions/settings/updateLocationAction";
 import type { LocationRow } from "@/lib/school/getSchoolLocations";
 import { LocationFormFields } from "./LocationFormFields";
@@ -27,8 +28,6 @@ export function EditLocationDialog({
   const [kind, setKind] = useState(location.kind);
   const [isPending, startTransition] = useTransition();
 
-  if (!isOpen) return null;
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
@@ -44,11 +43,12 @@ export function EditLocationDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-xl">
-        <h3 className="mb-4 text-lg font-semibold text-foreground">{t("editLocation")}</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>{t("editLocation")}</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <LocationFormFields
             building={building}
             setBuilding={setBuilding}
@@ -69,7 +69,7 @@ export function EditLocationDialog({
             </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -37,7 +37,7 @@ export function DashboardVisionMission({ school }: { school: SchoolFullDetails |
 
       {mission ? (
         <div className="flex items-start gap-3 rounded-lg border border-border/70 bg-background/60 p-3 text-xs shadow-2xs backdrop-blur-xs">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400">
+          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-info/10 text-info">
             <TargetIcon className="size-4" />
           </div>
           <div className="min-w-0 space-y-0.5">

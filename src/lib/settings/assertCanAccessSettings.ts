@@ -16,7 +16,7 @@ export async function assertCanAccessSettings(): Promise<SettingsAccessResult> {
   }
 
   const [permissions, isOwner] = await Promise.all([
-    getEffectivePermissions().catch((): string[] => []),
+    getEffectivePermissions(profile.school_id),
     isPlatformOwner(profile.id),
   ]);
 
@@ -28,8 +28,7 @@ export async function assertCanAccessSettings(): Promise<SettingsAccessResult> {
         p === "users.manage" ||
         p === "roles.manage" ||
         p === "audit.view",
-    ) ||
-    profile.school_id === null;
+    );
 
   return {
     allowed: hasSettingsPerm,

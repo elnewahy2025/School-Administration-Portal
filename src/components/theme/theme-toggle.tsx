@@ -29,7 +29,7 @@ export function ThemeToggle() {
     );
   }
 
-  const activeTheme = theme ?? "al-nada";
+  const activeTheme = theme ?? "moe";
 
   return (
     <DropdownMenu>

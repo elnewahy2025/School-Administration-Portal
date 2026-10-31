@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { getFirstActiveSchoolId } from "./getFirstActiveSchoolId";
 
 export type SchoolRow = {
   id: string;
@@ -19,33 +20,30 @@ export type SchoolRow = {
   address_ar?: string | null;
   address_en?: string | null;
   academic_year?: string | null;
+  updated_at?: string | null;
 };
 
 const SCHOOL_FIELDS =
-  "id, name_ar, name_en, slug, timezone, logo_path, is_active, phone, email, manager_name_ar, manager_name_en, assistant_manager_ar, assistant_manager_en, assistant_manager_2_ar, assistant_manager_2_en, address_ar, address_en";
+  "id, name_ar, name_en, slug, timezone, logo_path, is_active, phone, email, manager_name_ar, manager_name_en, assistant_manager_ar, assistant_manager_en, assistant_manager_2_ar, assistant_manager_2_en, address_ar, address_en, updated_at";
 
 export async function getCurrentSchool(schoolId?: string | null): Promise<SchoolRow | null> {
   const supabase = await createSupabaseServerClient();
-  let school: SchoolRow | null = null;
+  let targetId = schoolId;
 
-  if (schoolId) {
-    const { data } = await supabase
-      .from("schools")
-      .select(SCHOOL_FIELDS)
-      .eq("id", schoolId)
-      .maybeSingle();
-    school = (data as SchoolRow | null) ?? null;
+  if (targetId === undefined) {
+    targetId = await getFirstActiveSchoolId();
+  }
+  if (!targetId) {
+    return null;
   }
 
-  if (!school) {
-    const { data: fallback } = await supabase
-      .from("schools")
-      .select(SCHOOL_FIELDS)
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-    school = (fallback as SchoolRow | null) ?? null;
-  }
+  const { data } = await supabase
+    .from("schools")
+    .select(SCHOOL_FIELDS)
+    .eq("id", targetId)
+    .maybeSingle();
+
+  const school = (data as SchoolRow | null) ?? null;
 
   if (school) {
     const { data: settings } = await supabase

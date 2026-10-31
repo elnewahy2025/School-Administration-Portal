@@ -14,12 +14,12 @@ export function DashboardComplianceDeptsCard({
 
   return (
     <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-      <div className="flex flex-col gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-3.5 shadow-2xs transition-colors dark:border-emerald-500/20 dark:bg-emerald-950/20">
+      <div className="flex flex-col gap-2 rounded-xl border border-success/25 bg-success/5 p-3.5 shadow-2xs transition-colors dark:border-success/20 dark:bg-success/20">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
+          <span className="text-xs font-bold text-success">
             {t("respondedDepartments")} ({responded.length})
           </span>
-          <span className="size-2 animate-pulse rounded-full bg-emerald-500" />
+          <span className="size-2 animate-pulse rounded-full bg-success" />
         </div>
         <div className="flex flex-wrap gap-1.5 pt-0.5">
           {responded.length > 0 ? (
@@ -27,7 +27,7 @@ export function DashboardComplianceDeptsCard({
               <Badge
                 key={d.id}
                 variant="secondary"
-                className="border-emerald-500/30 bg-emerald-500/15 text-[11px] font-semibold text-emerald-800 transition-transform hover:scale-105 dark:text-emerald-200"
+                className="border-success/30 bg-success/15 text-[11px] font-semibold text-success transition-transform hover:scale-105 dark:text-success"
               >
                 {d.name}
               </Badge>
@@ -38,15 +38,15 @@ export function DashboardComplianceDeptsCard({
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-xl border border-rose-500/25 bg-rose-500/5 p-3.5 shadow-2xs transition-colors dark:border-rose-500/20 dark:bg-rose-950/20">
+      <div className="flex flex-col gap-2 rounded-xl border border-destructive/25 bg-destructive/5 p-3.5 shadow-2xs transition-colors dark:border-destructive/20 dark:bg-destructive/20">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-rose-700 dark:text-rose-400">
+          <span className="text-xs font-bold text-destructive">
             {t("pendingDepartments")} ({pending.length})
           </span>
           {pending.length > 0 ? (
-            <span className="size-2 rounded-full bg-rose-500" />
+            <span className="size-2 rounded-full bg-destructive" />
           ) : (
-            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">✓</span>
+            <span className="text-xs font-bold text-success">✓</span>
           )}
         </div>
         <div className="flex flex-wrap gap-1.5 pt-0.5">
@@ -55,15 +55,13 @@ export function DashboardComplianceDeptsCard({
               <Badge
                 key={d.id}
                 variant="destructive"
-                className="border-rose-500/30 bg-rose-500/15 text-[11px] font-semibold text-rose-800 transition-transform hover:scale-105 dark:text-rose-200"
+                className="border-destructive/30 bg-destructive/15 text-[11px] font-semibold text-destructive transition-transform hover:scale-105 dark:text-destructive"
               >
                 {d.name}
               </Badge>
             ))
           ) : (
-            <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
-              {t("claimed")}
-            </span>
+            <span className="text-xs font-medium text-success">{t("claimed")}</span>
           )}
         </div>
       </div>

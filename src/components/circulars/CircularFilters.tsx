@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { CircularFilterControls } from "./CircularFilterControls";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 import type { CircularSortField } from "@/lib/circulars/sortCirculars";
@@ -35,7 +36,7 @@ export function CircularFilters({
   const t = useTranslations("circulars");
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4">
+    <div className={`${PANEL} flex flex-col gap-3 p-5`}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <SearchIcon className="absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />

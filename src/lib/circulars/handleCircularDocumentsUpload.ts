@@ -9,16 +9,20 @@ export async function handleCircularDocumentsUpload(
     circularId: string;
     uploadedBy: string;
   },
-): Promise<void> {
+): Promise<{ error?: string }> {
   const files = params.formData.getAll("documents");
   for (const item of files) {
     if (item instanceof File && item.size > 0 && item.name) {
-      await uploadCircularDocument(supabase, {
+      const res = await uploadCircularDocument(supabase, {
         file: item,
         schoolId: params.schoolId,
         circularId: params.circularId,
         uploadedBy: params.uploadedBy,
       });
+      if (res.error) {
+        return { error: `${item.name}: ${res.error}` };
+      }
     }
   }
+  return {};
 }

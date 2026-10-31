@@ -13,7 +13,7 @@ export function NotificationBell({ unreadCount }: { unreadCount: number }) {
       <Button
         variant="ghost"
         size="icon"
-        className="relative text-foreground hover:bg-muted"
+        className="relative text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         aria-label={t("title")}
       >
         <BellIcon className="size-5" />

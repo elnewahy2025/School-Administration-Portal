@@ -5,7 +5,7 @@ import { ThemeToggle } from "./theme-toggle";
 const { setTheme } = vi.hoisted(() => ({ setTheme: vi.fn() }));
 
 vi.mock("next-themes", () => ({
-  useTheme: () => ({ theme: "al-nada", setTheme }),
+  useTheme: () => ({ theme: "moe", setTheme }),
 }));
 
 vi.mock("next-intl", () => ({
@@ -24,12 +24,21 @@ describe("ThemeToggle", () => {
     expect(button).toBeDefined();
   });
 
-  it("opens menu and allows selecting a theme", () => {
+  it("lists and applies the restored themes", () => {
     render(<ThemeToggle />);
     const trigger = screen.getByRole("button", { name: "selectTheme" });
     fireEvent.click(trigger);
     const darkOption = screen.getByText("dark");
     fireEvent.click(darkOption);
     expect(setTheme).toHaveBeenCalledWith("dark");
+  });
+
+  it("lists and applies the MOE theme", () => {
+    render(<ThemeToggle />);
+    const trigger = screen.getByRole("button", { name: "selectTheme" });
+    fireEvent.click(trigger);
+    const moeOption = screen.getByText("moe");
+    fireEvent.click(moeOption);
+    expect(setTheme).toHaveBeenCalledWith("moe");
   });
 });

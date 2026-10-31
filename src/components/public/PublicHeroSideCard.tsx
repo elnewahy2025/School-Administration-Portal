@@ -1,25 +1,29 @@
-import type { ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  CARD_DIAMOND,
+  CARD_DIAMOND_ICON,
+  CARD_HERO_PADDING,
+  CARD_RULE,
+  CARD_SHELL,
+} from "./publicCardStyles";
 
 export function PublicHeroSideCard({
-  icon,
-  iconClass,
+  icon: Icon,
   title,
   content,
 }: {
-  icon: ReactNode;
-  iconClass: string;
+  icon: LucideIcon;
   title: string;
   content: string;
 }) {
   return (
-    <div className="group relative flex h-full flex-col justify-start rounded-3xl border border-border/80 bg-card/75 p-6 sm:p-8 shadow-xs backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg space-y-4">
-      <div
-        className={`flex size-12 items-center justify-center rounded-2xl border transition-transform duration-300 group-hover:scale-110 ${iconClass}`}
-      >
-        {icon}
+    <div className={`${CARD_SHELL} ${CARD_HERO_PADDING} h-full`}>
+      <div className={CARD_DIAMOND}>
+        <Icon className={`size-5 ${CARD_DIAMOND_ICON}`} />
       </div>
-      <h3 className="text-lg sm:text-xl font-bold text-foreground tracking-tight">{title}</h3>
-      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-line">
+      <h3 className="mb-3 text-lg font-extrabold tracking-tight text-foreground sm:text-xl">{title}</h3>
+      <div className={CARD_RULE} />
+      <p className="flex-1 text-sm leading-relaxed text-muted-foreground whitespace-pre-line sm:text-base">
         {content}
       </p>
     </div>

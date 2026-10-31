@@ -7,6 +7,7 @@
     "achievements": "School Achievements",
     "publicCalendar": "School Events & Activities",
     "publicCalendarDesc": "Stay informed with key public dates, academic events, and school activities.",
+    "tickerLabel": "Upcoming Events",
     "portalSignIn": "Staff & Portal Access",
     "portalSignInDesc": "Authorized staff, department heads, and administrators may sign in to the administrative portal.",
     "contact": "Contact & Location",
@@ -44,7 +45,8 @@
     "light": "Classic Light",
     "dark": "Slate Dark",
     "emerald": "Emerald Academy",
-    "midnight": "Midnight OLED"
+    "midnight": "Midnight OLED",
+    "moe": "MOE Navy & Gold"
   },
   "auth": {
     "loginTitle": "Sign in",
@@ -113,6 +115,7 @@
     "pendingDepartments": "Pending Departments"
   },
   "nav": {
+    "menu": "Menu",
     "portal": "Admin Portal",
     "dashboard": "Dashboard",
     "circulars": "Circulars & Tasks",
@@ -427,6 +430,9 @@
     "backToList": "Back to Maintenance"
   },
   "calendar": {
+    "viewMore": "View more",
+    "noEventsToday": "No events on this day",
+    "selectDay": "Select a day to see its events",
     "title": "School Calendar",
     "description": "Manage school activities, academic deadlines, exams, and holidays.",
     "newEvent": "New Event",
@@ -550,6 +556,21 @@
       "maintenance": "Maintenance",
       "calendar": "Calendar",
       "system": "System"
+    },
+    "templates": {
+      "circular_published": {
+        "title": "New Administrative Circular",
+        "body": "A new administrative circular has been published requiring your department's review and response"
+      },
+      "circular_reminder": {
+        "title": "Urgent Reminder: Circular Response",
+        "bodyWithRef": "Please review and acknowledge circular #{ref} ({title})",
+        "bodyDefault": "Please review and acknowledge pending administrative circulars for your department"
+      },
+      "maintenance_assigned": {
+        "title": "New Maintenance Request Assigned to You",
+        "body": "A maintenance request has been assigned to you for follow-up and completion"
+      }
     }
   },
   "reports": {

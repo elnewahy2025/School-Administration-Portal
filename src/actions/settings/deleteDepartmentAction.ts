@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -43,8 +44,10 @@ export async function deleteDepartmentAction(departmentId: string): Promise<Acti
       throw new ConflictError("Department could not be deleted or does not exist.");
     }
 
-    revalidatePath("/[locale]/settings/departments", "page");
-    revalidatePath("/[locale]/circulars/new", "page");
+    revalidateSettingsPath("departments");
+    revalidatePath("/circulars/new");
+    revalidatePath("/en/circulars/new");
+    revalidatePath("/[locale]/(app)/circulars/new", "page");
     return { success: true };
   } catch (err: unknown) {
     const appError = sanitizeError(err);

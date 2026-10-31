@@ -1,5 +1,10 @@
-import { Card, CardContent } from "@/components/ui/card";
 import type { LucideIcon } from "lucide-react";
+import {
+  CARD_DIAMOND_ICON,
+  CARD_DIAMOND_SM,
+  CARD_RULE,
+  CARD_SHELL,
+} from "@/components/ui/diamond-card-styles";
 
 export function ReportKpiCard({
   title,
@@ -16,27 +21,22 @@ export function ReportKpiCard({
 }) {
   const trendColor =
     trend === "good"
-      ? "text-emerald-600 dark:text-emerald-400"
+      ? "text-success"
       : trend === "warning"
-        ? "text-amber-600 dark:text-amber-400"
+        ? "text-warning"
         : "text-muted-foreground";
 
   return (
-    <Card className="border-border bg-card shadow-xs">
-      <CardContent className="p-5">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-muted-foreground">{title}</span>
-          {Icon && (
-            <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Icon className="size-4" />
-            </div>
-          )}
+    <div className={`${CARD_SHELL} h-full px-5 pt-12 pb-6`}>
+      {Icon && (
+        <div className={CARD_DIAMOND_SM}>
+          <Icon className={`size-6 ${CARD_DIAMOND_ICON}`} />
         </div>
-        <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-2xl font-bold tracking-tight text-foreground">{value}</span>
-          {description && <span className={`text-xs ${trendColor}`}>{description}</span>}
-        </div>
-      </CardContent>
-    </Card>
+      )}
+      <div className="text-3xl font-extrabold tracking-tight text-foreground">{value}</div>
+      <div className="mt-1 text-sm font-bold text-foreground">{title}</div>
+      <div className={`mt-3 ${CARD_RULE} mb-3`} />
+      <div className={`min-h-4 text-xs font-medium ${trendColor}`}>{description ?? "\u00a0"}</div>
+    </div>
   );
 }

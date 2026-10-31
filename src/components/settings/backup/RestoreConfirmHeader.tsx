@@ -19,7 +19,7 @@ export function RestoreConfirmHeader({
     <>
       <div className="flex items-center justify-between border-b border-border pb-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-warning/15 text-warning">
             <Database className="h-5 w-5" />
           </div>
           <div>
@@ -39,7 +39,7 @@ export function RestoreConfirmHeader({
         </button>
       </div>
 
-      <div className="my-4 flex items-start gap-3 rounded-xl bg-amber-500/10 p-3 text-xs text-amber-800 dark:text-amber-300">
+      <div className="my-4 flex items-start gap-3 rounded-xl bg-warning/10 p-3 text-xs text-warning">
         <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
         <span>{t("confirmWarning")}</span>
       </div>

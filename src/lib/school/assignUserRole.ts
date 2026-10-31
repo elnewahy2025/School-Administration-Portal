@@ -1,4 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { resolveRoleForAssignment } from "./resolveRoleForAssignment";
 
 export async function assignUserRole(
   supabase: SupabaseClient,
@@ -7,23 +9,7 @@ export async function assignUserRole(
   assignedBy: string,
   roleKey: string,
 ): Promise<void> {
-  const { data: roles, error: roleError } = await supabase
-    .from("roles")
-    .select("id, school_id, is_system")
-    .eq("key", roleKey)
-    .or(`school_id.eq.${schoolId},school_id.is.null`);
-
-  if (roleError) {
-    throw new Error(`Failed to resolve role '${roleKey}': ${roleError.message}`);
-  }
-
-  // Prefer school-scoped custom role over global system role
-  const role =
-    roles?.find((r) => r.school_id === schoolId) ?? roles?.find((r) => r.school_id === null);
-
-  if (!role) {
-    throw new Error(`Role '${roleKey}' was not found for school '${schoolId}'`);
-  }
+  const roleId = await resolveRoleForAssignment(supabase, roleKey, schoolId);
 
   const { data: existingAssignment, error: findError } = await supabase
     .from("user_role_assignments")
@@ -33,28 +19,28 @@ export async function assignUserRole(
     .maybeSingle();
 
   if (findError) {
-    throw new Error(`Failed to check existing role assignment: ${findError.message}`);
+    throw mapDatabaseError(findError, "Failed to check existing role assignment");
   }
 
   if (existingAssignment) {
     const { error: updateError } = await supabase
       .from("user_role_assignments")
-      .update({ role_id: role.id, assigned_by: assignedBy })
+      .update({ role_id: roleId, assigned_by: assignedBy })
       .eq("id", existingAssignment.id);
 
     if (updateError) {
-      throw new Error(`Failed to update user role assignment: ${updateError.message}`);
+      throw mapDatabaseError(updateError, "Failed to update user role assignment");
     }
   } else {
     const { error: insertError } = await supabase.from("user_role_assignments").insert({
       user_id: userId,
-      role_id: role.id,
+      role_id: roleId,
       school_id: schoolId,
       assigned_by: assignedBy,
     });
 
     if (insertError) {
-      throw new Error(`Failed to insert user role assignment: ${insertError.message}`);
+      throw mapDatabaseError(insertError, "Failed to insert user role assignment");
     }
   }
 }

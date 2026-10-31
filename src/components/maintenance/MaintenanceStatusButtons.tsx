@@ -63,7 +63,7 @@ export function MaintenanceStatusButtons({
           size="sm"
           disabled={isPending}
           onClick={() => onOpenAction("reopened")}
-          className="text-rose-600"
+          className="text-destructive"
         >
           <RotateCcwIcon className="size-4" />
           <span>{t("reopen")}</span>

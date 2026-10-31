@@ -33,7 +33,7 @@ export function CalendarItemDetailDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-xs" onClick={onClose} />
+      <div className="fixed inset-0 bg-scrim/60 backdrop-blur-xs" onClick={onClose} />
       <div className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-xl border border-border bg-card p-6 shadow-2xl">
         <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
           <div className="space-y-1">
@@ -41,7 +41,7 @@ export function CalendarItemDetailDialog({
               {isEvent ? (
                 <CalendarIcon className="size-5 text-primary" />
               ) : (
-                <FileTextIcon className="size-5 text-indigo-500" />
+                <FileTextIcon className="size-5 text-chart-4" />
               )}
               <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                 {isEvent ? tCal("title") : tCirc("title")}

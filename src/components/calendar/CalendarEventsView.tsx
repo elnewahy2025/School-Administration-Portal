@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CalendarDaysIcon, ListIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { CalendarCategoryFilterBar } from "./CalendarCategoryFilterBar";
 import { CalendarMonthView } from "./CalendarMonthView";
 import { CalendarListView } from "./CalendarListView";
@@ -39,7 +40,7 @@ export function CalendarEventsView({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className={`${PANEL} flex flex-wrap items-center justify-between gap-3 p-4`}>
         <CalendarCategoryFilterBar
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
@@ -68,7 +69,11 @@ export function CalendarEventsView({
       </div>
 
       {viewMode === "month" ? (
-        <CalendarMonthView items={filteredItems} onSelectItem={setSelectedItem} />
+        <CalendarMonthView
+          items={filteredItems}
+          onSelectItem={setSelectedItem}
+          onViewMore={() => setViewMode("list")}
+        />
       ) : (
         <CalendarListView
           items={filteredItems}

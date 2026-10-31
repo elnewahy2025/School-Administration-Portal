@@ -4,7 +4,7 @@ import { getCircularsReportData } from "@/lib/reports/getCircularsReportData";
 import { getMaintenanceReportData } from "@/lib/reports/getMaintenanceReportData";
 import { buildCircularsCsv } from "@/lib/reports/buildCircularsCsv";
 import { buildMaintenanceCsv } from "@/lib/reports/buildMaintenanceCsv";
-import type { ReportFilterParams } from "@/lib/reports/types";
+import { parseReportExportFilters } from "@/lib/reports/parseReportExportFilters";
 
 async function handleReportExport(request: Request) {
   const authCheck = await assertCanViewReports();
@@ -13,15 +13,8 @@ async function handleReportExport(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const type = searchParams.get("type") || "circulars";
-
-  const filters: ReportFilterParams = {
-    from: searchParams.get("from") || undefined,
-    to: searchParams.get("to") || undefined,
-    departmentId: searchParams.get("departmentId") || undefined,
-    status: searchParams.get("status") || undefined,
-    category: searchParams.get("category") || undefined,
-  };
+  const type = searchParams.get("type") ?? "circulars";
+  const filters = parseReportExportFilters(searchParams, authCheck.scopedDepartmentId);
 
   let csvContent = "";
   let filename = `report-${Date.now()}.csv`;

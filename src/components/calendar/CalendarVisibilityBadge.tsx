@@ -10,10 +10,7 @@ export function CalendarVisibilityBadge({ visibility }: { visibility: CalendarVi
 
   if (visibility === "public") {
     return (
-      <Badge
-        variant="outline"
-        className="gap-1 border-blue-500/30 text-blue-700 dark:text-blue-300"
-      >
+      <Badge variant="outline" className="gap-1 border-info/30 text-info">
         <GlobeIcon className="size-3" />
         <span>{t("public")}</span>
       </Badge>

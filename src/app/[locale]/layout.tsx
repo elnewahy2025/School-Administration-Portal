@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Almarai, Aref_Ruqaa, Outfit, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Tajawal } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -11,23 +11,17 @@ import en from "../../messages/en.json";
 import ar from "../../messages/ar.json";
 import "../globals.css";
 
-const fontSans = Almarai({
-  subsets: ["arabic"],
-  weight: ["300", "400", "700", "800"],
+const fontSans = Tajawal({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "700", "800"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const fontHeading = Aref_Ruqaa({
-  subsets: ["arabic"],
-  weight: ["400", "700"],
+const fontHeading = Tajawal({
+  subsets: ["arabic", "latin"],
+  weight: ["700", "800"],
   variable: "--font-heading",
-  display: "swap",
-});
-
-const fontLatin = Outfit({
-  subsets: ["latin"],
-  variable: "--font-latin",
   display: "swap",
 });
 
@@ -93,14 +87,14 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
-      className={`${fontSans.variable} ${fontHeading.variable} ${fontLatin.variable} ${fontMono.variable} h-full font-sans antialiased`}
+      className={`${fontSans.variable} ${fontHeading.variable} ${fontMono.variable} h-full font-sans antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider
           attribute="class"
-          defaultTheme="al-nada"
-          themes={["al-nada", "light", "dark", "emerald", "midnight"]}
+          defaultTheme="moe"
+          themes={["al-nada", "light", "dark", "emerald", "midnight", "moe"]}
           enableSystem={false}
           disableTransitionOnChange
         >

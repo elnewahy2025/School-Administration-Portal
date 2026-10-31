@@ -10,9 +10,9 @@ export async function handleOptionalPhoto(
     uploadedBy: string;
     kind: "report" | "evidence";
   },
-): Promise<void> {
+): Promise<{ error?: string }> {
   if (photo && photo.size > 0) {
-    await uploadMaintenancePhoto(supabase, {
+    return uploadMaintenancePhoto(supabase, {
       photo,
       schoolId: params.schoolId,
       requestId: params.requestId,
@@ -20,4 +20,5 @@ export async function handleOptionalPhoto(
       kind: params.kind,
     });
   }
+  return {};
 }

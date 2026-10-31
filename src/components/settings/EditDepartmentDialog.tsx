@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { updateDepartmentAction } from "@/actions/settings/updateDepartmentAction";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
@@ -26,8 +27,6 @@ export function EditDepartmentDialog({
   const [nameEn, setNameEn] = useState(department.name_en);
   const [isPending, startTransition] = useTransition();
 
-  if (!isOpen) return null;
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
@@ -43,11 +42,12 @@ export function EditDepartmentDialog({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-xl">
-        <h3 className="mb-4 text-lg font-semibold text-foreground">{t("editDepartment")}</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>{t("editDepartment")}</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <div className="space-y-2">
             <Label htmlFor="edit_dept_ar">{t("deptNameAr")}</Label>
             <Input
@@ -77,7 +77,7 @@ export function EditDepartmentDialog({
             </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

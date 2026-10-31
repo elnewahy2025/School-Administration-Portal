@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { assertCanRegisterAchievement } from "./assertCanRegisterAchievement";
 import { deleteAchievementRecord } from "@/lib/achievements/deleteAchievementRecord";
-import { AppError } from "@/lib/errors/AppError";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
@@ -17,7 +17,7 @@ export async function deleteAchievementAction(achievementId: string): Promise<Ac
     const res = await deleteAchievementRecord(supabase, achievementId, auth.schoolId);
 
     if (res.error) {
-      throw new AppError(res.error);
+      throw mapDatabaseError(res.error, "Failed to delete achievement");
     }
 
     revalidatePath("/[locale]/achievements", "page");

@@ -21,7 +21,7 @@ export function CircularRemindTargetSelector({
           onClick={() => onChange("pending")}
           className={`flex flex-col items-center gap-1.5 rounded-xl border p-3 text-xs font-bold transition-all ${
             targetType === "pending"
-              ? "border-rose-500 bg-rose-500/10 text-rose-700 ring-2 ring-rose-500/20 dark:text-rose-300"
+              ? "border-destructive bg-destructive/10 text-destructive ring-2 ring-destructive/20 dark:text-destructive"
               : "border-border bg-card text-muted-foreground hover:bg-muted"
           }`}
         >

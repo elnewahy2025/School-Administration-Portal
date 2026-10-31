@@ -7,8 +7,8 @@ export function buildCircularReminderBody(
   if (trimmed) return trimmed;
 
   if (circularRef) {
-    return `يرجى مراجعة وتأكيد استلام التعميم الإداري رقم #${circularRef} (${circularTitle})`;
+    return JSON.stringify({ ref: circularRef, title: circularTitle });
   }
 
-  return "يرجى مراجعة وتأكيد استلام التعاميم الإدارية المعلقة لقسمكم";
+  return JSON.stringify({});
 }

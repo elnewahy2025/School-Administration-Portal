@@ -1,22 +1,13 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import type { CalendarEventRow } from "./types";
 
 export async function getSchoolCalendarEvents(
   schoolId?: string | null,
 ): Promise<CalendarEventRow[]> {
-  const supabase = await createSupabaseServerClient();
-  let resolvedId = schoolId;
-  if (!resolvedId) {
-    const { data: firstSchool } = await supabase
-      .from("schools")
-      .select("id")
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-    resolvedId = firstSchool?.id ?? null;
-  }
-  if (!resolvedId) return [];
+  if (!schoolId) return [];
 
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("calendar_events")
     .select(
@@ -27,11 +18,11 @@ export async function getSchoolCalendarEvents(
       creator:profiles!calendar_events_created_by_fkey(id, full_name)
     `,
     )
-    .eq("school_id", resolvedId)
+    .eq("school_id", schoolId)
     .order("starts_at", { ascending: true });
 
   if (error) {
-    throw new Error(`Failed to fetch calendar events: ${error.message}`);
+    throw mapDatabaseError(error);
   }
 
   return (data as unknown as CalendarEventRow[]) ?? [];

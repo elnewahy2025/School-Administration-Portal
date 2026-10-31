@@ -6,6 +6,7 @@ import { SearchIcon, WrenchIcon } from "lucide-react";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { MaintenanceTableRow } from "./MaintenanceTableRow";
 import { MaintenanceListHeader } from "./MaintenanceListHeader";
 import { filterMaintenanceTickets } from "@/lib/maintenance/filterMaintenanceTickets";
@@ -32,7 +33,9 @@ export function MaintenanceList({
     <div className="space-y-6">
       <MaintenanceListHeader canCreate={canCreate} />
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div
+        className={`${PANEL} flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between`}
+      >
         <div className="relative max-w-sm flex-1">
           <SearchIcon className="absolute start-3 top-2.5 size-4 text-muted-foreground" />
           <Input
@@ -62,15 +65,15 @@ export function MaintenanceList({
       </div>
 
       {filteredTickets.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border p-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-[color:var(--panel,var(--card))] p-12 text-center">
           <WrenchIcon className="mb-3 size-10 text-muted-foreground/60" />
           <p className="text-sm font-medium text-foreground">{t("noTickets")}</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-border bg-card">
+        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_12px_30px_rgba(20,37,74,.10)]">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="border-b-0 bg-[linear-gradient(90deg,var(--topbar-from,var(--sidebar)),var(--topbar-to,var(--sidebar)))] hover:bg-transparent [&_th]:h-11 [&_th]:px-3 [&_th]:font-bold [&_th]:text-sidebar-foreground">
                 <TableHead>{t("ticketNumber")}</TableHead>
                 <TableHead>{t("ticketTitle")}</TableHead>
                 <TableHead>{t("location")}</TableHead>

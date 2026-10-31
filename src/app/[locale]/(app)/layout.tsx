@@ -2,6 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getUnreadNotificationCount } from "@/lib/notifications/getUnreadNotificationCount";
@@ -31,9 +32,10 @@ export default async function AuthenticatedAppLayout({
     redirect({ href: "/login", locale });
   }
 
+  const schoolId = await resolveSchoolForCaller(profile);
   const [school, permissions, unreadNotifications, isOwner, backupAccess] = await Promise.all([
-    getCurrentSchool(profile?.school_id),
-    getEffectivePermissions().catch(() => []),
+    getCurrentSchool(schoolId),
+    getEffectivePermissions(schoolId).catch(() => []),
     getUnreadNotificationCount().catch(() => 0),
     profile?.id ? isPlatformOwner(profile.id) : Promise.resolve(false),
     assertCanManageBackup().catch(() => ({ allowed: false })),

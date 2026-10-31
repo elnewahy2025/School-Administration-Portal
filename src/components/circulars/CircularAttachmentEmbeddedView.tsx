@@ -30,7 +30,7 @@ export function CircularAttachmentEmbeddedView({
           alt={fileName}
           className="max-h-[550px] w-auto max-w-full rounded-md object-contain transition-transform duration-200 group-hover:scale-[1.005]"
         />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/25 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="absolute inset-0 flex items-center justify-center bg-scrim/25 opacity-0 transition-opacity group-hover:opacity-100">
           <span className="flex items-center gap-1.5 rounded-full bg-background/90 px-3 py-1.5 text-xs font-medium text-foreground shadow-sm">
             <ZoomInIcon className="size-3.5" />
             {t("expandAttachment")}

@@ -19,7 +19,13 @@ type TargetJoinResult = {
 export async function getCircularById(circularId: string): Promise<CircularDetail | null> {
   const supabase = await createSupabaseServerClient();
   const [{ data: circular, error: circError }, { data: targets }, attachments] = await Promise.all([
-    supabase.from("circulars").select("*").eq("id", circularId).maybeSingle(),
+    supabase
+      .from("circulars")
+      .select(
+        "id, school_id, ref_number, title, body, category, priority, status, response_type, response_instructions, allow_response_revision, publish_at, due_at, created_by, closed_at, created_at",
+      )
+      .eq("id", circularId)
+      .maybeSingle(),
     supabase
       .from("circular_targets")
       .select("id, circular_id, department_id, role_key, departments(name_ar, name_en)")

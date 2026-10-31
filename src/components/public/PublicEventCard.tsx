@@ -1,6 +1,7 @@
-import { CalendarIcon, MapPinIcon } from "lucide-react";
+import { CalendarDaysIcon, CalendarIcon, MapPinIcon } from "lucide-react";
 import { CalendarEventCategoryBadge } from "@/components/calendar/CalendarEventCategoryBadge";
 import type { CalendarEventRow } from "@/lib/calendar/types";
+import { CARD_DIAMOND, CARD_DIAMOND_ICON, CARD_RULE, CARD_SHELL } from "./publicCardStyles";
 
 export function PublicEventCard({
   event,
@@ -10,56 +11,46 @@ export function PublicEventCard({
   locale: string;
 }) {
   const title = locale === "ar" ? event.title_ar : (event.title_en || event.title_ar);
-  const eventDate = new Date(event.starts_at);
-
-  const monthStr = eventDate.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
-    month: "short",
-  });
-  const dayStr = eventDate.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
-    day: "numeric",
-  });
-  const weekdayStr = eventDate.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
-    weekday: "short",
-  });
+  const dateLabel = new Date(event.starts_at).toLocaleDateString(
+    locale === "ar" ? "ar-EG" : "en-US",
+    { weekday: "short", day: "numeric", month: "short" },
+  );
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-border/80 bg-card/80 p-5 shadow-xs backdrop-blur-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md">
-      <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <CalendarEventCategoryBadge category={event.category} />
-          <span className="text-xs text-muted-foreground flex items-center gap-1">
-            <CalendarIcon className="size-3 text-primary" />
-            <span>{weekdayStr}</span>
-          </span>
-        </div>
-
-        <div className="flex items-start gap-3.5">
-          <div className="flex flex-col items-center justify-center rounded-xl border border-primary/20 bg-primary/5 px-2.5 py-1.5 min-w-[50px] text-center shadow-2xs">
-            <span className="text-[10px] font-semibold uppercase text-primary tracking-wider">
-              {monthStr}
-            </span>
-            <span className="text-lg font-black text-foreground leading-none">{dayStr}</span>
-          </div>
-
-          <div className="space-y-1 flex-1 min-w-0">
-            <h3 className="font-bold text-foreground text-sm sm:text-base tracking-tight line-clamp-2 group-hover:text-primary transition-colors">
-              {title}
-            </h3>
-            {event.description && (
-              <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                {event.description}
-              </p>
-            )}
-          </div>
-        </div>
+    <div className={`${CARD_SHELL} h-full px-5 pt-16 pb-0 sm:pt-[4.5rem]`}>
+      <div className={CARD_DIAMOND}>
+        <CalendarDaysIcon className={`size-6 ${CARD_DIAMOND_ICON}`} />
       </div>
 
-      {event.location && (
-        <div className="mt-4 flex items-center gap-1.5 text-xs text-muted-foreground border-t border-border/60 pt-3">
-          <MapPinIcon className="size-3.5 text-primary shrink-0" />
-          <span className="truncate">{event.location}</span>
-        </div>
-      )}
+      <div className="mb-3">
+        <CalendarEventCategoryBadge category={event.category} />
+      </div>
+
+      <h3 className="mb-3 line-clamp-2 text-base font-extrabold leading-relaxed tracking-tight text-foreground sm:text-lg">
+        {title}
+      </h3>
+      <div className={CARD_RULE} />
+
+      <div className="mb-5 w-full flex-1">
+        {event.description && (
+          <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+            {event.description}
+          </p>
+        )}
+      </div>
+
+      <div className="-mx-5 flex min-h-12 w-[calc(100%+2.5rem)] flex-col items-center justify-center gap-1 rounded-b-[11px] bg-[color:var(--card-bar,#e6e9f1)] px-5 py-3 text-sm font-bold text-[color:var(--card-bar-foreground,#3d6db8)] transition-colors duration-[400ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:bg-[linear-gradient(90deg,var(--action-from,#0b63d6)_-20%,var(--action-to,#0a2f7a)_120%)] group-hover:text-[color:var(--action-foreground,#fff)]">
+        <span className="flex items-center gap-2">
+          <CalendarIcon className="size-4 shrink-0" />
+          <span>{dateLabel}</span>
+        </span>
+        {event.location && (
+          <span className="flex max-w-full items-center gap-2 text-xs font-medium">
+            <MapPinIcon className="size-3.5 shrink-0" />
+            <span className="truncate">{event.location}</span>
+          </span>
+        )}
+      </div>
     </div>
   );
 }

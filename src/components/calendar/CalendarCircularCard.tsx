@@ -2,9 +2,15 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { FileTextIcon, ClockIcon, CheckCircle2Icon, ExternalLinkIcon } from "lucide-react";
+import { CheckCircle2Icon, ClockIcon, FileTextIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import {
+  CARD_DIAMOND,
+  CARD_DIAMOND_ICON,
+  CARD_FOOTER_BAR,
+  CARD_RULE,
+  CARD_SHELL,
+} from "@/components/ui/diamond-card-styles";
 import { CircularPriorityBadge } from "@/components/circulars/CircularPriorityBadge";
 import type { CircularRow } from "@/lib/circulars/types";
 
@@ -28,61 +34,54 @@ export function CalendarCircularCard({
     : null;
 
   return (
-    <div className="space-y-3 rounded-lg border border-indigo-500/20 bg-indigo-50/30 p-5 shadow-xs transition hover:border-indigo-500/40 hover:shadow-sm dark:bg-indigo-950/10">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge
-            variant="outline"
-            className="border-indigo-500/40 text-indigo-600 dark:text-indigo-400"
-          >
-            <FileTextIcon className="me-1 size-3" />
-            {tCirc("title")}
-          </Badge>
-          <CircularPriorityBadge priority={circular.priority} />
-          <Badge variant="outline" className="font-mono text-xs">
-            {circular.ref_number}
-          </Badge>
-        </div>
-        <div className="flex items-center gap-1.5">
-          {onSelect && (
-            <Button variant="ghost" size="sm" onClick={onSelect} className="h-7 text-xs">
-              View Details
-            </Button>
-          )}
-          <Link href={`/${locale}/circulars/${circular.id}`}>
-            <Button variant="outline" size="sm" className="h-7 gap-1 text-xs">
-              <ExternalLinkIcon className="size-3" />
-              <span>Respond</span>
-            </Button>
-          </Link>
-        </div>
+    <div className={`${CARD_SHELL} h-full px-5 pt-16 pb-0 sm:pt-[4.5rem]`}>
+      <div className={CARD_DIAMOND}>
+        <FileTextIcon className={`size-6 ${CARD_DIAMOND_ICON}`} />
       </div>
 
-      <div>
-        <button
-          type="button"
-          onClick={onSelect}
-          className="text-start font-semibold text-foreground hover:underline"
-        >
-          <h3 className="text-base font-semibold text-foreground">{circular.title}</h3>
-        </button>
+      <div className="mb-3 flex flex-wrap items-center justify-center gap-1.5">
+        <Badge variant="outline" className="border-chart-4/40 text-chart-4">
+          <FileTextIcon className="me-1 size-3" />
+          {tCirc("title")}
+        </Badge>
+        <CircularPriorityBadge priority={circular.priority} />
+        <Badge variant="outline" className="font-mono text-xs">
+          {circular.ref_number}
+        </Badge>
+      </div>
+
+      <button
+        type="button"
+        onClick={onSelect}
+        className="text-base leading-relaxed font-extrabold text-primary hover:underline sm:text-lg"
+      >
+        <h3>{circular.title}</h3>
+      </button>
+      <div className={`mt-3 ${CARD_RULE}`} />
+
+      <div className="mb-4 w-full flex-1 space-y-3">
         {circular.body && (
-          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{circular.body}</p>
+          <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+            {circular.body}
+          </p>
         )}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-4 border-t border-border/60 pt-2.5 text-xs text-muted-foreground">
-        {formattedDeadline && (
-          <div className="flex items-center gap-1.5 font-medium text-rose-500">
-            <ClockIcon className="size-3.5" />
-            <span>Due: {formattedDeadline}</span>
-          </div>
-        )}
-        <div className="flex items-center gap-1.5">
-          <CheckCircle2Icon className="size-3.5 text-indigo-500" />
-          <span>Requires: {circular.response_type}</span>
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          {formattedDeadline && (
+            <span className="flex items-center gap-1.5 font-medium text-destructive">
+              <ClockIcon className="size-3.5" />
+              {tCirc("dueDate")}: {formattedDeadline}
+            </span>
+          )}
+          <span className="flex items-center gap-1.5">
+            <CheckCircle2Icon className="size-3.5 text-chart-4" />
+            {circular.response_type}
+          </span>
         </div>
       </div>
+
+      <Link href={`/${locale}/circulars/${circular.id}`} className={CARD_FOOTER_BAR}>
+        {tCirc("respond")}
+      </Link>
     </div>
   );
 }

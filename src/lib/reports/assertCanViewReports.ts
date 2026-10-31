@@ -1,6 +1,6 @@
 import { getCurrentProfile, type ProfileRow } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
-import { getCurrentSchool } from "@/lib/school/getCurrentSchool";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 
 export type AssertCanViewReportsResult =
@@ -18,26 +18,36 @@ export async function assertCanViewReports(): Promise<AssertCanViewReportsResult
     return { authorized: false, error: "Unauthorized" };
   }
 
-  const school = await getCurrentSchool(profile.school_id);
-  if (!school) {
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!schoolId) {
     return { authorized: false, error: "No school associated with profile" };
   }
 
-  const perms = await getEffectivePermissions().catch((): string[] => []);
+  const perms = await getEffectivePermissions(schoolId);
   const isOwner = await isPlatformOwner(profile.id);
   const isManager =
     perms.includes("settings.school.update") ||
     perms.includes("users.manage") ||
-    perms.includes("audit.view");
-  const allowed = isOwner || (perms.includes("reports.view") && isManager);
-  if (!allowed) {
-    return { authorized: false, error: "Unauthorized" };
+    perms.includes("audit.view") ||
+    perms.includes("school.manage");
+
+  if (isOwner || isManager) {
+    return {
+      authorized: true,
+      profile,
+      schoolId,
+      scopedDepartmentId: null,
+    };
   }
 
-  return {
-    authorized: true,
-    profile,
-    schoolId: school.id,
-    scopedDepartmentId: null,
-  };
+  if (perms.includes("reports.view") && profile.department_id) {
+    return {
+      authorized: true,
+      profile,
+      schoolId,
+      scopedDepartmentId: profile.department_id,
+    };
+  }
+
+  return { authorized: false, error: "Unauthorized" };
 }

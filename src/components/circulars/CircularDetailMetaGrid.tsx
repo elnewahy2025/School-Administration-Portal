@@ -25,7 +25,7 @@ export function CircularDetailMetaGrid({
   const responseTypeLabel = responseTypeLabels[responseType] ?? responseType;
 
   return (
-    <div className="grid grid-cols-1 gap-4 rounded-lg bg-muted/40 p-4 text-xs sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 rounded-xl border border-border bg-[color:var(--panel,var(--muted))] p-4 text-xs sm:grid-cols-3">
       <div>
         <span className="text-muted-foreground">{t("publishedAt")}: </span>
         <span suppressHydrationWarning className="font-medium text-foreground">

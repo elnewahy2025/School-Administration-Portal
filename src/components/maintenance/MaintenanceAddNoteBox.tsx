@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { SendIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { PANEL } from "@/components/ui/diamond-card-styles";
 import { addMaintenanceNoteAction } from "@/actions/maintenance/addMaintenanceNoteAction";
 
 export function MaintenanceAddNoteBox({ requestId }: { requestId: string }) {
@@ -27,11 +28,7 @@ export function MaintenanceAddNoteBox({ requestId }: { requestId: string }) {
   };
 
   return (
-    <form
-      ref={formRef}
-      action={handleSubmit}
-      className="space-y-3 rounded-lg border border-border bg-card p-4 shadow-xs"
-    >
+    <form ref={formRef} action={handleSubmit} className={`${PANEL} space-y-3 p-4`}>
       <input type="hidden" name="request_id" value={requestId} />
       <Textarea
         name="note"

@@ -8,9 +8,7 @@ export type UploadRules = {
   contentMismatchMessage: string;
 };
 
-export type UploadValidation =
-  | { bytes: Uint8Array; error?: never }
-  | { bytes?: never; error: string };
+export type UploadValidation = { ok: true; bytes: Uint8Array } | { ok: false; error: string };
 
 /**
  * Validates an upload before anything is written.
@@ -25,17 +23,17 @@ export async function validateStorageUpload(
   rules: UploadRules,
 ): Promise<UploadValidation> {
   if (!rules.allowedMime.includes(file.type)) {
-    return { error: rules.invalidFormatMessage };
+    return { ok: false, error: rules.invalidFormatMessage };
   }
 
   if (file.size > rules.maxBytes) {
-    return { error: rules.tooLargeMessage };
+    return { ok: false, error: rules.tooLargeMessage };
   }
 
   const bytes = new Uint8Array(await file.arrayBuffer());
   if (!hasValidFileSignature(bytes, file.type)) {
-    return { error: rules.contentMismatchMessage };
+    return { ok: false, error: rules.contentMismatchMessage };
   }
 
-  return { bytes };
+  return { ok: true, bytes };
 }

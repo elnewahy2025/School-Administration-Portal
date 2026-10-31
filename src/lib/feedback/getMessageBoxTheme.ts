@@ -16,17 +16,16 @@ export function getMessageBoxTheme(type: MessageBoxType): MessageBoxTheme {
         badgeBgClass: "bg-destructive/10 ring-1 ring-destructive/20",
         badgeTextClass: "text-destructive",
         buttonClass:
-          "bg-destructive hover:bg-destructive/90 text-white shadow-sm focus:ring-destructive/40",
+          "bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-sm focus:ring-destructive/40",
         defaultTitleKey: "error",
       };
     case "warning":
       return {
-        borderClass:
-          "border-amber-500/30 dark:border-amber-400/30 shadow-[0_0_35px_-12px_rgba(245,158,11,0.2)]",
-        badgeBgClass: "bg-amber-500/10 ring-1 ring-amber-500/20",
-        badgeTextClass: "text-amber-600 dark:text-amber-400",
+        borderClass: "border-warning/30 shadow-[0_0_35px_-12px_var(--warning)]",
+        badgeBgClass: "bg-warning/10 ring-1 ring-warning/20",
+        badgeTextClass: "text-warning",
         buttonClass:
-          "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm focus:ring-primary/40",
+          "bg-[linear-gradient(180deg,var(--action-from,#0b63d6)_-40%,var(--action-to,#0a2f7a)_120%)] text-[color:var(--action-foreground,#fff)] shadow-[0_6px_16px_rgba(10,47,122,.25),inset_0_-3px_0_var(--gold,#ffcd35)] focus:ring-2 focus:ring-ring/40",
         defaultTitleKey: "warning",
       };
     case "success":
@@ -35,7 +34,7 @@ export function getMessageBoxTheme(type: MessageBoxType): MessageBoxTheme {
         badgeBgClass: "bg-primary/10 ring-1 ring-primary/20",
         badgeTextClass: "text-primary",
         buttonClass:
-          "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm focus:ring-primary/40",
+          "bg-[linear-gradient(180deg,var(--action-from,#0b63d6)_-40%,var(--action-to,#0a2f7a)_120%)] text-[color:var(--action-foreground,#fff)] shadow-[0_6px_16px_rgba(10,47,122,.25),inset_0_-3px_0_var(--gold,#ffcd35)] focus:ring-2 focus:ring-ring/40",
         defaultTitleKey: "success",
       };
     case "info":
@@ -45,7 +44,7 @@ export function getMessageBoxTheme(type: MessageBoxType): MessageBoxTheme {
         badgeBgClass: "bg-primary/10 ring-1 ring-primary/20",
         badgeTextClass: "text-primary",
         buttonClass:
-          "bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm focus:ring-primary/40",
+          "bg-[linear-gradient(180deg,var(--action-from,#0b63d6)_-40%,var(--action-to,#0a2f7a)_120%)] text-[color:var(--action-foreground,#fff)] shadow-[0_6px_16px_rgba(10,47,122,.25),inset_0_-3px_0_var(--gold,#ffcd35)] focus:ring-2 focus:ring-ring/40",
         defaultTitleKey: "notice",
       };
   }

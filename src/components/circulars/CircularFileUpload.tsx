@@ -2,17 +2,34 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { UploadCloudIcon, FileTextIcon, XIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { circularDocumentRules } from "@/lib/circulars/circularDocumentRules";
+import { validateClientFile } from "@/lib/storage/validateClientFile";
 
 export function CircularFileUpload() {
   const t = useTranslations("circulars");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setSelectedFiles(Array.from(e.target.files));
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files);
+    const validFiles: File[] = [];
+
+    for (const file of files) {
+      const validation = validateClientFile(file, {
+        allowedMimes: circularDocumentRules.allowedMime,
+        maxBytes: circularDocumentRules.maxBytes,
+      });
+      if (!validation.valid) {
+        toast.error(`${file.name}: ${validation.error}`);
+      } else {
+        validFiles.push(file);
+      }
     }
+
+    setSelectedFiles(validFiles);
   };
 
   const removeFile = (index: number) => {
@@ -35,7 +52,7 @@ export function CircularFileUpload() {
             type="file"
             multiple
             className="sr-only"
-            accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
+            accept="application/pdf,image/jpeg,image/png,image/webp"
             onChange={handleFileChange}
           />
         </label>

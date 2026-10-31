@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -9,7 +9,7 @@ import {
   formatActionErrorResult,
   AuthenticationError,
   ForbiddenError,
-  AppError,
+  mapDatabaseError,
   type ActionResult,
 } from "@/lib/errors";
 import { insertRoleRow } from "./insertRoleRow";
@@ -43,10 +43,10 @@ export async function createRoleAction(
     });
 
     if (!res.success) {
-      throw new AppError(res.error || "Failed to create role");
+      throw mapDatabaseError(res.error, "Failed to create role");
     }
 
-    revalidatePath("/[locale]/settings/users", "page");
+    revalidateSettingsPath("users");
     return { success: true };
   } catch (err: unknown) {
     const sanitized = sanitizeError(err, { action: "createRoleAction", roleKey: key });

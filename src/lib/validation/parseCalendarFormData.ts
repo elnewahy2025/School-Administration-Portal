@@ -1,5 +1,7 @@
 import type { CalendarCategory, CalendarVisibility } from "@/lib/calendar/types";
 import { parseCalendarRecurrenceInput } from "./parseCalendarRecurrenceInput";
+import { calendarSchema } from "./calendarSchema";
+import { formatZodError } from "./formatZodError";
 
 export function parseCalendarFormData(formData: FormData) {
   const get = (k: string) => {
@@ -12,16 +14,27 @@ export function parseCalendarFormData(formData: FormData) {
   const isAllDay = formData.get("all_day") === "true" || formData.get("all_day") === "on";
   const recurrence = parseCalendarRecurrenceInput(formData);
 
-  return {
+  const rawInput = {
     titleAr: get("title_ar"),
     titleEn: get("title_en") || null,
     description: get("description") || null,
-    category: (get("category") || "event") as CalendarCategory,
+    category: get("category") || "event",
     startsAt: get("starts_at"),
     endsAt: get("ends_at"),
-    allDay: isAllDay,
-    visibility: (get("visibility") || "internal") as CalendarVisibility,
+    visibility: get("visibility") || "internal",
     location: get("location") || null,
+  };
+
+  const parsed = calendarSchema.safeParse(rawInput);
+  if (!parsed.success) {
+    throw formatZodError(parsed.error);
+  }
+
+  return {
+    ...parsed.data,
+    category: parsed.data.category as CalendarCategory,
+    visibility: parsed.data.visibility as CalendarVisibility,
+    allDay: isAllDay,
     image,
     ...recurrence,
   };

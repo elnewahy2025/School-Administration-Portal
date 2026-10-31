@@ -8,9 +8,9 @@ import { updateAchievementRecord } from "@/lib/achievements/updateAchievementRec
 import { uploadCalendarImage } from "@/lib/calendar/uploadCalendarImage";
 import { assertCanRegisterAchievement } from "./assertCanRegisterAchievement";
 import { ValidationError } from "@/lib/errors/ValidationError";
+import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
-import { AppError } from "@/lib/errors/AppError";
 
 export async function updateAchievementAction(
   id: string,
@@ -28,9 +28,14 @@ export async function updateAchievementAction(
     const supabase = await createSupabaseServerClient();
     let imagePath: string | null | undefined = undefined;
     if (data.image) {
-      const uploadRes = await uploadCalendarImage(supabase, data.image, auth.schoolId);
+      const uploadRes = await uploadCalendarImage(
+        supabase,
+        data.image,
+        auth.schoolId,
+        "achievements",
+      );
       if (uploadRes.error) {
-        throw new AppError(uploadRes.error);
+        throw mapDatabaseError(uploadRes.error, "Failed to upload achievement image");
       }
       imagePath = uploadRes.path ?? null;
     }
@@ -48,7 +53,7 @@ export async function updateAchievementAction(
     });
 
     if (res.error) {
-      throw new AppError(res.error);
+      throw mapDatabaseError(res.error, "Failed to update achievement");
     }
 
     revalidatePath("/[locale]/achievements", "page");

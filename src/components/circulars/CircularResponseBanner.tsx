@@ -23,7 +23,7 @@ export function CircularResponseBanner({
   const translatedStatus = statusLabels[response.status] ?? response.status;
 
   return (
-    <div className="flex items-center gap-2 rounded-lg bg-muted/50 p-4 text-sm">
+    <div className="flex items-center gap-2 rounded-xl border border-border bg-[color:var(--panel,var(--muted))] p-4 text-sm">
       <CheckCircle2Icon className="size-5 shrink-0 text-primary" />
       <div>
         <p className="font-medium text-foreground">

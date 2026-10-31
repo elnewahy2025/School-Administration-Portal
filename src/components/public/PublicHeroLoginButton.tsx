@@ -13,7 +13,7 @@ export function PublicHeroLoginButton() {
     <Link href={`/${locale}/login`} className="w-full">
       <Button
         size="lg"
-        className="h-14 sm:h-16 w-full rounded-2xl px-8 text-base sm:text-lg md:text-xl font-black shadow-lg hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 gap-3.5 sm:gap-4 bg-foreground text-background hover:bg-foreground/90 group cursor-pointer tracking-wide"
+        className="h-14 sm:h-16 w-full rounded-2xl px-8 text-base sm:text-lg md:text-xl font-black hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 gap-3.5 sm:gap-4 group cursor-pointer tracking-wide"
       >
         <GraduationCapIcon className="size-6 sm:size-7 transition-transform duration-300 group-hover:scale-110" />
         <span className="font-extrabold">{t("portalSignIn")}</span>

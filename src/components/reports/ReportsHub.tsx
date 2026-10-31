@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { SEGMENT_GROUP, segmentClass } from "@/components/ui/segment-styles";
 import { ExportCsvButton } from "./ExportCsvButton";
 import { ReportFiltersBar } from "./ReportFiltersBar";
 import { CircularsReportSummary } from "./CircularsReportSummary";
@@ -57,23 +57,25 @@ export function ReportsHub({
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-2">
-          <Button
-            variant={activeTab === "circulars" ? "default" : "outline"}
-            size="sm"
+        <div className={SEGMENT_GROUP} role="group">
+          <button
+            type="button"
+            aria-pressed={activeTab === "circulars"}
             onClick={() => setActiveTab("circulars")}
+            className={segmentClass(activeTab === "circulars")}
           >
             {t("circularsTab")}
-          </Button>
-          <Button
-            variant={activeTab === "maintenance" ? "default" : "outline"}
-            size="sm"
+          </button>
+          <button
+            type="button"
+            aria-pressed={activeTab === "maintenance"}
             onClick={() => setActiveTab("maintenance")}
+            className={segmentClass(activeTab === "maintenance")}
           >
             {t("maintenanceTab")}
-          </Button>
+          </button>
         </div>
-        <ExportCsvButton type={activeTab} />
+        <ExportCsvButton type={activeTab} filters={filters} />
       </div>
 
       <ReportFiltersBar

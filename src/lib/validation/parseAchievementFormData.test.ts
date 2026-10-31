@@ -36,4 +36,11 @@ describe("parseAchievementFormData", () => {
     expect(parsed.dateAchieved).toBe("2026-05-15");
     expect(parsed.visibility).toBe("public");
   });
+
+  it("throws ValidationError when title_ar is missing", () => {
+    const formData = new FormData();
+    formData.append("title_en", "Only English Title");
+
+    expect(() => parseAchievementFormData(formData)).toThrow();
+  });
 });

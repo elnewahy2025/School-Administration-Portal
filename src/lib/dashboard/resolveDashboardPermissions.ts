@@ -13,7 +13,6 @@ export function resolveDashboardPermissions(
     canCircular: isOwner || perms.includes("circular.create"),
     canMaintenance: isOwner || perms.includes("maintenance.create"),
     canCalendar: isOwner || perms.includes("calendar.manage"),
-    canViewCompliance:
-      isOwner || perms.includes("reports.view") || perms.includes("circular.create"),
+    canViewCompliance: isOwner || perms.includes("reports.view"),
   };
 }

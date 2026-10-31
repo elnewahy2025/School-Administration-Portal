@@ -7,7 +7,7 @@ export function CircularsReportSummary({ data }: { data: CircularsReportSummaryD
   const t = useTranslations("reports.kpis");
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-x-5 gap-y-12 pt-8 sm:grid-cols-2 lg:grid-cols-4">
       <ReportKpiCard title={t("totalCirculars")} value={data.totalCirculars} icon={FileTextIcon} />
       <ReportKpiCard title={t("publishedCirculars")} value={data.publishedCount} icon={SendIcon} />
       <ReportKpiCard

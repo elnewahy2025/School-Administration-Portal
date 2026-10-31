@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { createUserAction } from "@/actions/settings/createUserAction";
@@ -23,6 +24,7 @@ export function CreateUserForm({
 }) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,6 +47,7 @@ export function CreateUserForm({
       if (res.success) {
         toast.success(t("userCreated"));
         onClose();
+        router.refresh();
       } else {
         toast.error(res.error ?? tCommon("error"));
       }

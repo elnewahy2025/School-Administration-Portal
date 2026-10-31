@@ -5,6 +5,7 @@ import { getCircularsReportData } from "@/lib/reports/getCircularsReportData";
 import { getMaintenanceReportData } from "@/lib/reports/getMaintenanceReportData";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { ReportsHub } from "@/components/reports";
+import { PageHeader } from "@/components/ui/page-header";
 
 export default async function ReportsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -19,16 +20,16 @@ export default async function ReportsPage({ params }: { params: Promise<{ locale
   const t = await getTranslations("reports");
   const [circularsData, maintenanceData, departments] = await Promise.all([
     getCircularsReportData(authCheck.schoolId, {}, authCheck.scopedDepartmentId),
-    getMaintenanceReportData(authCheck.schoolId, {}),
+    getMaintenanceReportData(
+      authCheck.schoolId,
+      authCheck.scopedDepartmentId ? { departmentId: authCheck.scopedDepartmentId } : {},
+    ),
     getSchoolDepartments(authCheck.schoolId),
   ]);
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("title")}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{t("subtitle")}</p>
-      </div>
+      <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
       <ReportsHub
         circularsData={circularsData}
