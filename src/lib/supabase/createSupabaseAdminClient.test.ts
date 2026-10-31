@@ -54,4 +54,25 @@ describe("createSupabaseAdminClient", () => {
       },
     );
   });
+
+  it("sanitizes non-ASCII actor headers with URI encoding", () => {
+    createSupabaseAdminClient({
+      actorId: "actor-123",
+      actorLabel: "أحمد (admin@school.org)",
+    });
+
+    expect(mockCreateClient).toHaveBeenCalledWith(
+      "https://example.supabase.co",
+      "test-service-key",
+      {
+        auth: { autoRefreshToken: false, persistSession: false },
+        global: {
+          headers: {
+            "x-actor-id": "actor-123",
+            "x-actor-label": encodeURIComponent("أحمد (admin@school.org)"),
+          },
+        },
+      },
+    );
+  });
 });

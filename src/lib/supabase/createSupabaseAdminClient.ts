@@ -15,7 +15,9 @@ export function createSupabaseAdminClient(options?: SupabaseAdminClientOptions) 
     headers["x-actor-id"] = options.actorId;
   }
   if (options?.actorLabel) {
-    headers["x-actor-label"] = options.actorLabel;
+    headers["x-actor-label"] = /^[\x00-\x7F]*$/.test(options.actorLabel)
+      ? options.actorLabel
+      : encodeURIComponent(options.actorLabel);
   }
 
   return createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {

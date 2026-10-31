@@ -41,7 +41,7 @@ export async function updateSchoolAction(formData: FormData): Promise<ActionResu
 
     const admin = createSupabaseAdminClient({
       actorId: profile.id,
-      actorLabel: profile.full_name ? `${profile.full_name} (${profile.email})` : profile.email,
+      actorLabel: profile.email || "system",
     });
     const persistResult = await persistSchoolProfile(
       admin,

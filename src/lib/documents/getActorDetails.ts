@@ -10,13 +10,8 @@ export function getActorDetails(profile?: ProfileRow | null): ActorDetails {
     return { actorLabel: "system" };
   }
 
-  const label = profile.full_name
-    ? `${profile.full_name} (${profile.email || ""})`
-    : profile.email || "system";
-
   return {
     actorId: profile.id,
-    actorLabel: label,
+    actorLabel: profile.email || "system",
   };
 }
-
