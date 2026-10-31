@@ -26,7 +26,7 @@ export function SchoolDocumentRowCard({
   return (
     <div className="flex flex-col justify-between gap-4 rounded-xl border border-border bg-card p-4 shadow-xs transition-shadow hover:shadow-md sm:flex-row sm:items-center sm:p-5">
       <div className="flex items-start gap-3.5">
-        <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-gold/15 text-gold">
+        <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-gold shadow-xs">
           {isImage ? <ImageIcon className="size-5 text-gold" /> : <FileTextIcon className="size-5 text-gold" />}
         </div>
 
@@ -35,7 +35,7 @@ export function SchoolDocumentRowCard({
             <h3 className="max-w-sm truncate text-sm font-bold text-foreground sm:max-w-md sm:text-base">
               {document.title}
             </h3>
-            <span className="rounded border border-gold/40 bg-gold/10 px-1.5 py-0.5 text-[10px] font-bold text-gold uppercase">
+            <span className="rounded border border-primary/30 bg-primary px-1.5 py-0.5 text-[10px] font-bold text-gold uppercase shadow-xs">
               {isImage ? "IMG" : "PDF"}
             </span>
           </div>

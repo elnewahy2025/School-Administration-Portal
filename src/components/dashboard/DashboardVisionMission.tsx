@@ -25,7 +25,7 @@ export function DashboardVisionMission({ school }: { school: SchoolFullDetails |
     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
       {vision ? (
         <div className="flex items-start gap-3 rounded-lg border border-border/70 bg-background/60 p-3 text-xs shadow-2xs backdrop-blur-xs">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-gold/15 text-gold">
+          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-gold shadow-xs">
             <EyeIcon className="size-4 text-gold" />
           </div>
           <div className="min-w-0 space-y-0.5">
@@ -37,7 +37,7 @@ export function DashboardVisionMission({ school }: { school: SchoolFullDetails |
 
       {mission ? (
         <div className="flex items-start gap-3 rounded-lg border border-border/70 bg-background/60 p-3 text-xs shadow-2xs backdrop-blur-xs">
-          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-gold/15 text-gold">
+          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-gold shadow-xs">
             <TargetIcon className="size-4 text-gold" />
           </div>
           <div className="min-w-0 space-y-0.5">

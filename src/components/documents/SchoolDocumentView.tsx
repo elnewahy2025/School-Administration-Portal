@@ -57,7 +57,7 @@ export function SchoolDocumentView({
       </div>
 
       <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-card/60 p-12 text-center shadow-xs">
-        <div className="mb-4 grid size-16 place-items-center rounded-2xl bg-gold/15 text-gold shadow-xs">
+        <div className="mb-4 grid size-16 place-items-center rounded-2xl bg-primary text-gold shadow-xs">
           <Icon className="size-8 text-gold" strokeWidth={2} />
         </div>
 

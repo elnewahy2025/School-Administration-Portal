@@ -41,7 +41,7 @@ export function SchoolDocumentsManagerHeader({
   return (
     <div className="flex flex-col justify-between gap-4 border-b border-border/60 pb-5 sm:flex-row sm:items-center">
       <div className="flex items-start gap-3.5">
-        <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gold/15 text-gold shadow-xs">
+        <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-gold shadow-xs">
           <CategoryIcon className="size-6 text-gold" strokeWidth={2.2} />
         </div>
 

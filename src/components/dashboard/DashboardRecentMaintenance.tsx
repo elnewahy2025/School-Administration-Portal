@@ -17,7 +17,9 @@ export function DashboardRecentMaintenance({ requests }: { requests: Maintenance
     <Card className="border-border bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="flex items-center gap-2.5 text-base font-extrabold text-primary">
-          <WrenchIcon className="size-4 text-primary" />
+          <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary text-gold shadow-xs">
+            <WrenchIcon className="size-4 text-gold" />
+          </div>
           <span>{t("recentMaintenance")}</span>
           <GoldDots />
         </CardTitle>

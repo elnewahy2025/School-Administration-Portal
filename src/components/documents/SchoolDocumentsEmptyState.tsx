@@ -15,8 +15,8 @@ export function SchoolDocumentsEmptyState({
 
   return (
     <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/80 bg-card/60 p-12 text-center shadow-xs">
-      <div className="mb-3 grid size-14 place-items-center rounded-full bg-muted text-muted-foreground">
-        <FolderOpenIcon className="size-7" />
+      <div className="mb-3 grid size-14 place-items-center rounded-2xl bg-primary text-gold shadow-xs">
+        <FolderOpenIcon className="size-7 text-gold" />
       </div>
       <h2 className="text-base font-bold text-foreground">{t("noDocuments")}</h2>
       <p className="mt-1 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-sm">

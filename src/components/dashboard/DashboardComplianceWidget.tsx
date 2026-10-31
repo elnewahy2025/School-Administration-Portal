@@ -33,8 +33,8 @@ export function DashboardComplianceWidget({ data }: { data: DashboardComplianceD
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <div className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <PieChartIcon className="size-4" />
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary text-gold shadow-xs">
+              <PieChartIcon className="size-4 text-gold" />
             </div>
             <h2 className="font-heading text-base font-extrabold tracking-tight text-primary sm:text-lg">
               {t("circularCompliance")}
