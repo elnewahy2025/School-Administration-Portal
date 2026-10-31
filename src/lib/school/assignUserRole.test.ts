@@ -3,7 +3,7 @@ import { assignUserRole } from "./assignUserRole";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 describe("assignUserRole", () => {
-  it("scopes role resolution and prefers school-scoped role over system role", async () => {
+  it("scopes role resolution and prefers school-scoped role over system role, setting department", async () => {
     const rolesMock = [
       { id: "system-role-id", school_id: null, is_system: true },
       { id: "school-role-id", school_id: "school-123", is_system: false },
@@ -31,12 +31,13 @@ describe("assignUserRole", () => {
       }),
     } as unknown as SupabaseClient;
 
-    await assignUserRole(supabase, "user-1", "school-123", "admin-1", "custom_role");
+    await assignUserRole(supabase, "user-1", "school-123", "admin-1", "custom_role", "dept-456");
 
     expect(insertMock).toHaveBeenCalledWith({
       user_id: "user-1",
       role_id: "school-role-id",
       school_id: "school-123",
+      department_id: "dept-456",
       assigned_by: "admin-1",
     });
   });
@@ -87,7 +88,13 @@ describe("assignUserRole", () => {
     } as unknown as SupabaseClient;
 
     await expect(
-      assignUserRole(supabase, "user-1", "school-123", "admin-1", "teacher"),
+      assignUserRole(supabase, "user-1", "school-123", "admin-1", "teacher", "dept-789"),
     ).rejects.toThrow("Failed to update user role assignment");
+
+    expect(updateMock).toHaveBeenCalledWith({
+      role_id: "system-role-id",
+      assigned_by: "admin-1",
+      department_id: "dept-789",
+    });
   });
 });

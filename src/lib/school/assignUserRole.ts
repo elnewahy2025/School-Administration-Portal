@@ -8,6 +8,7 @@ export async function assignUserRole(
   schoolId: string,
   assignedBy: string,
   roleKey: string,
+  departmentId?: string | null,
 ): Promise<void> {
   const roleId = await resolveRoleForAssignment(supabase, roleKey, schoolId);
 
@@ -23,9 +24,17 @@ export async function assignUserRole(
   }
 
   if (existingAssignment) {
+    const updatePayload: { role_id: string; assigned_by: string; department_id?: string | null } = {
+      role_id: roleId,
+      assigned_by: assignedBy,
+    };
+    if (departmentId !== undefined) {
+      updatePayload.department_id = departmentId || null;
+    }
+
     const { error: updateError } = await supabase
       .from("user_role_assignments")
-      .update({ role_id: roleId, assigned_by: assignedBy })
+      .update(updatePayload)
       .eq("id", existingAssignment.id);
 
     if (updateError) {
@@ -36,6 +45,7 @@ export async function assignUserRole(
       user_id: userId,
       role_id: roleId,
       school_id: schoolId,
+      department_id: departmentId || null,
       assigned_by: assignedBy,
     });
 

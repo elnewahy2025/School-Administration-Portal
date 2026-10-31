@@ -40,7 +40,14 @@ export async function provisionAuthUser(params: ProvisionUserParams) {
   }
 
   try {
-    await assignUserRole(admin, userId, params.schoolId, params.callerId, params.roleKey);
+    await assignUserRole(
+      admin,
+      userId,
+      params.schoolId,
+      params.callerId,
+      params.roleKey,
+      params.departmentId,
+    );
   } catch (roleErr) {
     await rollbackProvisionedUser(admin, userId);
     return {

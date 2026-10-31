@@ -54,7 +54,13 @@ export async function updateUserAction(input: UpdateUserInput): Promise<ActionRe
       throw mapDatabaseError(res.error, "Failed to update user");
     }
 
-    await applyUserRoleUpdate(input.userId, check.schoolId, check.currentUserId, input.roleKey);
+    await applyUserRoleUpdate(
+      input.userId,
+      check.schoolId,
+      check.currentUserId,
+      input.roleKey,
+      input.departmentId,
+    );
 
     if (input.password) {
       await recordCredentialAudit({

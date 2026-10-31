@@ -3,11 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { assertCanRespondToCircular } from "@/lib/circulars/assertCanRespondToCircular";
 import { validateCircularResponse } from "@/lib/validation/validateCircularResponse";
 import type { CircularResponseStatus, CircularResponseType } from "@/lib/circulars/types";
-import { AuthenticationError } from "@/lib/errors/AuthenticationError";
-import { ForbiddenError } from "@/lib/errors/ForbiddenError";
 import { ValidationError } from "@/lib/errors/ValidationError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
@@ -26,18 +24,7 @@ export async function submitCircularResponseAction({
 }): Promise<ActionResult> {
   try {
     const profile = await getCurrentProfile();
-    if (!profile?.school_id || !profile.department_id) {
-      throw new AuthenticationError("Must belong to a department to respond");
-    }
-
-    const allowed = await hasPermission(
-      "circular.respond",
-      profile.school_id,
-      profile.department_id,
-    );
-    if (!allowed) {
-      throw new ForbiddenError("Unauthorized");
-    }
+    const { schoolId, departmentId } = await assertCanRespondToCircular(profile);
 
     if (!validateCircularResponse(status, reason)) {
       throw new ValidationError("Rejection reason is required");
@@ -46,15 +33,15 @@ export async function submitCircularResponseAction({
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.rpc("submit_circular_response", {
       p_circular_id: circularId,
-      p_school_id: profile.school_id,
-      p_department_id: profile.department_id,
+      p_school_id: schoolId,
+      p_department_id: departmentId,
       p_response_type: responseType,
       p_status: status,
       p_reason: reason?.trim() || null,
     });
 
     if (error) {
-      throw mapDatabaseError(error);
+      throw mapDatabaseError(error, error.message || "Failed to submit circular response");
     }
 
     revalidatePath("/[locale]/circulars", "page");

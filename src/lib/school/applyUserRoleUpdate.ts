@@ -6,9 +6,10 @@ export async function applyUserRoleUpdate(
   schoolId: string,
   callerId: string,
   roleKey?: string | null,
+  departmentId?: string | null,
 ): Promise<void> {
   if (!roleKey) return;
 
   const supabase = await createSupabaseServerClient();
-  await assignUserRole(supabase, userId, schoolId, callerId, roleKey);
+  await assignUserRole(supabase, userId, schoolId, callerId, roleKey, departmentId);
 }
