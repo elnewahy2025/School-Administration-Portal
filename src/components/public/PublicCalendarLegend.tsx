@@ -25,3 +25,4 @@ export function PublicCalendarLegend({ locale }: PublicCalendarLegendProps) {
     </div>
   );
 }
+

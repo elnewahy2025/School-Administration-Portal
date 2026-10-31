@@ -23,3 +23,4 @@ describe("CircularVisibilityBadge", () => {
     expect(screen.getByText("داخلي")).toBeInTheDocument();
   });
 });
+

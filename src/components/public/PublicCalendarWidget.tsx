@@ -61,3 +61,4 @@ export function PublicCalendarWidget({ items, locale }: PublicCalendarWidgetProp
     </div>
   );
 }
+

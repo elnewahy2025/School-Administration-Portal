@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import type { CircularRow, CircularTargetRow, CircularAttachmentRow } from "./types";
-
 import { getCircularAttachments } from "./getCircularAttachments";
+import { fetchCircularBaseRow } from "./fetchCircularBaseRow";
 
 export type CircularDetail = CircularRow & {
   targets: CircularTargetRow[];
@@ -18,22 +18,17 @@ type TargetJoinResult = {
 
 export async function getCircularById(circularId: string): Promise<CircularDetail | null> {
   const supabase = await createSupabaseServerClient();
-  const [{ data: circular, error: circError }, { data: targets }, attachments] = await Promise.all([
-    supabase
-      .from("circulars")
-      .select(
-        "id, school_id, ref_number, title, body, category, priority, status, visibility, response_type, response_instructions, allow_response_revision, publish_at, due_at, created_by, closed_at, created_at",
-      )
-      .eq("id", circularId)
-      .maybeSingle(),
+  const circular = await fetchCircularBaseRow(supabase, circularId);
+
+  if (!circular) return null;
+
+  const [{ data: targets }, attachments] = await Promise.all([
     supabase
       .from("circular_targets")
       .select("id, circular_id, department_id, role_key, departments(name_ar, name_en)")
       .eq("circular_id", circularId),
     getCircularAttachments(circularId).catch(() => []),
   ]);
-
-  if (circError || !circular) return null;
 
   const rawTargets = (targets as unknown as TargetJoinResult[]) ?? [];
   const mappedTargets: CircularTargetRow[] = rawTargets.map((t) => ({
@@ -45,7 +40,7 @@ export async function getCircularById(circularId: string): Promise<CircularDetai
   }));
 
   return {
-    ...(circular as CircularRow),
+    ...circular,
     targets: mappedTargets,
     attachments,
   };

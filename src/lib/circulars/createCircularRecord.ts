@@ -24,7 +24,7 @@ export async function createCircularRecord(
   if (refError) return { error: refError.message };
   if (!refNum) return { error: "Failed to generate reference number" };
 
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from("circulars")
     .insert({
       school_id: params.schoolId,
@@ -40,6 +40,26 @@ export async function createCircularRecord(
     })
     .select("id")
     .single();
+
+  if (error && (error.code === "42703" || error.message?.includes("visibility"))) {
+    const fallback = await supabase
+      .from("circulars")
+      .insert({
+        school_id: params.schoolId,
+        ref_number: refNum,
+        title: params.title,
+        body: params.body,
+        priority: params.priority,
+        status: "draft",
+        response_type: params.responseType,
+        due_at: params.dueAt,
+        created_by: params.createdBy,
+      })
+      .select("id")
+      .single();
+    data = fallback.data;
+    error = fallback.error;
+  }
 
   if (error) return { error: error.message };
   if (!data) return { error: "Failed to create circular" };

@@ -19,3 +19,4 @@ export function CircularVisibilityBadge({ visibility }: { visibility?: CircularV
     </Badge>
   );
 }
+

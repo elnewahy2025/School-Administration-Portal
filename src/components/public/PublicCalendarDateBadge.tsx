@@ -22,3 +22,4 @@ export function PublicCalendarDateBadge({ date }: PublicCalendarDateBadgeProps) 
     </div>
   );
 }
+

@@ -6,6 +6,7 @@ import type {
   CircularVisibility,
 } from "./types";
 import { insertCircularTargets } from "./insertCircularTargets";
+import { buildCircularUpdatePayload } from "./buildCircularUpdatePayload";
 
 export async function updateCircularRecord(
   supabase: SupabaseClient,
@@ -23,35 +24,25 @@ export async function updateCircularRecord(
     departmentIds?: string[];
   },
 ): Promise<{ success: boolean; error?: string }> {
-  const updatePayload: Record<string, unknown> = {
-    title: params.title,
-    body: params.body,
-    priority: params.priority,
-    response_type: params.responseType,
-    due_at: params.dueAt,
-    updated_at: new Date().toISOString(),
-  };
+  const updatePayload = buildCircularUpdatePayload(params);
 
-  if (params.visibility) {
-    updatePayload.visibility = params.visibility;
-  }
-  if (params.status) {
-    updatePayload.status = params.status;
-  }
-  if (params.publishAt !== undefined) {
-    updatePayload.publish_at = params.publishAt;
-  }
-
-  const { error } = await supabase
+  let { error } = await supabase
     .from("circulars")
     .update(updatePayload)
     .eq("id", params.circularId);
 
+  if (error && (error.code === "42703" || error.message?.includes("visibility"))) {
+    delete updatePayload.visibility;
+    const retry = await supabase
+      .from("circulars")
+      .update(updatePayload)
+      .eq("id", params.circularId);
+    error = retry.error;
+  }
+
   if (error) return { success: false, error: error.message };
 
   if (params.departmentIds) {
-    // Both halves are checked: a delete that matched nothing used to be a
-    // silent no-op, so removed departments stayed targeted (H-15).
     const { error: deleteError } = await supabase
       .from("circular_targets")
       .delete()

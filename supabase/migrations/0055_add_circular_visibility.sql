@@ -66,3 +66,4 @@ create policy circular_attachments_select_public on public.circular_attachments
         and c.visibility = 'public'
     )
   );
+

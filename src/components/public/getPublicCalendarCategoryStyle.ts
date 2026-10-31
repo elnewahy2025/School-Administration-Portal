@@ -45,3 +45,4 @@ export function getPublicCalendarCategoryStyle(category?: string | null): Public
       };
   }
 }
+

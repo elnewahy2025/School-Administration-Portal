@@ -33,3 +33,4 @@ describe("getPublicCalendarCategoryStyle", () => {
     expect(style.labelEn).toBe("General Event");
   });
 });
+
