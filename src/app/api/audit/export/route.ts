@@ -1,6 +1,6 @@
 import { withApiErrorHandler, ForbiddenError } from "@/lib/errors";
 import { assertCanViewAudit } from "@/lib/audit/assertCanViewAudit";
-import { getSchoolAuditLogs } from "@/lib/school/getSchoolAuditLogs";
+import { fetchAllSchoolAuditLogs } from "@/lib/school/fetchAllSchoolAuditLogs";
 import { buildAuditCsv } from "@/lib/audit/buildAuditCsv";
 
 async function handleAuditExport(request: Request) {
@@ -16,17 +16,15 @@ async function handleAuditExport(request: Request) {
   const startDate = searchParams.get("startDate") || undefined;
   const endDate = searchParams.get("endDate") || undefined;
 
-  const result = await getSchoolAuditLogs(authCheck.schoolId, {
+  const logs = await fetchAllSchoolAuditLogs(authCheck.schoolId, {
     action,
     entityType,
     actorLabel,
     startDate,
     endDate,
-    page: 1,
-    pageSize: 1000,
   });
 
-  const csvContent = buildAuditCsv(result.logs);
+  const csvContent = buildAuditCsv(logs);
   const filename = `audit-logs-${Date.now()}.csv`;
 
   return new Response(csvContent, {
@@ -34,6 +32,9 @@ async function handleAuditExport(request: Request) {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
       "Content-Disposition": `attachment; filename="${filename}"`,
+      "Cache-Control": "no-store, no-cache, must-revalidate, private",
+      "Pragma": "no-cache",
+      "Expires": "0",
     },
   });
 }

@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { mockAssertCanViewAudit, mockGetSchoolAuditLogs, mockBuildAuditCsv } = vi.hoisted(() => ({
+const { mockAssertCanViewAudit, mockFetchAllSchoolAuditLogs, mockBuildAuditCsv } = vi.hoisted(() => ({
   mockAssertCanViewAudit: vi.fn(),
-  mockGetSchoolAuditLogs: vi.fn(),
+  mockFetchAllSchoolAuditLogs: vi.fn(),
   mockBuildAuditCsv: vi.fn(),
 }));
 
@@ -10,8 +10,8 @@ vi.mock("@/lib/audit/assertCanViewAudit", () => ({
   assertCanViewAudit: mockAssertCanViewAudit,
 }));
 
-vi.mock("@/lib/school/getSchoolAuditLogs", () => ({
-  getSchoolAuditLogs: mockGetSchoolAuditLogs,
+vi.mock("@/lib/school/fetchAllSchoolAuditLogs", () => ({
+  fetchAllSchoolAuditLogs: mockFetchAllSchoolAuditLogs,
 }));
 
 vi.mock("@/lib/audit/buildAuditCsv", () => ({
@@ -45,10 +45,9 @@ describe("GET /api/audit/export", () => {
       isOwner: false,
     });
 
-    mockGetSchoolAuditLogs.mockResolvedValue({
-      logs: [{ id: "log-1", action: "profiles.update" }],
-      totalCount: 1,
-    });
+    mockFetchAllSchoolAuditLogs.mockResolvedValue([
+      { id: "log-1", action: "profiles.update" },
+    ]);
 
     mockBuildAuditCsv.mockReturnValue("\uFEFFTimestamp,Action\r\n2026-10-31,profiles.update");
 
@@ -58,6 +57,7 @@ describe("GET /api/audit/export", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("Content-Type")).toContain("text/csv");
     expect(response.headers.get("Content-Disposition")).toContain("attachment;");
+    expect(response.headers.get("Cache-Control")).toBe("no-store, no-cache, must-revalidate, private");
     const text = await response.text();
     expect(text).toContain("profiles.update");
   });
