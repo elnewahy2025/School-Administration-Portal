@@ -53,3 +53,5 @@ supabase/.temp/
 # Template is committed; real values live only in .env.local
 !.env.example
 supabase/.branches/
+
+.vercel
