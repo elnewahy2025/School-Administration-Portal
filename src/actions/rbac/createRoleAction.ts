@@ -3,7 +3,8 @@
 import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { getFirstActiveSchoolId } from "@/lib/school/getFirstActiveSchoolId";
 import {
   sanitizeError,
   formatActionErrorResult,
@@ -22,14 +23,18 @@ export async function createRoleAction(
 ): Promise<ActionResult> {
   try {
     const profile = await getCurrentProfile();
-    const schoolId = profile?.school_id;
-    if (!schoolId) {
-      throw new AuthenticationError("No school associated with profile");
+    if (!profile) {
+      throw new AuthenticationError("User is not authenticated");
     }
 
-    const allowed = await hasPermission("roles.manage", schoolId);
-    if (!allowed) {
-      throw new ForbiddenError("Unauthorized");
+    const isOwner = await isPlatformOwner(profile.id);
+    if (!isOwner) {
+      throw new ForbiddenError("Only the platform owner can create roles");
+    }
+
+    const schoolId = profile.school_id ?? (await getFirstActiveSchoolId());
+    if (!schoolId) {
+      throw new AuthenticationError("No school associated with profile");
     }
 
     const { trimmedName, trimmedKey } = validateCreateRoleInput(name, key);

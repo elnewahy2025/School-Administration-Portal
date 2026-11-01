@@ -60,7 +60,7 @@ export function EditRoleDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <ShieldCheckIcon className="size-5 text-primary" />
-            <span>{role.is_system ? t("viewRole") : t("editRole")}</span>
+            <span>{t("editRole")}</span>
           </DialogTitle>
         </DialogHeader>
 
@@ -72,7 +72,7 @@ export function EditRoleDialog({
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              disabled={isPending || role.is_system}
+              disabled={isPending}
             />
           </div>
 
@@ -81,19 +81,17 @@ export function EditRoleDialog({
             <PermissionCategoriesList
               selectedKeys={selectedKeys}
               onToggle={handleToggle}
-              disabled={isPending || role.is_system}
+              disabled={isPending}
             />
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
-              {role.is_system ? tCommon("close") : tCommon("cancel")}
+              {tCommon("cancel")}
             </Button>
-            {!role.is_system && (
-              <Button type="submit" disabled={isPending}>
-                {tCommon("save")}
-              </Button>
-            )}
+            <Button type="submit" disabled={isPending}>
+              {tCommon("save")}
+            </Button>
           </div>
         </form>
       </DialogContent>

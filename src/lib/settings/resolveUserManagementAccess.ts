@@ -37,10 +37,12 @@ export async function resolveUserManagementAccess(
   // the old service-role fallback inside getSchoolUsers.
   const schoolId = profile.school_id ?? (owner ? await getFirstActiveSchoolId() : null);
 
-  const [canManageUsers, canManageRoles] = await Promise.all([
+  const [canManageUsers] = await Promise.all([
     owner || (schoolId ? hasPermission("users.manage", schoolId).catch(() => false) : false),
-    owner || (schoolId ? hasPermission("roles.manage", schoolId).catch(() => false) : false),
   ]);
+
+  // Only the platform owner can view and manage roles and permissions
+  const canManageRoles = owner;
 
   return { isPlatformOwner: owner, schoolId, canManageUsers, canManageRoles };
 }

@@ -3,7 +3,7 @@
 import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import {
   sanitizeError,
   formatActionErrorResult,
@@ -18,17 +18,22 @@ import { assertCanDeleteRoleRecord } from "./assertCanDeleteRoleRecord";
 export async function deleteRoleAction(roleId: string): Promise<ActionResult> {
   try {
     const profile = await getCurrentProfile();
-    if (!profile?.school_id) {
-      throw new AuthenticationError("No school associated with profile");
+    if (!profile) {
+      throw new AuthenticationError("User is not authenticated");
     }
 
-    const allowed = await hasPermission("roles.manage", profile.school_id);
-    if (!allowed) {
-      throw new ForbiddenError("Unauthorized");
+    const isOwner = await isPlatformOwner(profile.id);
+    if (!isOwner) {
+      throw new ForbiddenError("Only the platform owner can delete roles");
     }
 
     const supabase = await createSupabaseServerClient();
-    const canDelete = await assertCanDeleteRoleRecord(supabase, roleId, profile.school_id);
+    const canDelete = await assertCanDeleteRoleRecord(
+      supabase,
+      roleId,
+      profile.school_id,
+      isOwner,
+    );
     if (!canDelete.allowed) {
       throw new ValidationError(canDelete.error || "Cannot delete role");
     }

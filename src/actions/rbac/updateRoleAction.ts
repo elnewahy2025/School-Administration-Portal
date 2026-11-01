@@ -3,7 +3,7 @@
 import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { assertCanUpdateRoleRecord } from "./assertCanUpdateRoleRecord";
 import { syncRolePermissions } from "./syncRolePermissions";
 import {
@@ -23,13 +23,13 @@ export async function updateRoleAction(
 ): Promise<ActionResult> {
   try {
     const profile = await getCurrentProfile();
-    if (!profile?.school_id) {
-      throw new AuthenticationError("No school associated with profile");
+    if (!profile) {
+      throw new AuthenticationError("User is not authenticated");
     }
 
-    const allowed = await hasPermission("roles.manage", profile.school_id);
-    if (!allowed) {
-      throw new ForbiddenError("Unauthorized");
+    const isOwner = await isPlatformOwner(profile.id);
+    if (!isOwner) {
+      throw new ForbiddenError("Only the platform owner can update roles and permissions");
     }
 
     const trimmedName = name.trim();
@@ -38,7 +38,7 @@ export async function updateRoleAction(
     }
 
     const supabase = await createSupabaseServerClient();
-    await assertCanUpdateRoleRecord(supabase, roleId, profile.school_id);
+    await assertCanUpdateRoleRecord(supabase, roleId, profile.school_id, isOwner);
 
     const { error: updateError } = await supabase
       .from("roles")
