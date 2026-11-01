@@ -17,30 +17,31 @@ export function UserRolesTabNav({
 }) {
   const t = useTranslations("rbac");
 
+  // If only one tab is available (e.g. roles are hidden for admins), do not display tab navigation
+  if (!showRoles || !showUsers) {
+    return null;
+  }
+
   return (
     <div className="flex gap-2 border-b border-border">
-      {showUsers && (
-        <Button
-          variant={activeTab === "users" ? "default" : "ghost"}
-          size="sm"
-          onClick={() => onTabChange("users")}
-          className="gap-2 rounded-b-none"
-        >
-          <UsersIcon className="size-4" />
-          <span>{t("tabUsers")}</span>
-        </Button>
-      )}
-      {showRoles && (
-        <Button
-          variant={activeTab === "roles" ? "default" : "ghost"}
-          size="sm"
-          onClick={() => onTabChange("roles")}
-          className="gap-2 rounded-b-none"
-        >
-          <ShieldCheckIcon className="size-4" />
-          <span>{t("tabRoles")}</span>
-        </Button>
-      )}
+      <Button
+        variant={activeTab === "users" ? "default" : "ghost"}
+        size="sm"
+        onClick={() => onTabChange("users")}
+        className="gap-2 rounded-b-none"
+      >
+        <UsersIcon className="size-4" />
+        <span>{t("tabUsers")}</span>
+      </Button>
+      <Button
+        variant={activeTab === "roles" ? "default" : "ghost"}
+        size="sm"
+        onClick={() => onTabChange("roles")}
+        className="gap-2 rounded-b-none"
+      >
+        <ShieldCheckIcon className="size-4" />
+        <span>{t("tabRoles")}</span>
+      </Button>
     </div>
   );
 }

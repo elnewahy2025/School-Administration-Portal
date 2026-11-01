@@ -26,7 +26,7 @@ export default async function UsersSettingsPage({
   const [users, departments, roles] = await Promise.all([
     access.canManageUsers ? getSchoolUsers(access.schoolId) : Promise.resolve([]),
     access.canManageUsers ? getSchoolDepartments(access.schoolId) : Promise.resolve([]),
-    access.canManageRoles ? getSchoolRoles(access.schoolId) : Promise.resolve([]),
+    getSchoolRoles(access.schoolId),
   ]);
 
   return (
