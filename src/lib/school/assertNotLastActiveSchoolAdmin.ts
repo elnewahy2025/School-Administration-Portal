@@ -1,16 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { ConflictError } from "@/lib/errors/ConflictError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { checkAdminFallback } from "./checkAdminFallback";
 
-/**
- * Refuses to deactivate the only active school administrator (M-10).
- *
- * The database trigger `enforce_profile_self_update` enforces this for
- * end-user writes, but both the toggle and the edit form go through the
- * service-role client, which is exempt from `auth.uid()`-based guards. This
- * check closes that path; the definition of "last administrator" lives in
- * `public.is_last_active_school_admin` (0046) so the two cannot drift.
- */
 export async function assertNotLastActiveSchoolAdmin(
   adminClient: SupabaseClient,
   userId: string,
@@ -20,6 +12,10 @@ export async function assertNotLastActiveSchoolAdmin(
   });
 
   if (error) {
+    if (error.code === "PGRST202" || error.code === "42883") {
+      await checkAdminFallback(adminClient, userId);
+      return;
+    }
     throw mapDatabaseError(error);
   }
 

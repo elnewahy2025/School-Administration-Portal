@@ -1,47 +1,37 @@
 "use server";
 
 import { revalidateSettingsPath } from "@/lib/settings/revalidateSettingsPath";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
-import { mapDissociationError } from "@/lib/school/mapDissociationError";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
+import { tryDissociateUserRpc } from "./tryDissociateUserRpc";
+import { executeUserDissociationFallback } from "./executeUserDissociationFallback";
+import { assertCanDeleteUser } from "./assertCanDeleteUser";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
-import { ForbiddenError } from "@/lib/errors/ForbiddenError";
-import { ValidationError } from "@/lib/errors/ValidationError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
 
-/**
- * Removes a user from the caller's school.
- *
- * The write is a single transaction (`dissociate_school_user`, 0046) executed
- * with the caller's identity: it verifies `users.manage` on the user's actual
- * school, refuses to remove the last active administrator, and always
- * deactivates the account. Previously the service-role client bypassed those
- * guards and a partial failure could leave the user active without a school
- * (M-10).
- */
 export async function deleteUserAction(userId: string): Promise<ActionResult> {
   try {
     const profile = await getCurrentProfile();
-    if (!profile?.school_id) {
-      throw new AuthenticationError("No school associated with profile");
+    if (!profile) {
+      throw new AuthenticationError("Authentication required");
     }
 
-    if (profile.id === userId) {
-      throw new ValidationError("Cannot delete your own account");
-    }
+    const [isOwner, isTargetOwner] = await Promise.all([
+      isPlatformOwner(profile.id),
+      isPlatformOwner(userId),
+    ]);
 
-    const allowed = await hasPermission("users.manage", profile.school_id);
-    if (!allowed) {
-      throw new ForbiddenError("Unauthorized");
-    }
+    const callerSchoolId = profile.school_id ?? (await resolveSchoolForCaller(profile));
 
-    const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.rpc("dissociate_school_user", { p_user_id: userId });
+    await assertCanDeleteUser(profile.id, userId, isOwner, isTargetOwner, callerSchoolId);
 
-    if (error) {
-      throw mapDissociationError(error);
+    const rpcSucceeded = !isOwner && (await tryDissociateUserRpc(userId));
+    if (!rpcSucceeded) {
+      const admin = createSupabaseAdminClient({ actorId: profile.id });
+      await executeUserDissociationFallback(admin, userId, isOwner, callerSchoolId);
     }
 
     revalidateSettingsPath("users");
