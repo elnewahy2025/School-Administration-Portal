@@ -50,4 +50,12 @@ describe("mergeSchoolSettings", () => {
     expect(merged.vision).toBe("رؤية المدرسة");
     expect(merged.mission).toBe("رسالة المدرسة");
   });
+
+  it("selects the newest updated_at between school and settings", () => {
+    const olderSchool = { ...mockSchool, updated_at: "2026-01-01T00:00:00.000Z" };
+    const merged = mergeSchoolSettings(olderSchool, {
+      updated_at: "2026-06-01T00:00:00.000Z",
+    });
+    expect(merged.updated_at).toBe("2026-06-01T00:00:00.000Z");
+  });
 });

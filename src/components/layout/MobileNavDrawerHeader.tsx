@@ -43,7 +43,7 @@ export function MobileNavDrawerHeader({
         aria-label={t("closeMenu")}
         className="ms-2 shrink-0 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
       >
-        <XIcon className="size-5 text-gold" />
+        <XIcon className="size-5" />
       </Button>
     </div>
   );

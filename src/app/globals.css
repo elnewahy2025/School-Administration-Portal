@@ -369,35 +369,27 @@
     color: var(--primary-foreground) !important;
   }
 
-  /* Unified Gold Visual Identity & Blue (#182C55) Background for all UI icons across all pages & functions */
-  svg.lucide:not([data-no-bg]):not(.text-destructive):not(.text-destructive-foreground):not(.text-red-500):not(.text-red-600),
-  svg.custom-doc-icon:not([data-no-bg]) {
-    color: var(--gold, #ffcd35);
-    background-color: var(--icon-bg, #182c55);
-    border-radius: 0.375rem;
-    padding: 0.2rem;
-    box-sizing: content-box;
+  /*
+   * Icons across all pages and functions:
+   * Lucide and custom icons naturally inherit currentColor to match the text
+   * next to them and honor the active theme (MOE, Al-Nada, Light, Dark, Emerald, Midnight).
+   * Elements with explicit color utilities (.text-gold, .text-destructive, etc.)
+   * cleanly take their intended token.
+   */
+  svg.lucide,
+  svg.custom-doc-icon {
+    color: currentColor;
   }
 
-  /* When an icon is already nested inside an icon-badge container with the blue background, remove redundant inner background and padding */
-  [class*="bg-primary"] > svg.lucide,
-  [class*="bg-primary"] > svg.custom-doc-icon,
-  [class*="bg-icon-bg"] > svg.lucide,
-  [class*="bg-icon-bg"] > svg.custom-doc-icon,
-  [class*="bg-sidebar"] > svg.lucide,
-  [class*="bg-sidebar"] > svg.custom-doc-icon,
-  .no-icon-bg svg.lucide,
-  .no-icon-bg svg.custom-doc-icon {
-    background-color: transparent;
-    padding: 0;
-    box-sizing: border-box;
+  svg.lucide.text-gold,
+  svg.custom-doc-icon.text-gold {
+    color: var(--gold, #ffcd35) !important;
   }
 
   svg.lucide.text-destructive,
+  svg.lucide.text-destructive-foreground,
   svg.lucide.text-red-500,
   svg.lucide.text-red-600 {
     color: var(--destructive, #dc3545) !important;
-    background-color: transparent !important;
-    padding: 0 !important;
   }
 }

@@ -1,12 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n";
-import {
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  ClockIcon,
-  TargetIcon,
-} from "lucide-react";
+import { ArrowRightIcon, ArrowLeftIcon, ClockIcon, TargetIcon } from "lucide-react";
 import { useLocale } from "next-intl";
 import { GoldDots } from "@/components/ui/gold-dots";
 
@@ -51,7 +46,7 @@ export function SchoolDocumentView({
           href="/dashboard"
           className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
-          <BackArrow className="size-4 text-gold" />
+          <BackArrow className="size-4" />
           <span>{isRtl ? "العودة للوحة التحكم" : "Back to Dashboard"}</span>
         </Link>
       </div>
@@ -62,7 +57,7 @@ export function SchoolDocumentView({
         </div>
 
         <div className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:text-amber-400">
-          <ClockIcon className="size-3.5 text-gold" />
+          <ClockIcon className="size-3.5" />
           <span>{isRtl ? "قيد التجهيز والإعداد" : "Under Preparation"}</span>
         </div>
 

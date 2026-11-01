@@ -13,7 +13,13 @@ export type ClientErrorSource = "boundary" | "error" | "unhandledrejection";
  */
 export function reportClientError(error: unknown, source: ClientErrorSource): string {
   const correlationId = resolveClientErrorReference(error);
-  const message = (error instanceof Error ? error.message : String(error ?? "")).slice(0, 2_000);
+  const extractedMessage =
+    (error instanceof Error
+      ? error.message
+      : typeof error === "object" && error && "message" in error
+        ? String((error as { message: unknown }).message)
+        : String(error ?? "")) || "Unknown client error";
+  const message = extractedMessage.slice(0, 2_000);
 
   if (!isDuplicateClientError(`${source}:${message}`)) {
     const payload = {

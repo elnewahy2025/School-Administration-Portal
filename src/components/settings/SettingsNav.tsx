@@ -43,7 +43,7 @@ export function SettingsNav({
                   : "border-transparent text-muted-foreground hover:border-border hover:text-foreground",
               )}
             >
-              <Icon className="size-4 shrink-0 text-gold" />
+              <Icon className="size-4 shrink-0" />
               <span>{tab.label}</span>
             </Link>
           );

@@ -49,22 +49,39 @@ describe("assertCanDeleteRoleRecord", () => {
     expect(res.error).toBe("Cannot delete the platform owner role");
   });
 
-  it("allows owner to delete a role even if it has active user assignments", async () => {
+  it("blocks deleting a role that has active user assignments", async () => {
     const rolesMock = {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       maybeSingle: vi.fn().mockResolvedValue({
-        data: { id: "role-with-users", key: "custom_role", is_system: false, school_id: "school-1" },
+        data: {
+          id: "role-with-users",
+          key: "custom_role",
+          is_system: false,
+          school_id: "school-1",
+        },
         error: null,
       }),
     };
+    const uraMock = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockResolvedValue({ data: [{ id: "assignment-1" }], error: null }),
+    };
 
     const supabase = {
-      from: vi.fn(() => rolesMock),
+      from: vi.fn((table: string) => {
+        if (table === "roles") return rolesMock;
+        if (table === "user_role_assignments") return uraMock;
+        return {};
+      }),
     } as unknown as SupabaseClient;
 
     const res = await assertCanDeleteRoleRecord(supabase, "role-with-users", "school-1", true);
-    expect(res.allowed).toBe(true);
+    expect(res.allowed).toBe(false);
+    expect(res.error).toBe(
+      "Cannot delete role assigned to active users. Please reassign or delete assigned users first.",
+    );
   });
 
   it("blocks non-owner from deleting roles", async () => {
@@ -86,4 +103,3 @@ describe("assertCanDeleteRoleRecord", () => {
     expect(res.error).toBe("Only the platform owner can delete roles");
   });
 });
-

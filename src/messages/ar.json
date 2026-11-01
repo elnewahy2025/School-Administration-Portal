@@ -123,7 +123,20 @@
     "overallCompliance": "نسبة الالتزام الإجمالية",
     "selectCircular": "اختر التعميم",
     "allCircularsSummary": "جميع التعاميم (إجمالي)",
+    "showingRecentCirculars": "عرض أحدث {shown} من {total} تعميمًا",
     "noComplianceData": "لا توجد بيانات استجابة للتعاميم حالياً",
+    "complianceByDepartment": "الالتزام حسب القسم",
+    "complianceTarget": "المستهدف {percent}%",
+    "sortedByLowestCompliance": "الأدنى التزامًا أولًا",
+    "legendCompliant": "مستجيب",
+    "legendOverdue": "متأخر",
+    "legendNotYetDue": "لم يحن موعده",
+    "compliantOfTargeted": "{compliant} من {targeted} مستجيبة",
+    "outstandingOfTargeted": "{outstanding} متبقية من {targeted} ({overdue} متأخرة)",
+    "showAllDepartments": "عرض جميع الأقسام",
+    "showLowestDepartments": "عرض الأدنى {count}",
+    "respondedOf": "{responded} من {targeted} استجابة مطلوبة",
+    "allResponded": "جميع الأقسام استجابت",
     "respondedDepartments": "الأقسام المستجيبة",
     "pendingDepartments": "الأقسام التي لم تستجب"
   },
@@ -709,6 +722,7 @@
     "roleAuditor": "مدقق حسابات",
     "roleOwner": "مدير النظام",
     "confirmDeleteRoleWithUsers": "تحذير هام: هذا الدور معين حالياً لـ {count} مستخدم. حذفه إجراء خطير جداً وسيؤدي إلى تجريد هؤلاء المستخدمين من صلاحياتهم. هل أنت متأكد من المتابعة أم تفضل إعادة تعيين أو حذف المستخدمين أولاً؟",
+    "cannotDeleteRoleWithUsers": "لا يمكن حذف دور مسند إليه مستخدمون نشطون. يُرجى إعادة تعيين أو حذف المستخدمين أولاً.",
     "confirmDeleteRole": "هل أنت متأكد من رغبتك في حذف هذا الدور بشكل نهائي؟"
   },
   "common": {
@@ -747,6 +761,7 @@
     "goHome": "العودة للرئيسية",
     "skipToMain": "الانتقال إلى المحتوى الرئيسي",
     "clear": "مسح التصفية",
+    "reset": "إعادة ضبط",
     "schoolLogoAlt": "شعار المدرسة"
   },
   "errors": {

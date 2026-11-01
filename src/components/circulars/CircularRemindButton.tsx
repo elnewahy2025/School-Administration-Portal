@@ -25,7 +25,7 @@ export function CircularRemindButton({
   return (
     <>
       <Button variant={variant} size={size} onClick={() => setOpen(true)} className={className}>
-        <BellRingIcon className="size-3.5" />
+        <BellRingIcon className="size-3.5 text-inherit" />
         <span>{t("urgePending")}</span>
       </Button>
 

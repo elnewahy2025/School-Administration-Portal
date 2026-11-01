@@ -43,7 +43,7 @@ export function AppHeaderGreeting({
         </span>
       )}
       <div className="hidden items-center gap-2 rounded-xl border border-sidebar-border/80 bg-sidebar px-3 py-1.5 text-xs font-semibold text-sidebar-foreground/80 shadow-2xs sm:text-sm lg:flex">
-        <CalendarIcon className="size-4 text-gold" />
+        <CalendarIcon className="size-4" />
         <span>{todayStr}</span>
       </div>
     </div>

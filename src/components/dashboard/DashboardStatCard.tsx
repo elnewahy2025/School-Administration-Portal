@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { ArrowRightIcon, type LucideIcon } from "lucide-react";
 import {
   CARD_DIAMOND_ICON,
-  CARD_DIAMOND_SM,
+  CARD_DIAMOND_SM_SOLID,
   CARD_FOOTER_BAR,
   CARD_RULE,
   CARD_SHELL,
@@ -28,7 +28,7 @@ export function DashboardStatCard({ item }: { item: DashboardStatItem }) {
       href={item.href}
       className={`${CARD_SHELL} h-full px-5 pt-12 pb-0 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-gold`}
     >
-      <div className={CARD_DIAMOND_SM}>
+      <div className={CARD_DIAMOND_SM_SOLID}>
         <Icon className={`size-6 ${CARD_DIAMOND_ICON}`} />
       </div>
       <div className="text-3xl font-extrabold tracking-tight text-foreground">{item.count}</div>
@@ -39,7 +39,7 @@ export function DashboardStatCard({ item }: { item: DashboardStatItem }) {
       </p>
       <span className={CARD_FOOTER_BAR}>
         <span>{t("viewAll")}</span>
-        <ArrowRightIcon className="size-4 transition-transform duration-[400ms] group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+        <ArrowRightIcon className="size-4 text-inherit transition-transform duration-[400ms] group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
       </span>
     </Link>
   );

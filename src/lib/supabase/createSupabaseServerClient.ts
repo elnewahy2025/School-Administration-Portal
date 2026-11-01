@@ -15,8 +15,11 @@ export async function createSupabaseServerClient() {
           for (const { name, value, options } of cookiesToSet) {
             cookieStore.set(name, value, options);
           }
-        } catch {
-          // Called from a Server Component: cookies cannot be set there.
+        } catch (error) {
+          // Expected in a Server Component (cookies are read-only there). In a
+          // Server Action it means the session is not persisted, which must not
+          // disappear silently.
+          console.error("[supabase] could not write auth cookies", error);
         }
       },
     },

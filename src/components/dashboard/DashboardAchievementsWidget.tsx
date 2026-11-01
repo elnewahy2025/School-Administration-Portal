@@ -32,7 +32,7 @@ export function DashboardAchievementsWidget({
           className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
         >
           <span>{t("viewAll")}</span>
-          <ArrowRightIcon className="size-3 rtl:rotate-180" />
+          <ArrowRightIcon className="size-3 text-inherit rtl:rotate-180" />
         </Link>
       </CardHeader>
       <CardContent className="space-y-2.5">

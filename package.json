@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:rls": "node scripts/runLocalRlsTests.mjs",
+    "seed:local": "node scripts/seedLocal.mjs",
     "storage:sweep": "node scripts/sweepOrphanedStorageObjects.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

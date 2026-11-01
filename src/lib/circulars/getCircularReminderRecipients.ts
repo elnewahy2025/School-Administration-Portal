@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { getDepartmentMemberUserIds } from "./getDepartmentMemberUserIds";
 import { getPendingCircularDepartmentIds } from "./getPendingCircularDepartmentIds";
+import { getPendingDepartmentIdsForSchool } from "./getPendingDepartmentIdsForSchool";
 
 export async function getCircularReminderRecipients({
   supabase,
@@ -39,19 +40,8 @@ export async function getCircularReminderRecipients({
     return getDepartmentMemberUserIds(supabase, schoolId, pendingDeptIds);
   }
 
-  const { data: activeTargets, error: targetsError } = await supabase
-    .from("circular_targets")
-    .select("department_id, circular:circulars!inner(school_id, status)")
-    .eq("circular.school_id", schoolId)
-    .in("circular.status", ["published", "in_progress"]);
-
-  if (targetsError) {
-    throw mapDatabaseError(targetsError);
-  }
-
-  const deptIds = Array.from(
-    new Set((activeTargets ?? []).map((t) => t.department_id).filter(Boolean)),
-  ) as string[];
-
-  return getDepartmentMemberUserIds(supabase, schoolId, deptIds);
+  // "Pending" without a specific circular means every department that still
+  // owes a response somewhere in the school, not every targeted department.
+  const pendingDeptIds = await getPendingDepartmentIdsForSchool(supabase, schoolId);
+  return getDepartmentMemberUserIds(supabase, schoolId, pendingDeptIds);
 }

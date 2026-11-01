@@ -1,4 +1,6 @@
+import { createComplianceCounts } from "./createComplianceCounts";
 import { matchesDateFilter } from "./matchesDateFilter";
+import { toCompliancePercent } from "./toCompliancePercent";
 import type { CircularsReportSummaryData, ReportFilterState } from "./types";
 
 export function filterAndSortCirculars(
@@ -46,19 +48,24 @@ export function filterAndSortCirculars(
     );
   }
 
-  const req = complianceItems.reduce((acc, d) => acc + d.targetedCount, 0);
-  const rec = complianceItems.reduce((acc, d) => acc + d.respondedCount, 0);
-  const rate = req > 0 ? Math.min(100, Math.round((rec / req) * 100)) : 100;
+  // Totals are the sum of the same per-department counts the table shows, so a
+  // filtered view can never report a rate its own table contradicts.
+  const totals = createComplianceCounts();
+  for (const item of complianceItems) {
+    totals.targeted += item.targeted;
+    totals.compliant += item.compliant;
+    totals.overdue += item.overdue;
+    totals.notYetDue += item.notYetDue;
+    totals.notApplicable += item.notApplicable;
+  }
 
   return {
     totalCirculars: filteredRows.length,
     publishedCount: filteredRows.filter(
       (c) => c.status === "published" || c.status === "in_progress",
     ).length,
-    totalResponsesRequired: req,
-    totalResponsesReceived: rec,
-    responseRatePercent: rate,
-    overdueCount: filteredRows.filter((c) => c.status === "overdue").length,
+    overdueCount: totals.overdue,
+    totals: { ...totals, percent: toCompliancePercent(totals) },
     departmentBreakdown: complianceItems,
     rows: filteredRows,
   };

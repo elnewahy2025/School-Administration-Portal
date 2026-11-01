@@ -42,7 +42,7 @@ export function AchievementFilterBar({
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-border bg-card/60 p-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="relative flex-1 sm:max-w-xs">
-        <SearchIcon className="absolute start-2.5 top-2.5 size-4 text-gold" />
+        <SearchIcon className="absolute start-2.5 top-2.5 size-4 text-muted-foreground" />
         <Input
           placeholder={t("titleAr")}
           value={searchQuery}

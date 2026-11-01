@@ -7,6 +7,7 @@ export async function persistSchoolProfile(
   parsed: ReturnType<typeof parseSchoolFormData>,
   logoPath: string | null,
 ): Promise<{ success: boolean; error?: string }> {
+  const now = new Date().toISOString();
   const schoolUpdates: Record<string, unknown> = {
     name_ar: parsed.nameAr,
     name_en: parsed.nameEn,
@@ -20,6 +21,7 @@ export async function persistSchoolProfile(
     assistant_manager_2_en: parsed.assistantManager2En,
     address_ar: parsed.addressAr,
     address_en: parsed.addressEn,
+    updated_at: now,
     ...(parsed.slug ? { slug: parsed.slug } : {}),
   };
 
@@ -55,6 +57,7 @@ export async function persistSchoolProfile(
     mission_en: parsed.missionEn,
     working_days: parsed.workingDays.length > 0 ? parsed.workingDays : [0, 1, 2, 3, 4],
     date_format: parsed.dateFormat,
+    updated_at: now,
   });
 
   if (settingsError) {

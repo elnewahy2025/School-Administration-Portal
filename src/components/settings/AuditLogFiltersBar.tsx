@@ -54,7 +54,7 @@ export function AuditLogFiltersBar({ initialFilters }: { initialFilters?: AuditL
 
       <div className="flex items-center gap-2">
         <Button type="submit" size="sm" className="h-9 gap-1.5 text-xs">
-          <SearchIcon className="size-3.5 text-gold" />
+          <SearchIcon className="size-3.5" />
           <span>{t("search")}</span>
         </Button>
         <Button
@@ -64,7 +64,7 @@ export function AuditLogFiltersBar({ initialFilters }: { initialFilters?: AuditL
           onClick={form.handleReset}
           className="h-9 gap-1.5 text-xs"
         >
-          <RotateCcwIcon className="size-3.5 text-gold" />
+          <RotateCcwIcon className="size-3.5" />
           <span>{t("reset")}</span>
         </Button>
       </div>

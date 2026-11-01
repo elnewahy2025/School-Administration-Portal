@@ -12,10 +12,16 @@ export function CircularsReportSummary({ data }: { data: CircularsReportSummaryD
       <ReportKpiCard title={t("publishedCirculars")} value={data.publishedCount} icon={SendIcon} />
       <ReportKpiCard
         title={t("responseRate")}
-        value={`${data.responseRatePercent}%`}
-        description={`${data.totalResponsesReceived} / ${data.totalResponsesRequired}`}
+        value={data.totals.percent === null ? "—" : `${data.totals.percent}%`}
+        description={`${data.totals.compliant} / ${data.totals.targeted}`}
         icon={CheckCircle2Icon}
-        trend={data.responseRatePercent >= 80 ? "good" : "warning"}
+        trend={
+          data.totals.percent === null
+            ? "neutral"
+            : data.totals.percent >= 80
+              ? "good"
+              : "warning"
+        }
       />
       <ReportKpiCard
         title={t("overdueResponses")}

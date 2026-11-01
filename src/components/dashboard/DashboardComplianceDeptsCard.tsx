@@ -8,7 +8,7 @@ export function DashboardComplianceDeptsCard({
   pending,
 }: {
   responded: Array<{ id: string; name: string }>;
-  pending: Array<{ id: string; name: string }>;
+  pending: Array<{ id: string; name: string; outstanding: number }>;
 }) {
   const t = useTranslations("dashboard");
 
@@ -58,10 +58,11 @@ export function DashboardComplianceDeptsCard({
                 className="border-destructive/30 bg-destructive/15 text-[11px] font-semibold text-destructive transition-transform hover:scale-105 dark:text-destructive"
               >
                 {d.name}
+                {d.outstanding > 0 ? ` · ${d.outstanding}` : ""}
               </Badge>
             ))
           ) : (
-            <span className="text-xs font-medium text-success">{t("claimed")}</span>
+            <span className="text-xs font-medium text-success">{t("allResponded")}</span>
           )}
         </div>
       </div>

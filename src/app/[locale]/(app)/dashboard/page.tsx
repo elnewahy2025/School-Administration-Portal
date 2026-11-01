@@ -15,7 +15,7 @@ import {
   DashboardAchievementsWidget,
   DashboardComplianceWidget,
 } from "@/components/dashboard";
-import { getDashboardComplianceData } from "@/lib/dashboard/getDashboardComplianceData";
+import { loadDashboardCompliance } from "@/lib/dashboard/loadDashboardCompliance";
 import { resolveDashboardPermissions } from "@/lib/dashboard/resolveDashboardPermissions";
 
 export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -46,10 +46,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
   const achievements = isOwner ? await getSchoolAchievements(schoolId) : [];
   const { canViewCompliance } = resolveDashboardPermissions(isOwner, perms);
 
-  const complianceData =
-    canViewCompliance && schoolId
-      ? await getDashboardComplianceData(schoolId).catch(() => null)
-      : null;
+  const complianceData = canViewCompliance && schoolId ? await loadDashboardCompliance() : null;
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6">

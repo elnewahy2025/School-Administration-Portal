@@ -13,6 +13,12 @@ port = 54322
 shadow_port = 54320
 major_version = 17
 
+# Local-only demo data (supabase/seed.sql). Applied by `supabase db reset` and
+# never pushed to a linked project.
+[db.seed]
+enabled = false
+sql_paths = ["./seed.sql"]
+
 [studio]
 enabled = true
 port = 54323

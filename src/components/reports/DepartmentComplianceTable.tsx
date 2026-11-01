@@ -45,20 +45,22 @@ export function DepartmentComplianceTable({ items }: { items: DepartmentComplian
           {items.map((item) => (
             <TableRow key={item.departmentId} className={TABLE_BODY_ROW}>
               <TableCell className="font-medium text-foreground">{item.departmentName}</TableCell>
-              <TableCell className="text-center">{item.targetedCount}</TableCell>
-              <TableCell className="text-center text-success">{item.respondedCount}</TableCell>
-              <TableCell className="text-center text-warning">{item.pendingCount}</TableCell>
+              <TableCell className="text-center">{item.targeted}</TableCell>
+              <TableCell className="text-center text-success">{item.compliant}</TableCell>
+              <TableCell className="text-center text-warning">{item.overdue + item.notYetDue}</TableCell>
               <TableCell className="text-end font-semibold">
                 <span
                   className={
-                    item.complianceRatePercent >= 80
-                      ? "text-success"
-                      : item.complianceRatePercent >= 50
-                        ? "text-warning"
-                        : "text-destructive"
+                    item.percent === null
+                      ? "text-muted-foreground"
+                      : item.percent >= 80
+                        ? "text-success"
+                        : item.percent >= 50
+                          ? "text-warning"
+                          : "text-destructive"
                   }
                 >
-                  {item.complianceRatePercent}%
+                  {item.percent === null ? "—" : `${item.percent}%`}
                 </span>
               </TableCell>
             </TableRow>

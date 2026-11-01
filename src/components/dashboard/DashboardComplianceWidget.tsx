@@ -5,11 +5,15 @@ import { useTranslations } from "next-intl";
 import { PieChartIcon } from "lucide-react";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { PANEL } from "@/components/ui/diamond-card-styles";
-import { DashboardComplianceDonut } from "./DashboardComplianceDonut";
-import { DashboardComplianceDeptsCard } from "./DashboardComplianceDeptsCard";
 import { CircularRemindButton } from "@/components/circulars/CircularRemindButton";
+import { isRemindableStatus } from "@/lib/circulars/isRemindableStatus";
 import { resolveSelectedComplianceView } from "@/lib/dashboard/resolveSelectedComplianceView";
+import { resolveDepartmentBadges } from "@/lib/dashboard/resolveDepartmentBadges";
+import { sumComplianceCounts } from "@/lib/dashboard/sumComplianceCounts";
 import type { DashboardComplianceData } from "@/lib/dashboard/types";
+import { DashboardComplianceDeptsCard } from "./DashboardComplianceDeptsCard";
+import { DashboardComplianceDistribution } from "./DashboardComplianceDistribution";
+import { DashboardComplianceOverview } from "./DashboardComplianceOverview";
 
 export function DashboardComplianceWidget({ data }: { data: DashboardComplianceData }) {
   const t = useTranslations("dashboard");
@@ -17,16 +21,18 @@ export function DashboardComplianceWidget({ data }: { data: DashboardComplianceD
     () => data.circulars[0]?.id ?? "all",
   );
 
-  const {
-    selectedCircular,
-    displayedResponded,
-    displayedPending,
-    displayedSlices,
-    currentPercent,
-  } = resolveSelectedComplianceView(data, selectedCircularId);
+  const { selectedCircular, displayedSlices } = resolveSelectedComplianceView(
+    data,
+    selectedCircularId,
+  );
 
-  const remindCircularId = selectedCircular?.id ?? data.circulars[0]?.id ?? null;
-  const remindCircularTitle = selectedCircular?.title;
+  const counts = sumComplianceCounts(displayedSlices);
+  const { responded, pending } = resolveDepartmentBadges(displayedSlices);
+
+  // Reminders only make sense while a circular is open; in the "all" view the
+  // server resolves the school-wide pending set.
+  const canRemind =
+    (selectedCircular ? isRemindableStatus(selectedCircular.status) : true) && pending.length > 0;
 
   return (
     <div className={`${PANEL} flex flex-col gap-5 p-5 sm:p-6`}>
@@ -46,43 +52,48 @@ export function DashboardComplianceWidget({ data }: { data: DashboardComplianceD
 
         <div className="flex flex-wrap items-center gap-2">
           {data.circulars.length > 0 && (
-            <select
-              value={selectedCircularId}
-              onChange={(e) => setSelectedCircularId(e.target.value)}
-              className="w-full rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors outline-none focus:border-primary sm:w-auto"
-              aria-label={t("selectCircular")}
-            >
-              <option value="all">{t("allCircularsSummary")}</option>
-              {data.circulars.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.refNumber} - {c.title}
-                </option>
-              ))}
-            </select>
+            <div className="w-full sm:w-auto">
+              <select
+                value={selectedCircularId}
+                onChange={(e) => setSelectedCircularId(e.target.value)}
+                className="w-full rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors outline-none focus:border-primary sm:w-auto"
+                aria-label={t("selectCircular")}
+              >
+                <option value="all">{t("allCircularsSummary")}</option>
+                {data.circulars.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.refNumber} - {c.title}
+                  </option>
+                ))}
+              </select>
+              {data.circularCount > data.circulars.length ? (
+                <p className="mt-1 text-[11px] font-medium text-muted-foreground">
+                  {t("showingRecentCirculars", {
+                    shown: data.circulars.length,
+                    total: data.circularCount,
+                  })}
+                </p>
+              ) : null}
+            </div>
           )}
 
-          {displayedPending.length > 0 ? (
+          {canRemind ? (
             <CircularRemindButton
-              circularId={remindCircularId}
-              circularTitle={remindCircularTitle}
+              circularId={selectedCircular?.id ?? null}
+              circularTitle={selectedCircular?.title}
             />
           ) : null}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-center">
-        <div className="lg:col-span-5">
-          <DashboardComplianceDonut
-            slices={displayedSlices}
-            centerPercent={currentPercent}
-            centerLabel={selectedCircular ? selectedCircular.refNumber : t("overallCompliance")}
-          />
-        </div>
+      <DashboardComplianceOverview
+        label={selectedCircular ? selectedCircular.refNumber : t("overallCompliance")}
+        counts={counts}
+      />
 
-        <div className="flex flex-col justify-center lg:col-span-7">
-          <DashboardComplianceDeptsCard responded={displayedResponded} pending={displayedPending} />
-        </div>
-      </div>
+      <DashboardComplianceDistribution slices={displayedSlices} />
+
+      <DashboardComplianceDeptsCard responded={responded} pending={pending} />
     </div>
   );
 }

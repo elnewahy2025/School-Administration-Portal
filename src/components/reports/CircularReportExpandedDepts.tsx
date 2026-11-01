@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import type { DepartmentCompactItem } from "@/lib/reports/types";
+import type { ComplianceDepartmentRef } from "@/lib/reports/types";
 
 const TONES = {
   success: {
@@ -24,7 +24,7 @@ function DepartmentPanel({
 }: {
   tone: keyof typeof TONES;
   title: string;
-  items: DepartmentCompactItem[];
+  items: ComplianceDepartmentRef[];
   emptyMark: string;
 }) {
   const c = TONES[tone];
@@ -49,6 +49,7 @@ function DepartmentPanel({
             >
               <i aria-hidden="true" className={`size-1.5 rounded-full ${c.dot}`} />
               {d.name}
+              {d.outstanding > 0 ? ` · ${d.outstanding}` : ""}
             </span>
           ))
         ) : (
@@ -63,8 +64,8 @@ export function CircularReportExpandedDepts({
   responded,
   pending,
 }: {
-  responded: DepartmentCompactItem[];
-  pending: DepartmentCompactItem[];
+  responded: ComplianceDepartmentRef[];
+  pending: ComplianceDepartmentRef[];
 }) {
   const t = useTranslations("circulars");
 

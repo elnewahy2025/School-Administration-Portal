@@ -91,10 +91,14 @@ try {
   } else {
     skip("admin cannot delete the platform owner assignment", "no platform owner exists");
   }
+  // A system role's permission matrix is platform configuration. The fixture's
+  // read-only role is now school-scoped (0059 retired the seeded auditor), and a
+  // school administrator may legitimately manage permissions on school roles,
+  // so target a system role to keep the original assertion intact.
   await expectDenied("admin cannot write the permission matrix", () =>
     adminC
       .from("role_permissions")
-      .insert({ role_id: fx.roleIds.auditor, permission_key: "circular.publish" })
+      .insert({ role_id: fx.roleIds.staff, permission_key: "circular.publish" })
       .select("role_id"),
   );
 
@@ -594,11 +598,17 @@ try {
   );
 
   // -- N5: the system-role catalog is readable by role managers -------------
-  const adminRoles = await visibleCount(adminC, "roles");
+  // The system catalog no longer contains `auditor` (0059), and `owner` is
+  // deliberately hidden from non-owners by roles_select, so assert the keys a
+  // school administrator is supposed to see instead of a raw row count.
+  const adminCatalog = await adminC.from("roles").select("key").eq("is_system", true);
+  const visibleSystemKeys = (adminCatalog.data ?? []).map((row) => row.key);
   check(
     "a school admin can read the system role catalog (N5)",
-    adminRoles.count >= 5,
-    `count=${adminRoles.count}`,
+    ["department_head", "operator", "school_admin", "staff"].every((key) =>
+      visibleSystemKeys.includes(key),
+    ),
+    adminCatalog.error?.message ?? `keys=${visibleSystemKeys.join(",")}`,
   );
   const staffRoles = await visibleCount(staffC, "roles");
   check(
@@ -607,11 +617,38 @@ try {
     `count=${staffRoles.count}`,
   );
 
+  // F15/0062: the fixture owner has only the global owner assignment (no
+  // school-scoped row). Membership must still hold, otherwise every
+  // membership-gated read returns nothing and the dashboard looks empty.
+  const ownerDepartments = await ownerC
+    .from("departments")
+    .select("id")
+    .eq("school_id", fx.schoolId);
+  check(
+    "the platform owner reads departments without a school-scoped assignment (F15)",
+    !ownerDepartments.error && (ownerDepartments.data ?? []).length > 0,
+    ownerDepartments.error?.message ?? `count=${(ownerDepartments.data ?? []).length}`,
+  );
+
   // -- 0040: authorization hardening regressions ----------------------------
   // B-1: the reserved-key trigger used to fire on UPDATE only, so a school
   // admin could insert their own `owner` row and be treated as platform owner.
   await expectDenied("admin cannot insert a school-scoped role keyed owner (B-1)", () =>
     adminC
+      .from("roles")
+      .insert({
+        key: "owner",
+        name: "Forged Owner",
+        school_id: fx.schoolId,
+        is_system: false,
+      })
+      .select("id"),
+  );
+  // With role management owner-only (0061), the admin attempt above is denied by
+  // RLS before the reserved-key trigger can speak. Exercise the trigger with the
+  // owner, who is allowed to create roles.
+  await expectDenied("even the owner cannot insert a school-scoped role keyed owner (B-1)", () =>
+    ownerC
       .from("roles")
       .insert({
         key: "owner",
@@ -659,8 +696,9 @@ try {
     `school=${adminAfter?.school_id}`,
   );
 
-  // H-10: platform-only permission keys cannot be attached to a school role,
-  // but ordinary permission management still works.
+  // H-10 + 0061: role permissions are owner-only now, so a school administrator
+  // can attach nothing to a role. The platform owner still can, and
+  // platform-only keys stay out of school roles.
   const { data: customRole } = await admin
     .from("roles")
     .insert({
@@ -677,14 +715,20 @@ try {
       .insert({ role_id: customRole.id, permission_key: "settings.platform.update" })
       .select("role_id"),
   );
-  const normalGrant = await adminC
+  await expectDenied("admin cannot grant any permission to a school role (0061)", () =>
+    adminC
+      .from("role_permissions")
+      .insert({ role_id: customRole.id, permission_key: "circular.create" })
+      .select("role_id"),
+  );
+  const ownerGrant = await ownerC
     .from("role_permissions")
     .insert({ role_id: customRole.id, permission_key: "circular.create" })
     .select("role_id");
   check(
-    "admin can still grant an ordinary permission to a school role (H-10)",
-    !normalGrant.error && (normalGrant.data ?? []).length === 1,
-    normalGrant.error?.message ?? "",
+    "the platform owner can still grant an ordinary permission to a school role (0061)",
+    !ownerGrant.error && (ownerGrant.data ?? []).length === 1,
+    ownerGrant.error?.message ?? "",
   );
 
   // H-11: circular.create alone must not publish or archive.
@@ -1416,7 +1460,21 @@ try {
   // system key and capture circulars targeted at it. The policy allows this
   // insert (valid key domain, caller holds roles.manage), so the rejection has
   // to come from the unique index itself: code 23505.
-  const { error: shadowErr } = await adminC
+  // 0061: creating roles is owner-only. A school administrator is denied before
+  // the unique index can speak, so the shadowing test runs as the owner.
+  await expectDenied("a school admin cannot create a role (0061)", () =>
+    adminC
+      .from("roles")
+      .insert({
+        name: "Admin made role",
+        key: `admin-made-${ts}`,
+        school_id: fx.schoolId,
+        is_system: false,
+      })
+      .select("id"),
+  );
+
+  const { error: shadowErr } = await ownerC
     .from("roles")
     .insert({ name: "Staff clone", key: "staff", school_id: fx.schoolId, is_system: false })
     .select("id");
@@ -1428,7 +1486,7 @@ try {
 
   // Positive control: a genuinely new key is still allowed.
   const newKey = `battery-new-${ts}`;
-  const { data: newRole, error: newRoleErr } = await adminC
+  const { data: newRole, error: newRoleErr } = await ownerC
     .from("roles")
     .insert({ name: "Battery new role", key: newKey, school_id: fx.schoolId, is_system: false })
     .select("id")

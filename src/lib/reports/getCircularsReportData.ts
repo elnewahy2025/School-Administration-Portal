@@ -3,8 +3,8 @@ import { warnOnDataTruncation } from "@/lib/supabase/warnOnDataTruncation";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { fetchCircularReportBatches } from "./fetchCircularReportBatches";
-import { computeDepartmentCompliance } from "./computeDepartmentCompliance";
-import { mapCircularReportRows } from "./mapCircularReportRows";
+import { calculateCompliance } from "./calculateCompliance";
+import { isDeliveredStatus } from "./isDeliveredStatus";
 import { applyCircularReportFilters } from "./applyCircularReportFilters";
 import type { ReportFilterParams, CircularsReportSummaryData } from "./types";
 
@@ -41,43 +41,36 @@ export async function getCircularsReportData(
     throw mapDatabaseError(circularsError);
   }
 
-  const circularList = (circulars ?? []) as RawCircularRow[];
-  warnOnDataTruncation(circularList.length, "getCircularsReportData.circulars");
+  const fetched = (circulars ?? []) as RawCircularRow[];
+  warnOnDataTruncation(fetched.length, "getCircularsReportData.circulars");
 
-  const circularIds = circularList.map((c) => c.id);
+  // Drafts, archived and cancelled circulars are not obligations and are not
+  // listed either (§4.2 of the inspection report).
+  const circularList = fetched.filter((circular) => isDeliveredStatus(circular.status));
+  const circularIds = circularList.map((circular) => circular.id);
+
   const departments = await getSchoolDepartments(schoolId);
   const { targets, responses } = await fetchCircularReportBatches(supabase, circularIds);
 
   const activeDepts = effectiveDeptId
-    ? departments.filter((d) => d.id === effectiveDeptId)
+    ? departments.filter((department) => department.id === effectiveDeptId)
     : departments;
 
-  const departmentBreakdown = computeDepartmentCompliance({
-    departments: activeDepts,
+  const compliance = calculateCompliance({
+    circulars: circularList,
     targets,
     responses,
-    circularIds,
+    departments: activeDepts,
   });
-
-  const totalResponsesRequired = departmentBreakdown.reduce((sum, d) => sum + d.targetedCount, 0);
-  const totalResponsesReceived = departmentBreakdown.reduce((sum, d) => sum + d.respondedCount, 0);
-  const responseRatePercent =
-    totalResponsesRequired > 0
-      ? Math.min(100, Math.round((totalResponsesReceived / totalResponsesRequired) * 100))
-      : 100;
-
-  const rows = mapCircularReportRows(circularList, targets, responses, activeDepts);
 
   return {
     totalCirculars: circularList.length,
     publishedCount: circularList.filter(
-      (c) => c.status === "published" || c.status === "in_progress",
+      (circular) => circular.status === "published" || circular.status === "in_progress",
     ).length,
-    totalResponsesRequired,
-    totalResponsesReceived,
-    responseRatePercent,
-    overdueCount: circularList.filter((c) => c.status === "overdue").length,
-    departmentBreakdown,
-    rows,
+    overdueCount: compliance.totals.overdue,
+    totals: compliance.totals,
+    departmentBreakdown: compliance.departments,
+    rows: compliance.circulars,
   };
 }

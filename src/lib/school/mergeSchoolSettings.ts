@@ -36,6 +36,13 @@ export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsR
     };
   }
 
+  const resolvedUpdatedAt =
+    settings.updated_at && school.updated_at
+      ? new Date(settings.updated_at) > new Date(school.updated_at)
+        ? settings.updated_at
+        : school.updated_at
+      : settings.updated_at ?? school.updated_at ?? null;
+
   return {
     ...school,
     academic_year: settings.academic_year,
@@ -48,6 +55,6 @@ export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsR
     public_description: settings.public_description,
     working_days: settings.working_days ?? defaultWorkingDays,
     date_format: settings.date_format ?? defaultDateFormat,
-    updated_at: settings.updated_at ?? school.updated_at ?? null,
+    updated_at: resolvedUpdatedAt,
   };
 }

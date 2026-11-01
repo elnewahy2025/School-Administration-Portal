@@ -132,6 +132,35 @@ export async function seedFixture(admin) {
   const { data: roles } = await admin.from("roles").select("id, key").eq("is_system", true);
   const roleIds = Object.fromEntries(roles.map((r) => [r.key, r.id]));
 
+  // 0059 retired the seeded `auditor` system role. The read-only checks below
+  // only need a role that grants audit.view + reports.view, so the fixture
+  // builds its own school-scoped role instead of depending on the retired key.
+  // Without this the "auditor" user would carry no role at all and the checks
+  // would pass vacuously.
+  if (!roleIds.auditor) {
+    const { data: auditorRole, error: auditorRoleError } = await admin
+      .from("roles")
+      .insert({
+        key: `battery-auditor-${ts}`,
+        name: "Battery Auditor",
+        school_id: school.id,
+        is_system: false,
+      })
+      .select("id")
+      .single();
+    if (auditorRoleError) throw new Error(`create auditor role: ${auditorRoleError.message}`);
+
+    const { error: auditorPermissionError } = await admin.from("role_permissions").insert([
+      { role_id: auditorRole.id, permission_key: "audit.view" },
+      { role_id: auditorRole.id, permission_key: "reports.view" },
+    ]);
+    if (auditorPermissionError) {
+      throw new Error(`grant auditor permissions: ${auditorPermissionError.message}`);
+    }
+
+    roleIds.auditor = auditorRole.id;
+  }
+
   const defs = [
     ["owner", "battery-owner", "owner", null, null],
     ["admin", "battery-admin", "school_admin", school.id, null],

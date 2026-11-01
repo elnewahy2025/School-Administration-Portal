@@ -2,12 +2,7 @@
 
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n";
-import {
-  PlusIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  TargetIcon,
-} from "lucide-react";
+import { PlusIcon, ArrowRightIcon, ArrowLeftIcon, TargetIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { OperationalPlanIcon } from "@/components/icons/OperationalPlanIcon";
@@ -59,12 +54,12 @@ export function SchoolDocumentsManagerHeader({
           href="/dashboard"
           className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
-          <BackArrow className="size-4 text-gold" />
+          <BackArrow className="size-4" />
           <span>{isRtl ? "لوحة التحكم" : "Dashboard"}</span>
         </Link>
 
         <Button onClick={onAdd} className="gap-1.5 text-xs shadow-sm sm:text-sm">
-          <PlusIcon className="size-4 text-gold" />
+          <PlusIcon className="size-4" />
           <span>{t("addDocument")}</span>
         </Button>
       </div>

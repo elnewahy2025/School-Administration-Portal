@@ -20,6 +20,9 @@ export const CARD_RULE = `mb-4 h-0.5 w-28 rounded-full bg-[linear-gradient(90deg
 
 export const CARD_DIAMOND_SM = `absolute -top-8 left-1/2 grid size-16 -translate-x-1/2 rotate-45 place-items-center rounded-xl bg-[linear-gradient(135deg,var(--action-from,#0b63d6),var(--action-to,#0a2f7a))] text-gold shadow-[0_10px_20px_rgba(10,47,122,.3)] transition-[transform,border-radius,box-shadow] duration-[550ms] ${EASE} group-hover:rotate-[225deg] group-hover:rounded-full group-hover:shadow-[0_14px_28px_rgba(10,47,122,.45)]`;
 
+/** Same small diamond, filled with the solid brand blue instead of the blue→navy gradient. */
+export const CARD_DIAMOND_SM_SOLID = `absolute -top-8 left-1/2 grid size-16 -translate-x-1/2 rotate-45 place-items-center rounded-xl bg-[var(--action-from,#0b63d6)] text-gold shadow-[0_10px_20px_rgba(10,47,122,.3)] transition-[transform,border-radius,box-shadow] duration-[550ms] ${EASE} group-hover:rotate-[225deg] group-hover:rounded-full group-hover:shadow-[0_14px_28px_rgba(10,47,122,.45)]`;
+
 export const CARD_FOOTER_BAR = `-mx-5 flex min-h-11 w-[calc(100%+2.5rem)] items-center justify-center gap-2 rounded-b-[11px] bg-[color:var(--card-bar,#e6e9f1)] px-5 py-2.5 text-sm font-bold text-[color:var(--card-bar-foreground,#3d6db8)] transition-colors duration-[400ms] ${EASE} group-hover:bg-[linear-gradient(90deg,var(--action-from,#0b63d6)_-20%,var(--action-to,#0a2f7a)_120%)] group-hover:text-[color:var(--action-foreground,#fff)]`;
 
 /** Light panel that wraps widgets (the guide's .wrap). */

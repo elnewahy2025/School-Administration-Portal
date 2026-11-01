@@ -36,7 +36,7 @@ export function SchoolProfileSubTabs({
                 : "text-muted-foreground hover:bg-background/80 hover:text-foreground"
             }`}
           >
-            <Icon className="size-4 shrink-0 text-gold" />
+            <Icon className="size-4 shrink-0" />
             <span>{t(tab.labelKey)}</span>
           </button>
         );

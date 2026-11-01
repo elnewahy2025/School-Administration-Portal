@@ -18,7 +18,7 @@ export function PublicTopBarTicker({ events }: { events: CalendarEventRow[] }) {
     <div className="border-t border-scrim-foreground/10 bg-scrim/15">
       <div className="mx-auto flex w-full max-w-[1720px] items-center gap-3.5 overflow-hidden px-4 py-1.5 sm:px-8 lg:px-12 xl:px-16">
         <span className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-lg bg-sidebar-primary px-4 py-2 text-xs font-extrabold text-sidebar-primary-foreground sm:text-sm">
-          <CalendarDaysIcon className="size-4" />
+          <CalendarDaysIcon className="size-4 text-sidebar-primary-foreground" />
           {t("tickerLabel")}
         </span>
         <div className="min-w-0 flex-1 overflow-hidden whitespace-nowrap text-sm font-bold text-sidebar-primary">

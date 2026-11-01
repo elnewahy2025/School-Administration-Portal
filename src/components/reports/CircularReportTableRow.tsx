@@ -30,19 +30,21 @@ export function CircularReportTableRow({ row }: { row: CircularReportRow }) {
         <TableCell>
           <CircularStatusBadge status={row.status as never} />
         </TableCell>
-        <TableCell className="text-center">{row.totalTargets}</TableCell>
-        <TableCell className="text-center font-medium text-success">{row.totalResponses}</TableCell>
+        <TableCell className="text-center">{row.targeted}</TableCell>
+        <TableCell className="text-center font-medium text-success">{row.compliant}</TableCell>
         <TableCell className="text-end">
           <span
             className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-extrabold ${
-              row.compliancePercent >= 80
-                ? "bg-success/15 text-success"
-                : row.compliancePercent >= 50
-                  ? "bg-warning/15 text-warning"
-                  : "bg-destructive/15 text-destructive"
+              row.percent === null
+                ? "bg-muted text-muted-foreground"
+                : row.percent >= 80
+                  ? "bg-success/15 text-success"
+                  : row.percent >= 50
+                    ? "bg-warning/15 text-warning"
+                    : "bg-destructive/15 text-destructive"
             }`}
           >
-            {row.compliancePercent}%
+            {row.percent === null ? "—" : `${row.percent}%`}
           </span>
         </TableCell>
         <TableCell className="w-12 text-center">

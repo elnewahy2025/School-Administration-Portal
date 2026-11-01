@@ -40,7 +40,7 @@ export function MobileNav({
         onClick={() => setIsOpen(true)}
         aria-label={t("openMenu")}
       >
-        <MenuIcon className="size-5 text-gold" />
+        <MenuIcon className="size-5" />
       </Button>
 
       {isOpen && isMounted ? (

@@ -51,7 +51,7 @@ export function NavLink({
       )}
       <Icon
         className={cn(
-          "size-5 shrink-0 text-gold transition-[opacity,transform] duration-300",
+          "size-5 shrink-0 transition-[opacity,transform] duration-300",
           isActive ? "opacity-100" : "opacity-85 group-hover:scale-110 group-hover:opacity-100",
         )}
       />

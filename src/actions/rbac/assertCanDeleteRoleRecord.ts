@@ -30,5 +30,23 @@ export async function assertCanDeleteRoleRecord(
     return { allowed: false, error: "Cannot delete the platform owner role" };
   }
 
+  const { data: assignments, error: assignError } = await supabase
+    .from("user_role_assignments")
+    .select("id")
+    .eq("role_id", roleId)
+    .limit(1);
+
+  if (assignError) {
+    throw mapDatabaseError(assignError);
+  }
+
+  if (assignments && assignments.length > 0) {
+    return {
+      allowed: false,
+      error:
+        "Cannot delete role assigned to active users. Please reassign or delete assigned users first.",
+    };
+  }
+
   return { allowed: true };
 }

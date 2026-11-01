@@ -6,21 +6,32 @@ export interface ReportFilterParams {
   category?: string;
 }
 
-export interface DepartmentComplianceItem {
-  departmentId: string;
-  departmentName: string;
-  targetedCount: number;
-  respondedCount: number;
-  pendingCount: number;
-  complianceRatePercent: number;
+/** Counts for one scope (school, department or circular). */
+export interface ComplianceCounts {
+  /** Denominator: targeted pairs minus `not_applicable` ones. */
+  targeted: number;
+  compliant: number;
+  overdue: number;
+  notYetDue: number;
+  /** Targets removed from the denominator because the answer was not applicable. */
+  notApplicable: number;
+  /** null when `targeted` is 0 — never a fabricated 100%. */
+  percent: number | null;
 }
 
-export interface DepartmentCompactItem {
+export interface ComplianceDepartmentRef {
   id: string;
   name: string;
+  /** Outstanding targets for this department in this circular. */
+  outstanding: number;
 }
 
-export interface CircularReportRow {
+export interface DepartmentComplianceItem extends ComplianceCounts {
+  departmentId: string;
+  departmentName: string;
+}
+
+export interface CircularReportRow extends ComplianceCounts {
   id: string;
   refNumber: string;
   title: string;
@@ -29,22 +40,23 @@ export interface CircularReportRow {
   status: string;
   publishAt: string | null;
   dueAt: string | null;
-  totalTargets: number;
-  totalResponses: number;
-  compliancePercent: number;
-  respondedDepartments: DepartmentCompactItem[];
-  pendingDepartments: DepartmentCompactItem[];
+  respondedDepartments: ComplianceDepartmentRef[];
+  pendingDepartments: ComplianceDepartmentRef[];
 }
 
 export interface CircularsReportSummaryData {
   totalCirculars: number;
   publishedCount: number;
-  totalResponsesRequired: number;
-  totalResponsesReceived: number;
-  responseRatePercent: number;
+  /** Targets past their due date and still outstanding. */
   overdueCount: number;
+  totals: ComplianceCounts;
   departmentBreakdown: DepartmentComplianceItem[];
   rows: CircularReportRow[];
+}
+
+export interface DepartmentCompactItem {
+  id: string;
+  name: string;
 }
 
 export interface MaintenanceReportRow {

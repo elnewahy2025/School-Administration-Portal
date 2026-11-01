@@ -23,7 +23,7 @@ export function ReportDateFilterControls({
   return (
     <>
       <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-        <FilterIcon className="size-3.5 text-gold" />
+        <FilterIcon className="size-3.5" />
         <span>{t("dateMode")}:</span>
       </div>
 

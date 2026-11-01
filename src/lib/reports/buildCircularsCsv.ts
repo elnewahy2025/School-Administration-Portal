@@ -1,6 +1,11 @@
 import { buildCsvDocument } from "./buildCsvDocument";
 import type { CircularReportRow } from "./types";
 
+/** `name · n` so a partly compliant department carries its outstanding count. */
+function formatDepartments(items: CircularReportRow["pendingDepartments"]): string {
+  return items.map((item) => (item.outstanding > 0 ? `${item.name} (${item.outstanding})` : item.name)).join(" - ");
+}
+
 export function buildCircularsCsv(rows: CircularReportRow[]): string {
   const headers = [
     "الرقم المرجعي (Ref)",
@@ -11,7 +16,10 @@ export function buildCircularsCsv(rows: CircularReportRow[]): string {
     "تاريخ النشر (Published At)",
     "تاريخ الاستحقاق (Due At)",
     "الأقسام المستهدفة (Targets)",
-    "الاستجابات المستلمة (Responses)",
+    "المستجيب (Compliant)",
+    "متأخر (Overdue)",
+    "لم يحن موعده (Not yet due)",
+    "غير منطبق (Not applicable)",
     "نسبة الالتزام % (Compliance %)",
     "الأقسام المستجيبة (Responded Departments)",
     "الأقسام غير المستجيبة (Pending Departments)",
@@ -25,11 +33,15 @@ export function buildCircularsCsv(rows: CircularReportRow[]): string {
     r.status,
     r.publishAt || "",
     r.dueAt || "",
-    r.totalTargets,
-    r.totalResponses,
-    `${r.compliancePercent}%`,
-    r.respondedDepartments?.map((d) => d.name).join(" - ") ?? "",
-    r.pendingDepartments?.map((d) => d.name).join(" - ") ?? "",
+    r.targeted,
+    r.compliant,
+    r.overdue,
+    r.notYetDue,
+    r.notApplicable,
+    // Blank rather than 0 or 100: the circular required nothing, so it has no rate.
+    r.percent === null ? "" : `${r.percent}%`,
+    formatDepartments(r.respondedDepartments),
+    formatDepartments(r.pendingDepartments),
   ]);
 
   return buildCsvDocument(headers, dataRows);

@@ -16,7 +16,7 @@ export function NotificationBell({ unreadCount }: { unreadCount: number }) {
         className="relative text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         aria-label={t("title")}
       >
-        <BellIcon className="size-5 text-gold" />
+        <BellIcon className="size-5" />
         {unreadCount > 0 && (
           <span className="absolute end-1.5 top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
             {unreadCount > 9 ? "9+" : unreadCount}

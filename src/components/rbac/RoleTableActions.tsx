@@ -25,14 +25,9 @@ export function RoleTableActions({
   const [isDeleting, startDeleteTransition] = useTransition();
 
   const handleDelete = async () => {
-    const confirmMessage =
-      role.user_count > 0
-        ? t("confirmDeleteRoleWithUsers", { count: role.user_count })
-        : t("confirmDeleteRole");
-
     const confirmed = await showConfirmBox({
-      title: role.user_count > 0 ? tCommon("warning") : undefined,
-      message: confirmMessage,
+      title: tCommon("warning"),
+      message: t("confirmDeleteRole"),
       type: "warning",
     });
     if (!confirmed) return;
@@ -48,16 +43,14 @@ export function RoleTableActions({
   };
 
   const isOwnerRole = role.key === "owner";
+  const hasUsers = role.user_count > 0;
+  const isDeleteDisabled = isDeleting || hasUsers;
+  const deleteTitle = hasUsers ? t("cannotDeleteRoleWithUsers") : tCommon("delete");
 
   return (
     <div className="flex items-center justify-end gap-1.5">
       {canManage && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onEdit}
-          title={tCommon("edit")}
-        >
+        <Button variant="outline" size="sm" onClick={onEdit} title={tCommon("edit")}>
           <PencilIcon className="size-3.5" />
         </Button>
       )}
@@ -65,9 +58,9 @@ export function RoleTableActions({
         <Button
           variant="destructive"
           size="sm"
-          disabled={isDeleting}
+          disabled={isDeleteDisabled}
           onClick={handleDelete}
-          title={tCommon("delete")}
+          title={deleteTitle}
         >
           <Trash2Icon className="size-3.5" />
         </Button>
