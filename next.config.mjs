@@ -77,7 +77,7 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'none'; frame-ancestors 'self';",
+            value: "frame-ancestors 'self';",
           },
         ],
       },
