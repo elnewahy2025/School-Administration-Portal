@@ -10,4 +10,3 @@ export function resolveSafeOrigin(url?: string | null): string | null {
     return null;
   }
 }
-

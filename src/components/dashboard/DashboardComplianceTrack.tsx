@@ -23,7 +23,8 @@ export function DashboardComplianceTrack({
   heightClass?: string;
 }) {
   const total = Math.max(0, targeted);
-  const share = (value: number) => (total > 0 ? Math.min(100, Math.max(0, (value / total) * 100)) : 0);
+  const share = (value: number) =>
+    total > 0 ? Math.min(100, Math.max(0, (value / total) * 100)) : 0;
 
   return (
     <div

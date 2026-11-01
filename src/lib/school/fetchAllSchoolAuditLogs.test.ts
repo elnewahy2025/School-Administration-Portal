@@ -66,4 +66,3 @@ describe("fetchAllSchoolAuditLogs", () => {
     await expect(fetchAllSchoolAuditLogs("school-1", {}, 100)).rejects.toThrow();
   });
 });
-

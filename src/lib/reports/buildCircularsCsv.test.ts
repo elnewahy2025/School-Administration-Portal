@@ -33,7 +33,9 @@ describe("buildCircularsCsv", () => {
   });
 
   it("leaves the rate blank when nothing was required", () => {
-    const csv = buildCircularsCsv([{ ...row, targeted: 0, compliant: 0, overdue: 0, percent: null }]);
+    const csv = buildCircularsCsv([
+      { ...row, targeted: 0, compliant: 0, overdue: 0, percent: null },
+    ]);
     const cells = csv.trim().split(/\r?\n/)[1]!.split(",");
 
     // Compliance % column is the 13th field.

@@ -30,4 +30,3 @@ export function computeResponseFilterCounts(
 
   return { respondedCount, acknowledgedCount, rejectedCount, pendingCount };
 }
-

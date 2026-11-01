@@ -34,4 +34,3 @@ describe("isHealthSecretValid", () => {
     expect(isHealthSecretValid(req, "matching-secret")).toBe(false);
   });
 });
-

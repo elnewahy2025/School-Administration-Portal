@@ -205,14 +205,14 @@ All 20 issues identified in the Comprehensive Code Inspection (`School Admin Por
 
 ## 4. Verification & Testing Matrix
 
-| Suite               | Target                           | Status      | Passing                       |
-| ------------------- | -------------------------------- | ----------- | ----------------------------- |
-| RLS Battery         | Supabase Auth & RLS Harness      | **PASSING** | 85 / 85 checks passed         |
-| Unit & Integration  | Vitest                           | **PASSING** | 651 / 651 tests (206 suites)  |
-| Linter & Modularity | ESLint + D11 Single-Export       | **PASSING** | 0 errors, 0 warnings          |
-| Code Formatting     | Prettier                         | **PASSING** | 100% compliant                |
-| Type Safety         | TypeScript (`tsc --noEmit`)      | **PASSING** | 0 errors                      |
-| Production Build    | Next.js Turbopack (`next build`) | **PASSING** | 54 routes compiled cleanly    |
+| Suite               | Target                           | Status      | Passing                      |
+| ------------------- | -------------------------------- | ----------- | ---------------------------- |
+| RLS Battery         | Supabase Auth & RLS Harness      | **PASSING** | 85 / 85 checks passed        |
+| Unit & Integration  | Vitest                           | **PASSING** | 651 / 651 tests (206 suites) |
+| Linter & Modularity | ESLint + D11 Single-Export       | **PASSING** | 0 errors, 0 warnings         |
+| Code Formatting     | Prettier                         | **PASSING** | 100% compliant               |
+| Type Safety         | TypeScript (`tsc --noEmit`)      | **PASSING** | 0 errors                     |
+| Production Build    | Next.js Turbopack (`next build`) | **PASSING** | 54 routes compiled cleanly   |
 
 ---
 

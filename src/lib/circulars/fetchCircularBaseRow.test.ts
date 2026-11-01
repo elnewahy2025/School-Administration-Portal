@@ -8,7 +8,11 @@ describe("fetchCircularBaseRow", () => {
       from: () => ({
         select: () => ({
           eq: () => ({
-            maybeSingle: () => Promise.resolve({ data: { id: "c-1", title: "Test", visibility: "internal" }, error: null }),
+            maybeSingle: () =>
+              Promise.resolve({
+                data: { id: "c-1", title: "Test", visibility: "internal" },
+                error: null,
+              }),
           }),
         }),
       }),
@@ -27,7 +31,10 @@ describe("fetchCircularBaseRow", () => {
             maybeSingle: () => {
               callCount++;
               if (callCount === 1) {
-                return Promise.resolve({ data: null, error: { code: "42703", message: "column visibility does not exist" } });
+                return Promise.resolve({
+                  data: null,
+                  error: { code: "42703", message: "column visibility does not exist" },
+                });
               }
               return Promise.resolve({ data: { id: "c-1", title: "Test" }, error: null });
             },
@@ -40,4 +47,3 @@ describe("fetchCircularBaseRow", () => {
     expect(row).toEqual({ id: "c-1", title: "Test", visibility: "internal" });
   });
 });
-

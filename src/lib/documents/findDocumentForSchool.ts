@@ -26,4 +26,3 @@ export async function findDocumentForSchool(
 
   return existing;
 }
-

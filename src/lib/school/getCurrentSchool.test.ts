@@ -106,4 +106,3 @@ describe("getCurrentSchool", () => {
     expect(school?.academic_year).toBe("2026-2027");
   });
 });
-

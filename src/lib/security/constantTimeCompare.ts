@@ -11,4 +11,3 @@ export function constantTimeCompare(left: string, right: string): boolean {
   const rightHash = createHash("sha256").update(right).digest();
   return timingSafeEqual(leftHash, rightHash);
 }
-

@@ -16,11 +16,7 @@ export function CircularsReportSummary({ data }: { data: CircularsReportSummaryD
         description={`${data.totals.compliant} / ${data.totals.targeted}`}
         icon={CheckCircle2Icon}
         trend={
-          data.totals.percent === null
-            ? "neutral"
-            : data.totals.percent >= 80
-              ? "good"
-              : "warning"
+          data.totals.percent === null ? "neutral" : data.totals.percent >= 80 ? "good" : "warning"
         }
       />
       <ReportKpiCard

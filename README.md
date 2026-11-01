@@ -6,18 +6,18 @@ A modern, enterprise-grade school management platform built for modern education
 
 ## Application Framework & Tech Stack
 
-| Layer                       | Technologies & Tools                                                                                                                   |
-| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
-| **Framework & Runtime**     | [Next.js 16.4.2](https://nextjs.org/) (App Router, Turbopack, React 19 Server Components, Server Actions)                              |
-| **Language & Toolchain**    | [TypeScript 5](https://www.typescriptlang.org/) (Strict Mode) · [Node.js 24+](https://nodejs.org/)                                     |
-| **Database & Backend**      | [Supabase](https://supabase.com/) (PostgreSQL 15+, Row-Level Security / RLS policies, Storage buckets)                                 |
-| **Real-Time Engine**        | [Supabase Realtime](https://supabase.com/docs/guides/realtime) (WebSockets push notifications on `public.notifications`)               |
-| **Styling & Design System** | [Tailwind CSS v4](https://tailwindcss.com/) · [@base-ui/react](https://base-ui.com/) primitives · [Lucide Icons](https://lucide.dev/)  |
-| **Theming Engine**          | `next-themes` supporting 5 curated themes (Royal Navy [Default], Classic Light, Slate Dark, Emerald Academy, Midnight OLED)            |
-| **Internationalization**    | `next-intl` (Arabic `ar` RTL default + English `en` LTR) with locale prefix routing                                                    |
-| **Validation & Security**   | [Zod 4](https://zod.dev/) type-safe schemas · Server-only guardrail modules · Strict RLS SQL isolation                                 |
+| Layer                       | Technologies & Tools                                                                                                                         |
+| :-------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Framework & Runtime**     | [Next.js 16.4.2](https://nextjs.org/) (App Router, Turbopack, React 19 Server Components, Server Actions)                                    |
+| **Language & Toolchain**    | [TypeScript 5](https://www.typescriptlang.org/) (Strict Mode) · [Node.js 24+](https://nodejs.org/)                                           |
+| **Database & Backend**      | [Supabase](https://supabase.com/) (PostgreSQL 15+, Row-Level Security / RLS policies, Storage buckets)                                       |
+| **Real-Time Engine**        | [Supabase Realtime](https://supabase.com/docs/guides/realtime) (WebSockets push notifications on `public.notifications`)                     |
+| **Styling & Design System** | [Tailwind CSS v4](https://tailwindcss.com/) · [@base-ui/react](https://base-ui.com/) primitives · [Lucide Icons](https://lucide.dev/)        |
+| **Theming Engine**          | `next-themes` supporting 5 curated themes (Royal Navy [Default], Classic Light, Slate Dark, Emerald Academy, Midnight OLED)                  |
+| **Internationalization**    | `next-intl` (Arabic `ar` RTL default + English `en` LTR) with locale prefix routing                                                          |
+| **Validation & Security**   | [Zod 4](https://zod.dev/) type-safe schemas · Server-only guardrail modules · Strict RLS SQL isolation                                       |
 | **Testing & Quality Gates** | [Vitest 5](https://vitest.dev/) (651 tests across 206 test suites) · [Playwright](https://playwright.dev/) · [ESLint 9](https://eslint.org/) |
-| **Mobile & PWA**            | Progressive Web App manifest, Service Worker offline caching, install banner                                                           |
+| **Mobile & PWA**            | Progressive Web App manifest, Service Worker offline caching, install banner                                                                 |
 
 ---
 

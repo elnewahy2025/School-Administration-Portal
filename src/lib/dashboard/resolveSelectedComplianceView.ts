@@ -1,7 +1,4 @@
-import type {
-  DashboardComplianceCircularItem,
-  DashboardDepartmentComplianceSlice,
-} from "./types";
+import type { DashboardComplianceCircularItem, DashboardDepartmentComplianceSlice } from "./types";
 import { resolveCircularSlices } from "./resolveCircularSlices";
 
 export interface SelectedComplianceView {
@@ -10,7 +7,10 @@ export interface SelectedComplianceView {
 }
 
 export function resolveSelectedComplianceView(
-  data: { departmentSlices: DashboardDepartmentComplianceSlice[]; circulars: DashboardComplianceCircularItem[] },
+  data: {
+    departmentSlices: DashboardDepartmentComplianceSlice[];
+    circulars: DashboardComplianceCircularItem[];
+  },
   selectedCircularId: string,
 ): SelectedComplianceView {
   const selectedCircular =

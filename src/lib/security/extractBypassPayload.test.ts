@@ -30,4 +30,3 @@ describe("extractBypassPayload", () => {
     expect(payload.clear).toBe(true);
   });
 });
-

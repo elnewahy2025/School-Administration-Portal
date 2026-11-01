@@ -50,9 +50,7 @@ export function CircularResponseBox({
   };
 
   const isAcknowledged = existingResponse?.status === "acknowledged";
-  const hasFinalResponse = Boolean(
-    existingResponse && existingResponse.status !== "acknowledged",
-  );
+  const hasFinalResponse = Boolean(existingResponse && existingResponse.status !== "acknowledged");
 
   return (
     <Card className="border border-border bg-card">

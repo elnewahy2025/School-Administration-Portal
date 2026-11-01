@@ -8,13 +8,9 @@ Below is the prompt I recommend adding as a separate task for Gemini.
 
 # Master RBAC Audit & Security Verification Prompt
 
-
-
 Production security audit
 
 Gemini CLI / Antigravity
-
-
 
 # MASTER TASK: COMPLETE RBAC, AUTHORIZATION & PRIVILEGE-ESCALATION SECURITY AUDIT
 

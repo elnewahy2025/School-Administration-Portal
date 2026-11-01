@@ -28,12 +28,7 @@ export function CommitteesGuideIcon({ className = "", ...props }: SVGProps<SVGSV
       <path d="M7.5 16h9v3.5h-9z" fill="currentColor" fillOpacity={0.3} />
 
       {/* Foreground stage / conference arc */}
-      <path
-        d="M3 22c0-4.5 18-4.5 18 0"
-        fill="currentColor"
-        fillOpacity={0.2}
-      />
+      <path d="M3 22c0-4.5 18-4.5 18 0" fill="currentColor" fillOpacity={0.2} />
     </svg>
   );
 }
-

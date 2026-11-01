@@ -13,4 +13,3 @@ export function isHealthSecretValid(request: Request, expectedSecret?: string): 
   const presented = authHeader.slice("Bearer ".length).trim();
   return constantTimeCompare(presented, expectedSecret);
 }
-

@@ -31,4 +31,3 @@ export async function assertCanUpdateSchoolSettings(
 
   return targetSchoolId;
 }
-

@@ -331,27 +331,35 @@ Never make broad, destructive changes without first establishing their impact.
 At the end of every implementation or debugging task, provide a concise but evidence-based report containing:
 
 ### 1. Findings
+
 What was actually inspected and verified.
 
 ### 2. Root Cause
+
 The confirmed cause of the problem, or an explicit statement that it could not be established.
 
 ### 3. Changes Made
+
 Exact file paths and a description of the actual changes.
 
 ### 4. Functionality Preserved
+
 Existing features, workflows, integrations, and dependencies checked for regressions.
 
 ### 5. Security Impact
+
 Authentication, authorization, tenant isolation, validation, and data access implications.
 
 ### 6. Tests Executed
+
 Exact commands executed and their actual results.
 
 ### 7. Unverified Items
+
 Anything that could not be executed, accessed, or conclusively verified.
 
 ### 8. Remaining Risks
+
 Known limitations, unresolved problems, and required follow-up actions.
 
 Use these statuses accurately:

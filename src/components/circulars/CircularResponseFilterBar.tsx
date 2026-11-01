@@ -1,12 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
-export type ResponseFilterTab =
-  | "all"
-  | "responded"
-  | "acknowledged"
-  | "rejected"
-  | "pending";
+export type ResponseFilterTab = "all" | "responded" | "acknowledged" | "rejected" | "pending";
 
 export function CircularResponseFilterBar({
   filter,

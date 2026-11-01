@@ -20,7 +20,11 @@ function slice(
 
 describe("sortDepartmentSlices", () => {
   it("puts the lowest compliance rate first", () => {
-    const sorted = sortDepartmentSlices([slice("alpha", 100), slice("beta", 25), slice("gamma", 50)]);
+    const sorted = sortDepartmentSlices([
+      slice("alpha", 100),
+      slice("beta", 25),
+      slice("gamma", 50),
+    ]);
 
     expect(sorted.map((s) => s.id)).toEqual(["beta", "gamma", "alpha"]);
   });

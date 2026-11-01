@@ -3,7 +3,9 @@ import type { CircularReportRow } from "./types";
 
 /** `name · n` so a partly compliant department carries its outstanding count. */
 function formatDepartments(items: CircularReportRow["pendingDepartments"]): string {
-  return items.map((item) => (item.outstanding > 0 ? `${item.name} (${item.outstanding})` : item.name)).join(" - ");
+  return items
+    .map((item) => (item.outstanding > 0 ? `${item.name} (${item.outstanding})` : item.name))
+    .join(" - ");
 }
 
 export function buildCircularsCsv(rows: CircularReportRow[]): string {

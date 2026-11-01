@@ -44,9 +44,33 @@ describe("DashboardComplianceWidget", () => {
   const mockData: DashboardComplianceData = {
     totals: { targeted: 5, compliant: 3, overdue: 1, notYetDue: 1, notApplicable: 0, percent: 60 },
     departmentSlices: [
-      { id: "dept-1", name: "Science", targeted: 2, compliant: 2, overdue: 0, notYetDue: 0, percent: 100 },
-      { id: "dept-2", name: "Math", targeted: 2, compliant: 1, overdue: 1, notYetDue: 0, percent: 50 },
-      { id: "dept-3", name: "Arabic", targeted: 1, compliant: 0, overdue: 0, notYetDue: 1, percent: 0 },
+      {
+        id: "dept-1",
+        name: "Science",
+        targeted: 2,
+        compliant: 2,
+        overdue: 0,
+        notYetDue: 0,
+        percent: 100,
+      },
+      {
+        id: "dept-2",
+        name: "Math",
+        targeted: 2,
+        compliant: 1,
+        overdue: 1,
+        notYetDue: 0,
+        percent: 50,
+      },
+      {
+        id: "dept-3",
+        name: "Arabic",
+        targeted: 1,
+        compliant: 0,
+        overdue: 0,
+        notYetDue: 1,
+        percent: 0,
+      },
     ],
     circulars: [
       {
@@ -98,7 +122,15 @@ describe("DashboardComplianceWidget", () => {
           circularCount: 0,
           departmentSlices: [
             ...mockData.departmentSlices,
-            { id: "dept-4", name: "Library", targeted: 0, compliant: 0, overdue: 0, notYetDue: 0, percent: null },
+            {
+              id: "dept-4",
+              name: "Library",
+              targeted: 0,
+              compliant: 0,
+              overdue: 0,
+              notYetDue: 0,
+              percent: null,
+            },
           ],
         }}
       />,
@@ -132,7 +164,14 @@ describe("DashboardComplianceWidget", () => {
     render(
       <DashboardComplianceWidget
         data={{
-          totals: { targeted: 0, compliant: 0, overdue: 0, notYetDue: 0, notApplicable: 0, percent: null },
+          totals: {
+            targeted: 0,
+            compliant: 0,
+            overdue: 0,
+            notYetDue: 0,
+            notApplicable: 0,
+            percent: null,
+          },
           departmentSlices: [],
           circulars: [],
           circularCount: 0,

@@ -67,7 +67,8 @@ describe("isUnderConstruction", () => {
 
     const { cookies } = await import("next/headers");
     vi.mocked(cookies).mockResolvedValue({
-      get: (name: string) => (name === "bypass_construction" ? { value: "invalid-token" } : undefined),
+      get: (name: string) =>
+        name === "bypass_construction" ? { value: "invalid-token" } : undefined,
     } as unknown as Awaited<ReturnType<typeof cookies>>);
 
     const result = await isUnderConstruction();

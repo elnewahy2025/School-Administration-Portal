@@ -10,15 +10,10 @@ export async function assertCanRespondToCircular(
     throw new AuthenticationError("Must belong to a department to respond");
   }
 
-  const allowed = await hasPermission(
-    "circular.respond",
-    profile.school_id,
-    profile.department_id,
-  );
+  const allowed = await hasPermission("circular.respond", profile.school_id, profile.department_id);
   if (!allowed) {
     throw new ForbiddenError("Unauthorized");
   }
 
   return { schoolId: profile.school_id, departmentId: profile.department_id };
 }
-

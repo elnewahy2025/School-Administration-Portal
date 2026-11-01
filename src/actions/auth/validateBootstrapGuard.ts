@@ -16,11 +16,17 @@ export function validateBootstrapGuard(
     return "bootstrap-disabled-in-production";
   }
 
-  if (expectedSecret && (!bootstrapSecret || !constantTimeCompare(bootstrapSecret, expectedSecret))) {
+  if (
+    expectedSecret &&
+    (!bootstrapSecret || !constantTimeCompare(bootstrapSecret, expectedSecret))
+  ) {
     return "invalid-bootstrap-secret";
   }
 
-  if (allowedEmail && (!userEmail || !constantTimeCompare(userEmail.toLowerCase(), allowedEmail.toLowerCase()))) {
+  if (
+    allowedEmail &&
+    (!userEmail || !constantTimeCompare(userEmail.toLowerCase(), allowedEmail.toLowerCase()))
+  ) {
     return "unauthorized-bootstrap-identity";
   }
 

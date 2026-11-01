@@ -73,4 +73,3 @@ describe("checkAuthRateLimit", () => {
     expect(blocked).toBe(false);
   });
 });
-

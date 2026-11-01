@@ -20,4 +20,3 @@ describe("constantTimeCompare", () => {
     expect(constantTimeCompare("", "a")).toBe(false);
   });
 });
-

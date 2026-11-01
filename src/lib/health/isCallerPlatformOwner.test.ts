@@ -34,4 +34,3 @@ describe("isCallerPlatformOwner", () => {
     expect(await isCallerPlatformOwner()).toBe(false);
   });
 });
-

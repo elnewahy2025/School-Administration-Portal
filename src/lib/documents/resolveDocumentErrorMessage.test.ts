@@ -10,9 +10,9 @@ describe("resolveDocumentErrorMessage", () => {
   });
 
   it("maps unauthorized and forbidden errors", () => {
-    expect(resolveDocumentErrorMessage("Unauthorized to manage school documents", mockTranslate)).toBe(
-      "translated:unauthorizedError",
-    );
+    expect(
+      resolveDocumentErrorMessage("Unauthorized to manage school documents", mockTranslate),
+    ).toBe("translated:unauthorizedError");
     expect(resolveDocumentErrorMessage("forbidden", mockTranslate)).toBe(
       "translated:unauthorizedError",
     );
@@ -26,7 +26,10 @@ describe("resolveDocumentErrorMessage", () => {
 
   it("maps format and mime errors", () => {
     expect(
-      resolveDocumentErrorMessage("Invalid file format. Allowed: PDF, JPEG, PNG, WebP", mockTranslate),
+      resolveDocumentErrorMessage(
+        "Invalid file format. Allowed: PDF, JPEG, PNG, WebP",
+        mockTranslate,
+      ),
     ).toBe("translated:invalidFileFormat");
   });
 
@@ -48,4 +51,3 @@ describe("resolveDocumentErrorMessage", () => {
     );
   });
 });
-

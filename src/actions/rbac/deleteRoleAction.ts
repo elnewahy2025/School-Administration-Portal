@@ -28,12 +28,7 @@ export async function deleteRoleAction(roleId: string): Promise<ActionResult> {
     }
 
     const supabase = await createSupabaseServerClient();
-    const canDelete = await assertCanDeleteRoleRecord(
-      supabase,
-      roleId,
-      profile.school_id,
-      isOwner,
-    );
+    const canDelete = await assertCanDeleteRoleRecord(supabase, roleId, profile.school_id, isOwner);
     if (!canDelete.allowed) {
       throw new ValidationError(canDelete.error || "Cannot delete role");
     }

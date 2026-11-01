@@ -33,7 +33,9 @@ describe("validateBootstrapGuard", () => {
     process.env.PLATFORM_BOOTSTRAP_SECRET = "super-secret-key-123";
 
     expect(validateBootstrapGuard("admin@example.com", undefined)).toBe("invalid-bootstrap-secret");
-    expect(validateBootstrapGuard("admin@example.com", "wrong-secret")).toBe("invalid-bootstrap-secret");
+    expect(validateBootstrapGuard("admin@example.com", "wrong-secret")).toBe(
+      "invalid-bootstrap-secret",
+    );
     expect(validateBootstrapGuard("admin@example.com", "super-secret-key-123")).toBeNull();
   });
 

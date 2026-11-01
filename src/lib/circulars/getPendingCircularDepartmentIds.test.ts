@@ -47,8 +47,22 @@ function buildClient({
 }
 
 const departments = [
-  { id: "d1", school_id: "s1", name_ar: "العلوم", name_en: "Science", is_active: true, created_at: "" },
-  { id: "d2", school_id: "s1", name_ar: "الرياضيات", name_en: "Math", is_active: true, created_at: "" },
+  {
+    id: "d1",
+    school_id: "s1",
+    name_ar: "العلوم",
+    name_en: "Science",
+    is_active: true,
+    created_at: "",
+  },
+  {
+    id: "d2",
+    school_id: "s1",
+    name_ar: "الرياضيات",
+    name_en: "Math",
+    is_active: true,
+    created_at: "",
+  },
 ];
 
 const publishedCircular = {

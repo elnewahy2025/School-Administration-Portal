@@ -41,4 +41,3 @@ describe("buildContentSecurityPolicy", () => {
     expect(headerValue).toContain("https://errors.example.com");
   });
 });
-

@@ -34,4 +34,3 @@ export async function handleBypassRequest(request: NextRequest): Promise<NextRes
   });
   return response;
 }
-

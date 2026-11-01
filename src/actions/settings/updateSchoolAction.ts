@@ -41,12 +41,7 @@ export async function updateSchoolAction(formData: FormData): Promise<ActionResu
       actorId: profile.id,
       actorLabel: profile.email || "system",
     });
-    const persistResult = await persistSchoolProfile(
-      admin,
-      targetSchoolId,
-      parsed,
-      uploadRes.path,
-    );
+    const persistResult = await persistSchoolProfile(admin, targetSchoolId, parsed, uploadRes.path);
     if (!persistResult.success) {
       throw mapDatabaseError(persistResult.error, "Failed to save school profile");
     }

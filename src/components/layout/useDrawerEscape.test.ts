@@ -40,4 +40,3 @@ describe("useDrawerEscape", () => {
     expect(document.body.style.overflow).toBe("scroll");
   });
 });
-

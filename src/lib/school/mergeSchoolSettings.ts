@@ -41,7 +41,7 @@ export function mergeSchoolSettings(school: SchoolRow, settings: SchoolSettingsR
       ? new Date(settings.updated_at) > new Date(school.updated_at)
         ? settings.updated_at
         : school.updated_at
-      : settings.updated_at ?? school.updated_at ?? null;
+      : (settings.updated_at ?? school.updated_at ?? null);
 
   return {
     ...school,

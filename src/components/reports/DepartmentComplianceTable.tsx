@@ -47,7 +47,9 @@ export function DepartmentComplianceTable({ items }: { items: DepartmentComplian
               <TableCell className="font-medium text-foreground">{item.departmentName}</TableCell>
               <TableCell className="text-center">{item.targeted}</TableCell>
               <TableCell className="text-center text-success">{item.compliant}</TableCell>
-              <TableCell className="text-center text-warning">{item.overdue + item.notYetDue}</TableCell>
+              <TableCell className="text-center text-warning">
+                {item.overdue + item.notYetDue}
+              </TableCell>
               <TableCell className="text-end font-semibold">
                 <span
                   className={

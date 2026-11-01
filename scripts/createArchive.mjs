@@ -13,4 +13,3 @@ const currentFile = url.fileURLToPath(import.meta.url);
 if (process.argv[1] && process.argv[1] === currentFile) {
   createArchive(process.argv[2]);
 }
-

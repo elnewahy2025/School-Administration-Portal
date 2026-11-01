@@ -38,11 +38,7 @@ describe("fetchCircularReportBatches", () => {
       }),
     } as unknown as SupabaseClient;
 
-    const result = await fetchCircularReportBatches(
-      mockSupabase,
-      ["c1", "c2", "c3"],
-      2,
-    );
+    const result = await fetchCircularReportBatches(mockSupabase, ["c1", "c2", "c3"], 2);
 
     expect(result.targets).toHaveLength(2);
     expect(result.responses).toHaveLength(2);
@@ -76,8 +72,6 @@ describe("fetchCircularReportBatches", () => {
       }),
     } as unknown as SupabaseClient;
 
-    await expect(
-      fetchCircularReportBatches(mockSupabase, ["c1"]),
-    ).rejects.toThrow(DatabaseError);
+    await expect(fetchCircularReportBatches(mockSupabase, ["c1"])).rejects.toThrow(DatabaseError);
   });
 });

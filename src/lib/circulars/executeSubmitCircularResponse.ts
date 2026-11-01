@@ -55,11 +55,13 @@ export async function executeSubmitCircularResponse({
     });
 
     if (insertError) {
-      throw mapDatabaseError(insertError, insertError.message || "Failed to submit circular response");
+      throw mapDatabaseError(
+        insertError,
+        insertError.message || "Failed to submit circular response",
+      );
     }
     return;
   }
 
   throw mapDatabaseError(rpcError, rpcError.message || "Failed to submit circular response");
 }
-

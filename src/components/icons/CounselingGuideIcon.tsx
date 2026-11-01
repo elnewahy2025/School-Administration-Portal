@@ -35,4 +35,3 @@ export function CounselingGuideIcon({ className = "", ...props }: SVGProps<SVGSV
     </svg>
   );
 }
-

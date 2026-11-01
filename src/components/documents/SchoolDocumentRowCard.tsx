@@ -27,7 +27,11 @@ export function SchoolDocumentRowCard({
     <div className="flex flex-col justify-between gap-4 rounded-xl border border-border bg-card p-4 shadow-xs transition-shadow hover:shadow-md sm:flex-row sm:items-center sm:p-5">
       <div className="flex items-start gap-3.5">
         <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-gold shadow-xs">
-          {isImage ? <ImageIcon className="size-5 text-gold" /> : <FileTextIcon className="size-5 text-gold" />}
+          {isImage ? (
+            <ImageIcon className="size-5 text-gold" />
+          ) : (
+            <FileTextIcon className="size-5 text-gold" />
+          )}
         </div>
 
         <div className="space-y-1 overflow-hidden">

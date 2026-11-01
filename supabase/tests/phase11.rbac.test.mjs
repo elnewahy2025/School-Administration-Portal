@@ -1,13 +1,6 @@
 // Phase 11 Complete Positive & Negative RBAC Verification Battery
 // Run: node scripts/runPhase11Rbac.mjs
-import {
-  check,
-  expectDenied,
-  getEnv,
-  makeAdmin,
-  signInAs,
-  summary,
-} from "./rls.helpers.test.mjs";
+import { check, expectDenied, getEnv, makeAdmin, signInAs, summary } from "./rls.helpers.test.mjs";
 
 const env = getEnv();
 const admin = makeAdmin(env);
@@ -376,7 +369,9 @@ try {
     .select();
   check(
     "POSIX 1.14: School Admin successfully assigns maintenance ticket to technician",
-    !adminAssignTicket.error && adminAssignTicket.data?.[0]?.assigned_operator_id === users.op1.id && adminAssignTicket.data?.[0]?.status === "assigned",
+    !adminAssignTicket.error &&
+      adminAssignTicket.data?.[0]?.assigned_operator_id === users.op1.id &&
+      adminAssignTicket.data?.[0]?.status === "assigned",
     adminAssignTicket.error?.message,
   );
 
@@ -485,34 +480,48 @@ try {
 
   // 2.1 Staff blocked from modifying platform settings
   await expectDenied("NEG 2.1: Staff cannot update system_settings", () =>
-    staff1C.from("system_settings").update({ value: { hacked: true } }).eq("key", "maintenance_mode").select(),
+    staff1C
+      .from("system_settings")
+      .update({ value: { hacked: true } })
+      .eq("key", "maintenance_mode")
+      .select(),
   );
 
   // 2.2 Staff blocked from modifying school settings
   await expectDenied("NEG 2.2: Staff cannot update school_settings", () =>
-    staff1C.from("school_settings").update({ academic_year: "9999" }).eq("school_id", school1.id).select(),
+    staff1C
+      .from("school_settings")
+      .update({ academic_year: "9999" })
+      .eq("school_id", school1.id)
+      .select(),
   );
 
   // 2.3 Staff blocked from creating or publishing circulars
   await expectDenied("NEG 2.3: Staff cannot insert circulars", () =>
-    staff1C.from("circulars").insert({
-      school_id: school1.id,
-      ref_number: `CIR-FAKE-${ts}`,
-      title: "Fake",
-      body: "Fake",
-    }).select(),
+    staff1C
+      .from("circulars")
+      .insert({
+        school_id: school1.id,
+        ref_number: `CIR-FAKE-${ts}`,
+        title: "Fake",
+        body: "Fake",
+      })
+      .select(),
   );
 
   // 2.4 Staff blocked from responding to circulars
   await expectDenied("NEG 2.4: Staff cannot respond to circulars", () =>
-    staff1C.from("circular_responses").insert({
-      circular_id: circularId,
-      school_id: school1.id,
-      department_id: d1.id,
-      responder_id: users.staff1.id,
-      response_type: "acknowledgement",
-      status: "acknowledged",
-    }).select(),
+    staff1C
+      .from("circular_responses")
+      .insert({
+        circular_id: circularId,
+        school_id: school1.id,
+        department_id: d1.id,
+        responder_id: users.staff1.id,
+        response_type: "acknowledgement",
+        status: "acknowledged",
+      })
+      .select(),
   );
 
   // 2.5 Staff blocked from managing roles
@@ -551,33 +560,42 @@ try {
 
   // 2.8 Department Head blocked from responding to another department's circular
   await expectDenied("NEG 2.8: Department Head cannot respond for a foreign department", () =>
-    headC.from("circular_responses").insert({
-      circular_id: circularId,
-      school_id: school1.id,
-      department_id: d2.id, // Science dept (Head belongs to IT)
-      responder_id: users.head.id,
-      response_type: "acknowledgement",
-      status: "acknowledged",
-    }).select(),
+    headC
+      .from("circular_responses")
+      .insert({
+        circular_id: circularId,
+        school_id: school1.id,
+        department_id: d2.id, // Science dept (Head belongs to IT)
+        responder_id: users.head.id,
+        response_type: "acknowledgement",
+        status: "acknowledged",
+      })
+      .select(),
   );
 
   // 2.9 Auditor blocked from modifying audit logs
   await expectDenied("NEG 2.9: Auditor cannot insert audit logs directly", () =>
-    audC.from("audit_logs").insert({
-      school_id: school1.id,
-      action: "fake.action",
-      actor_label: "auditor",
-    }).select(),
+    audC
+      .from("audit_logs")
+      .insert({
+        school_id: school1.id,
+        action: "fake.action",
+        actor_label: "auditor",
+      })
+      .select(),
   );
 
   // 2.10 Auditor blocked from creating maintenance requests
   await expectDenied("NEG 2.10: Auditor cannot create maintenance requests", () =>
-    audC.from("maintenance_requests").insert({
-      school_id: school1.id,
-      ticket_number: `TKT-AUD-${ts}`,
-      title: "Auditor Ticket",
-      description: "Test",
-    }).select(),
+    audC
+      .from("maintenance_requests")
+      .insert({
+        school_id: school1.id,
+        ticket_number: `TKT-AUD-${ts}`,
+        title: "Auditor Ticket",
+        description: "Test",
+      })
+      .select(),
   );
 
   // =========================================================================
@@ -587,7 +605,11 @@ try {
 
   // 3.1 School Admin cannot update Owner's profile email
   await expectDenied("PROT 3.1: School Admin cannot modify Owner's email", () =>
-    admin1C.from("profiles").update({ email: "hacked-owner@test.com" }).eq("id", users.owner1.id).select(),
+    admin1C
+      .from("profiles")
+      .update({ email: "hacked-owner@test.com" })
+      .eq("id", users.owner1.id)
+      .select(),
   );
 
   // 3.2 School Admin cannot deactivate Owner's profile
@@ -645,8 +667,9 @@ try {
   );
 
   // 3.10 Last-admin lockout guard: Now that only 1 school admin remains, cannot demote the sole admin
-  await expectDenied("PROT 3.10: School Admin CANNOT demote the sole remaining school administrator", () =>
-    admin1C.from("user_role_assignments").delete().eq("user_id", users.admin1.id).select(),
+  await expectDenied(
+    "PROT 3.10: School Admin CANNOT demote the sole remaining school administrator",
+    () => admin1C.from("user_role_assignments").delete().eq("user_id", users.admin1.id).select(),
   );
 
   // 3.11 Last-admin lockout guard: Sole school admin cannot deactivate their own profile
@@ -660,14 +683,17 @@ try {
   console.log("\n--- SECTION 4: MULTI-TENANT ISOLATION ---");
 
   // 4.1 School 2 Admin sees 0 School 1 circulars
-  const s2CircCount = await admin2C.from("circulars").select("id", { count: "exact" }).eq("school_id", school1.id);
-  check(
-    "TENANT 4.1: School 2 Admin cannot see School 1 circulars",
-    s2CircCount.data?.length === 0,
-  );
+  const s2CircCount = await admin2C
+    .from("circulars")
+    .select("id", { count: "exact" })
+    .eq("school_id", school1.id);
+  check("TENANT 4.1: School 2 Admin cannot see School 1 circulars", s2CircCount.data?.length === 0);
 
   // 4.2 School 2 Admin sees 0 School 1 maintenance requests
-  const s2TicketCount = await admin2C.from("maintenance_requests").select("id", { count: "exact" }).eq("school_id", school1.id);
+  const s2TicketCount = await admin2C
+    .from("maintenance_requests")
+    .select("id", { count: "exact" })
+    .eq("school_id", school1.id);
   check(
     "TENANT 4.2: School 2 Admin cannot see School 1 maintenance tickets",
     s2TicketCount.data?.length === 0,
@@ -675,12 +701,19 @@ try {
 
   // 4.3 School 2 Admin cannot update School 1 settings
   await expectDenied("TENANT 4.3: School 2 Admin cannot update School 1 settings", () =>
-    admin2C.from("school_settings").update({ academic_year: "3000" }).eq("school_id", school1.id).select(),
+    admin2C
+      .from("school_settings")
+      .update({ academic_year: "3000" })
+      .eq("school_id", school1.id)
+      .select(),
   );
 
   // 4.4 School 2 Admin cannot insert role for School 1
   await expectDenied("TENANT 4.4: School 2 Admin cannot insert role in School 1", () =>
-    admin2C.from("roles").insert({ school_id: school1.id, key: "cross_school", name: "Cross" }).select(),
+    admin2C
+      .from("roles")
+      .insert({ school_id: school1.id, key: "cross_school", name: "Cross" })
+      .select(),
   );
 
   console.log(`\n======================================================`);

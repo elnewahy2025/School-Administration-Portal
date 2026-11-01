@@ -52,4 +52,3 @@ export function checkAuthRateLimit(options: AuthRateLimitOptions): boolean {
 
   return true;
 }
-

@@ -24,8 +24,17 @@ export async function updateCircularAction(
       throw new ForbiddenError(auth.error || "Unauthorized");
     }
 
-    const { title, body, priority, visibility, responseType, dueAt, publishAt, status, departmentIds } =
-      parseCircularFormData(formData);
+    const {
+      title,
+      body,
+      priority,
+      visibility,
+      responseType,
+      dueAt,
+      publishAt,
+      status,
+      departmentIds,
+    } = parseCircularFormData(formData);
 
     if (!title || !body) {
       throw new ValidationError("Title and content are required");

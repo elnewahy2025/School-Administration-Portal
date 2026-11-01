@@ -94,7 +94,12 @@ describe("calculateCompliance", () => {
       departments,
     });
 
-    expect(result.totals).toMatchObject({ targeted: 1, compliant: 1, notApplicable: 1, percent: 100 });
+    expect(result.totals).toMatchObject({
+      targeted: 1,
+      compliant: 1,
+      notApplicable: 1,
+      percent: 100,
+    });
     expect(result.circulars[0]).toMatchObject({ targeted: 1, compliant: 1, percent: 100 });
   });
 

@@ -66,9 +66,8 @@ describe("assertCanUpdateRoleRecord", () => {
       })),
     } as unknown as SupabaseClient;
 
-    await expect(
-      assertCanUpdateRoleRecord(supabase, "missing", "school-1", true),
-    ).rejects.toThrow("Role not found");
+    await expect(assertCanUpdateRoleRecord(supabase, "missing", "school-1", true)).rejects.toThrow(
+      "Role not found",
+    );
   });
 });
-

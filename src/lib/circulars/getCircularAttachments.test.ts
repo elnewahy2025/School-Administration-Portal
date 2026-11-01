@@ -93,4 +93,3 @@ describe("getCircularAttachments", () => {
     await expect(getCircularAttachments("circ-123")).rejects.toThrow();
   });
 });
-

@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { getSchoolCirculars } from "./getSchoolCirculars";
 
-const mockCirculars = [
-  { id: "c-1", title: "Test", visibility: "public" },
-];
+const mockCirculars = [{ id: "c-1", title: "Test", visibility: "public" }];
 
 vi.mock("@/lib/supabase", () => ({
   createSupabaseServerClient: vi.fn().mockResolvedValue({

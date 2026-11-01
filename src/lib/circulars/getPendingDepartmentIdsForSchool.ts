@@ -1,7 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
-import { calculateCompliance, type ComplianceCircularInput } from "@/lib/reports/calculateCompliance";
+import {
+  calculateCompliance,
+  type ComplianceCircularInput,
+} from "@/lib/reports/calculateCompliance";
 import { isDeliveredStatus } from "@/lib/reports/isDeliveredStatus";
 
 const CIRCULAR_COLUMNS = "id, ref_number, title, category, priority, status, publish_at, due_at";

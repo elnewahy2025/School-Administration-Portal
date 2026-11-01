@@ -62,7 +62,9 @@ describe("getPublicSchoolDocuments", () => {
     expect(mockEqPublished).toHaveBeenCalledWith("is_published", true);
     expect(mockOrder).toHaveBeenCalledWith("created_at", { ascending: false });
     expect(result).toHaveLength(1);
-    expect(result[0]?.file_url).toBe("https://example.com/storage/school-123/operational-plan/plan.pdf");
+    expect(result[0]?.file_url).toBe(
+      "https://example.com/storage/school-123/operational-plan/plan.pdf",
+    );
   });
 
   it("returns an empty array when a database error occurs", async () => {
@@ -72,4 +74,3 @@ describe("getPublicSchoolDocuments", () => {
     expect(result).toEqual([]);
   });
 });
-

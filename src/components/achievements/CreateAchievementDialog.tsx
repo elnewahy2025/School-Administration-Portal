@@ -29,10 +29,7 @@ export function CreateAchievementDialog({ departments }: { departments: Departme
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
         >
-          <div
-            className="fixed inset-0 bg-scrim/60 backdrop-blur-xs"
-            onClick={handleClose}
-          />
+          <div className="fixed inset-0 bg-scrim/60 backdrop-blur-xs" onClick={handleClose} />
           <div className="relative z-10 max-h-[90vh] w-full max-w-2xl space-y-4 overflow-y-auto rounded-xl border border-border bg-card p-6 shadow-2xl">
             <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
               <div>

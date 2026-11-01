@@ -77,4 +77,3 @@ describe("getMaintenanceAttachments", () => {
     await expect(getMaintenanceAttachments("req-123")).rejects.toThrow();
   });
 });
-

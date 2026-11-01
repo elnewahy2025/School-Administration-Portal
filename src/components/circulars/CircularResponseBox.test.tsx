@@ -33,11 +33,7 @@ describe("CircularResponseBox", () => {
 
   it("renders 3 response options when department has not responded yet", () => {
     render(
-      <CircularResponseBox
-        circularId="circ-1"
-        responseType="approval"
-        existingResponse={null}
-      />,
+      <CircularResponseBox circularId="circ-1" responseType="approval" existingResponse={null} />,
     );
 
     expect(screen.getByRole("button", { name: /تم الاطلاع/i })).toBeInTheDocument();
@@ -104,4 +100,3 @@ describe("CircularResponseBox", () => {
     expect(screen.queryByRole("button", { name: /الرفض/i })).not.toBeInTheDocument();
   });
 });
-

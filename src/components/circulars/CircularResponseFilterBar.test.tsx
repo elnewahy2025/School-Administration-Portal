@@ -62,4 +62,3 @@ describe("CircularResponseFilterBar", () => {
     expect(setFilter).toHaveBeenCalledWith("acknowledged");
   });
 });
-

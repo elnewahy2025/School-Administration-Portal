@@ -18,9 +18,7 @@ describe("resolveRequestIp", () => {
 
   it("extracts x-real-ip when x-forwarded-for is missing", async () => {
     const { headers } = await import("next/headers");
-    vi.mocked(headers).mockResolvedValueOnce(
-      new Headers({ "x-real-ip": "198.51.100.4" }),
-    );
+    vi.mocked(headers).mockResolvedValueOnce(new Headers({ "x-real-ip": "198.51.100.4" }));
 
     const ip = await resolveRequestIp();
     expect(ip).toBe("198.51.100.4");
@@ -42,4 +40,3 @@ describe("resolveRequestIp", () => {
     expect(ip).toBe("unknown");
   });
 });
-

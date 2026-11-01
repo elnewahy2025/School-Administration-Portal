@@ -22,7 +22,14 @@ describe("getCircularsReportData", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(getSchoolDepartments).mockResolvedValue([
-      { id: "dept-1", school_id: "school-1", name_ar: "قسم 1", name_en: "Dept 1", is_active: true, created_at: "" },
+      {
+        id: "dept-1",
+        school_id: "school-1",
+        name_ar: "قسم 1",
+        name_en: "Dept 1",
+        is_active: true,
+        created_at: "",
+      },
     ]);
   });
 
@@ -155,8 +162,22 @@ describe("getCircularsReportData", () => {
 
   it("keeps drafts out of the denominator while still listing them", async () => {
     vi.mocked(getSchoolDepartments).mockResolvedValue([
-      { id: "d1", school_id: "school-1", name_ar: "العلوم", name_en: "Science", is_active: true, created_at: "" },
-      { id: "d2", school_id: "school-1", name_ar: "الرياضيات", name_en: "Math", is_active: true, created_at: "" },
+      {
+        id: "d1",
+        school_id: "school-1",
+        name_ar: "العلوم",
+        name_en: "Science",
+        is_active: true,
+        created_at: "",
+      },
+      {
+        id: "d2",
+        school_id: "school-1",
+        name_ar: "الرياضيات",
+        name_en: "Math",
+        is_active: true,
+        created_at: "",
+      },
     ]);
 
     const mockFrom = vi.fn((table: string) => {

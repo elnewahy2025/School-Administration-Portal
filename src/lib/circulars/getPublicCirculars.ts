@@ -29,4 +29,3 @@ export async function getPublicCirculars(schoolId?: string | null): Promise<Circ
 
   return (data as unknown as CircularRow[]) ?? [];
 }
-

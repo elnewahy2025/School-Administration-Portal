@@ -24,7 +24,8 @@ export function SchoolDocumentFileInput({
         <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2 text-xs font-medium text-foreground">
           <FileTextIcon className="size-4 shrink-0 text-primary" />
           <span className="truncate">
-            {t("currentFile")}: <span className="font-semibold text-primary">{currentFileName}</span>
+            {t("currentFile")}:{" "}
+            <span className="font-semibold text-primary">{currentFileName}</span>
           </span>
         </div>
       ) : null}

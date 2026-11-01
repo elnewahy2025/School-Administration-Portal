@@ -38,9 +38,7 @@ export function AuditLogPagination({
 
   return (
     <div className="flex items-center justify-between px-2 text-xs text-muted-foreground">
-      <span>
-        {t("auditPageOf", { page, totalPages, totalCount })}
-      </span>
+      <span>{t("auditPageOf", { page, totalPages, totalCount })}</span>
       <div className="flex items-center gap-2">
         <Button
           type="button"

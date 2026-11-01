@@ -11,4 +11,3 @@ export function createBypassToken(secret: string, nowMs: number = Date.now()): s
   const signature = createHmac("sha256", secret).update(payload).digest("hex");
   return `${payload}.${signature}`;
 }
-
