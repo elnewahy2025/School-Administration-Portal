@@ -68,7 +68,8 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-:root {
+:root,
+.moe {
   color-scheme: light;
   --background: #ffffff;
   --foreground: #0e121d;

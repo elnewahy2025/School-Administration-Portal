@@ -54,7 +54,11 @@ export async function updateSchoolDocumentAction(
     }
 
     revalidatePath(`/[locale]/documents/${existing.slug}`, "page");
+    revalidatePath(`/ar/documents/${existing.slug}`, "page");
+    revalidatePath(`/en/documents/${existing.slug}`, "page");
     revalidatePath("/[locale]", "page");
+    revalidatePath("/ar", "page");
+    revalidatePath("/en", "page");
     revalidatePath("/", "page");
 
     return { success: true };

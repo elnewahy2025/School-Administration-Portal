@@ -32,10 +32,38 @@ export async function getSchoolDocumentsBySlug(
     .eq("slug", slug)
     .order("created_at", { ascending: false });
 
-  if (error || !data) return [];
+  let rows: Record<string, unknown>[] | null = data;
+  if (error && error.code === "42703") {
+    const fallback = await supabase
+      .from("school_documents")
+      .select(
+        `
+        id,
+        school_id,
+        slug,
+        title,
+        description,
+        file_path,
+        file_name,
+        file_size,
+        mime_type,
+        created_by,
+        created_at,
+        updated_at,
+        creator:profiles!created_by(id, full_name)
+      `,
+      )
+      .eq("school_id", schoolId)
+      .eq("slug", slug)
+      .order("created_at", { ascending: false });
+    rows = fallback.data;
+  }
 
-  return (data as unknown as Record<string, unknown>[]).map((doc) => ({
+  if (!rows) return [];
+
+  return rows.map((doc) => ({
     ...doc,
+    is_published: typeof doc.is_published === "boolean" ? doc.is_published : true,
     file_url: `/api/documents/${doc.id as string}/preview`,
     creator: Array.isArray(doc.creator) ? (doc.creator[0] ?? null) : (doc.creator ?? null),
   })) as unknown as SchoolDocumentRow[];

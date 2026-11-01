@@ -30,10 +30,36 @@ export async function getPublicSchoolDocuments(
     .eq("is_published", true)
     .order("created_at", { ascending: false });
 
-  if (error || !data) return [];
+  let rows: Record<string, unknown>[] | null = data;
+  if (error && error.code === "42703") {
+    const fallback = await supabase
+      .from("school_documents")
+      .select(
+        `
+        id,
+        school_id,
+        slug,
+        title,
+        description,
+        file_path,
+        file_name,
+        file_size,
+        mime_type,
+        created_by,
+        created_at,
+        updated_at
+      `,
+      )
+      .eq("school_id", schoolId)
+      .order("created_at", { ascending: false });
+    rows = fallback.data;
+  }
 
-  return data.map((doc) => ({
+  if (!rows) return [];
+
+  return rows.map((doc) => ({
     ...doc,
-    file_url: `/api/documents/${doc.id}/preview`,
-  })) as SchoolDocumentRow[];
+    is_published: typeof doc.is_published === "boolean" ? doc.is_published : true,
+    file_url: `/api/documents/${doc.id as string}/preview`,
+  })) as unknown as SchoolDocumentRow[];
 }

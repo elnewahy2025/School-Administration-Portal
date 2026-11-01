@@ -97,7 +97,7 @@ export default async function LocaleLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="moe"
-          themes={["al-nada", "light", "dark", "emerald", "midnight", "moe"]}
+          themes={["moe", "al-nada", "light", "dark", "emerald", "midnight"]}
           enableSystem={false}
           disableTransitionOnChange
         >

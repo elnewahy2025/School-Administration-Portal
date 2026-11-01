@@ -40,7 +40,11 @@ export async function createSchoolDocumentAction(
     });
 
     revalidatePath(`/[locale]/documents/${slug}`, "page");
+    revalidatePath(`/ar/documents/${slug}`, "page");
+    revalidatePath(`/en/documents/${slug}`, "page");
     revalidatePath("/[locale]", "page");
+    revalidatePath("/ar", "page");
+    revalidatePath("/en", "page");
     revalidatePath("/", "page");
 
     return { success: true, documentId };
