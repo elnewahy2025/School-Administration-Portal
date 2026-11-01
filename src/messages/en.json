@@ -706,7 +706,9 @@
     "roleOperator": "Maintenance Technician",
     "roleSchoolAdmin": "School Administrator",
     "roleAuditor": "Auditor",
-    "roleOwner": "System Administrator"
+    "roleOwner": "System Administrator",
+    "confirmDeleteRoleWithUsers": "Warning: This role is currently assigned to {count} user(s). Deleting it is very dangerous and will strip all permissions from these users. Are you sure you want to proceed, or should you reassign/delete the users first?",
+    "confirmDeleteRole": "Are you sure you want to permanently delete this role?"
   },
   "common": {
     "save": "Save",

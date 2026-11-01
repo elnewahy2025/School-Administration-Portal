@@ -19,13 +19,20 @@ export function RoleTableActions({
   canManage: boolean;
   onEdit: () => void;
 }) {
+  const t = useTranslations("rbac");
   const tCommon = useTranslations("common");
   const router = useRouter();
   const [isDeleting, startDeleteTransition] = useTransition();
 
   const handleDelete = async () => {
+    const confirmMessage =
+      role.user_count > 0
+        ? t("confirmDeleteRoleWithUsers", { count: role.user_count })
+        : t("confirmDeleteRole");
+
     const confirmed = await showConfirmBox({
-      message: tCommon("confirmDelete"),
+      title: role.user_count > 0 ? tCommon("warning") : undefined,
+      message: confirmMessage,
       type: "warning",
     });
     if (!confirmed) return;
@@ -58,7 +65,7 @@ export function RoleTableActions({
         <Button
           variant="destructive"
           size="sm"
-          disabled={isDeleting || role.user_count > 0}
+          disabled={isDeleting}
           onClick={handleDelete}
           title={tCommon("delete")}
         >
