@@ -1,5 +1,4 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
-import { getPublicDocumentUrl } from "./getPublicDocumentUrl";
 import type { SchoolDocumentRow } from "./types";
 
 export async function getPublicSchoolDocuments(
@@ -35,6 +34,6 @@ export async function getPublicSchoolDocuments(
 
   return data.map((doc) => ({
     ...doc,
-    file_url: getPublicDocumentUrl(doc.file_path),
+    file_url: `/api/documents/${doc.id}/preview`,
   })) as SchoolDocumentRow[];
 }

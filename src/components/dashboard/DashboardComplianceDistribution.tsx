@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { COMPLIANCE_THRESHOLDS } from "@/lib/dashboard/complianceThresholds";
 import { sortDepartmentSlices } from "@/lib/dashboard/sortDepartmentSlices";
 import type { DashboardDepartmentComplianceSlice } from "@/lib/dashboard/types";
 import { DashboardComplianceDistributionRow } from "./DashboardComplianceDistributionRow";
@@ -39,10 +38,6 @@ export function DashboardComplianceDistribution({
       <div className="flex flex-wrap items-end justify-between gap-x-5 gap-y-1.5">
         <h3 className="text-xs font-bold text-muted-foreground">{t("complianceByDepartment")}</h3>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-medium text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block h-3 w-px bg-foreground/45" aria-hidden="true" />
-            {t("complianceTarget", { percent: COMPLIANCE_THRESHOLDS.good })}
-          </span>
           <span>{t("sortedByLowestCompliance")}</span>
         </div>
       </div>

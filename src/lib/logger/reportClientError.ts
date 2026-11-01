@@ -30,7 +30,6 @@ export function reportClientError(error: unknown, source: ClientErrorSource): st
       source,
     };
 
-    console.error("[client-error]", payload);
     sendClientErrorReport(payload);
   }
 

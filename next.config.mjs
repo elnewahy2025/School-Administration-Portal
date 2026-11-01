@@ -66,6 +66,21 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // PDF and image previews are embedded only by this application's document dialog.
+        // This narrow override retains clickjacking protection for every other API response.
+        source: "/api/documents/:id/preview",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "default-src 'none'; frame-ancestors 'self';",
+          },
+        ],
+      },
     ];
   },
 };

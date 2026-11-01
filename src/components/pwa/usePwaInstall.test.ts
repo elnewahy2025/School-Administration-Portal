@@ -15,7 +15,6 @@ describe("usePwaInstall", () => {
       result.current.dismiss();
     });
 
-    expect(sessionStorage.getItem("pwa_install_dismissed")).toBe("true");
     expect(result.current.isInstallable).toBe(false);
   });
 

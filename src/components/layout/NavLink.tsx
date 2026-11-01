@@ -30,7 +30,7 @@ export function NavLink({
       href={href}
       onClick={onClick}
       className={cn(
-        "group flex items-center gap-3 rounded-md border px-4 py-3 text-sm font-medium transition-[transform,box-shadow,background-color,border-color,color] duration-300 ease-[cubic-bezier(.22,1,.36,1)]",
+        "group flex items-center gap-3 rounded-md border px-4 py-3 text-sm font-medium transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(.22,1,.36,1)]",
         isActive
           ? "border-transparent bg-sidebar-primary bg-[linear-gradient(90deg,var(--nav-active-from,var(--sidebar-primary))_-30%,var(--nav-active-to,var(--sidebar-primary))_110%)] font-semibold text-gold shadow-[0_8px_18px_rgba(10,47,122,.35)]"
           : "border-sidebar-border bg-sidebar-accent/40 text-sidebar-foreground/90 hover:border-sidebar-primary/40 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_8px_18px_rgba(0,0,0,.18)] hover:ltr:translate-x-1 hover:rtl:-translate-x-1",

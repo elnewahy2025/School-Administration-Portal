@@ -1,6 +1,7 @@
 "use client";
 
 import { FileTextIcon, ImageIcon } from "lucide-react";
+import { useLocale } from "next-intl";
 import { SchoolDocumentRowActions } from "./SchoolDocumentRowActions";
 import type { SchoolDocumentRow } from "@/lib/documents/types";
 
@@ -15,13 +16,16 @@ export function SchoolDocumentRowCard({
   onEdit: () => void;
   onDelete: () => void;
 }) {
+  const locale = useLocale();
   const isImage = document.mime_type.startsWith("image/");
   const formattedSize =
     document.file_size > 1024 * 1024
       ? `${(document.file_size / (1024 * 1024)).toFixed(1)} MB`
       : `${Math.round(document.file_size / 1024)} KB`;
 
-  const dateStr = new Date(document.created_at).toLocaleDateString();
+  const dateStr = new Date(document.created_at).toLocaleDateString(
+    locale === "ar" ? "ar-EG" : "en-US",
+  );
 
   return (
     <div className="flex flex-col justify-between gap-4 rounded-xl border border-border bg-card p-4 shadow-xs transition-shadow hover:shadow-md sm:flex-row sm:items-center sm:p-5">

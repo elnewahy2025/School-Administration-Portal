@@ -14,7 +14,7 @@ vi.mock("next-intl", () => ({
       documentViewAction: "عرض الوثيقة",
       docOperationalPlanTitle: "الخطة التشغيلية",
       docOperationalPlanDesc: "أهداف الخطة السنوية ومؤشرات الأداء والتنفيذ.",
-      docCommitteesGuideTitle: "دليل إجراءات اللجان",
+      docCommitteesGuideTitle: "دليل سير اللجان",
       docCommitteesGuideDesc: "تشكيل اللجان المدرسية ومهامها وآلية عملها.",
       docCounselingGuideTitle: "دليل الإرشاد المدرسي",
       docCounselingGuideDesc: "برامج الإرشاد الطلابي والخدمات النفسية والتربوية.",
@@ -51,7 +51,7 @@ describe("PublicDocumentsSection", () => {
     render(<PublicDocumentsSection />);
 
     expect(screen.getByText("الخطة التشغيلية")).toBeDefined();
-    expect(screen.getByText("دليل إجراءات اللجان")).toBeDefined();
+    expect(screen.getByText("دليل سير اللجان")).toBeDefined();
     expect(screen.getByText("دليل الإرشاد المدرسي")).toBeDefined();
 
     const pdfBadges = screen.getAllByText("PDF");

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { PieChartIcon } from "lucide-react";
+import { FileTextIcon, PieChartIcon } from "lucide-react";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { PANEL } from "@/components/ui/diamond-card-styles";
 import { CircularRemindButton } from "@/components/circulars/CircularRemindButton";
@@ -53,19 +53,22 @@ export function DashboardComplianceWidget({ data }: { data: DashboardComplianceD
         <div className="flex flex-wrap items-center gap-2">
           {data.circulars.length > 0 && (
             <div className="w-full sm:w-auto">
-              <select
-                value={selectedCircularId}
-                onChange={(e) => setSelectedCircularId(e.target.value)}
-                className="w-full rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition-colors outline-none focus:border-primary sm:w-auto"
-                aria-label={t("selectCircular")}
-              >
-                <option value="all">{t("allCircularsSummary")}</option>
-                {data.circulars.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.refNumber} - {c.title}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <FileTextIcon className="pointer-events-none absolute start-2.5 top-1/2 size-3.5 -translate-y-1/2 text-primary" />
+                <select
+                  value={selectedCircularId}
+                  onChange={(e) => setSelectedCircularId(e.target.value)}
+                  className="h-8 w-full cursor-pointer rounded-lg border border-border bg-background ps-8 pe-3 text-xs font-medium text-foreground transition-colors outline-none focus:border-primary sm:w-auto dark:bg-input/30"
+                  aria-label={t("selectCircular")}
+                >
+                  <option value="all">{t("allCircularsSummary")}</option>
+                  {data.circulars.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.refNumber} - {c.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
               {data.circularCount > data.circulars.length ? (
                 <p className="mt-1 text-[11px] font-medium text-muted-foreground">
                   {t("showingRecentCirculars", {

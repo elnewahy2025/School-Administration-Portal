@@ -789,6 +789,7 @@
     "bannerSubtitleIos": "Install on iPhone/iPad for instant home screen access",
     "bannerAriaLabel": "PWA install banner",
     "installButton": "Install",
+    "skipForNow": "Skip for now",
     "iosGuideButton": "Install on iOS",
     "howToInstallIos": "How to install on iOS",
     "dismissAriaLabel": "Dismiss install prompt",

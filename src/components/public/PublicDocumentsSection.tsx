@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { OperationalPlanIcon } from "@/components/icons/OperationalPlanIcon";
-import { CommitteesGuideIcon } from "@/components/icons/CommitteesGuideIcon";
-import { CounselingGuideIcon } from "@/components/icons/CounselingGuideIcon";
+import { ClipboardListIcon, HeartHandshakeIcon, UsersIcon } from "lucide-react";
 import { PublicDocumentCard } from "./PublicDocumentCard";
 import { SchoolDocumentPreviewDialog } from "@/components/documents/SchoolDocumentPreviewDialog";
 import type { SchoolDocumentRow, SchoolDocumentSlug } from "@/lib/documents/types";
@@ -50,7 +48,7 @@ export function PublicDocumentsSection({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-6 lg:gap-8 pt-8 items-stretch">
         <div className="h-full animate-hero-fade-up delay-200">
           <PublicDocumentCard
-            icon={OperationalPlanIcon}
+            icon={ClipboardListIcon}
             title={t("docOperationalPlanTitle")}
             description={t("docOperationalPlanDesc")}
             actionLabel={t("documentViewAction")}
@@ -59,7 +57,7 @@ export function PublicDocumentsSection({
         </div>
         <div className="h-full animate-hero-fade-up delay-350">
           <PublicDocumentCard
-            icon={CommitteesGuideIcon}
+            icon={UsersIcon}
             title={t("docCommitteesGuideTitle")}
             description={t("docCommitteesGuideDesc")}
             actionLabel={t("documentViewAction")}
@@ -68,7 +66,7 @@ export function PublicDocumentsSection({
         </div>
         <div className="h-full animate-hero-fade-up delay-500">
           <PublicDocumentCard
-            icon={CounselingGuideIcon}
+            icon={HeartHandshakeIcon}
             title={t("docCounselingGuideTitle")}
             description={t("docCounselingGuideDesc")}
             actionLabel={t("documentViewAction")}

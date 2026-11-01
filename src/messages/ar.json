@@ -43,7 +43,7 @@
     "documentViewAction": "عرض الوثيقة",
     "docOperationalPlanTitle": "الخطة التشغيلية",
     "docOperationalPlanDesc": "أهداف الخطة السنوية ومؤشرات الأداء والتنفيذ.",
-    "docCommitteesGuideTitle": "دليل إجراءات اللجان",
+    "docCommitteesGuideTitle": "دليل سير اللجان",
     "docCommitteesGuideDesc": "تشكيل اللجان المدرسية ومهامها وآلية عملها.",
     "docCounselingGuideTitle": "دليل الإرشاد المدرسي",
     "docCounselingGuideDesc": "برامج الإرشاد الطلابي والخدمات النفسية والتربوية.",
@@ -156,7 +156,7 @@
     "closeMenu": "إغلاق القائمة",
     "schoolDocuments": "أدلة ووثائق المدرسة",
     "operationalPlan": "الخطة التشغيلية",
-    "committeesGuide": "دليل إجراءات اللجان",
+    "committeesGuide": "دليل سير اللجان",
     "counselingGuide": "دليل الإرشاد المدرسي"
   },
   "settings": {
@@ -790,6 +790,7 @@
     "bannerSubtitleIos": "ثبّت التطبيق على الآيفون والآيباد للوصول الفوري من الشاشة الرئيسية",
     "bannerAriaLabel": "شريط تثبيت التطبيق",
     "installButton": "تثبيت",
+    "skipForNow": "تخطي الآن",
     "iosGuideButton": "تثبيت على iOS",
     "howToInstallIos": "طريقة التثبيت على الآيفون",
     "dismissAriaLabel": "إغلاق التنبيه",

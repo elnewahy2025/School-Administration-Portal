@@ -20,10 +20,6 @@ vi.mock("@/lib/supabase", () => ({
   })),
 }));
 
-vi.mock("./getPublicDocumentUrl", () => ({
-  getPublicDocumentUrl: vi.fn((path: string) => `https://example.com/storage/${path}`),
-}));
-
 describe("getPublicSchoolDocuments", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -62,9 +58,7 @@ describe("getPublicSchoolDocuments", () => {
     expect(mockEqPublished).toHaveBeenCalledWith("is_published", true);
     expect(mockOrder).toHaveBeenCalledWith("created_at", { ascending: false });
     expect(result).toHaveLength(1);
-    expect(result[0]?.file_url).toBe(
-      "https://example.com/storage/school-123/operational-plan/plan.pdf",
-    );
+    expect(result[0]?.file_url).toBe("/api/documents/doc-1/preview");
   });
 
   it("returns an empty array when a database error occurs", async () => {

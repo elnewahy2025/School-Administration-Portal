@@ -1,9 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { OperationalPlanIcon } from "@/components/icons/OperationalPlanIcon";
-import { CommitteesGuideIcon } from "@/components/icons/CommitteesGuideIcon";
-import { CounselingGuideIcon } from "@/components/icons/CounselingGuideIcon";
+import { ClipboardListIcon, HeartHandshakeIcon, UsersIcon } from "lucide-react";
 import { NavLink } from "./NavLink";
 
 export function NavDocumentLinks({ onSelect }: { onSelect?: () => void }) {
@@ -19,19 +17,19 @@ export function NavDocumentLinks({ onSelect }: { onSelect?: () => void }) {
       <NavLink
         href="/documents/operational-plan"
         label={t("operationalPlan")}
-        icon={OperationalPlanIcon}
+        icon={ClipboardListIcon}
         onClick={onSelect}
       />
       <NavLink
         href="/documents/committees-guide"
         label={t("committeesGuide")}
-        icon={CommitteesGuideIcon}
+        icon={UsersIcon}
         onClick={onSelect}
       />
       <NavLink
         href="/documents/counseling-guide"
         label={t("counselingGuide")}
-        icon={CounselingGuideIcon}
+        icon={HeartHandshakeIcon}
         onClick={onSelect}
       />
     </>

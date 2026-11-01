@@ -15,10 +15,7 @@ export function usePwaInstall() {
   const [isIos] = useState(() => detectIosDevice());
   const [isStandalone] = useState(() => isStandaloneMode());
   const [isIosGuideOpen, setIsIosGuideOpen] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return sessionStorage.getItem("pwa_install_dismissed") === "true";
-  });
+  const [isDismissed, setIsDismissed] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstall = (e: Event) => {
@@ -47,10 +44,8 @@ export function usePwaInstall() {
   const promptInstall = useCallback(async () => {
     if (deferredPrompt) {
       await deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
-      if (choice.outcome === "accepted") {
-        setHasPrompt(false);
-      }
+      await deferredPrompt.userChoice;
+      setHasPrompt(false);
       setDeferredPrompt(null);
       return;
     }
@@ -62,7 +57,6 @@ export function usePwaInstall() {
 
   const dismiss = useCallback(() => {
     setIsDismissed(true);
-    sessionStorage.setItem("pwa_install_dismissed", "true");
   }, []);
 
   const isInstallable = (hasPrompt || isIos) && !isStandalone && !isDismissed;
