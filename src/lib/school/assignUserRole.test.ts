@@ -42,6 +42,40 @@ describe("assignUserRole", () => {
     });
   });
 
+  it("forces department_id to null for school-wide roles like school_admin", async () => {
+    const rolesMock = [{ id: "admin-role-id", school_id: null, is_system: true }];
+    const insertMock = vi.fn().mockResolvedValue({ error: null });
+    const userRoleMock = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+      insert: insertMock,
+    };
+    const rolesMockObj = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      or: vi.fn().mockResolvedValue({ data: rolesMock, error: null }),
+    };
+
+    const supabase = {
+      from: vi.fn((table: string) => {
+        if (table === "roles") return rolesMockObj;
+        if (table === "user_role_assignments") return userRoleMock;
+        return {};
+      }),
+    } as unknown as SupabaseClient;
+
+    await assignUserRole(supabase, "user-1", "school-123", "admin-1", "school_admin", "dept-456");
+
+    expect(insertMock).toHaveBeenCalledWith({
+      user_id: "user-1",
+      role_id: "admin-role-id",
+      school_id: "school-123",
+      department_id: null,
+      assigned_by: "admin-1",
+    });
+  });
+
   it("throws descriptive error when role is not found", async () => {
     const supabase = {
       from: vi.fn(() => ({

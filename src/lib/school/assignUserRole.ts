@@ -11,6 +11,8 @@ export async function assignUserRole(
   departmentId?: string | null,
 ): Promise<void> {
   const roleId = await resolveRoleForAssignment(supabase, roleKey, schoolId);
+  const isSchoolWide = ["school_admin", "operator", "auditor", "owner"].includes(roleKey);
+  const effectiveDeptId = isSchoolWide ? null : departmentId;
 
   const { data: existingAssignment, error: findError } = await supabase
     .from("user_role_assignments")
@@ -28,8 +30,8 @@ export async function assignUserRole(
       role_id: roleId,
       assigned_by: assignedBy,
     };
-    if (departmentId !== undefined) {
-      updatePayload.department_id = departmentId || null;
+    if (effectiveDeptId !== undefined) {
+      updatePayload.department_id = effectiveDeptId || null;
     }
 
     const { error: updateError } = await supabase
@@ -45,7 +47,7 @@ export async function assignUserRole(
       user_id: userId,
       role_id: roleId,
       school_id: schoolId,
-      department_id: departmentId || null,
+      department_id: effectiveDeptId || null,
       assigned_by: assignedBy,
     });
 
