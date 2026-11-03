@@ -47,6 +47,21 @@ describe("generateDocumentReferenceNumber", () => {
     });
   });
 
+  it("falls back to generate_school_number when next_school_number returns 42501 (service role)", async () => {
+    const mockSupabase = {
+      rpc: vi.fn().mockResolvedValue({
+        data: null,
+        error: { code: "42501", message: "An active account is required to allocate a document number" },
+      }),
+    } as unknown as SupabaseClient;
+
+    mockAdminRpc.mockResolvedValue({ data: "CIR-2026-0003", error: null });
+
+    const res = await generateDocumentReferenceNumber(mockSupabase, "school-1", "circular");
+
+    expect(res.refNum).toBe("CIR-2026-0003");
+  });
+
   it("falls back to sequential timestamp format if both RPCs fail", async () => {
     const mockSupabase = {
       rpc: vi.fn().mockResolvedValue({

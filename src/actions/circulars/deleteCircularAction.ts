@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseServerClient, createSupabaseAdminClient } from "@/lib/supabase";
 import { deleteCircularRecord } from "@/lib/circulars/deleteCircularRecord";
 import { assertCanManageCirculars } from "@/lib/circulars/assertCanManageCirculars";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
@@ -16,7 +16,9 @@ export async function deleteCircularAction(circularId: string): Promise<ActionRe
       throw new ForbiddenError(auth.error || "Unauthorized");
     }
 
-    const supabase = await createSupabaseServerClient();
+    const supabase = auth.isOwner
+      ? createSupabaseAdminClient({ actorId: auth.profileId })
+      : await createSupabaseServerClient();
     const res = await deleteCircularRecord(supabase, circularId);
     if (!res.success) {
       throw mapDatabaseError(res.error, "Failed to delete circular");

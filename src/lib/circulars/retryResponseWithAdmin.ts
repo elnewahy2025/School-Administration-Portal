@@ -22,8 +22,7 @@ export async function retryResponseWithAdmin(params: RetryResponseAdminParams): 
     .from("circular_responses")
     .update({ is_latest: false, updated_at: new Date().toISOString() })
     .eq("circular_id", params.circularId)
-    .eq("department_id", params.departmentId)
-    .eq("is_latest", true);
+    .eq("department_id", params.departmentId);
 
   const { error } = await admin.from("circular_responses").insert({
     circular_id: params.circularId,

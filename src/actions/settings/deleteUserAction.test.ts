@@ -83,7 +83,7 @@ describe("deleteUserAction", () => {
     expect(res.error).toBe("Cannot modify system-protected account");
   });
 
-  it("allows platform owner full control to delete a user even if RPC is missing", async () => {
+  it("allows platform owner full control to permanently delete a user from database", async () => {
     mockGetCurrentProfile.mockResolvedValue({ id: "owner-1", school_id: "school-1" });
     mockIsPlatformOwner.mockImplementation(async (id: string) => id === "owner-1");
 
@@ -104,11 +104,18 @@ describe("deleteUserAction", () => {
       if (table === "profiles") {
         return {
           select: () => ({ eq: () => ({ maybeSingle: mockMaybeSingle }) }),
-          update: mockUpdate,
+          delete: mockDelete,
         };
       }
-      if (table === "user_role_assignments") {
+      if (
+        table === "user_role_assignments" ||
+        table === "circular_responses" ||
+        table === "maintenance_assignments"
+      ) {
         return { delete: mockDelete };
+      }
+      if (table === "maintenance_requests") {
+        return { update: mockUpdate };
       }
       return {};
     });
@@ -116,11 +123,6 @@ describe("deleteUserAction", () => {
     const res = await deleteUserAction("target-1");
 
     expect(res.success).toBe(true);
-    expect(mockUpdate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        school_id: null,
-        is_active: false,
-      }),
-    );
+    expect(mockDelete).toHaveBeenCalled();
   });
 });
