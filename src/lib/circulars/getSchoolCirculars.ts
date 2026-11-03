@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { warnOnDataTruncation } from "@/lib/supabase/warnOnDataTruncation";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { logError } from "@/lib/logger";
 import type { CircularRow } from "./types";
 
 const SELECT_WITH_VISIBILITY = `
@@ -40,7 +41,13 @@ export async function getSchoolCirculars(schoolId?: string | null): Promise<Circ
     .order("created_at", { ascending: false });
 
   if (error) {
-    if (error.code === "42703" || error.message?.includes("visibility")) {
+    // Schema-tolerant read: a database that predates migration 0055 has no
+    // visibility column. The degradation is safe (an unknown visibility is
+    // treated as internal, never as public) and is logged so the drift stays
+    // visible instead of silent.
+    if (error.code === "42703") {
+      logError(error, { scope: "getSchoolCirculars.visibilityFallback", schoolId });
+
       const fallback = await supabase
         .from("circulars")
         .select(SELECT_WITHOUT_VISIBILITY)

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { logError } from "@/lib/logger";
 import type { CircularRow } from "./types";
 
 const SELECT_CIRCULAR_WITH_VISIBILITY =
@@ -22,7 +23,12 @@ export async function fetchCircularBaseRow(
   }
 
   const err = primary.error;
-  if (err && (err.code === "42703" || err.message?.includes("visibility"))) {
+  // Schema-tolerant read for a database that predates migration 0055. The
+  // missing visibility is treated as internal (never as public) and the drift
+  // is logged so it does not stay silent.
+  if (err && err.code === "42703") {
+    logError(err, { scope: "fetchCircularBaseRow.visibilityFallback", circularId });
+
     const fallback = await supabase
       .from("circulars")
       .select(SELECT_CIRCULAR_WITHOUT_VISIBILITY)

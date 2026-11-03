@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { logError } from "@/lib/logger";
 import { getEffectivePermissions } from "./getEffectivePermissions";
 
 export async function hasPermission(
@@ -24,8 +25,14 @@ export async function hasPermission(
       if (effective.includes(key)) {
         return true;
       }
-    } catch {
-      // Fall through to error mapping or return false
+    } catch (fallbackError) {
+      // The fallback is best effort: a failure here must not hide the RPC
+      // result. It is logged so the real cause is never lost silently.
+      logError(fallbackError, {
+        scope: "hasPermission.effectivePermissionsFallback",
+        permission: key,
+        schoolId: schoolId ?? null,
+      });
     }
   }
 

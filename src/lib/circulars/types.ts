@@ -67,3 +67,14 @@ export type CircularResponseRow = {
   is_latest: boolean;
   submitted_at: string;
 };
+
+export type CircularInsertParams = {
+  schoolId: string;
+  title: string;
+  body: string;
+  priority: CircularPriority;
+  visibility?: CircularVisibility;
+  responseType: CircularResponseType;
+  dueAt: string | null;
+  createdBy: string;
+};

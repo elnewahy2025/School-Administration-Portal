@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { CircularPriority, CircularResponseType, CircularVisibility } from "./types";
 import { generateDocumentReferenceNumber } from "@/lib/school/generateDocumentReferenceNumber";
-import { insertCircularWithFallback } from "./insertCircularWithFallback";
+import { insertCircularRecord } from "./insertCircularRecord";
 
 export async function createCircularRecord(
   supabase: SupabaseClient,
@@ -26,5 +26,5 @@ export async function createCircularRecord(
     return { error: refError ?? "Failed to generate reference number" };
   }
 
-  return insertCircularWithFallback(supabase, params, refNum);
+  return insertCircularRecord(supabase, params, refNum);
 }

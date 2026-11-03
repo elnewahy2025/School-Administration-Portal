@@ -5,6 +5,7 @@ import type {
   CircularStatus,
   CircularVisibility,
 } from "./types";
+import { logError } from "@/lib/logger";
 import { insertCircularTargets } from "./insertCircularTargets";
 import { buildCircularUpdatePayload } from "./buildCircularUpdatePayload";
 
@@ -26,21 +27,24 @@ export async function updateCircularRecord(
 ): Promise<{ success: boolean; error?: string }> {
   const updatePayload = buildCircularUpdatePayload(params);
 
-  let { error } = await supabase
+  // A single attempt: the payload is written as built. Retrying without the
+  // visibility column would silently discard the requested visibility change
+  // and report success, which is exactly the failure mode migration 0064
+  // removes.
+  const { error } = await supabase
     .from("circulars")
     .update(updatePayload)
     .eq("id", params.circularId);
 
-  if (error && (error.code === "42703" || error.message?.includes("visibility"))) {
-    delete updatePayload.visibility;
-    const retry = await supabase
-      .from("circulars")
-      .update(updatePayload)
-      .eq("id", params.circularId);
-    error = retry.error;
+  if (error) {
+    logError(error, {
+      scope: "updateCircularRecord",
+      circularId: params.circularId,
+      schoolId: params.schoolId,
+      visibility: params.visibility ?? null,
+    });
+    return { success: false, error: error.message };
   }
-
-  if (error) return { success: false, error: error.message };
 
   if (params.departmentIds) {
     const { error: deleteError } = await supabase

@@ -60,31 +60,20 @@ describe("createCircularRecord", () => {
     expect(res.error).toBe("Failed to generate");
   });
 
-  it("retries with 'internal' if 'public' is rejected by database check constraint", async () => {
+  it("surfaces a visibility constraint violation instead of rewriting it", async () => {
     mockGenerateRef.mockResolvedValue({ refNum: "CIR-2026-0001" });
 
-    let callCount = 0;
-    const mockInsert = vi.fn().mockImplementation(() => {
-      callCount++;
-      if (callCount === 1) {
-        return {
-          select: () => ({
-            single: () =>
-              Promise.resolve({
-                data: null,
-                error: {
-                  code: "23514",
-                  message: 'violates check constraint "circulars_visibility_check"',
-                },
-              }),
+    const mockInsert = vi.fn().mockReturnValue({
+      select: () => ({
+        single: () =>
+          Promise.resolve({
+            data: null,
+            error: {
+              code: "23514",
+              message: 'violates check constraint "circulars_visibility_check"',
+            },
           }),
-        };
-      }
-      return {
-        select: () => ({
-          single: () => Promise.resolve({ data: { id: "circ-internal-1" }, error: null }),
-        }),
-      };
+      }),
     });
 
     const mockSupabase = {
@@ -102,7 +91,11 @@ describe("createCircularRecord", () => {
       createdBy: "user-1",
     });
 
-    expect(res.circularId).toBe("circ-internal-1");
-    expect(callCount).toBe(2);
+    // The failure is reported, and the row is written exactly once: no second
+    // attempt with a different visibility value.
+    expect(res.circularId).toBeUndefined();
+    expect(res.error).toContain("circulars_visibility_check");
+    expect(mockInsert).toHaveBeenCalledTimes(1);
+    expect(mockInsert.mock.calls[0][0]).toMatchObject({ visibility: "public" });
   });
 });
