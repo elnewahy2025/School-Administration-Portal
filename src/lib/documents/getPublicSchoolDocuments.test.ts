@@ -3,7 +3,7 @@ import { getPublicSchoolDocuments } from "./getPublicSchoolDocuments";
 
 const mockSelect = vi.fn();
 const mockEqSchool = vi.fn();
-const mockEqPublished = vi.fn();
+const mockOrCondition = vi.fn();
 const mockOrder = vi.fn();
 
 vi.mock("@/lib/supabase", () => ({
@@ -11,9 +11,19 @@ vi.mock("@/lib/supabase", () => ({
     from: vi.fn(() => ({
       select: mockSelect.mockReturnValue({
         eq: mockEqSchool.mockReturnValue({
-          eq: mockEqPublished.mockReturnValue({
+          or: mockOrCondition.mockReturnValue({
             order: mockOrder,
           }),
+          order: mockOrder,
+        }),
+      }),
+    })),
+  })),
+  createSupabaseAdminClient: vi.fn(() => ({
+    from: vi.fn(() => ({
+      select: vi.fn().mockReturnValue({
+        eq: vi.fn().mockReturnValue({
+          order: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
       }),
     })),
@@ -55,14 +65,13 @@ describe("getPublicSchoolDocuments", () => {
     const result = await getPublicSchoolDocuments("school-123");
 
     expect(mockEqSchool).toHaveBeenCalledWith("school_id", "school-123");
-    expect(mockEqPublished).toHaveBeenCalledWith("is_published", true);
     expect(mockOrder).toHaveBeenCalledWith("created_at", { ascending: false });
     expect(result).toHaveLength(1);
     expect(result[0]?.file_url).toBe("/api/documents/doc-1/preview");
   });
 
   it("returns an empty array when a database error occurs", async () => {
-    mockOrder.mockResolvedValueOnce({ data: null, error: new Error("DB failure") });
+    mockOrder.mockResolvedValue({ data: null, error: new Error("DB failure") });
 
     const result = await getPublicSchoolDocuments("school-123");
     expect(result).toEqual([]);

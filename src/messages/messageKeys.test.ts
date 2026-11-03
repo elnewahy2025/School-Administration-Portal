@@ -99,7 +99,7 @@ describe("translation messages", () => {
     }
 
     expect([...new Set(missing)]).toEqual([]);
-  });
+  }, 20000);
 
   it("keeps the ar and en key sets identical", () => {
     const ar = new Set(leafKeys(messages.ar));

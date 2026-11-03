@@ -60,7 +60,7 @@ describe("createCircularRecord", () => {
     expect(res.error).toBe("Failed to generate");
   });
 
-  it("retries with 'all' if 'public' is rejected by database check constraint", async () => {
+  it("retries with 'internal' if 'public' is rejected by database check constraint", async () => {
     mockGenerateRef.mockResolvedValue({ refNum: "CIR-2026-0001" });
 
     let callCount = 0;
@@ -82,7 +82,7 @@ describe("createCircularRecord", () => {
       }
       return {
         select: () => ({
-          single: () => Promise.resolve({ data: { id: "circ-all-1" }, error: null }),
+          single: () => Promise.resolve({ data: { id: "circ-internal-1" }, error: null }),
         }),
       };
     });
@@ -102,7 +102,7 @@ describe("createCircularRecord", () => {
       createdBy: "user-1",
     });
 
-    expect(res.circularId).toBe("circ-all-1");
+    expect(res.circularId).toBe("circ-internal-1");
     expect(callCount).toBe(2);
   });
 });

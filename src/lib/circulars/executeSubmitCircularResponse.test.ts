@@ -1,4 +1,12 @@
 import { describe, it, expect, vi } from "vitest";
+
+vi.mock("server-only", () => ({}));
+
+const mockRetryResponseWithAdmin = vi.fn().mockResolvedValue(undefined);
+vi.mock("./retryResponseWithAdmin", () => ({
+  retryResponseWithAdmin: (...args: unknown[]) => mockRetryResponseWithAdmin(...args),
+}));
+
 import { executeSubmitCircularResponse } from "./executeSubmitCircularResponse";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -86,7 +94,48 @@ describe("executeSubmitCircularResponse", () => {
     });
   });
 
-  it("throws mapped database error when fallback insert fails", async () => {
+  it("retries with admin client when fallback insert fails with 23505 conflict", async () => {
+    const rpcMock = vi.fn().mockResolvedValue({
+      error: { code: "PGRST202", message: "function not found in schema cache" },
+    });
+
+    const eqSecondMock = vi.fn().mockResolvedValue({ error: null });
+    const eqFirstMock = vi.fn().mockReturnValue({ eq: eqSecondMock });
+    const updateMock = vi.fn().mockReturnValue({ eq: eqFirstMock });
+    const insertMock = vi.fn().mockResolvedValue({
+      error: { code: "23505", message: "duplicate key value" },
+    });
+
+    const supabase = {
+      rpc: rpcMock,
+      from: vi.fn().mockReturnValue({
+        update: updateMock,
+        insert: insertMock,
+      }),
+    } as unknown as SupabaseClient;
+
+    await expect(
+      executeSubmitCircularResponse({
+        supabase,
+        circularId: "circ-1",
+        schoolId: "school-1",
+        departmentId: "dept-1",
+        responderId: "user-1",
+        responseType: "task",
+        status: "completed",
+        reason: null,
+      }),
+    ).resolves.toBeUndefined();
+
+    expect(mockRetryResponseWithAdmin).toHaveBeenCalledWith(
+      expect.objectContaining({
+        circularId: "circ-1",
+        status: "completed",
+      }),
+    );
+  });
+
+  it("throws mapped database error when fallback insert fails with non-conflict error", async () => {
     const rpcMock = vi.fn().mockResolvedValue({
       error: { code: "PGRST202", message: "function not found in schema cache" },
     });

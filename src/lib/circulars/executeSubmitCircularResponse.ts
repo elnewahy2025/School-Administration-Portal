@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { CircularResponseStatus, CircularResponseType } from "./types";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
+import { retryResponseWithAdmin } from "./retryResponseWithAdmin";
 
 export interface ExecuteCircularResponseParams {
   supabase: SupabaseClient;
@@ -36,6 +37,16 @@ export async function executeSubmitCircularResponse({
 
   if (!rpcError) return;
 
+  const retryParams = {
+    circularId,
+    schoolId,
+    departmentId,
+    responderId,
+    responseType,
+    status,
+    reason: trimmedReason,
+  };
+
   if (rpcError.code === "PGRST202") {
     await supabase
       .from("circular_responses")
@@ -54,12 +65,21 @@ export async function executeSubmitCircularResponse({
       is_latest: true,
     });
 
-    if (insertError) {
-      throw mapDatabaseError(
-        insertError,
-        insertError.message || "Failed to submit circular response",
-      );
+    if (!insertError) return;
+
+    if (insertError.code === "23505") {
+      await retryResponseWithAdmin(retryParams);
+      return;
     }
+
+    throw mapDatabaseError(
+      insertError,
+      insertError.message || "Failed to submit circular response",
+    );
+  }
+
+  if (rpcError.code === "23505") {
+    await retryResponseWithAdmin(retryParams);
     return;
   }
 

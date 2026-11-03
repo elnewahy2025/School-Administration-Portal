@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseServerClient, createSupabaseAdminClient } from "@/lib/supabase";
 import { parseCircularFormData } from "@/lib/validation/parseCircularFormData";
 import { insertCircularTargets } from "@/lib/circulars/insertCircularTargets";
 import { createCircularRecord } from "@/lib/circulars/createCircularRecord";
@@ -32,7 +32,9 @@ export async function createCircularAction(
 
     await assertValidCircularDocuments(formData);
 
-    const supabase = await createSupabaseServerClient();
+    const supabase = auth.isOwner
+      ? createSupabaseAdminClient({ actorId: auth.profileId })
+      : await createSupabaseServerClient();
     const res = await createCircularRecord(supabase, {
       schoolId: auth.schoolId,
       title,

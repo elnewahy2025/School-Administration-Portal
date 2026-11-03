@@ -44,7 +44,7 @@ export async function insertCircularWithFallback(
   if (params.visibility === "public" && error?.code === "23514") {
     const retry = await supabase
       .from("circulars")
-      .insert({ ...insertPayload, visibility: "all" })
+      .insert({ ...insertPayload, visibility: "internal" })
       .select("id")
       .single();
     if (retry.data?.id) {
