@@ -1,11 +1,17 @@
 import { AppError } from "./AppError";
-import { ERROR_CODES } from "./errorCodes";
-import { mapDatabaseError } from "./mapDatabaseError";
 import { createCorrelationId } from "../logger/createCorrelationId";
 import { logError, type LogContext } from "../logger/logError";
-
 import { isNextRouterError } from "./isNextRouterError";
+import { resolveNormalizedError } from "./resolveNormalizedError";
 
+/**
+ * Single server-side normalization point for every caught error.
+ *
+ * Converts unknown values into an operational AppError, attaches one
+ * correlation id, logs the original failure with its diagnostic cause, and
+ * rethrows Next's control-flow errors (`redirect()` / `notFound()`). The text
+ * returned to users never contains the raw exception message.
+ */
 export function sanitizeError(
   error: unknown,
   context?: LogContext,
@@ -15,40 +21,14 @@ export function sanitizeError(
     throw error;
   }
 
-  const correlationId = providedCorrelationId || createCorrelationId();
+  const existingCorrelationId = error instanceof AppError ? error.correlationId : undefined;
+  const correlationId = providedCorrelationId || existingCorrelationId || createCorrelationId();
 
-  let resolvedAppError: AppError;
+  const resolved = resolveNormalizedError(error, correlationId);
 
-  if (error instanceof AppError) {
-    if (!error.correlationId) {
-      (error as { correlationId?: string }).correlationId = correlationId;
-    }
-    resolvedAppError = error;
-  } else if (typeof error === "object" && error !== null && "code" in error) {
-    resolvedAppError = mapDatabaseError(error, correlationId);
-  } else if (error instanceof Error) {
-    const isProd = process.env.NODE_ENV === "production";
-    const userMessage = isProd
-      ? "An unexpected error occurred. Please try again later."
-      : error.message;
-
-    resolvedAppError = new AppError(userMessage, {
-      code: ERROR_CODES.INTERNAL_ERROR,
-      statusCode: 500,
-      isOperational: false,
-      correlationId,
-      cause: error,
-    });
-  } else {
-    resolvedAppError = new AppError("An unexpected error occurred", {
-      code: ERROR_CODES.INTERNAL_ERROR,
-      statusCode: 500,
-      isOperational: false,
-      correlationId,
-    });
-  }
-
+  // Build the failure log from the original error so the cause/stack survives,
+  // but use the normalized correlation id and user-safe code.
   logError(error, context, correlationId);
 
-  return resolvedAppError;
+  return resolved;
 }

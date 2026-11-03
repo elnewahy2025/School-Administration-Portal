@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { MaintenancePriority } from "./types";
+import { generateDocumentReferenceNumber } from "@/lib/school/generateDocumentReferenceNumber";
 
 export async function createMaintenanceRecord(
   supabase: SupabaseClient,
@@ -16,14 +17,13 @@ export async function createMaintenanceRecord(
     reporterDepartmentId: string | null;
   },
 ): Promise<{ requestId?: string; error?: string }> {
-  // 0023 revoked the raw generator from `authenticated`; end users go through
-  // the checked wrapper (audit finding B-4).
-  const { data: ticketNumber, error: ticketError } = await supabase.rpc("next_school_number", {
-    p_school: params.schoolId,
-    p_kind: "maintenance",
-  });
+  const { refNum: ticketNumber, error: ticketError } = await generateDocumentReferenceNumber(
+    supabase,
+    params.schoolId,
+    "maintenance",
+  );
 
-  if (ticketError) return { error: ticketError.message };
+  if (ticketError) return { error: ticketError };
   if (!ticketNumber) return { error: "Failed to generate ticket number" };
 
   const { data, error } = await supabase

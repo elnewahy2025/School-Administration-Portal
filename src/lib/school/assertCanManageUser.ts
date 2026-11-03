@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { assertCallerCanManageSchoolUsers } from "./assertCallerCanManageSchoolUsers";
+import { verifyManageTargetUser } from "./verifyManageTargetUser";
 
 export type ManageUserPermissionResult = {
   allowed: boolean;
@@ -24,17 +24,15 @@ export async function assertCanManageUser(
   targetRoleKey?: string | null,
 ): Promise<ManageUserPermissionResult> {
   const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
-    return { allowed: false, error: "No school associated with profile" };
+  if (!profile) {
+    return { allowed: false, error: "Authentication required" };
   }
 
-  const permitted = await hasPermission("users.manage", profile.school_id);
-  if (!permitted) {
-    return { allowed: false, error: "Unauthorized" };
+  const callerCheck = await assertCallerCanManageSchoolUsers(profile);
+  if (!callerCheck.allowed) {
+    return { allowed: false, error: callerCheck.error };
   }
 
-  // RLS lets a manager read the profiles of their own school only, so a
-  // foreign id resolves to "not found" instead of leaking its existence.
   const supabase = await createSupabaseServerClient();
   const { data: target, error } = await supabase
     .from("profiles")
@@ -46,17 +44,16 @@ export async function assertCanManageUser(
     return { allowed: false, error: "Failed to load the target user" };
   }
 
-  if (!target || target.school_id !== profile.school_id) {
-    return { allowed: false, error: "User not found in this school" };
+  const targetCheck = await verifyManageTargetUser(
+    target,
+    profile.school_id,
+    callerCheck.isOwner,
+    targetRoleKey,
+  );
+  if (!targetCheck.allowed) {
+    return { allowed: false, error: targetCheck.error };
   }
 
-  if (await isPlatformOwner(targetUserId)) {
-    return { allowed: false, error: "Cannot modify system-protected account" };
-  }
-
-  if (targetRoleKey === "owner") {
-    return { allowed: false, error: "Invalid role selection" };
-  }
-
-  return { allowed: true, schoolId: profile.school_id, currentUserId: profile.id };
+  const effectiveSchoolId = target?.school_id ?? profile.school_id;
+  return { allowed: true, schoolId: effectiveSchoolId ?? undefined, currentUserId: profile.id };
 }
