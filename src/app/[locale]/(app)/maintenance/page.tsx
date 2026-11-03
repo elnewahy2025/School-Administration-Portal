@@ -14,7 +14,7 @@ export default async function MaintenancePage({ params }: { params: Promise<{ lo
     getSchoolMaintenanceRequests(profile?.school_id),
     isCurrentUserPlatformOwner(profile?.id),
     profile?.school_id
-      ? hasPermission("maintenance.create", profile.school_id).catch(() => false)
+      ? hasPermission("maintenance.create", profile.school_id, profile.department_id).catch(() => false)
       : false,
   ]);
   const canCreate = isOwner || hasPerm;

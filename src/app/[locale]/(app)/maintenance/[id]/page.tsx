@@ -38,8 +38,8 @@ export default async function MaintenanceDetailPage({
     getMaintenanceUpdates(id),
     getMaintenanceAttachments(id),
     getMaintenanceOperators(profile.school_id),
-    hasPermission("maintenance.assign", profile.school_id).catch(() => false),
-    hasPermission("maintenance.close", profile.school_id).catch(() => false),
+    hasPermission("maintenance.assign", profile.school_id, profile.department_id).catch(() => false),
+    hasPermission("maintenance.close", profile.school_id, profile.department_id).catch(() => false),
   ]);
 
   const isReporter = ticket.reporter_id === profile.id;

@@ -18,7 +18,11 @@ export default async function NewMaintenancePage({
     redirect(`/${locale}/login`);
   }
 
-  const canCreate = await hasPermission("maintenance.create", profile.school_id).catch(() => false);
+  const canCreate = await hasPermission(
+    "maintenance.create",
+    profile.school_id,
+    profile.department_id,
+  ).catch(() => false);
   if (!canCreate) {
     redirect(`/${locale}/maintenance`);
   }

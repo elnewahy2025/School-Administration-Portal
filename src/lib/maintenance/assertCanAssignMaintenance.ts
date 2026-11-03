@@ -12,7 +12,11 @@ export async function assertCanAssignMaintenance(): Promise<{
     throw new AuthenticationError("No school associated with profile");
   }
 
-  const allowed = await hasPermission("maintenance.assign", profile.school_id);
+  const allowed = await hasPermission(
+    "maintenance.assign",
+    profile.school_id,
+    profile.department_id,
+  );
   if (!allowed) {
     throw new ForbiddenError("Unauthorized");
   }
