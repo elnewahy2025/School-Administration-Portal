@@ -2,12 +2,23 @@
  * Service Worker for School Administration Portal PWA
  * Caching Strategy:
  * - Network-Only with Offline Fallback for HTML navigations (NEVER cache dynamic/authenticated pages)
- * - Stale-While-Revalidate for static assets, scripts, and fonts (_next/static, public static icons/css)
+ * - Stale-While-Revalidate for immutable static assets, scripts, and fonts (_next/static, public static icons/css)
+ *   Only responses the server marks `immutable` are cached: development chunk URLs are not
+ *   content-addressed and are served with `no-cache`, so caching them serves stale modules.
  * - Network-Only for Supabase API calls, auth endpoints, mutations, and storage assets
  */
 
-const CACHE_NAME = "school-portal-cache-v3";
+const CACHE_NAME = "school-portal-cache-v4";
 const OFFLINE_URL = "/offline.html";
+
+// Only responses the server marks as immutable (content-addressed production
+// chunks) may be cached. Development chunks are served with `no-cache` and must
+// always come from the network, otherwise a recompile leaves the page with
+// stale modules ("module factory is not available").
+function isCacheableStaticResponse(response) {
+  const cacheControl = response.headers.get("cache-control") || "";
+  return response.ok && cacheControl.includes("immutable");
+}
 
 // Pre-cached assets during installation (strictly static, unauthenticated assets)
 const PRECACHE_ASSETS = [
@@ -99,7 +110,7 @@ self.addEventListener("fetch", (event) => {
       caches.match(request).then((cachedResponse) => {
         const fetchPromise = fetch(request)
           .then((networkResponse) => {
-            if (networkResponse.ok) {
+            if (isCacheableStaticResponse(networkResponse)) {
               const responseClone = networkResponse.clone();
               caches.open(CACHE_NAME).then((cache) => {
                 cache.put(request, responseClone);
