@@ -11,7 +11,7 @@ They apply to ALL activities: implementation, debugging, refactoring, testing, c
 <!-- BEGIN:modularity-rule -->
 
 ## RULE #1 (NON-NEGOTIABLE): ONE FUNCTION PER FILE, NO BIG FILES
-
+this
 This is the most important structural rule in this repository. Every agent MUST follow it.
 
 1. **One function per file.** Each function/component/hook lives in its own file, named after it (e.g. `hasAnyPlatformOwner.ts` → `hasAnyPlatformOwner`). Do not bundle unrelated functions, helpers, or utilities into one file.
