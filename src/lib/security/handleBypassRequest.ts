@@ -2,8 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { constantTimeCompare } from "./constantTimeCompare";
 import { createBypassToken } from "./createBypassToken";
 import { extractBypassPayload } from "./extractBypassPayload";
+import { BYPASS_COOKIE_NAME } from "./bypassCookieName";
 
-const COOKIE_NAME = "bypass_construction";
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
 /**
@@ -15,7 +15,7 @@ export async function handleBypassRequest(request: NextRequest): Promise<NextRes
 
   if (clear) {
     const response = NextResponse.redirect(new URL("/", request.url));
-    response.cookies.delete(COOKIE_NAME);
+    response.cookies.delete(BYPASS_COOKIE_NAME);
     return response;
   }
 
@@ -25,7 +25,7 @@ export async function handleBypassRequest(request: NextRequest): Promise<NextRes
 
   const token = createBypassToken(expectedSecret);
   const response = NextResponse.redirect(new URL("/", request.url));
-  response.cookies.set(COOKIE_NAME, token, {
+  response.cookies.set(BYPASS_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
