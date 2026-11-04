@@ -1,4 +1,7 @@
 {
+  "publicCircular": {
+    "backToHome": "Back to home"
+  },
   "home": {
     "title": "School Administration Portal",
     "subtitle": "Circulars, maintenance requests, school calendar, and reports — in one place",
