@@ -1,7 +1,27 @@
-import { afterEach, describe, expect, it } from "vitest";
+import React from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import type { UnifiedCalendarItem } from "@/lib/calendar/types";
 import { PublicCalendarWidget } from "./PublicCalendarWidget";
+
+// The item card links circulars to their public detail page through the
+// next-intl navigation Link, which cannot be imported in the test environment.
+vi.mock("@/i18n", () => ({
+  Link: ({
+    children,
+    href,
+    className,
+    ...props
+  }: {
+    children: React.ReactNode;
+    href: string;
+    className?: string;
+  }) => (
+    <a href={href} className={className} {...props}>
+      {children}
+    </a>
+  ),
+}));
 
 afterEach(() => {
   cleanup();
