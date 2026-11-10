@@ -50,6 +50,12 @@
     "docCommitteesGuideDesc": "تشكيل اللجان المدرسية ومهامها وآلية عملها.",
     "docCounselingGuideTitle": "دليل الإرشاد المدرسي",
     "docCounselingGuideDesc": "برامج الإرشاد الطلابي والخدمات النفسية والتربوية.",
+    "circularsEyebrow": "إعلانات وقرارات رسمية",
+    "circularsTitle": "التعاميم المدرسية",
+    "circularsSubtitle": "أحدث التعاميم والقرارات المعتمدة الصادرة عن إدارة المدرسة — اضغط على أي تعميم للاطلاع على التفاصيل ومرفقاته الرسمية.",
+    "viewCircularAction": "عرض التعميم",
+    "noPublicCirculars": "لا توجد تعاميم عامة منشورة حالياً.",
+    "hasAttachments": "مرفق مستند",
     "previousMonth": "الشهر السابق",
     "nextMonth": "الشهر التالي"
   },

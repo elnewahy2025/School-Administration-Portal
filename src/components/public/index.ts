@@ -25,4 +25,6 @@ export { PublicCalendarMonthGrid } from "./PublicCalendarMonthGrid";
 export { PublicCalendarLegend } from "./PublicCalendarLegend";
 export { PublicCalendarUpcomingList } from "./PublicCalendarUpcomingList";
 export { getPublicCalendarCategoryStyle } from "./getPublicCalendarCategoryStyle";
+export { PublicCircularsSection } from "./PublicCircularsSection";
+export { PublicCircularCard } from "./PublicCircularCard";
 

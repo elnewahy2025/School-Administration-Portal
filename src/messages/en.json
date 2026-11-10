@@ -50,6 +50,12 @@
     "docCommitteesGuideDesc": "Formation of school committees, duties, and workflow.",
     "docCounselingGuideTitle": "School Counseling Guide",
     "docCounselingGuideDesc": "Student counseling programs, psychological, and educational services.",
+    "circularsEyebrow": "Official Announcements",
+    "circularsTitle": "School Circulars",
+    "circularsSubtitle": "Latest approved circulars and decisions issued by the school administration — click any circular to view its details and official attachments.",
+    "viewCircularAction": "View Circular",
+    "noPublicCirculars": "No public circulars published currently.",
+    "hasAttachments": "Document attached",
     "previousMonth": "Previous month",
     "nextMonth": "Next month"
   },
