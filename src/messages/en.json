@@ -96,6 +96,7 @@
     "forgotPasswordDesc": "Enter your registered email address and we'll send you a link to reset your password.",
     "sendResetLink": "Send Reset Link",
     "sending": "Sending...",
+    "resetError": "Unable to send reset link. Please wait a minute and try again.",
     "resetLinkSent": "Password reset link has been sent to your email.",
     "backToSignIn": "Back to Sign In",
     "resetPasswordTitle": "Set New Password",
