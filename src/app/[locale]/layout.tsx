@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/components/theme";
 import { ServiceWorkerRegister, PwaInstallBanner } from "@/components/pwa";
 import { MessageBoxHost } from "@/components/ui/MessageBoxHost";
+import { Toaster } from "@/components/ui/sonner";
 import { UnderConstructionView } from "@/components/public/UnderConstructionView";
 import { isUnderConstruction } from "@/lib/env/isUnderConstruction";
 import { routing } from "@/i18n";
@@ -104,6 +105,12 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={locale === "ar" ? ar : en}>
             {underConstruction ? <UnderConstructionView /> : children}
             <MessageBoxHost />
+            <Toaster
+              richColors
+              position="top-center"
+              closeButton
+              dir={locale === "ar" ? "rtl" : "ltr"}
+            />
             <PwaInstallBanner />
             <ServiceWorkerRegister />
           </NextIntlClientProvider>
