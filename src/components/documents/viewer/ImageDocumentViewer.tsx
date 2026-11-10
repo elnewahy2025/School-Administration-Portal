@@ -76,3 +76,4 @@ export function ImageDocumentViewer({ url, fileName, className = "" }: ImageDocu
     </div>
   );
 }
+

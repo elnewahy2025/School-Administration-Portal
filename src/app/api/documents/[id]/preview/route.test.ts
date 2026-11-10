@@ -80,6 +80,8 @@ describe("GET /api/documents/[id]/preview", () => {
     expect(response.headers.get("content-type")).toBe("application/pdf");
     expect(response.headers.get("content-disposition")).toBe("inline");
     expect(response.headers.get("cache-control")).toBe("private, no-store");
+    expect(response.headers.get("x-frame-options")).toBe("SAMEORIGIN");
+    expect(response.headers.get("content-security-policy")).toBe("frame-ancestors 'self';");
     expect(await response.text()).toBe("PDF content");
   });
 });

@@ -81,6 +81,20 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // Circular attachment previews (PDFs and documents) embedded inside circular viewers.
+        source: "/api/circulars/attachments/:id/preview",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self';",
+          },
+        ],
+      },
     ];
   },
 };

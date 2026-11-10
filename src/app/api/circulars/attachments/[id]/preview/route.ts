@@ -16,8 +16,11 @@ async function handleAttachmentPreview(
       "Content-Disposition": `inline; filename="${safeFileName}"`,
       "Content-Type": fileData.mime,
       "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "SAMEORIGIN",
+      "Content-Security-Policy": "frame-ancestors 'self';",
     },
   });
 }
 
 export const GET = withApiErrorHandler(handleAttachmentPreview);
+

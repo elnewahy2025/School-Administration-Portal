@@ -12,6 +12,7 @@ export interface UniversalDocumentViewerProps {
   fileName: string;
   kind: AttachmentKind;
   className?: string;
+  onExpand?: () => void;
 }
 
 export function UniversalDocumentViewer({
@@ -19,6 +20,7 @@ export function UniversalDocumentViewer({
   fileName,
   kind,
   className = "",
+  onExpand,
 }: UniversalDocumentViewerProps) {
   if (kind === "image") {
     return <ImageDocumentViewer url={url} fileName={fileName} className={className} />;
@@ -33,8 +35,16 @@ export function UniversalDocumentViewer({
   }
 
   if (kind === "pdf") {
-    return <PdfDocumentViewer url={url} fileName={fileName} className={className} />;
+    return (
+      <PdfDocumentViewer
+        url={url}
+        fileName={fileName}
+        className={className}
+        onExpand={onExpand}
+      />
+    );
   }
 
   return <GenericDocumentFallback url={url} fileName={fileName} className={className} />;
 }
+

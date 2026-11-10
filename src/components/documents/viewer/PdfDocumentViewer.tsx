@@ -2,16 +2,22 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { ExternalLinkIcon, DownloadIcon } from "lucide-react";
+import { ExternalLinkIcon, DownloadIcon, Maximize2Icon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 export interface PdfDocumentViewerProps {
   url: string;
   fileName: string;
   className?: string;
+  onExpand?: () => void;
 }
 
-export function PdfDocumentViewer({ url, fileName, className = "" }: PdfDocumentViewerProps) {
+export function PdfDocumentViewer({
+  url,
+  fileName,
+  className = "",
+  onExpand,
+}: PdfDocumentViewerProps) {
   const t = useTranslations("circulars");
   const [loadFailed, setLoadFailed] = useState(false);
 
@@ -20,6 +26,16 @@ export function PdfDocumentViewer({ url, fileName, className = "" }: PdfDocument
       <div className="flex shrink-0 items-center justify-between border-b border-border/60 bg-muted/30 px-3 py-1.5 text-xs text-muted-foreground">
         <span className="truncate font-medium">{fileName}</span>
         <div className="flex items-center gap-1.5">
+          {onExpand ? (
+            <button
+              type="button"
+              onClick={onExpand}
+              title={t("expandAttachment")}
+              className={buttonVariants({ variant: "ghost", size: "icon-xs" })}
+            >
+              <Maximize2Icon className="size-3.5" />
+            </button>
+          ) : null}
           <a
             href={url}
             target="_blank"

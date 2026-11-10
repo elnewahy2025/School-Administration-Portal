@@ -26,5 +26,8 @@ describe("GET /api/circulars/attachments/[id]/preview", () => {
     expect(res.headers.get("Content-Type")).toBe("application/pdf");
     expect(res.headers.get("Content-Disposition")).toContain("inline");
     expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff");
+    expect(res.headers.get("X-Frame-Options")).toBe("SAMEORIGIN");
+    expect(res.headers.get("Content-Security-Policy")).toBe("frame-ancestors 'self';");
   });
 });
+

@@ -44,6 +44,8 @@ async function handleDocumentPreview(
       "Content-Disposition": "inline",
       "Content-Type": file.type || doc.mime_type,
       "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "SAMEORIGIN",
+      "Content-Security-Policy": "frame-ancestors 'self';",
     },
   });
 }
