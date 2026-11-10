@@ -11,7 +11,11 @@ export const serverEnvSchema = z.object({
     .min(1)
     .default(
       process.env.NEXT_PUBLIC_APP_URL ||
-        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"),
+        (process.env.VERCEL_PROJECT_PRODUCTION_URL
+          ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+          : process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : "http://localhost:3000"),
     ),
   SCHOOL_TIMEZONE: z.string().min(1).default("Asia/Kuwait"),
   PLATFORM_BOOTSTRAP_SECRET: z.string().min(8).optional(),
