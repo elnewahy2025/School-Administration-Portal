@@ -22,3 +22,4 @@ export function formatPublicEventDateTime(
 
   return { formattedDate, timeRange };
 }
+
