@@ -49,8 +49,9 @@ A modern, enterprise-grade school management platform built for modern education
    - Personalized circular deadlines automatically merged into teacher and administrator agendas.
 
 5. **Real-Time Push Notifications (الإشعارات الفورية):**
-   - Instant WebSocket delivery for circular publishing, maintenance assignments, and urgent escalations.
-   - Live badge counter, audio chime alerts, and unread notification drawer.
+   - Instant WebSocket delivery for circular publishing (targeted to Department Heads), maintenance assignments, and urgent escalations.
+   - Interactive Sonner popup toasts with direct action links and live header bell icon badge updates.
+   - Complete notification lifecycle: mark individual/all as read, single notification deletion, and bulk purge ("Delete All") with accessible confirmation modals.
 
 6. **School Achievements & Institutional Honors (سجل الإنجازات):**
    - Platform Owner & Principal portfolio for national competition medals, student honors, and accreditation records.

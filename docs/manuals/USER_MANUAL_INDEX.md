@@ -65,3 +65,7 @@ All deletion and irreversible actions across the portal (such as deleting depart
 ### Q7: What themes are available and how do I change them?
 
 The portal includes 5 curated visual themes: **Royal Navy (Default)** (`كحلي ملكي [افتراضي]`), **Classic Light** (`فاتح كلاسيكي`), **Slate Dark** (`داكن هادئ`), **Emerald Academy** (`أكاديمية الزمرد`), and **Midnight OLED** (`سواد الليل [OLED]`). Click the palette icon in the header to select your preferred appearance.
+
+### Q8: Can I delete old notifications?
+
+Yes. On the Notifications page (`/notifications`), you can click the trash icon on any notification to permanently remove it, or click **Delete All** (`حذف الكل`) in the header to purge all your notifications at once. An accessible confirmation modal verifies the action before executing the physical deletion from the database and resetting your unread count badge.

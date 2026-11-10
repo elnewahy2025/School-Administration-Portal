@@ -107,3 +107,12 @@ When computers in a lab, air conditioners in departmental classrooms, or office 
 2. Toggle between **Month View** and **List View**.
 3. Filter by categories such as **Exam**, **Academic Schedule**, or **Administrative Meeting**.
 4. Click on any event to view the full details, venue, start/end times, and organizer notes.
+
+---
+
+### 5. Managing Your In-App Notifications (`/notifications`)
+
+1. Open the **Notifications** page from the top header bell icon.
+2. **Reviewing Directives:** Real-time push toasts alert you immediately when new circulars are published for your department.
+3. **Marking as Read:** Use **Mark as read** on individual alerts or **Mark all as read** to acknowledge alerts.
+4. **Deleting Notifications:** Click the trash icon (**حذف**) on an individual alert, or click **Delete All** (**حذف الكل**) in the header to permanently remove alerts. Confirm the accessible safety dialog to finalize deletion in the database.

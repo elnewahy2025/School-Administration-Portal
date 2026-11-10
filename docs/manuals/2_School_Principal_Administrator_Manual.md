@@ -179,3 +179,13 @@ Access to compliance analytics is strictly reserved for School Administrators an
    - Inspect average repair resolution times and open work order backlogs.
 4. **Exporting Data:**
    - Click **Export CSV** to download complete audit-ready records with UTF-8 BOM encoding for Excel compatibility in Arabic.
+
+---
+
+### 5. Managing Your In-App Notifications (`/notifications`)
+
+1. Click the **Notification Bell** icon in the top header or navigate to **Notifications** (`/notifications`).
+2. **Reviewing Alerts:** Unread notifications feature a highlighted background and an unread badge indicator.
+3. **Marking as Read:** Click **Mark as read** (`تحديد كمقروء`) on an individual alert, or click **Mark all as read** (`تحديد الكل كمقروء`) in the header.
+4. **Deleting a Notification:** Click the **Delete** (trash icon) button on any notification. An accessible confirmation modal appears to prevent accidental deletions. Click **Confirm** to permanently remove it from the database.
+5. **Bulk Purge ("Delete All"):** Click the red **Delete All** (`حذف الكل`) button in the header and confirm the prompt to permanently delete all your notifications at once and reset your unread count badge to zero.

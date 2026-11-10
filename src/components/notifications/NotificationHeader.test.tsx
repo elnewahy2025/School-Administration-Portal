@@ -99,3 +99,4 @@ describe("NotificationHeader", () => {
     expect(deleteAllNotificationsAction).not.toHaveBeenCalled();
   });
 });
+

@@ -33,3 +33,4 @@ export async function deleteAllNotificationsAction(): Promise<ActionResult> {
     return formatActionErrorResult(appError);
   }
 }
+

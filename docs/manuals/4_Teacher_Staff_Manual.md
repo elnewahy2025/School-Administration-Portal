@@ -97,3 +97,11 @@ If a projector fails, an air conditioner stops cooling, a window latch is damage
    - **Holidays:** Official national and school breaks.
    - **Events:** Assemblies, sports days, and student exhibitions.
 3. Click on any event to see venue details, timeframes, and organizer guidelines.
+
+---
+
+### 5. Managing Your In-App Notifications (`/notifications`)
+
+1. Access your notification inbox at any time via the **Bell Icon** in the top navigation bar.
+2. **Reviewing Alerts:** Review maintenance status updates or school notifications assigned to you.
+3. **Deleting Notifications:** Delete notifications you no longer need by clicking the trash icon (**حذف**) on an item, or click **Delete All** (**حذف الكل**) at the top of the page. An accessible confirmation dialog verifies the action before permanently removing the record from the database.

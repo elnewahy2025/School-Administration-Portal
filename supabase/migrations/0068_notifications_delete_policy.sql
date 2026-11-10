@@ -13,3 +13,4 @@ begin
       using (user_id = auth.uid());
   end if;
 end $$;
+
