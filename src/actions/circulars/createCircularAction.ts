@@ -16,7 +16,7 @@ import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatA
 
 export async function createCircularAction(
   formData: FormData,
-): Promise<ActionResult<{ circularId: string }>> {
+): Promise<ActionResult<{ circularId: string; schoolId: string }>> {
   try {
     const auth = await assertCanManageCirculars();
     if (!auth.authorized) {
@@ -74,7 +74,7 @@ export async function createCircularAction(
     }
 
     revalidatePath("/[locale]/circulars", "page");
-    return { success: true, circularId: res.circularId };
+    return { success: true, circularId: res.circularId, schoolId: auth.schoolId };
   } catch (err: unknown) {
     const appError = sanitizeError(err);
     return formatActionErrorResult(appError);

@@ -60,7 +60,7 @@ describe("createCircularAction", () => {
 
     const res = await createCircularAction(formData);
 
-    expect(res).toEqual({ success: true, circularId: "circ-123" });
+    expect(res).toEqual({ success: true, circularId: "circ-123", schoolId: "school-1" });
   });
 
   it("handles platform owner creation using admin client", async () => {
@@ -83,7 +83,7 @@ describe("createCircularAction", () => {
 
     const res = await createCircularAction(formData);
 
-    expect(res).toEqual({ success: true, circularId: "circ-owner-1" });
+    expect(res).toEqual({ success: true, circularId: "circ-owner-1", schoolId: "school-1" });
   });
 
   it("rejects unauthorized caller", async () => {

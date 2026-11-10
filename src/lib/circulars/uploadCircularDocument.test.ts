@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { uploadCircularDocument } from "./uploadCircularDocument";
+import { circularDocumentRules } from "./circularDocumentRules";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 const PDF_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x37];
@@ -16,15 +17,15 @@ describe("uploadCircularDocument", () => {
       uploadedBy: "user-1",
     });
 
-    expect(result.error).toBe("Invalid document format. Only PDF, JPG, PNG, and WebP are allowed.");
+    expect(result.error).toBe(circularDocumentRules.invalidFormatMessage);
   });
 
-  it("rejects files larger than 10MB", async () => {
+  it("rejects files larger than 25MB", async () => {
     const supabase = {} as SupabaseClient;
     const largeFile = new File([new Uint8Array(PDF_BYTES)], "big.pdf", {
       type: "application/pdf",
     });
-    Object.defineProperty(largeFile, "size", { value: 11 * 1024 * 1024 });
+    Object.defineProperty(largeFile, "size", { value: 26 * 1024 * 1024 });
 
     const result = await uploadCircularDocument(supabase, {
       file: largeFile,
@@ -33,7 +34,7 @@ describe("uploadCircularDocument", () => {
       uploadedBy: "user-1",
     });
 
-    expect(result.error).toBe("File exceeds 10MB limit.");
+    expect(result.error).toBe(circularDocumentRules.tooLargeMessage);
   });
 
   it("rejects content that does not match the declared PDF type", async () => {

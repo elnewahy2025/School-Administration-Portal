@@ -1,21 +1,16 @@
 "use client";
 
-import { useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PANEL } from "@/components/ui/diamond-card-styles";
-import { updateCircularAction } from "@/actions/circulars/updateCircularAction";
-import { circularDocumentRules } from "@/lib/circulars/circularDocumentRules";
-import { validateFormDataFiles } from "@/lib/storage/validateFormDataFiles";
 import { DepartmentTargetPicker } from "./DepartmentTargetPicker";
 import { CircularFileUpload } from "./CircularFileUpload";
 import { CircularAttachmentsList } from "./CircularAttachmentsList";
 import { EditCircularFieldsGrid } from "./EditCircularFieldsGrid";
 import { EditCircularActions } from "./EditCircularActions";
+import { useEditCircularForm } from "./useEditCircularForm";
 import type { CircularDetail } from "@/lib/circulars/getCircularById";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
 
@@ -27,30 +22,7 @@ export function EditCircularForm({
   departments: DepartmentRow[];
 }) {
   const t = useTranslations("circulars");
-  const tCommon = useTranslations("common");
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  const handleSubmit = (formData: FormData) => {
-    const validation = validateFormDataFiles(formData, "documents", {
-      allowedMimes: circularDocumentRules.allowedMime,
-      maxBytes: circularDocumentRules.maxBytes,
-    });
-    if (!validation.valid) {
-      toast.error(validation.error);
-      return;
-    }
-
-    startTransition(async () => {
-      const res = await updateCircularAction(circular.id, formData);
-      if (res.success) {
-        toast.success(tCommon("saved"));
-        router.push(`/circulars/${circular.id}`);
-      } else {
-        toast.error(res.error ?? "Failed to update circular");
-      }
-    });
-  };
+  const { isBusy, files, setFiles, handleSubmit, router } = useEditCircularForm(circular);
 
   const initialDeptIds = circular.targets
     .map((t) => t.department_id)
@@ -89,10 +61,10 @@ export function EditCircularForm({
         />
       ) : null}
 
-      <CircularFileUpload />
+      <CircularFileUpload files={files} onFilesChange={setFiles} disabled={isBusy} />
 
       <EditCircularActions
-        isPending={isPending}
+        isPending={isBusy}
         onCancel={() => router.push(`/circulars/${circular.id}`)}
       />
     </form>

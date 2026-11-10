@@ -16,6 +16,14 @@ const SIGNATURES: Record<string, { offset: number; bytes: number[] }[]> = {
     { offset: 8, bytes: [0x57, 0x45, 0x42, 0x50] }, // WEBP
   ],
   "application/pdf": [{ offset: 0, bytes: [0x25, 0x50, 0x44, 0x46, 0x2d] }], // %PDF-
+  "application/msword": [{ offset: 0, bytes: [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1] }],
+  "application/vnd.ms-excel": [{ offset: 0, bytes: [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1] }],
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+    { offset: 0, bytes: [0x50, 0x4b, 0x03, 0x04] },
+  ],
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+    { offset: 0, bytes: [0x50, 0x4b, 0x03, 0x04] },
+  ],
 };
 
 export function hasValidFileSignature(bytes: Uint8Array, mime: string): boolean {
