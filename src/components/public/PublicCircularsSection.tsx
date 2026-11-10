@@ -7,7 +7,7 @@ import { ArrowRightIcon } from "lucide-react";
 import type { CircularRow } from "@/lib/circulars/types";
 import { getCircularMonths } from "@/lib/circulars/getCircularMonths";
 import { usePublicCircularFilters } from "./usePublicCircularFilters";
-import { PublicCircularMonthFilter } from "./PublicCircularMonthFilter";
+import { PublicCircularMonthSelect } from "./PublicCircularMonthSelect";
 import { PublicCircularSearchInput } from "./PublicCircularSearchInput";
 import { PublicCircularCard } from "./PublicCircularCard";
 import { PublicCircularsEmptyState } from "./PublicCircularsEmptyState";
@@ -19,7 +19,7 @@ export function PublicCircularsSection({ circulars = [] }: { circulars?: Circula
   const t = useTranslations("home");
 
   const months = useMemo(() => getCircularMonths(circulars, locale), [circulars, locale]);
-  const defaultMonth = months[0]?.key ?? "all";
+  const defaultMonth = months.find((m) => m.count > 0)?.key ?? months[0]?.key ?? "all";
   const {
     selectedMonth,
     setSelectedMonth,
@@ -46,7 +46,7 @@ export function PublicCircularsSection({ circulars = [] }: { circulars?: Circula
           <div className="space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <PublicCircularSearchInput value={searchQuery} onChange={setSearchQuery} />
-              <PublicCircularMonthFilter
+              <PublicCircularMonthSelect
                 months={months}
                 selectedMonth={selectedMonth}
                 totalCount={circulars.length}

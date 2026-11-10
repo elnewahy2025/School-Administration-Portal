@@ -15,6 +15,7 @@ vi.mock("next-intl", () => ({
       noPublicCirculars: "لا توجد تعاميم عامة منشورة حالياً.",
       hasAttachments: "مرفق مستند",
       allMonths: "جميع الأشهر",
+      selectMonth: "اختر الشهر",
       searchPlaceholder: "البحث في التعاميم بالاسم أو الرقم أو النص...",
       viewAllArchive: "عرض أرشيف التعاميم بالكامل",
       viewAllArchiveWithCount: values ? `عرض أرشيف التعاميم بالكامل (${values.count})` : "عرض أرشيف التعاميم بالكامل",
@@ -103,5 +104,25 @@ describe("PublicCircularsSection", () => {
     fireEvent.change(searchInput, { target: { value: "5" } });
     expect(screen.getByText("تعميم 5")).toBeDefined();
     expect(screen.queryByText("تعميم 1")).toBeNull();
+  });
+
+  it("filters circulars when month dropdown changes", () => {
+    const circulars = [
+      createMockCircular("c-1", "CIR-01", "تعميم نوفمبر", "2026-11-01T10:00:00Z"),
+      createMockCircular("c-2", "CIR-02", "تعميم أكتوبر", "2026-10-02T10:00:00Z"),
+    ];
+
+    render(<PublicCircularsSection circulars={circulars} />);
+
+    // Defaults to November (c-1)
+    expect(screen.getByText("تعميم نوفمبر")).toBeDefined();
+    expect(screen.queryByText("تعميم أكتوبر")).toBeNull();
+
+    // Select October
+    const select = screen.getByRole("combobox", { name: "اختر الشهر" });
+    fireEvent.change(select, { target: { value: "2026-10" } });
+
+    expect(screen.getByText("تعميم أكتوبر")).toBeDefined();
+    expect(screen.queryByText("تعميم نوفمبر")).toBeNull();
   });
 });

@@ -3,7 +3,7 @@ import { getCircularMonths } from "./getCircularMonths";
 import type { CircularRow } from "./types";
 
 describe("getCircularMonths", () => {
-  it("groups circulars by month in descending order", () => {
+  it("groups circulars by month and includes academic year baseline", () => {
     const circulars: Partial<CircularRow>[] = [
       { id: "1", publish_at: "2026-11-05T10:00:00Z" },
       { id: "2", publish_at: "2026-11-10T12:00:00Z" },
@@ -11,15 +11,21 @@ describe("getCircularMonths", () => {
     ];
 
     const months = getCircularMonths(circulars as CircularRow[], "en");
-    expect(months).toHaveLength(2);
-    expect(months[0].key).toBe("2026-11");
-    expect(months[0].count).toBe(2);
-    expect(months[1].key).toBe("2026-10");
-    expect(months[1].count).toBe(1);
+    expect(months.length).toBeGreaterThanOrEqual(10);
+
+    const nov = months.find((m) => m.key === "2026-11");
+    expect(nov?.count).toBe(2);
+
+    const oct = months.find((m) => m.key === "2026-10");
+    expect(oct?.count).toBe(1);
+
+    const sep = months.find((m) => m.key === "2026-09");
+    expect(sep?.count).toBe(0);
   });
 
-  it("returns empty array when no circulars are provided", () => {
-    expect(getCircularMonths([], "ar")).toEqual([]);
+  it("returns baseline academic year months when no circulars are provided", () => {
+    const months = getCircularMonths([], "ar");
+    expect(months.length).toBe(10);
+    expect(months.every((m) => m.count === 0)).toBe(true);
   });
 });
-

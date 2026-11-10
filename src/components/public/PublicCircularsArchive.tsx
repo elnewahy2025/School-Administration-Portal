@@ -6,7 +6,7 @@ import { RotateCcwIcon } from "lucide-react";
 import type { CircularRow } from "@/lib/circulars/types";
 import { getCircularMonths } from "@/lib/circulars/getCircularMonths";
 import { usePublicCircularFilters } from "./usePublicCircularFilters";
-import { PublicCircularMonthFilter } from "./PublicCircularMonthFilter";
+import { PublicCircularMonthSelect } from "./PublicCircularMonthSelect";
 import { PublicCircularSearchInput } from "./PublicCircularSearchInput";
 import { PublicCircularCard } from "./PublicCircularCard";
 import { PublicCircularsEmptyState } from "./PublicCircularsEmptyState";
@@ -21,7 +21,7 @@ export function PublicCircularsArchive({
   const t = useTranslations("home");
 
   const months = useMemo(() => getCircularMonths(circulars, locale), [circulars, locale]);
-  const defaultMonth = months[0]?.key ?? "all";
+  const defaultMonth = months.find((m) => m.count > 0)?.key ?? months[0]?.key ?? "all";
   const {
     selectedMonth,
     setSelectedMonth,
@@ -45,32 +45,34 @@ export function PublicCircularsArchive({
           onChange={setSearchQuery}
         />
 
-        <div className="flex items-center justify-between gap-4 md:justify-end">
-          <span className="text-xs font-medium text-muted-foreground">
-            {t("showingCount", {
-              shown: filteredCirculars.length,
-              total: circulars.length,
-            })}
-          </span>
-          {isFiltered && (
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
-            >
-              <RotateCcwIcon className="size-3.5" aria-hidden="true" />
-              <span>{t("clearFilters")}</span>
-            </button>
-          )}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+          <PublicCircularMonthSelect
+            months={months}
+            selectedMonth={selectedMonth}
+            totalCount={circulars.length}
+            onSelectMonth={setSelectedMonth}
+          />
+
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-xs font-medium text-muted-foreground">
+              {t("showingCount", {
+                shown: filteredCirculars.length,
+                total: circulars.length,
+              })}
+            </span>
+            {isFiltered && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline cursor-pointer"
+              >
+                <RotateCcwIcon className="size-3.5" aria-hidden="true" />
+                <span>{t("clearFilters")}</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
-
-      <PublicCircularMonthFilter
-        months={months}
-        selectedMonth={selectedMonth}
-        totalCount={circulars.length}
-        onSelectMonth={setSelectedMonth}
-      />
 
       {filteredCirculars.length === 0 ? (
         <PublicCircularsEmptyFilter onReset={resetFilters} />

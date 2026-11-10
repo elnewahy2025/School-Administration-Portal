@@ -14,3 +14,4 @@ describe("PublicCircularsSectionHeader", () => {
     expect(screen.getByText("circularsSubtitle")).toBeInTheDocument();
   });
 });
+

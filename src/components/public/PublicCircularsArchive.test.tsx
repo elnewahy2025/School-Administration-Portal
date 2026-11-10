@@ -75,14 +75,14 @@ describe("PublicCircularsArchive", () => {
   it("defaults to latest month and displays all when allMonths is selected", () => {
     render(<PublicCircularsArchive circulars={mockCirculars} />);
 
-    // Defaults to latest month (November 2026 -> circ-1)
+    // Defaults to latest month with circulars (November 2026 -> circ-1)
     expect(screen.getByText("تعميم رقم واحد")).toBeInTheDocument();
     expect(screen.queryByText("تعميم رقم اثنين")).not.toBeInTheDocument();
     expect(screen.getByText("Showing 1 of 2")).toBeInTheDocument();
 
-    // Click All Months pill
-    const allMonthsButton = screen.getByRole("tab", { name: /allMonths/ });
-    fireEvent.click(allMonthsButton);
+    // Select All Months from the dropdown
+    const select = screen.getByRole("combobox", { name: "selectMonth" });
+    fireEvent.change(select, { target: { value: "all" } });
 
     expect(screen.getByText("تعميم رقم واحد")).toBeInTheDocument();
     expect(screen.getByText("تعميم رقم اثنين")).toBeInTheDocument();

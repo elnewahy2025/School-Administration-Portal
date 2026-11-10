@@ -6,11 +6,39 @@ export interface CircularMonthOption {
   count: number;
 }
 
+const BASELINE_MONTHS = [
+  "2026-09",
+  "2026-10",
+  "2026-11",
+  "2026-12",
+  "2027-01",
+  "2027-02",
+  "2027-03",
+  "2027-04",
+  "2027-05",
+  "2027-06",
+];
+
 export function getCircularMonths(
-  circulars: CircularRow[],
-  locale: string,
+  circulars: CircularRow[] = [],
+  locale = "ar",
 ): CircularMonthOption[] {
   const monthMap = new Map<string, { label: string; count: number; timestamp: number }>();
+
+  for (const ym of BASELINE_MONTHS) {
+    const [y, m] = ym.split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, 1));
+    const label = date.toLocaleDateString(locale, {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    });
+    monthMap.set(ym, {
+      label,
+      count: 0,
+      timestamp: date.getTime(),
+    });
+  }
 
   for (const circular of circulars) {
     const rawDate = circular.publish_at || circular.created_at;
@@ -27,7 +55,8 @@ export function getCircularMonths(
     if (existing) {
       existing.count += 1;
     } else {
-      const label = date.toLocaleDateString(locale, {
+      const firstOfMonth = new Date(Date.UTC(year, date.getUTCMonth(), 1));
+      const label = firstOfMonth.toLocaleDateString(locale, {
         month: "long",
         year: "numeric",
         timeZone: "UTC",
@@ -35,7 +64,7 @@ export function getCircularMonths(
       monthMap.set(key, {
         label,
         count: 1,
-        timestamp: date.getTime(),
+        timestamp: firstOfMonth.getTime(),
       });
     }
   }
@@ -48,4 +77,3 @@ export function getCircularMonths(
       count: data.count,
     }));
 }
-
