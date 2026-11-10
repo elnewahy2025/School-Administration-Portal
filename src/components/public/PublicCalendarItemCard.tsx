@@ -9,9 +9,10 @@ import { resolvePublicCalendarItemDetails } from "./resolvePublicCalendarItemDet
 interface PublicCalendarItemCardProps {
   item: UnifiedCalendarItem;
   locale: string;
+  onSelect?: (item: UnifiedCalendarItem) => void;
 }
 
-export function PublicCalendarItemCard({ item, locale }: PublicCalendarItemCardProps) {
+export function PublicCalendarItemCard({ item, locale, onSelect }: PublicCalendarItemCardProps) {
   const { title, location, categoryLabel, pillClass } = resolvePublicCalendarItemDetails(
     item,
     locale,
@@ -42,8 +43,6 @@ export function PublicCalendarItemCard({ item, locale }: PublicCalendarItemCardP
   const cardClass =
     "group flex items-center justify-between gap-3.5 rounded-2xl border border-slate-200/80 bg-white p-3.5 shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-800 dark:bg-card";
 
-  // A circular has a public detail page, so its card is a link. A calendar
-  // event has no public detail page yet and stays a plain card.
   if (item.kind === "circular") {
     return (
       <Link href={`/public/circulars/${item.id}`} className={cardClass} aria-label={title}>
@@ -52,5 +51,14 @@ export function PublicCalendarItemCard({ item, locale }: PublicCalendarItemCardP
     );
   }
 
-  return <article className={cardClass}>{content}</article>;
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect?.(item)}
+      className={`${cardClass} w-full cursor-pointer text-start focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0c1f44]`}
+      aria-label={title}
+    >
+      {content}
+    </button>
+  );
 }

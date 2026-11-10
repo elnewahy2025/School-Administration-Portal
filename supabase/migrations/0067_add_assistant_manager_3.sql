@@ -40,3 +40,4 @@ where s.is_active;
 
 revoke all on public.public_school_profiles from public;
 grant select on public.public_school_profiles to anon, authenticated;
+

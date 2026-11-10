@@ -127,7 +127,8 @@ describe("PublicCalendarItemCard", () => {
     expect(link).toHaveAttribute("href", "/public/circulars/circ-42");
   });
 
-  it("does not link an event card, which has no public detail page", () => {
+  it("renders an event card as a button that calls onSelect when clicked", () => {
+    const handleSelect = vi.fn();
     const item: UnifiedCalendarItem = {
       kind: "event",
       id: "ev-2",
@@ -154,8 +155,12 @@ describe("PublicCalendarItemCard", () => {
       },
     };
 
-    render(<PublicCalendarItemCard item={item} locale="ar" />);
+    render(<PublicCalendarItemCard item={item} locale="ar" onSelect={handleSelect} />);
 
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    const button = screen.getByRole("button", { name: "اجتماع" });
+    expect(button).toBeInTheDocument();
+    button.click();
+    expect(handleSelect).toHaveBeenCalledWith(item);
   });
 });

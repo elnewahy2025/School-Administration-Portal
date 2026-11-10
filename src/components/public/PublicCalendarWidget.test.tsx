@@ -23,6 +23,19 @@ vi.mock("@/i18n", () => ({
   ),
 }));
 
+vi.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => {
+    const map: Record<string, string> = {
+      allDayBadge: "طوال اليوم",
+      startsAt: "تاريخ البدء",
+      endsAt: "تاريخ الانتهاء",
+      eventDescription: "وصف الفعالية",
+      close: "إغلاق",
+    };
+    return map[key] ?? key;
+  },
+}));
+
 afterEach(() => {
   cleanup();
 });
@@ -75,5 +88,15 @@ describe("PublicCalendarWidget", () => {
     fireEvent.click(todayBtn);
 
     expect(todayBtn).toBeInTheDocument();
+  });
+
+  it("opens the event detail dialog when clicking an event in upcoming events", () => {
+    render(<PublicCalendarWidget items={mockItems} locale="ar" />);
+
+    const eventCard = screen.getByRole("button", { name: /اختبارات منتصف الفصل الدراسي/ });
+    fireEvent.click(eventCard);
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getAllByText("القاعات الامتحانية")).toHaveLength(2);
   });
 });
