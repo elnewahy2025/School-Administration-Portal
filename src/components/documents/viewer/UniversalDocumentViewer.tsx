@@ -36,15 +36,9 @@ export function UniversalDocumentViewer({
 
   if (kind === "pdf") {
     return (
-      <PdfDocumentViewer
-        url={url}
-        fileName={fileName}
-        className={className}
-        onExpand={onExpand}
-      />
+      <PdfDocumentViewer url={url} fileName={fileName} className={className} onExpand={onExpand} />
     );
   }
 
   return <GenericDocumentFallback url={url} fileName={fileName} className={className} />;
 }
-

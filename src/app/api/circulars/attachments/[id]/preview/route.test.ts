@@ -30,4 +30,3 @@ describe("GET /api/circulars/attachments/[id]/preview", () => {
     expect(res.headers.get("Content-Security-Policy")).toBe("frame-ancestors 'self';");
   });
 });
-

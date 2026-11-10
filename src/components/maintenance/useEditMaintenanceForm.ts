@@ -7,10 +7,7 @@ import { toast } from "sonner";
 import { updateMaintenanceRequestAction } from "@/actions/maintenance/updateMaintenanceRequestAction";
 import type { MaintenanceRequestRow } from "@/lib/maintenance/types";
 
-export function useEditMaintenanceForm(
-  ticket: MaintenanceRequestRow,
-  onClose: () => void,
-) {
+export function useEditMaintenanceForm(ticket: MaintenanceRequestRow, onClose: () => void) {
   const router = useRouter();
   const t = useTranslations("maintenance");
   const tCommon = useTranslations("common");

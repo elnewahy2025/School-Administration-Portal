@@ -23,4 +23,3 @@ async function handleAttachmentPreview(
 }
 
 export const GET = withApiErrorHandler(handleAttachmentPreview);
-

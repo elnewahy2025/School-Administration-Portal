@@ -24,7 +24,11 @@ export async function persistSchoolProfile(
   if (schoolError && !hasAssistant3) {
     delete schoolUpdates.assistant_manager_3_ar;
     delete schoolUpdates.assistant_manager_3_en;
-    const retry = await supabase.from("schools").update(schoolUpdates).eq("id", schoolId).select("id");
+    const retry = await supabase
+      .from("schools")
+      .update(schoolUpdates)
+      .eq("id", schoolId)
+      .select("id");
     if (!retry.error) {
       updatedSchool = retry.data;
       schoolError = null;

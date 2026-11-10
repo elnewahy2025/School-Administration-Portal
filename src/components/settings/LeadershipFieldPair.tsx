@@ -22,23 +22,12 @@ export function LeadershipFieldPair({
     <>
       <div className="space-y-2">
         <Label htmlFor={idAr}>{labelAr}</Label>
-        <Input
-          id={idAr}
-          name={idAr}
-          defaultValue={defaultValueAr}
-          disabled={disabled}
-        />
+        <Input id={idAr} name={idAr} defaultValue={defaultValueAr} disabled={disabled} />
       </div>
       <div className="space-y-2">
         <Label htmlFor={idEn}>{labelEn}</Label>
-        <Input
-          id={idEn}
-          name={idEn}
-          defaultValue={defaultValueEn}
-          disabled={disabled}
-        />
+        <Input id={idEn} name={idEn} defaultValue={defaultValueEn} disabled={disabled} />
       </div>
     </>
   );
 }
-

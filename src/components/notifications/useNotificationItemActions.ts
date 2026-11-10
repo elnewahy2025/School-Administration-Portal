@@ -45,4 +45,3 @@ export function useNotificationItemActions(notificationId: string) {
 
   return { isPending, handleMarkRead, handleDelete };
 }
-

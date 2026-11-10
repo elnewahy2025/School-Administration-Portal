@@ -77,13 +77,11 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
 
     void initSubscription();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session?.access_token) {
-          void supabase.realtime.setAuth(session.access_token);
-        }
-      },
-    );
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.access_token) {
+        void supabase.realtime.setAuth(session.access_token);
+      }
+    });
 
     return () => {
       isMounted = false;

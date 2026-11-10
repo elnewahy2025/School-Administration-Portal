@@ -843,8 +843,8 @@
   "backup": {
     "title": "Database Backup & Restore",
     "subtitle": "Securely export and restore database records in JSON format",
-    "exportCardTitle": "Export Database Backup",
-    "exportCardDesc": "Download a full JSON backup file containing your school's configuration, departments, locations, users, circulars, maintenance tickets, calendar events, and achievements.",
+    "exportCardTitle": "Export Complete System Backup (.ZIP)",
+    "exportCardDesc": "Download a complete ZIP archive containing all database records (JSON) and all uploaded storage files (PDFs, images, documents).",
     "exportButton": "Download JSON Backup",
     "exporting": "Generating Backup...",
     "exportSuccess": "Backup exported successfully",
@@ -880,7 +880,7 @@
     "diffOverwritten": "Overwritten records",
     "diffUntouched": "Untouched records",
     "restoreNeverDeletes": "Restore only inserts or updates records. It never deletes a record that is missing from the file.",
-    "notDisasterRecovery": "This JSON file is a per-school configuration export, not a disaster-recovery backup. For full recovery, use `supabase db dump` as described in the runbook.",
+    "notDisasterRecovery": "This complete ZIP archive packages all database tables and all physical storage files.",
     "restoreSuccessWithSnapshot": "Database restored: {count} records across {tables} tables. Pre-restore snapshot: {id}"
   },
   "documents": {

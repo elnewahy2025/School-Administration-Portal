@@ -16,10 +16,7 @@ export async function deleteAllNotificationsAction(): Promise<ActionResult> {
     }
 
     const admin = createSupabaseAdminClient({ actorId: userRes.user.id });
-    const { error } = await admin
-      .from("notifications")
-      .delete()
-      .eq("user_id", userRes.user.id);
+    const { error } = await admin.from("notifications").delete().eq("user_id", userRes.user.id);
 
     if (error) {
       throw mapDatabaseError(error);
@@ -33,4 +30,3 @@ export async function deleteAllNotificationsAction(): Promise<ActionResult> {
     return formatActionErrorResult(appError);
   }
 }
-

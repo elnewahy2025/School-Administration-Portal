@@ -19,17 +19,16 @@ export async function getSchoolFullDetails(
   if (!resolvedId) return null;
 
   const supabase = await createSupabaseServerClient();
-  const [schoolResult, { data: settings, error: settingsError }] =
-    await Promise.all([
-      supabase.from("schools").select(SCHOOL_FIELDS).eq("id", resolvedId).maybeSingle(),
-      supabase
-        .from("school_settings")
-        .select(
-          "academic_year, vision, mission, vision_ar, vision_en, mission_ar, mission_en, public_description, working_days, date_format, updated_at",
-        )
-        .eq("school_id", resolvedId)
-        .maybeSingle(),
-    ]);
+  const [schoolResult, { data: settings, error: settingsError }] = await Promise.all([
+    supabase.from("schools").select(SCHOOL_FIELDS).eq("id", resolvedId).maybeSingle(),
+    supabase
+      .from("school_settings")
+      .select(
+        "academic_year, vision, mission, vision_ar, vision_en, mission_ar, mission_en, public_description, working_days, date_format, updated_at",
+      )
+      .eq("school_id", resolvedId)
+      .maybeSingle(),
+  ]);
 
   let school = schoolResult.data;
   let schoolError = schoolResult.error;

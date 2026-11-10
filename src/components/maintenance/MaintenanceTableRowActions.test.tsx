@@ -72,13 +72,7 @@ describe("MaintenanceTableRowActions", () => {
   });
 
   it("renders only view button when canManage is false", () => {
-    render(
-      <MaintenanceTableRowActions
-        ticket={mockTicket}
-        locations={[]}
-        canManage={false}
-      />,
-    );
+    render(<MaintenanceTableRowActions ticket={mockTicket} locations={[]} canManage={false} />);
 
     const link = screen.getByRole("link");
     expect(link).toBeDefined();
@@ -88,13 +82,7 @@ describe("MaintenanceTableRowActions", () => {
   });
 
   it("renders view, edit, and delete buttons when canManage is true", () => {
-    render(
-      <MaintenanceTableRowActions
-        ticket={mockTicket}
-        locations={[]}
-        canManage={true}
-      />,
-    );
+    render(<MaintenanceTableRowActions ticket={mockTicket} locations={[]} canManage={true} />);
 
     expect(screen.getByRole("link")).toBeDefined();
     const editBtn = screen.getByLabelText("editTicket");

@@ -88,4 +88,3 @@ describe("isPublicCircularAttachmentAllowed", () => {
     expect(allowed).toBe(false);
   });
 });
-

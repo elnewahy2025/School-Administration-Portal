@@ -27,7 +27,7 @@ export async function getPublicCircularById(circularId: string): Promise<Circula
   }
 
   if (data) {
-    return (data as unknown as CircularRow);
+    return data as unknown as CircularRow;
   }
 
   const admin = createSupabaseAdminClient();

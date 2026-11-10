@@ -32,4 +32,3 @@ export function buildSchoolUpdatePayload(
 
   return payload;
 }
-

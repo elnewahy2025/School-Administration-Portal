@@ -48,11 +48,7 @@ export function MaintenanceTableRow({
         {new Date(ticket.created_at).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US")}
       </TableCell>
       <TableCell className="text-end">
-        <MaintenanceTableRowActions
-          ticket={ticket}
-          locations={locations}
-          canManage={canManage}
-        />
+        <MaintenanceTableRowActions ticket={ticket} locations={locations} canManage={canManage} />
       </TableCell>
     </TableRow>
   );

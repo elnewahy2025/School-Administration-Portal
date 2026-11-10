@@ -19,4 +19,3 @@ export async function downloadAttachmentFromStorage(storagePath: string): Promis
     type: file.type,
   };
 }
-

@@ -39,4 +39,3 @@ export async function deleteNotificationAction(notificationId: string): Promise<
     return formatActionErrorResult(appError);
   }
 }
-

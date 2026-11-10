@@ -17,4 +17,3 @@ export async function fetchSchoolAcademicYear(
 
   return settings?.academic_year ?? null;
 }
-

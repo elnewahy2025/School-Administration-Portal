@@ -17,4 +17,3 @@ export function validateUpdateMaintenanceInput(input: UpdateMaintenanceRequestIn
 
   return { title, description };
 }
-

@@ -30,4 +30,3 @@ export async function isPublicCircularAttachmentAllowed(
 
   return !schoolError && Boolean(school?.is_active);
 }
-

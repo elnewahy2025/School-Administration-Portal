@@ -66,23 +66,13 @@ describe("MaintenanceDetailActions", () => {
 
   it("renders nothing when canManage is false", () => {
     const { container } = render(
-      <MaintenanceDetailActions
-        ticket={mockTicket}
-        locations={[]}
-        canManage={false}
-      />,
+      <MaintenanceDetailActions ticket={mockTicket} locations={[]} canManage={false} />,
     );
     expect(container.firstChild).toBeNull();
   });
 
   it("renders Edit and Delete buttons when canManage is true", () => {
-    render(
-      <MaintenanceDetailActions
-        ticket={mockTicket}
-        locations={[]}
-        canManage={true}
-      />,
-    );
+    render(<MaintenanceDetailActions ticket={mockTicket} locations={[]} canManage={true} />);
 
     expect(screen.getByText("editTicket")).toBeDefined();
     expect(screen.getByText("deleteTicket")).toBeDefined();
@@ -90,13 +80,7 @@ describe("MaintenanceDetailActions", () => {
 
   it("triggers confirmation box when Delete is clicked", async () => {
     mockShowConfirmBox.mockResolvedValue(false);
-    render(
-      <MaintenanceDetailActions
-        ticket={mockTicket}
-        locations={[]}
-        canManage={true}
-      />,
-    );
+    render(<MaintenanceDetailActions ticket={mockTicket} locations={[]} canManage={true} />);
 
     const deleteBtn = screen.getByText("deleteTicket");
     fireEvent.click(deleteBtn);

@@ -27,4 +27,3 @@ export async function persistSchoolSettings(
 
   return { success: true };
 }
-
