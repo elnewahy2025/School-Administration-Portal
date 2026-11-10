@@ -73,7 +73,6 @@ describe("RealtimeNotificationListener", () => {
           event: "INSERT",
           schema: "public",
           table: "notifications",
-          filter: "user_id=eq.usr-123",
         }),
         expect.any(Function),
       );
@@ -119,5 +118,24 @@ describe("RealtimeNotificationListener", () => {
     options?.action?.onClick?.();
     expect(mockPush).toHaveBeenCalledWith("/circulars/circ-456");
     expect(mockRefresh).toHaveBeenCalled();
+  });
+
+  it("ignores notifications addressed to a different user ID", async () => {
+    render(<RealtimeNotificationListener userId="usr-123" />);
+
+    await waitFor(() => {
+      expect(postgresChangesHandler).not.toBeNull();
+    });
+
+    postgresChangesHandler!({
+      new: {
+        id: "notif-2",
+        user_id: "other-user-999",
+        title: "غير مخصص لي",
+      },
+    });
+
+    expect(toast.info).not.toHaveBeenCalled();
+    expect(mockRefresh).not.toHaveBeenCalled();
   });
 });

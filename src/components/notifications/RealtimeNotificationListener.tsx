@@ -43,10 +43,11 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
               event: "INSERT",
               schema: "public",
               table: "notifications",
-              filter: `user_id=eq.${userId}`,
             },
             (payload) => {
               const row = payload.new as NotificationRow;
+              if (!row || (row.user_id && row.user_id !== userId)) return;
+
               const href = resolveNotificationHref(row);
               const content = resolveNotificationText(row, t);
 
@@ -64,8 +65,9 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
             },
           )
           .subscribe((status, err) => {
+            console.log("[Realtime] channel status:", status, err ?? "");
             if (err) {
-              console.error("[realtime] subscription error:", err);
+              console.error("[Realtime] subscription error:", err);
             }
           });
       } catch (err) {
