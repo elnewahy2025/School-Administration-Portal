@@ -1,4 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
+
+vi.mock("server-only", () => ({}));
+
 import { createCalendarEventSeries } from "./createCalendarEventSeries";
 
 describe("createCalendarEventSeries", () => {

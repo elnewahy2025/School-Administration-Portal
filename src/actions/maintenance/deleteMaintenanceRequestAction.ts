@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createSupabaseServerClient, createSupabaseAdminClient } from "@/lib/supabase";
+import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { hasPermission } from "@/lib/rbac/hasPermission";
@@ -25,16 +25,17 @@ export async function deleteMaintenanceRequestAction(requestId: string): Promise
         throw new AuthenticationError("No school associated with profile");
       }
       const canDelete =
-        (await hasPermission("maintenance.close", profile.school_id)) ||
-        (await hasPermission("users.manage", profile.school_id));
+        (await hasPermission("maintenance.close", profile.school_id, profile.department_id)) ||
+        (await hasPermission("users.manage", profile.school_id, profile.department_id));
       if (!canDelete) {
         throw new ForbiddenError("Unauthorized to delete maintenance request");
       }
     }
 
-    const supabase = isOwner
-      ? createSupabaseAdminClient({ actorId: profile.id })
-      : await createSupabaseServerClient();
+    const supabase = createSupabaseAdminClient({
+      actorId: profile.id,
+      actorLabel: "delete-maintenance-request",
+    });
 
     const res = await deleteMaintenanceRequestRecord(supabase, requestId);
     if (!res.success) {

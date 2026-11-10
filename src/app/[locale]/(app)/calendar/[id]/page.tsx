@@ -28,7 +28,7 @@ export default async function CalendarEventDetailPage({
   }
 
   const [hasManagePerm, isOwner] = await Promise.all([
-    hasPermission("calendar.manage", profile.school_id).catch(() => false),
+    hasPermission("calendar.manage", profile.school_id, profile.department_id).catch(() => false),
     isPlatformOwner(profile.id),
   ]);
 
