@@ -1,24 +1,15 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ArrowLeftIcon, FileTextIcon, PaperclipIcon } from "lucide-react";
+import { ArrowRightIcon, FileTextIcon, PaperclipIcon } from "lucide-react";
 import { Link } from "@/i18n";
 import { formatCircularDate } from "@/lib/circulars/formatCircularDate";
-import type { CircularRow, CircularPriority } from "@/lib/circulars/types";
-
-const PRIORITY_BADGE_STYLES: Record<CircularPriority, string> = {
-  urgent: "bg-destructive/15 text-destructive border-destructive/30",
-  high: "bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30",
-  normal: "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30",
-  low: "bg-slate-500/15 text-slate-700 dark:text-slate-400 border-slate-500/30",
-};
-
-const PRIORITY_LABELS: Record<CircularPriority, string> = {
-  urgent: "priorityUrgent",
-  high: "priorityHigh",
-  normal: "priorityNormal",
-  low: "priorityLow",
-};
+import type { CircularRow } from "@/lib/circulars/types";
+import {
+  CARD_DIAMOND_ICON,
+  CARD_DIAMOND_SM,
+  CARD_SHELL,
+} from "./publicCardStyles";
 
 export function PublicCircularCard({
   circular,
@@ -28,64 +19,53 @@ export function PublicCircularCard({
   locale: string;
 }) {
   const tHome = useTranslations("home");
-  const tCirc = useTranslations("circulars");
 
   const publishedAt = circular.publish_at ?? circular.created_at;
   const attachmentsCount = circular.attachments?.length ?? 0;
-  const priorityStyle = PRIORITY_BADGE_STYLES[circular.priority] ?? PRIORITY_BADGE_STYLES.normal;
 
   return (
-    <article className="group flex flex-col justify-between rounded-2xl border border-border/70 bg-card p-5 sm:p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg">
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-3">
-          <div className="flex items-center gap-2">
-            <span className="rounded-full bg-[#0c1f44] px-2.5 py-0.5 text-xs font-bold text-white dark:bg-primary">
-              {circular.ref_number}
-            </span>
-            <span
-              className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${priorityStyle}`}
-            >
-              {tCirc(PRIORITY_LABELS[circular.priority] as never)}
-            </span>
-          </div>
-          <span className="text-xs font-medium text-muted-foreground">
-            {formatCircularDate(publishedAt, locale)}
+    <article className={`${CARD_SHELL} h-full w-full justify-between p-6 pt-14 pb-6`}>
+      <div className="absolute top-4 start-4 flex items-center gap-1.5">
+        <span className="inline-flex items-center rounded-md border border-blue-200/90 bg-blue-50/80 px-2 py-0.5 text-[10px] font-bold tracking-wider text-blue-700 shadow-2xs dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300">
+          {circular.ref_number}
+        </span>
+        {attachmentsCount > 0 && (
+          <span
+            className="inline-flex items-center gap-1 rounded-md border border-amber-200/90 bg-amber-50/80 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300"
+            title={tHome("hasAttachments")}
+          >
+            <PaperclipIcon className="size-3" />
           </span>
-        </div>
+        )}
+      </div>
 
+      <span className="absolute top-4 end-4 text-[11px] font-medium text-muted-foreground">
+        {formatCircularDate(publishedAt, locale)}
+      </span>
+
+      <div className={CARD_DIAMOND_SM}>
+        <FileTextIcon className={`size-6 ${CARD_DIAMOND_ICON} text-gold`} strokeWidth={2.2} />
+      </div>
+
+      <div className="flex w-full flex-1 flex-col items-center text-center">
         <Link href={`/public/circulars/${circular.id}`} className="block">
-          <h3 className="line-clamp-2 font-heading text-base sm:text-lg font-bold text-[#0c1f44] transition-colors group-hover:text-primary dark:text-foreground">
+          <h3 className="line-clamp-2 text-base font-extrabold text-[#0a2f7a] sm:text-lg dark:text-foreground hover:text-primary transition-colors">
             {circular.title}
           </h3>
         </Link>
 
-        <p className="line-clamp-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-2 flex-1 text-xs leading-relaxed text-muted-foreground sm:text-sm line-clamp-3">
           {circular.body}
         </p>
       </div>
 
-      <div className="mt-5 flex items-center justify-between border-t border-border/50 pt-4">
-        {attachmentsCount > 0 ? (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-border/60 bg-muted/50 px-2 py-1 text-xs font-medium text-muted-foreground">
-            <PaperclipIcon className="size-3.5 text-primary" />
-            <span>{tHome("hasAttachments")}</span>
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground/70">
-            <FileTextIcon className="size-3.5" />
-            <span>{circular.ref_number}</span>
-          </span>
-        )}
-
-        <Link
-          href={`/public/circulars/${circular.id}`}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
-        >
-          <span>{tHome("viewCircularAction")}</span>
-          <ArrowLeftIcon className="size-3.5 rtl:rotate-180" />
-        </Link>
-      </div>
+      <Link
+        href={`/public/circulars/${circular.id}`}
+        className="mt-6 inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0b5cce] px-6 py-2.5 text-xs font-bold text-amber-300 shadow-[0_4px_14px_rgba(11,92,206,0.35),0_2px_0_#ffcd35] transition-all duration-300 hover:scale-[1.03] hover:brightness-110 hover:shadow-[0_6px_20px_rgba(11,92,206,0.45),0_2px_0_#ffcd35] active:scale-95 sm:text-sm"
+      >
+        <span>{tHome("viewCircularAction")}</span>
+        <ArrowRightIcon className="size-4 text-amber-300 rtl:rotate-180" />
+      </Link>
     </article>
   );
 }
-
