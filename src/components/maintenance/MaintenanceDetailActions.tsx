@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "@/i18n";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,6 @@ export function MaintenanceDetailActions({
   canManage: boolean;
 }) {
   const router = useRouter();
-  const locale = useLocale();
   const t = useTranslations("maintenance");
   const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
@@ -41,7 +40,7 @@ export function MaintenanceDetailActions({
       const res = await deleteMaintenanceRequestAction(ticket.id);
       if (res.success) {
         toast.success(t("ticketDeleted"));
-        router.push(`/${locale}/maintenance`);
+        router.push("/maintenance");
       } else {
         toast.error(res.error || tCommon("error"));
       }

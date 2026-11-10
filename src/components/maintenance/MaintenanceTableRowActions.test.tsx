@@ -80,7 +80,9 @@ describe("MaintenanceTableRowActions", () => {
       />,
     );
 
-    expect(screen.getByRole("link")).toBeDefined();
+    const link = screen.getByRole("link");
+    expect(link).toBeDefined();
+    expect(link.getAttribute("href")).toBe("/maintenance/ticket-1");
     expect(screen.queryByLabelText("editTicket")).toBeNull();
     expect(screen.queryByLabelText("deleteTicket")).toBeNull();
   });

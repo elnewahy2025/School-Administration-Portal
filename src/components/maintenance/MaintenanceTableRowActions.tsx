@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { EyeIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EditMaintenanceDialog } from "./EditMaintenanceDialog";
@@ -18,14 +18,13 @@ export function MaintenanceTableRowActions({
   locations: LocationRow[];
   canManage: boolean;
 }) {
-  const locale = useLocale();
   const t = useTranslations("maintenance");
   const { isPending, isEditDialogOpen, setIsEditDialogOpen, handleDelete } =
     useMaintenanceRowActions(ticket.id);
 
   return (
     <div className="inline-flex items-center justify-end gap-1">
-      <Link href={`/${locale}/maintenance/${ticket.id}`}>
+      <Link href={`/maintenance/${ticket.id}`}>
         <Button variant="ghost" size="sm" aria-label={t("ticketNumber")}>
           <EyeIcon className="size-4" />
         </Button>
