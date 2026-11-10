@@ -31,7 +31,7 @@ A modern, enterprise-grade school management platform built for modern education
 
 2. **Administrative Circulars & Duties (التعاميم والتكليفات):**
    - Full lifecycle management: Draft → Published → In Progress → Completed → Overdue → Archived.
-   - Targeted distribution by department or individual staff role.
+   - Targeted distribution by department with automated real-time push notifications delivered to Department Heads.
    - Secure PDF/image attachment uploads, in-browser printing, and authenticated file downloads.
    - Real-time acknowledgment tracking and compliance auditing.
 

@@ -112,7 +112,8 @@ Circulars replace paper memos with verifiable, trackable digital directives.
      - **Approval / Formal Feedback:** Requires written comments or status sign-off.
    - **Attachments:** Drag and drop official guidelines, PDF timetables, or images (up to 25MB).
 3. Click **Publish Circular**.
-4. The system immediately broadcasts **Real-Time Push Notifications** over WebSockets to all targeted users.
+4. The system immediately broadcasts **Real-Time Push Notifications** over WebSockets to the active Department Heads (`head_profile_id`) of all targeted departments (the publishing administrator is excluded from self-notification).
+5. Targeted Department Heads receive an instant bilingual pop-up toast banner on their screens and their notification bell count increments automatically.
 
 #### Monitoring Compliance in Real Time:
 

@@ -58,8 +58,8 @@ The portal delivers all official administrative directives with legally verifiab
 
 #### Receiving a New Circular:
 
-1. When the School Administration issues a circular targeting your department, you receive an instant **Real-Time Push Notification** (a Sonner toast appears in the corner with a direct link).
-2. The **Notification Bell** icon in the header displays an updated unread counter badge.
+1. When the School Administration issues a circular targeting your department, you receive an instant **Real-Time Push Notification** (a Sonner toast banner appears at the top center of your screen with the circular title, message, and a direct "عرض" / View action button).
+2. The **Notification Bell** icon in the header updates its unread counter badge automatically in real time without refreshing the page.
 
 #### Reading & Reviewing Official Attachments:
 

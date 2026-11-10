@@ -53,7 +53,7 @@ The school administration issues administrative memos, duty rosters, exam rules,
 
 #### How to Review a Circular:
 
-1. When a new circular is published for all staff, you will receive an in-app **Notification Toast** and an unread counter badge on the bell icon in the top header.
+1. Official circulars targeting your department are received by your Department Head, who reviews and submits the departmental response. You can also view all active circulars addressed to your department directly under **Administrative Circulars** (`/circulars`).
 2. Navigate to **Administrative Circulars** (`/circulars`).
 3. Click on the circular title to open it.
 4. Read the directive and review any attached documents (PDFs, official schedules).

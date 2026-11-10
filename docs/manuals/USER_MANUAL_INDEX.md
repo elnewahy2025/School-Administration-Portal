@@ -48,7 +48,7 @@ On the login screen (`/login`), click the **Forgot password?** (`نسيت كلم
 
 ### Q3: How do Real-Time Notifications work?
 
-When an administrator publishes a circular targeted to your department or assigns a maintenance ticket to your queue, an interactive toast notification appears on your screen in real time over WebSockets. Clicking the toast takes you directly to the relevant record.
+When an administrator publishes a circular targeted to your department, the designated Department Head receives an interactive toast notification at the top-center of their screen in real time over WebSockets (the publishing author is excluded from self-notification). Similarly, when a maintenance ticket is assigned, the appointed technician receives an instant notification. Clicking the toast banner takes the user directly to the relevant record, and the header Bell icon badge updates immediately without requiring a page refresh.
 
 ### Q4: Why can't I schedule events on Friday and Saturday?
 
