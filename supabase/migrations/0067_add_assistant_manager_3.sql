@@ -4,7 +4,10 @@ alter table public.schools
   add column if not exists assistant_manager_3_ar text,
   add column if not exists assistant_manager_3_en text;
 
-create or replace view public.public_school_profiles
+-- Drop view first to avoid Postgres error 42P16 when existing view column order differs
+drop view if exists public.public_school_profiles cascade;
+
+create view public.public_school_profiles
 with (security_invoker = false) as
 select
   s.id,
@@ -40,4 +43,3 @@ where s.is_active;
 
 revoke all on public.public_school_profiles from public;
 grant select on public.public_school_profiles to anon, authenticated;
-
