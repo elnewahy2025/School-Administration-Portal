@@ -1,6 +1,7 @@
 export { PublicHero } from "./PublicHero";
 export { PublicTopBar } from "./PublicTopBar";
 export { PublicTopBarTicker } from "./PublicTopBarTicker";
+export { PublicTopBarLoginButton } from "./PublicTopBarLoginButton";
 export { PublicHeroCardsGrid } from "./PublicHeroCardsGrid";
 export { PublicHeroSideCard } from "./PublicHeroSideCard";
 export { PublicHeroLeadershipCard } from "./PublicHeroLeadershipCard";

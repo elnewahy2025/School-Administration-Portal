@@ -6,7 +6,6 @@ import type { PublicSchoolProfileRow } from "@/lib/school/getPublicSchoolProfile
 import { resolveHeroSchoolData } from "@/lib/school/resolveHeroSchoolData";
 import { PublicHeroSideCard } from "./PublicHeroSideCard";
 import { PublicHeroLeadershipCard } from "./PublicHeroLeadershipCard";
-import { PublicHeroLoginButton } from "./PublicHeroLoginButton";
 
 export function PublicHeroCardsGrid({ school }: { school: PublicSchoolProfileRow | null }) {
   const locale = useLocale();
@@ -31,20 +30,18 @@ export function PublicHeroCardsGrid({ school }: { school: PublicSchoolProfileRow
         <div />
       )}
 
-      <div className="flex flex-col items-center justify-between gap-4 animate-hero-fade-up delay-300">
-        {hasLeadership ? (
+      {hasLeadership ? (
+        <div className="h-full animate-hero-fade-up delay-300">
           <PublicHeroLeadershipCard
             manager={data.manager}
             assistant1={data.assistant1}
             assistant2={data.assistant2}
             assistant3={data.assistant3}
           />
-        ) : (
-          <div />
-        )}
-
-        <PublicHeroLoginButton />
-      </div>
+        </div>
+      ) : (
+        <div />
+      )}
 
       {data.mission ? (
         <div className="h-full animate-hero-fade-up delay-450">

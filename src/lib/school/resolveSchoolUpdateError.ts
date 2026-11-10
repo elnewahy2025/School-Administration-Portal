@@ -10,3 +10,4 @@ export function resolveSchoolUpdateError(error: PostgrestError): string {
 
   return error.message;
 }
+

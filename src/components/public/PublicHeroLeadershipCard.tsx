@@ -25,7 +25,7 @@ export function PublicHeroLeadershipCard({
   const tSettings = useTranslations("settings");
 
   return (
-    <div className={`${CARD_SHELL} ${CARD_HERO_PADDING} w-full`}>
+    <div className={`${CARD_SHELL} ${CARD_HERO_PADDING} h-full w-full`}>
       <div className={CARD_DIAMOND}>
         <UserCheckIcon className={`size-5 ${CARD_DIAMOND_ICON}`} />
       </div>
