@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { parseSchoolFormData } from "@/lib/validation/parseSchoolFormData";
+import { persistSchoolSettings } from "./persistSchoolSettings";
 
 export async function persistSchoolProfile(
   supabase: SupabaseClient,
@@ -19,6 +20,8 @@ export async function persistSchoolProfile(
     assistant_manager_en: parsed.assistantManagerEn,
     assistant_manager_2_ar: parsed.assistantManager2Ar,
     assistant_manager_2_en: parsed.assistantManager2En,
+    assistant_manager_3_ar: parsed.assistantManager3Ar,
+    assistant_manager_3_en: parsed.assistantManager3En,
     address_ar: parsed.addressAr,
     address_en: parsed.addressEn,
     updated_at: now,
@@ -29,11 +32,21 @@ export async function persistSchoolProfile(
     schoolUpdates.logo_path = logoPath;
   }
 
-  const { data: updatedSchool, error: schoolError } = await supabase
+  let { data: updatedSchool, error: schoolError } = await supabase
     .from("schools")
     .update(schoolUpdates)
     .eq("id", schoolId)
     .select("id");
+
+  if (schoolError && schoolUpdates.assistant_manager_3_ar !== undefined) {
+    delete schoolUpdates.assistant_manager_3_ar;
+    delete schoolUpdates.assistant_manager_3_en;
+    const retry = await supabase.from("schools").update(schoolUpdates).eq("id", schoolId).select("id");
+    if (!retry.error) {
+      updatedSchool = retry.data;
+      schoolError = null;
+    }
+  }
 
   if (schoolError) {
     return { success: false, error: schoolError.message };
@@ -46,23 +59,5 @@ export async function persistSchoolProfile(
     };
   }
 
-  const { error: settingsError } = await supabase.from("school_settings").upsert({
-    school_id: schoolId,
-    academic_year: parsed.academicYear,
-    vision: parsed.visionAr ?? parsed.visionEn,
-    mission: parsed.missionAr ?? parsed.missionEn,
-    vision_ar: parsed.visionAr,
-    vision_en: parsed.visionEn,
-    mission_ar: parsed.missionAr,
-    mission_en: parsed.missionEn,
-    working_days: parsed.workingDays.length > 0 ? parsed.workingDays : [0, 1, 2, 3, 4],
-    date_format: parsed.dateFormat,
-    updated_at: now,
-  });
-
-  if (settingsError) {
-    return { success: false, error: settingsError.message };
-  }
-
-  return { success: true };
+  return persistSchoolSettings(supabase, schoolId, parsed, now);
 }

@@ -45,6 +45,8 @@ describe("parseSchoolFormData", () => {
     formData.append("assistant_manager_en", "Mr. Khaled Al-Harbi");
     formData.append("assistant_manager_2_ar", "أ. سارة السالم");
     formData.append("assistant_manager_2_en", "Ms. Sarah Al-Salem");
+    formData.append("assistant_manager_3_ar", "أ. منيرة الدوسري");
+    formData.append("assistant_manager_3_en", "Ms. Muneera Al-Dossari");
     formData.append("address_ar", "الرياض، حي النرجس");
     formData.append("address_en", "Riyadh, Al-Narjis District");
     formData.append("academic_year", "2026/2027");
@@ -72,6 +74,8 @@ describe("parseSchoolFormData", () => {
     expect(parsed.assistantManagerEn).toBe("Mr. Khaled Al-Harbi");
     expect(parsed.assistantManager2Ar).toBe("أ. سارة السالم");
     expect(parsed.assistantManager2En).toBe("Ms. Sarah Al-Salem");
+    expect(parsed.assistantManager3Ar).toBe("أ. منيرة الدوسري");
+    expect(parsed.assistantManager3En).toBe("Ms. Muneera Al-Dossari");
     expect(parsed.addressAr).toBe("الرياض، حي النرجس");
     expect(parsed.addressEn).toBe("Riyadh, Al-Narjis District");
     expect(parsed.academicYear).toBe("2026/2027");

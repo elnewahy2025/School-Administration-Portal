@@ -54,6 +54,11 @@ export function buildAboutCardList(
     school.assistant_manager_2_ar,
     school.assistant_manager_2_en,
   );
+  const assistant3 = resolveLocalizedText(
+    locale,
+    school.assistant_manager_3_ar,
+    school.assistant_manager_3_en,
+  );
 
   const leadershipLines: string[] = [];
   if (manager) {
@@ -64,6 +69,9 @@ export function buildAboutCardList(
   }
   if (assistant2) {
     leadershipLines.push(`${t("assistantManager2Title")}: ${assistant2}`);
+  }
+  if (assistant3) {
+    leadershipLines.push(`${t("assistantManager3Title")}: ${assistant3}`);
   }
 
   if (leadershipLines.length > 0) {

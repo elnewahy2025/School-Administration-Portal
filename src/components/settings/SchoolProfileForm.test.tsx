@@ -57,6 +57,8 @@ describe("SchoolProfileForm", () => {
     assistant_manager_en: null,
     assistant_manager_2_ar: null,
     assistant_manager_2_en: null,
+    assistant_manager_3_ar: null,
+    assistant_manager_3_en: null,
     address_ar: null,
     address_en: null,
     vision: null,

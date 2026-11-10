@@ -16,6 +16,8 @@ describe("buildAboutCardList", () => {
     assistant_manager_en: "Mona Al-Mutairi",
     assistant_manager_2_ar: "خزنه الشمري",
     assistant_manager_2_en: "Khazna Al-Shammari",
+    assistant_manager_3_ar: "أ. فاطمة الحربي",
+    assistant_manager_3_en: "Fatima Al-Harbi",
     vision_ar: "رؤية المدرسة",
     vision_en: "School vision",
     mission_ar: "رسالة المدرسة",
@@ -32,8 +34,9 @@ describe("buildAboutCardList", () => {
       mission: "Our Mission",
       achievements: "Achievements",
       managerTitle: "Principal",
-      assistantManager1Title: "Assistant Principal 1",
-      assistantManager2Title: "Assistant Principal 2",
+      assistantManager1Title: "Assistant Principal",
+      assistantManager2Title: "Assistant Principal",
+      assistantManager3Title: "Assistant Principal",
     };
     return map[key] ?? key;
   };
@@ -55,15 +58,17 @@ describe("buildAboutCardList", () => {
     expect(leadershipCard).toBeDefined();
     expect(leadershipCard?.title).toBe("School Leadership");
     expect(leadershipCard?.content).toContain("Principal: سلوى العنزي");
-    expect(leadershipCard?.content).toContain("Assistant Principal 1: منى المطيري");
-    expect(leadershipCard?.content).toContain("Assistant Principal 2: خزنه الشمري");
+    expect(leadershipCard?.content).toContain("Assistant Principal: منى المطيري");
+    expect(leadershipCard?.content).toContain("Assistant Principal: خزنه الشمري");
+    expect(leadershipCard?.content).toContain("Assistant Principal: أ. فاطمة الحربي");
   });
 
   it("builds leadership card in English", () => {
     const cards = buildAboutCardList(mockSchool, "en", mockT, mockTSettings);
     const leadershipCard = cards.find((c) => c.key === "leadership");
     expect(leadershipCard?.content).toContain("Principal: Salwa Al-Enezi");
-    expect(leadershipCard?.content).toContain("Assistant Principal 1: Mona Al-Mutairi");
-    expect(leadershipCard?.content).toContain("Assistant Principal 2: Khazna Al-Shammari");
+    expect(leadershipCard?.content).toContain("Assistant Principal: Mona Al-Mutairi");
+    expect(leadershipCard?.content).toContain("Assistant Principal: Khazna Al-Shammari");
+    expect(leadershipCard?.content).toContain("Assistant Principal: Fatima Al-Harbi");
   });
 });

@@ -14,10 +14,12 @@ export function PublicHeroLeadershipCard({
   manager,
   assistant1,
   assistant2,
+  assistant3,
 }: {
   manager?: string | null;
   assistant1?: string | null;
   assistant2?: string | null;
+  assistant3?: string | null;
 }) {
   const t = useTranslations("home");
   const tSettings = useTranslations("settings");
@@ -47,6 +49,12 @@ export function PublicHeroLeadershipCard({
           <p>
             {t("assistantManager2Title")}:{" "}
             <span className="font-semibold text-foreground">{assistant2}</span>
+          </p>
+        )}
+        {assistant3 && (
+          <p>
+            {t("assistantManager3Title")}:{" "}
+            <span className="font-semibold text-foreground">{assistant3}</span>
           </p>
         )}
       </div>

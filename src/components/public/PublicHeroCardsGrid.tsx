@@ -13,7 +13,9 @@ export function PublicHeroCardsGrid({ school }: { school: PublicSchoolProfileRow
   const t = useTranslations("home");
   const data = resolveHeroSchoolData(school, locale);
 
-  const hasLeadership = Boolean(data.manager || data.assistant1 || data.assistant2);
+  const hasLeadership = Boolean(
+    data.manager || data.assistant1 || data.assistant2 || data.assistant3,
+  );
 
   return (
     <div className="w-full grid grid-cols-1 items-stretch gap-6 lg:gap-8 xl:gap-10 lg:grid-cols-3">
@@ -35,6 +37,7 @@ export function PublicHeroCardsGrid({ school }: { school: PublicSchoolProfileRow
             manager={data.manager}
             assistant1={data.assistant1}
             assistant2={data.assistant2}
+            assistant3={data.assistant3}
           />
         ) : (
           <div />
