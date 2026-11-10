@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { toast } from "sonner";
 import { RealtimeNotificationListener } from "./RealtimeNotificationListener";
 
@@ -63,30 +63,35 @@ describe("RealtimeNotificationListener", () => {
     postgresChangesHandler = null;
   });
 
-  it("subscribes to realtime channel on mount and removes on unmount", () => {
+  it("subscribes to realtime channel on mount and removes on unmount", async () => {
     const { unmount } = render(<RealtimeNotificationListener userId="usr-123" />);
 
-    expect(mockChannel.on).toHaveBeenCalledWith(
-      "postgres_changes",
-      expect.objectContaining({
-        event: "INSERT",
-        schema: "public",
-        table: "notifications",
-        filter: "user_id=eq.usr-123",
-      }),
-      expect.any(Function),
-    );
-    expect(mockChannel.subscribe).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockChannel.on).toHaveBeenCalledWith(
+        "postgres_changes",
+        expect.objectContaining({
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: "user_id=eq.usr-123",
+        }),
+        expect.any(Function),
+      );
+      expect(mockChannel.subscribe).toHaveBeenCalled();
+    });
 
     unmount();
     expect(mockRemoveChannel).toHaveBeenCalledWith(mockChannel);
     expect(mockUnsubscribe).toHaveBeenCalled();
   });
 
-  it("triggers toast and router.refresh when notification payload is received", () => {
+  it("triggers toast and router.refresh when notification payload is received", async () => {
     render(<RealtimeNotificationListener userId="usr-123" />);
 
-    expect(postgresChangesHandler).not.toBeNull();
+    await waitFor(() => {
+      expect(postgresChangesHandler).not.toBeNull();
+    });
+
     postgresChangesHandler!({
       new: {
         id: "notif-1",

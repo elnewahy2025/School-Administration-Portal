@@ -18,12 +18,62 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
 
     const supabase = createSupabaseBrowserClient();
     const channelName = `realtime-notifications-${userId}`;
+    let isMounted = true;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
 
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.access_token) {
-        void supabase.realtime.setAuth(session.access_token);
+    async function initSubscription() {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!isMounted) return;
+
+        if (session?.access_token) {
+          await supabase.realtime.setAuth(session.access_token);
+        }
+
+        if (!isMounted) return;
+
+        channel = supabase
+          .channel(channelName)
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "notifications",
+              filter: `user_id=eq.${userId}`,
+            },
+            (payload) => {
+              const row = payload.new as NotificationRow;
+              const href = resolveNotificationHref(row);
+              const content = resolveNotificationText(row, t);
+
+              toast.info(content.title, {
+                description: content.body ?? undefined,
+                action: href
+                  ? {
+                      label: t("view"),
+                      onClick: () => router.push(href),
+                    }
+                  : undefined,
+              });
+
+              router.refresh();
+            },
+          )
+          .subscribe((status, err) => {
+            if (err) {
+              console.error("[realtime] subscription error:", err);
+            }
+          });
+      } catch (err) {
+        console.error("[realtime] init failed:", err);
       }
-    });
+    }
+
+    void initSubscription();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
@@ -33,43 +83,12 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
       },
     );
 
-    const channel = supabase
-      .channel(channelName)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "notifications",
-          filter: `user_id=eq.${userId}`,
-        },
-        (payload) => {
-          const row = payload.new as NotificationRow;
-          const href = resolveNotificationHref(row);
-          const content = resolveNotificationText(row, t);
-
-          toast.info(content.title, {
-            description: content.body ?? undefined,
-            action: href
-              ? {
-                  label: t("view"),
-                  onClick: () => router.push(href),
-                }
-              : undefined,
-          });
-
-          router.refresh();
-        },
-      )
-      .subscribe((status, err) => {
-        if (err) {
-          console.error("[realtime] subscription error:", err);
-        }
-      });
-
     return () => {
+      isMounted = false;
       authListener?.subscription?.unsubscribe();
-      void supabase.removeChannel(channel);
+      if (channel) {
+        void supabase.removeChannel(channel);
+      }
     };
   }, [userId, router, t]);
 
