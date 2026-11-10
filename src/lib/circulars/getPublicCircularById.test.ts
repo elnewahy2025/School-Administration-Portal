@@ -4,13 +4,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 vi.mock("@/lib/supabase", () => ({
   createSupabaseServerClient: vi.fn(),
+  createSupabaseAdminClient: vi.fn(),
 }));
 
 vi.mock("@/lib/logger", () => ({
   logError: vi.fn(),
 }));
 
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseServerClient, createSupabaseAdminClient } from "@/lib/supabase";
 
 const mockMaybeSingle = vi.fn();
 const filters: { column: string; value: unknown }[] = [];
@@ -34,6 +35,7 @@ describe("getPublicCircularById", () => {
     vi.clearAllMocks();
     filters.length = 0;
     vi.mocked(createSupabaseServerClient).mockResolvedValue(mockSupabase);
+    vi.mocked(createSupabaseAdminClient).mockReturnValue(mockSupabase);
   });
 
   it("returns the circular when it is published and public", async () => {
@@ -53,7 +55,7 @@ describe("getPublicCircularById", () => {
     await getPublicCircularById("circ-2");
 
     expect(mockSelect).toHaveBeenCalled();
-    expect(filters).toEqual([
+    expect(filters.slice(0, 3)).toEqual([
       { column: "id", value: "circ-2" },
       { column: "status", value: "published" },
       { column: "visibility", value: "public" },

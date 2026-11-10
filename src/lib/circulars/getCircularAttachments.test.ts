@@ -17,6 +17,13 @@ vi.mock("@/lib/supabase", () => ({
     })),
   })),
   createSupabaseAdminClient: vi.fn(() => ({
+    from: vi.fn(() => ({
+      select: mockSelect.mockReturnValue({
+        eq: mockEq.mockReturnValue({
+          order: mockOrder,
+        }),
+      }),
+    })),
     storage: {
       from: vi.fn(() => ({
         createSignedUrls: mockCreateSignedUrls,

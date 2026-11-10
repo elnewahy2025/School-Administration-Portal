@@ -28,3 +28,4 @@ create policy circular_attachments_select_public on public.circular_attachments
         and public.is_public_school_active(c.school_id)
     )
   );
+

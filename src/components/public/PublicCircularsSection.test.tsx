@@ -85,3 +85,4 @@ describe("PublicCircularsSection", () => {
     expect(link.getAttribute("href")).toBe("/public/circulars/circ-1");
   });
 });
+

@@ -52,3 +52,4 @@ export function PublicCircularsSection({ circulars = [] }: { circulars?: Circula
     </section>
   );
 }
+
