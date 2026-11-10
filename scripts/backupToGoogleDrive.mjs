@@ -1,10 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { execSync } from "child_process";
 import { createClient } from "@supabase/supabase-js";
 import JSZip from "jszip";
 
-const GDRIVE_CMD = path.join(process.env.USERPROFILE || "", ".gemini/antigravity/bin/gdrive.cmd");
 const PARENT_FOLDER_ID = "1ooIHNsNDXh-B9Ux9Cz7_Kdsc_tRQmUl5";
 const BUCKETS = ["public-assets", "school-documents", "circular-attachments", "maintenance-photos"];
 
@@ -29,6 +27,13 @@ const TABLES = [
 ];
 
 function loadSupabaseCredentials() {
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+    );
+  }
+
   let envPath = ".env.cloud.local";
   if (!fs.existsSync(envPath)) envPath = ".env.local";
   const envContent = fs.readFileSync(envPath, "utf8");
@@ -39,6 +44,104 @@ function loadSupabaseCredentials() {
     if (line.startsWith("SUPABASE_SERVICE_ROLE_KEY=")) key = line.split("=")[1].trim();
   }
   return createClient(url, key);
+}
+
+function loadGoogleTokenData() {
+  if (process.env.GDRIVE_TOKEN_JSON) {
+    return JSON.parse(process.env.GDRIVE_TOKEN_JSON);
+  }
+  const localTokenPath = path.join(
+    process.env.USERPROFILE || "",
+    ".gemini/antigravity/plugin_data/gdrive/token.json",
+  );
+  if (fs.existsSync(localTokenPath)) {
+    return JSON.parse(fs.readFileSync(localTokenPath, "utf8"));
+  }
+  throw new Error("No Google Drive authentication token found.");
+}
+
+async function getFreshAccessToken(tokenData) {
+  const refreshToken = tokenData.token?.refresh_token || tokenData.refresh_token;
+  const clientId = tokenData.client_id;
+  const clientSecret = tokenData.client_secret;
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    refresh_token: refreshToken,
+    grant_type: "refresh_token",
+  });
+
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
+  });
+
+  const data = await res.json();
+  if (!data.access_token) {
+    throw new Error(`Failed to refresh Google access token: ${JSON.stringify(data)}`);
+  }
+  return data.access_token;
+}
+
+async function findOrCreateDatedFolder(accessToken, folderName) {
+  const query = `'${PARENT_FOLDER_ID}' in parents and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`;
+  const listUrl = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)`;
+  const listRes = await fetch(listUrl, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const listData = await listRes.json();
+  if (listData.files?.length > 0) {
+    console.log(`Found existing folder "${folderName}" (ID: ${listData.files[0].id})`);
+    return listData.files[0].id;
+  }
+
+  console.log(`Creating dated folder in Google Drive: "${folderName}"...`);
+  const createRes = await fetch("https://www.googleapis.com/drive/v3/files", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: folderName,
+      mimeType: "application/vnd.google-apps.folder",
+      parents: [PARENT_FOLDER_ID],
+    }),
+  });
+  const createData = await createRes.json();
+  console.log(`Created dated folder ID: ${createData.id}`);
+  return createData.id;
+}
+
+async function uploadFileToDrive(accessToken, parentId, fileName, mimeType, buffer) {
+  const boundary = `boundary_${Date.now()}`;
+  const delimiter = `\r\n--${boundary}\r\n`;
+  const closeDelim = `\r\n--${boundary}--\r\n`;
+
+  const metadata = { name: fileName, parents: [parentId] };
+  const body = Buffer.concat([
+    Buffer.from(
+      `${delimiter}Content-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(metadata)}\r\n`,
+    ),
+    Buffer.from(`${delimiter}Content-Type: ${mimeType}\r\n\r\n`),
+    buffer,
+    Buffer.from(closeDelim),
+  ]);
+
+  const res = await fetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": `multipart/related; boundary=${boundary}`,
+    },
+    body,
+  });
+
+  const data = await res.json();
+  if (!data.id) throw new Error(`Drive upload failed for ${fileName}: ${JSON.stringify(data)}`);
+  return data.id;
 }
 
 async function listFolderFiles(supabase, bucket, prefix) {
@@ -56,34 +159,6 @@ async function listFolderFiles(supabase, bucket, prefix) {
     }
   }
   return files;
-}
-
-function resolveDatedFolderId(folderName) {
-  try {
-    const listOut = execSync(`& "${GDRIVE_CMD}" readonly ls "${PARENT_FOLDER_ID}"`, {
-      shell: "powershell.exe",
-    }).toString();
-
-    for (const line of listOut.split("\n")) {
-      const parts = line.trim().split(/\s{2,}/);
-      if (parts.length >= 2 && parts[1] === folderName) {
-        console.log(`Found existing folder "${folderName}" (ID: ${parts[0]})`);
-        return parts[0];
-      }
-    }
-  } catch (err) {
-    console.warn("Could not list parent folder, will try mkdir:", err.message);
-  }
-
-  console.log(`Creating dated folder in Google Drive: "${folderName}"...`);
-  const mkdirOut = execSync(
-    `& "${GDRIVE_CMD}" mutate mkdir "${folderName}" --parent ${PARENT_FOLDER_ID}`,
-    { shell: "powershell.exe" },
-  ).toString();
-
-  const match = mkdirOut.match(/\(ID:\s*([^)]+)\)/i);
-  if (!match) throw new Error(`Failed to parse folder ID from output: ${mkdirOut}`);
-  return match[1].trim();
 }
 
 async function exportTableRows(supabase, table, schoolId) {
@@ -145,28 +220,15 @@ async function downloadAndZipStorage(supabase, schoolId, zip) {
   return count;
 }
 
-function uploadBackupFiles(tempDir, dateStr, datedFolderId) {
-  const zipPath = path.join(tempDir, `Al_Firdous_Full_Backup_${dateStr}.zip`);
-  const jsonPath = path.join(tempDir, `database_backup_${dateStr}.json`);
-  const readmePath = path.join(tempDir, "README.txt");
-
-  execSync(`& "${GDRIVE_CMD}" mutate upload "${zipPath}" --parent ${datedFolderId}`, {
-    shell: "powershell.exe",
-  });
-  execSync(`& "${GDRIVE_CMD}" mutate upload "${jsonPath}" --parent ${datedFolderId}`, {
-    shell: "powershell.exe",
-  });
-  execSync(`& "${GDRIVE_CMD}" mutate upload "${readmePath}" --parent ${datedFolderId}`, {
-    shell: "powershell.exe",
-  });
-}
-
 async function runWeeklyBackup() {
   console.log("==========================================================");
-  console.log("STARTING AUTOMATED GOOGLE DRIVE BACKUP:", new Date().toISOString());
+  console.log("STARTING CONTINUOUS CLOUD GOOGLE DRIVE BACKUP:", new Date().toISOString());
   console.log("==========================================================");
 
   const supabase = loadSupabaseCredentials();
+  const tokenData = loadGoogleTokenData();
+  const accessToken = await getFreshAccessToken(tokenData);
+
   const { data: schools } = await supabase.from("schools").select("*").limit(1);
   const school = schools?.[0];
   if (!school) throw new Error("No school found for backup");
@@ -188,17 +250,38 @@ async function runWeeklyBackup() {
     compressionOptions: { level: 6 },
   });
 
-  const tempDir = path.resolve("./.temp_backup");
-  if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
-  fs.writeFileSync(path.join(tempDir, `Al_Firdous_Full_Backup_${dateStr}.zip`), zipBuffer);
-  fs.writeFileSync(path.join(tempDir, `database_backup_${dateStr}.json`), jsonContent);
-  fs.writeFileSync(path.join(tempDir, "README.txt"), readme);
+  const datedFolderId = await findOrCreateDatedFolder(accessToken, `Backup_${dateStr}`);
 
-  const datedFolderId = resolveDatedFolderId(`Backup_${dateStr}`);
-  uploadBackupFiles(tempDir, dateStr, datedFolderId);
-  fs.rmSync(tempDir, { recursive: true, force: true });
+  console.log("Uploading full zip package to Google Drive...");
+  await uploadFileToDrive(
+    accessToken,
+    datedFolderId,
+    `Al_Firdous_Full_Backup_${dateStr}.zip`,
+    "application/zip",
+    zipBuffer,
+  );
 
-  console.log(`SUCCESS: Weekly backup completed and saved into "Backup_${dateStr}".`);
+  console.log("Uploading database JSON to Google Drive...");
+  await uploadFileToDrive(
+    accessToken,
+    datedFolderId,
+    `database_backup_${dateStr}.json`,
+    "application/json",
+    Buffer.from(jsonContent),
+  );
+
+  console.log("Uploading README to Google Drive...");
+  await uploadFileToDrive(
+    accessToken,
+    datedFolderId,
+    "README.txt",
+    "text/plain",
+    Buffer.from(readme),
+  );
+
+  console.log("==========================================================");
+  console.log(`SUCCESS: Cloud backup completed and saved into "Backup_${dateStr}".`);
+  console.log("==========================================================");
 }
 
 runWeeklyBackup().catch((err) => {
