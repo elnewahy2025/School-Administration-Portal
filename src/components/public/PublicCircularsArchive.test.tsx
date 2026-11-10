@@ -72,19 +72,21 @@ describe("PublicCircularsArchive", () => {
     expect(screen.getByText("noPublicCirculars")).toBeInTheDocument();
   });
 
-  it("renders circular list and filters properly", () => {
+  it("defaults to latest month and displays all when allMonths is selected", () => {
     render(<PublicCircularsArchive circulars={mockCirculars} />);
+
+    // Defaults to latest month (November 2026 -> circ-1)
+    expect(screen.getByText("تعميم رقم واحد")).toBeInTheDocument();
+    expect(screen.queryByText("تعميم رقم اثنين")).not.toBeInTheDocument();
+    expect(screen.getByText("Showing 1 of 2")).toBeInTheDocument();
+
+    // Click All Months pill
+    const allMonthsButton = screen.getByRole("tab", { name: /allMonths/ });
+    fireEvent.click(allMonthsButton);
 
     expect(screen.getByText("تعميم رقم واحد")).toBeInTheDocument();
     expect(screen.getByText("تعميم رقم اثنين")).toBeInTheDocument();
     expect(screen.getByText("Showing 2 of 2")).toBeInTheDocument();
-
-    const searchInput = screen.getByRole("searchbox");
-    fireEvent.change(searchInput, { target: { value: "واحد" } });
-
-    expect(screen.getByText("تعميم رقم واحد")).toBeInTheDocument();
-    expect(screen.queryByText("تعميم رقم اثنين")).not.toBeInTheDocument();
-    expect(screen.getByText("Showing 1 of 2")).toBeInTheDocument();
   });
 
   it("shows no-results state when search does not match", () => {

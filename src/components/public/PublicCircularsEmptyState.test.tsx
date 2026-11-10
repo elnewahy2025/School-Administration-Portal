@@ -12,3 +12,4 @@ describe("PublicCircularsEmptyState", () => {
     expect(screen.getByText("noPublicCirculars")).toBeInTheDocument();
   });
 });
+

@@ -23,3 +23,4 @@ export function PublicCircularsEmptyFilter({ onReset }: { onReset: () => void })
     </div>
   );
 }
+

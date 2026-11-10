@@ -26,6 +26,7 @@ export { PublicCalendarLegend } from "./PublicCalendarLegend";
 export { PublicCalendarUpcomingList } from "./PublicCalendarUpcomingList";
 export { getPublicCalendarCategoryStyle } from "./getPublicCalendarCategoryStyle";
 export { PublicCircularsSection } from "./PublicCircularsSection";
+export { PublicCircularsSectionHeader } from "./PublicCircularsSectionHeader";
 export { PublicCircularCard } from "./PublicCircularCard";
 export { PublicCircularMonthFilter } from "./PublicCircularMonthFilter";
 export { PublicCircularSearchInput } from "./PublicCircularSearchInput";

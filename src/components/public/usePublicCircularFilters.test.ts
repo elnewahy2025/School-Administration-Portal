@@ -21,6 +21,16 @@ const mockCirculars: Partial<CircularRow>[] = [
 ];
 
 describe("usePublicCircularFilters", () => {
+  it("initializes with initialMonth if provided", () => {
+    const { result } = renderHook(() =>
+      usePublicCircularFilters(mockCirculars as CircularRow[], "2026-11"),
+    );
+
+    expect(result.current.selectedMonth).toBe("2026-11");
+    expect(result.current.filteredCirculars).toHaveLength(1);
+    expect(result.current.filteredCirculars[0].id).toBe("1");
+  });
+
   it("filters by month key", () => {
     const { result } = renderHook(() =>
       usePublicCircularFilters(mockCirculars as CircularRow[]),
@@ -49,19 +59,19 @@ describe("usePublicCircularFilters", () => {
     expect(result.current.filteredCirculars[0].id).toBe("2");
   });
 
-  it("resets filters back to all", () => {
+  it("resets filters back to initial value", () => {
     const { result } = renderHook(() =>
-      usePublicCircularFilters(mockCirculars as CircularRow[]),
+      usePublicCircularFilters(mockCirculars as CircularRow[], "2026-11"),
     );
 
     act(() => {
-      result.current.setSelectedMonth("2026-11");
+      result.current.setSelectedMonth("all");
       result.current.setSearchQuery("exam");
       result.current.resetFilters();
     });
 
-    expect(result.current.selectedMonth).toBe("all");
+    expect(result.current.selectedMonth).toBe("2026-11");
     expect(result.current.searchQuery).toBe("");
-    expect(result.current.filteredCirculars).toHaveLength(2);
+    expect(result.current.filteredCirculars).toHaveLength(1);
   });
 });

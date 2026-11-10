@@ -1,11 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { FileTextIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CalendarCategory } from "@/lib/calendar/types";
 
-const CATEGORIES = ["all", "academic", "exam", "holiday", "meeting", "event", "circular"] as const;
+const CATEGORIES = ["all", "academic", "exam", "holiday", "meeting", "event"] as const;
 
 export function CalendarCategoryFilterBar({
   selectedCategory,
@@ -15,7 +14,6 @@ export function CalendarCategoryFilterBar({
   onSelectCategory: (category: string) => void;
 }) {
   const t = useTranslations("calendar");
-  const tCirc = useTranslations("circulars");
 
   return (
     <div className="flex flex-wrap gap-1.5">
@@ -27,12 +25,7 @@ export function CalendarCategoryFilterBar({
           onClick={() => onSelectCategory(cat)}
           className="gap-1.5"
         >
-          {cat === "circular" && <FileTextIcon className="size-3.5 text-chart-4" />}
-          {cat === "all"
-            ? t("title")
-            : cat === "circular"
-              ? tCirc("title")
-              : t(`categories.${cat as CalendarCategory}`)}
+          {cat === "all" ? t("title") : t(`categories.${cat as CalendarCategory}`)}
         </Button>
       ))}
     </div>

@@ -3,8 +3,11 @@
 import { useState, useMemo } from "react";
 import type { CircularRow } from "@/lib/circulars/types";
 
-export function usePublicCircularFilters(circulars: CircularRow[] = []) {
-  const [selectedMonth, setSelectedMonth] = useState<string>("all");
+export function usePublicCircularFilters(
+  circulars: CircularRow[] = [],
+  initialMonth = "all",
+) {
+  const [selectedMonth, setSelectedMonth] = useState<string>(initialMonth);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const filteredCirculars = useMemo(() => {
@@ -33,7 +36,7 @@ export function usePublicCircularFilters(circulars: CircularRow[] = []) {
   }, [circulars, selectedMonth, searchQuery]);
 
   const resetFilters = () => {
-    setSelectedMonth("all");
+    setSelectedMonth(initialMonth);
     setSearchQuery("");
   };
 

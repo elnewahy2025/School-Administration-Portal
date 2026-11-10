@@ -29,3 +29,4 @@ describe("PublicCircularSearchInput", () => {
     expect(onChange).toHaveBeenCalledWith("");
   });
 });
+

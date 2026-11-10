@@ -34,7 +34,6 @@ export function CalendarEventsView({
 
   const filteredItems = unifiedItems.filter((item) => {
     if (selectedCategory === "all") return true;
-    if (selectedCategory === "circular") return item.kind === "circular";
     return item.kind === "event" && item.event.category === selectedCategory;
   });
 

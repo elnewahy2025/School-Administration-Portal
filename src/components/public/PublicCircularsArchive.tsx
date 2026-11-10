@@ -21,6 +21,7 @@ export function PublicCircularsArchive({
   const t = useTranslations("home");
 
   const months = useMemo(() => getCircularMonths(circulars, locale), [circulars, locale]);
+  const defaultMonth = months[0]?.key ?? "all";
   const {
     selectedMonth,
     setSelectedMonth,
@@ -28,13 +29,13 @@ export function PublicCircularsArchive({
     setSearchQuery,
     filteredCirculars,
     resetFilters,
-  } = usePublicCircularFilters(circulars);
+  } = usePublicCircularFilters(circulars, defaultMonth);
 
   if (circulars.length === 0) {
     return <PublicCircularsEmptyState />;
   }
 
-  const isFiltered = selectedMonth !== "all" || searchQuery.trim().length > 0;
+  const isFiltered = selectedMonth !== defaultMonth || searchQuery.trim().length > 0;
 
   return (
     <div className="space-y-6">

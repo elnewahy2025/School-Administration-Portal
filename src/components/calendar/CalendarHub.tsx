@@ -7,15 +7,12 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
 import { CalendarEventsView } from "./CalendarEventsView";
 import type { CalendarEventRow } from "@/lib/calendar/types";
-import type { CircularRow } from "@/lib/circulars/types";
 
 export function CalendarHub({
   events,
-  circulars = [],
   canManageEvents = false,
 }: {
   events: CalendarEventRow[];
-  circulars?: CircularRow[];
   canManageEvents?: boolean;
 }) {
   const t = useTranslations("calendar");
@@ -38,7 +35,7 @@ export function CalendarHub({
         }
       />
 
-      <CalendarEventsView events={events} circulars={circulars} canManage={canManageEvents} />
+      <CalendarEventsView events={events} canManage={canManageEvents} />
     </div>
   );
 }

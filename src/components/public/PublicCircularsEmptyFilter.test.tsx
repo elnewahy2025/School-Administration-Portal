@@ -16,3 +16,4 @@ describe("PublicCircularsEmptyFilter", () => {
     expect(onReset).toHaveBeenCalledTimes(1);
   });
 });
+

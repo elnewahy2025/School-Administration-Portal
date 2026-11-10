@@ -62,6 +62,8 @@
     "noFilteredCirculars": "No circulars match your search or filter.",
     "clearFilters": "Reset Filters",
     "showingCount": "Showing {shown} of {total} circulars",
+    "showingAllCirculars": "Showing all published circulars ({count})",
+    "showingMonthCirculars": "Circulars for {month} ({count})",
     "archiveTitle": "School Circulars & Decisions Archive",
     "archiveSubtitle": "Complete institutional record of approved circulars and announcements issued by school administration, organized chronologically.",
     "archiveBreadcrumb": "Circulars Archive",

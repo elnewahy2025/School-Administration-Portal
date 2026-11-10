@@ -62,6 +62,8 @@
     "noFilteredCirculars": "لا توجد تعاميم مطابقة لبحثك في هذه الفترة.",
     "clearFilters": "إعادة تعيين التصفية",
     "showingCount": "عرض {shown} من أصل {total} تعميم",
+    "showingAllCirculars": "عرض جميع التعاميم المنشورة ({count})",
+    "showingMonthCirculars": "تعاميم شهر {month} ({count})",
     "archiveTitle": "أرشيف التعاميم والقرارات المدرسية",
     "archiveSubtitle": "السجل الشامل للتعاميم والإعلانات المعتمدة الصادرة عن إدارة المدرسة، مصنفة حسب تاريخ النشر.",
     "archiveBreadcrumb": "أرشيف التعاميم",

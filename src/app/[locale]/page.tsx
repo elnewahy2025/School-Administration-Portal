@@ -31,7 +31,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <main className="flex-1">
         <PublicHero school={school} documents={documents} />
         <PublicCircularsSection circulars={circulars} />
-        <PublicEventsSection events={events} circulars={circulars} />
+        <PublicEventsSection events={events} />
       </main>
       <PublicFooter />
     </div>
