@@ -1,23 +1,19 @@
 "use client";
 
-import { useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Link, useRouter } from "@/i18n";
-import { toast } from "sonner";
-import { CheckIcon, ExternalLinkIcon } from "lucide-react";
+import { Link } from "@/i18n";
+import { CheckIcon, ExternalLinkIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NotificationBadge } from "./NotificationBadge";
 import { resolveNotificationHref } from "@/lib/notifications/resolveNotificationHref";
 import { resolveNotificationText } from "@/lib/notifications/resolveNotificationText";
-import { markNotificationReadAction } from "@/actions/notifications/markNotificationReadAction";
+import { useNotificationItemActions } from "./useNotificationItemActions";
 import type { NotificationRow } from "@/lib/notifications/types";
 
 export function NotificationItem({ notification }: { notification: NotificationRow }) {
   const t = useTranslations("notifications");
-  const tCommon = useTranslations("common");
   const locale = useLocale();
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const { isPending, handleMarkRead, handleDelete } = useNotificationItemActions(notification.id);
 
   const isUnread = !notification.read_at;
   const href = resolveNotificationHref(notification);
@@ -29,18 +25,6 @@ export function NotificationItem({ notification }: { notification: NotificationR
       timeStyle: "short",
     },
   );
-
-  const handleMarkRead = () => {
-    startTransition(async () => {
-      const res = await markNotificationReadAction(notification.id);
-      if (res.success) {
-        toast.success(tCommon("saved"));
-        router.refresh();
-      } else {
-        toast.error(res.error ?? tCommon("error"));
-      }
-    });
-  };
 
   return (
     <div
@@ -83,6 +67,17 @@ export function NotificationItem({ notification }: { notification: NotificationR
             </Button>
           </Link>
         )}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDelete}
+          disabled={isPending}
+          className="gap-1 text-xs text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          aria-label={t("delete")}
+        >
+          <Trash2Icon className="size-3.5" />
+          <span className="hidden sm:inline">{t("delete")}</span>
+        </Button>
       </div>
     </div>
   );
