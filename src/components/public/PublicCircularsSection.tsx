@@ -1,13 +1,33 @@
 "use client";
 
+import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { FileTextIcon } from "lucide-react";
+import { Link } from "@/i18n";
+import { ArrowRightIcon } from "lucide-react";
 import type { CircularRow } from "@/lib/circulars/types";
+import { getCircularMonths } from "@/lib/circulars/getCircularMonths";
+import { usePublicCircularFilters } from "./usePublicCircularFilters";
+import { PublicCircularMonthFilter } from "./PublicCircularMonthFilter";
+import { PublicCircularSearchInput } from "./PublicCircularSearchInput";
 import { PublicCircularCard } from "./PublicCircularCard";
+import { PublicCircularsEmptyState } from "./PublicCircularsEmptyState";
+import { PublicCircularsEmptyFilter } from "./PublicCircularsEmptyFilter";
 
 export function PublicCircularsSection({ circulars = [] }: { circulars?: CircularRow[] }) {
   const locale = useLocale();
   const t = useTranslations("home");
+
+  const months = useMemo(() => getCircularMonths(circulars, locale), [circulars, locale]);
+  const {
+    selectedMonth,
+    setSelectedMonth,
+    searchQuery,
+    setSearchQuery,
+    filteredCirculars,
+    resetFilters,
+  } = usePublicCircularFilters(circulars);
+
+  const displayedCirculars = filteredCirculars.slice(0, 4);
 
   return (
     <section
@@ -35,21 +55,44 @@ export function PublicCircularsSection({ circulars = [] }: { circulars?: Circula
         </div>
 
         {circulars.length === 0 ? (
-          <div className="mx-auto max-w-md rounded-2xl border border-dashed border-border/80 bg-card/60 p-8 text-center space-y-3">
-            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
-              <FileTextIcon className="size-6" />
-            </div>
-            <p className="text-sm font-medium text-muted-foreground">{t("noPublicCirculars")}</p>
-          </div>
+          <PublicCircularsEmptyState />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch pt-4">
-            {circulars.map((circular) => (
-              <PublicCircularCard key={circular.id} circular={circular} locale={locale} />
-            ))}
+          <div className="space-y-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <PublicCircularSearchInput
+                value={searchQuery}
+                onChange={setSearchQuery}
+              />
+              <PublicCircularMonthFilter
+                months={months}
+                selectedMonth={selectedMonth}
+                totalCount={circulars.length}
+                onSelectMonth={setSelectedMonth}
+              />
+            </div>
+
+            {filteredCirculars.length === 0 ? (
+              <PublicCircularsEmptyFilter onReset={resetFilters} />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch pt-2">
+                {displayedCirculars.map((circular) => (
+                  <PublicCircularCard key={circular.id} circular={circular} locale={locale} />
+                ))}
+              </div>
+            )}
+
+            <div className="pt-4 text-center">
+              <Link
+                href="/public/circulars"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#0c1f44] px-6 py-3 text-sm font-bold text-white shadow-xs transition-all hover:bg-[#0b5cce] hover:shadow-md dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90"
+              >
+                <span>{t("viewAllArchiveWithCount", { count: circulars.length })}</span>
+                <ArrowRightIcon className="size-4 rtl:rotate-180" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         )}
       </div>
     </section>
   );
 }
-
