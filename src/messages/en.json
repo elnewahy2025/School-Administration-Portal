@@ -498,7 +498,12 @@
     "attachments": "Photos & Attachments",
     "reportPhoto": "Initial Report Photo",
     "evidencePhoto": "Completion Evidence",
-    "backToList": "Back to Maintenance"
+    "backToList": "Back to Maintenance",
+    "editTicket": "Edit Maintenance Ticket",
+    "deleteTicket": "Delete Maintenance Ticket",
+    "confirmDeleteTicket": "Are you sure you want to permanently delete this maintenance ticket from the database? This action cannot be undone.",
+    "ticketUpdated": "Maintenance ticket updated successfully",
+    "ticketDeleted": "Maintenance ticket deleted successfully"
   },
   "calendar": {
     "viewMore": "View more",

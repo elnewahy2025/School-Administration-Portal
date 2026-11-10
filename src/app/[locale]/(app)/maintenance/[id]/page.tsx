@@ -4,17 +4,19 @@ import { setRequestLocale } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { hasPermission } from "@/lib/rbac/hasPermission";
 import { getMaintenanceRequestById } from "@/lib/maintenance/getMaintenanceRequestById";
 import { getMaintenanceUpdates } from "@/lib/maintenance/getMaintenanceUpdates";
 import { getMaintenanceAttachments } from "@/lib/maintenance/getMaintenanceAttachments";
 import { getMaintenanceOperators } from "@/lib/maintenance/getMaintenanceOperators";
+import { resolveMaintenanceDetailPermissions } from "@/lib/maintenance/resolveMaintenanceDetailPermissions";
+import { getSchoolLocations } from "@/lib/school";
 import { MaintenanceDetailCard } from "@/components/maintenance/MaintenanceDetailCard";
 import { MaintenanceAttachmentsList } from "@/components/maintenance/MaintenanceAttachmentsList";
 import { MaintenanceStatusActions } from "@/components/maintenance/MaintenanceStatusActions";
 import { MaintenanceAssignSection } from "@/components/maintenance/MaintenanceAssignSection";
 import { MaintenanceTimeline } from "@/components/maintenance/MaintenanceTimeline";
 import { MaintenanceAddNoteBox } from "@/components/maintenance/MaintenanceAddNoteBox";
+import { MaintenanceDetailActions } from "@/components/maintenance/MaintenanceDetailActions";
 
 export default async function MaintenanceDetailPage({
   params,
@@ -34,29 +36,29 @@ export default async function MaintenanceDetailPage({
     notFound();
   }
 
-  const [updates, attachments, operators, canAssign, canClose] = await Promise.all([
+  const [updates, attachments, operators, locations, perms] = await Promise.all([
     getMaintenanceUpdates(id),
     getMaintenanceAttachments(id),
     getMaintenanceOperators(profile.school_id),
-    hasPermission("maintenance.assign", profile.school_id, profile.department_id).catch(
-      () => false,
-    ),
-    hasPermission("maintenance.close", profile.school_id, profile.department_id).catch(() => false),
+    getSchoolLocations(profile.school_id),
+    resolveMaintenanceDetailPermissions(profile, ticket),
   ]);
-
-  const isReporter = ticket.reporter_id === profile.id;
-  const isOperator = ticket.assigned_operator_id === profile.id;
-  const isParticipant = isReporter || isOperator || canAssign;
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
-      <div>
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <Link href={`/${locale}/maintenance`}>
           <Button variant="ghost" size="sm" className="gap-2">
             <ArrowLeftIcon className="size-4 rtl:rotate-180" />
             <span>Back to Maintenance</span>
           </Button>
         </Link>
+
+        <MaintenanceDetailActions
+          ticket={ticket}
+          locations={locations}
+          canManage={perms.canManage}
+        />
       </div>
 
       <MaintenanceDetailCard ticket={ticket} />
@@ -66,13 +68,13 @@ export default async function MaintenanceDetailPage({
       <MaintenanceStatusActions
         requestId={id}
         status={ticket.status}
-        isReporter={isReporter}
-        isOperator={isOperator}
-        canAssign={canAssign}
-        canClose={canClose}
+        isReporter={perms.isReporter}
+        isOperator={perms.isOperator}
+        canAssign={perms.canAssign}
+        canClose={perms.canClose}
       />
 
-      {canAssign && (
+      {perms.canAssign && (
         <MaintenanceAssignSection
           requestId={id}
           currentOperatorId={ticket.assigned_operator_id}
@@ -84,7 +86,7 @@ export default async function MaintenanceDetailPage({
 
       <MaintenanceTimeline updates={updates} />
 
-      {isParticipant && <MaintenanceAddNoteBox requestId={id} />}
+      {perms.isParticipant && <MaintenanceAddNoteBox requestId={id} />}
     </div>
   );
 }

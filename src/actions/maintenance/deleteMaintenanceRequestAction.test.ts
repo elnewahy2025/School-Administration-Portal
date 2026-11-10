@@ -1,13 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { deleteMaintenanceRequestAction } from "./deleteMaintenanceRequestAction";
 
-const { mockGetCurrentProfile, mockIsPlatformOwner, mockHasPermission, mockDeleteRecord } =
-  vi.hoisted(() => ({
-    mockGetCurrentProfile: vi.fn(),
-    mockIsPlatformOwner: vi.fn(),
-    mockHasPermission: vi.fn(),
-    mockDeleteRecord: vi.fn(),
-  }));
+const {
+  mockGetCurrentProfile,
+  mockIsPlatformOwner,
+  mockHasPermission,
+  mockDeleteRecord,
+  mockGetMaintenanceRequestById,
+} = vi.hoisted(() => ({
+  mockGetCurrentProfile: vi.fn(),
+  mockIsPlatformOwner: vi.fn(),
+  mockHasPermission: vi.fn(),
+  mockDeleteRecord: vi.fn(),
+  mockGetMaintenanceRequestById: vi.fn(),
+}));
 
 vi.mock("@/lib/auth/getCurrentProfile", () => ({
   getCurrentProfile: () => mockGetCurrentProfile(),
@@ -19,6 +25,10 @@ vi.mock("@/lib/auth/isPlatformOwner", () => ({
 
 vi.mock("@/lib/rbac/hasPermission", () => ({
   hasPermission: (...args: unknown[]) => mockHasPermission(...args),
+}));
+
+vi.mock("@/lib/maintenance/getMaintenanceRequestById", () => ({
+  getMaintenanceRequestById: (...args: unknown[]) => mockGetMaintenanceRequestById(...args),
 }));
 
 vi.mock("@/lib/maintenance/deleteMaintenanceRequestRecord", () => ({
@@ -46,8 +56,21 @@ describe("deleteMaintenanceRequestAction", () => {
     expect(res.error).toBe("Authentication required");
   });
 
-  it("fails when user lacks permission", async () => {
+  it("fails when ticket not found", async () => {
     mockGetCurrentProfile.mockResolvedValue({ id: "user-1", school_id: "school-1" });
+    mockGetMaintenanceRequestById.mockResolvedValue(null);
+    const res = await deleteMaintenanceRequestAction("req-1");
+    expect(res.success).toBe(false);
+    expect(res.error).toBe("Maintenance request not found");
+  });
+
+  it("fails when user lacks permission and is not reporter", async () => {
+    mockGetCurrentProfile.mockResolvedValue({ id: "user-1", school_id: "school-1" });
+    mockGetMaintenanceRequestById.mockResolvedValue({
+      id: "req-1",
+      school_id: "school-1",
+      reporter_id: "other-user",
+    });
     mockIsPlatformOwner.mockResolvedValue(false);
     mockHasPermission.mockResolvedValue(false);
 
@@ -58,7 +81,27 @@ describe("deleteMaintenanceRequestAction", () => {
 
   it("succeeds when user is platform owner", async () => {
     mockGetCurrentProfile.mockResolvedValue({ id: "owner-1", school_id: "school-1" });
+    mockGetMaintenanceRequestById.mockResolvedValue({
+      id: "req-1",
+      school_id: "school-1",
+      reporter_id: "other-user",
+    });
     mockIsPlatformOwner.mockResolvedValue(true);
+    mockDeleteRecord.mockResolvedValue({ success: true });
+
+    const res = await deleteMaintenanceRequestAction("req-1");
+    expect(res.success).toBe(true);
+  });
+
+  it("succeeds when user is ticket reporter", async () => {
+    mockGetCurrentProfile.mockResolvedValue({ id: "user-1", school_id: "school-1" });
+    mockGetMaintenanceRequestById.mockResolvedValue({
+      id: "req-1",
+      school_id: "school-1",
+      reporter_id: "user-1",
+    });
+    mockIsPlatformOwner.mockResolvedValue(false);
+    mockHasPermission.mockResolvedValue(false);
     mockDeleteRecord.mockResolvedValue({ success: true });
 
     const res = await deleteMaintenanceRequestAction("req-1");
@@ -67,6 +110,11 @@ describe("deleteMaintenanceRequestAction", () => {
 
   it("succeeds when user has maintenance.close permission", async () => {
     mockGetCurrentProfile.mockResolvedValue({ id: "admin-1", school_id: "school-1" });
+    mockGetMaintenanceRequestById.mockResolvedValue({
+      id: "req-1",
+      school_id: "school-1",
+      reporter_id: "other-user",
+    });
     mockIsPlatformOwner.mockResolvedValue(false);
     mockHasPermission.mockImplementation(async (perm: string) => perm === "maintenance.close");
     mockDeleteRecord.mockResolvedValue({ success: true });

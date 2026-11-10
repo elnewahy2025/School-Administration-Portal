@@ -2,22 +2,27 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { SearchIcon, WrenchIcon } from "lucide-react";
+import { WrenchIcon } from "lucide-react";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PANEL } from "@/components/ui/diamond-card-styles";
 import { MaintenanceTableRow } from "./MaintenanceTableRow";
 import { MaintenanceListHeader } from "./MaintenanceListHeader";
+import { MaintenanceFiltersToolbar } from "./MaintenanceFiltersToolbar";
 import { filterMaintenanceTickets } from "@/lib/maintenance/filterMaintenanceTickets";
 import type { MaintenanceRequestRow } from "@/lib/maintenance/types";
+import type { LocationRow } from "@/lib/school/getSchoolLocations";
 
 export function MaintenanceList({
   tickets,
   canCreate,
+  locations = [],
+  currentUserId,
+  canManageAll = false,
 }: {
   tickets: MaintenanceRequestRow[];
   canCreate: boolean;
+  locations?: LocationRow[];
+  currentUserId?: string;
+  canManageAll?: boolean;
 }) {
   const t = useTranslations("maintenance");
   const tCommon = useTranslations("common");
@@ -33,36 +38,12 @@ export function MaintenanceList({
     <div className="space-y-6">
       <MaintenanceListHeader canCreate={canCreate} />
 
-      <div
-        className={`${PANEL} flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between`}
-      >
-        <div className="relative max-w-sm flex-1">
-          <SearchIcon className="absolute start-3 top-2.5 size-4 text-muted-foreground" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={tCommon("search")}
-            className="ps-9"
-          />
-        </div>
-
-        <div className="flex flex-wrap gap-1.5">
-          {["all", "emergency", "in_progress", "resolved", "closed"].map((f) => (
-            <Button
-              key={f}
-              variant={statusFilter === f ? "default" : "outline"}
-              size="sm"
-              onClick={() => setStatusFilter(f)}
-            >
-              {f === "all"
-                ? t("filterAll")
-                : f === "emergency"
-                  ? t("priorities.emergency")
-                  : t(`statuses.${f}`)}
-            </Button>
-          ))}
-        </div>
-      </div>
+      <MaintenanceFiltersToolbar
+        search={search}
+        onSearchChange={setSearch}
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
+      />
 
       {filteredTickets.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-[color:var(--panel,var(--card))] p-12 text-center">
@@ -85,9 +66,18 @@ export function MaintenanceList({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredTickets.map((tk) => (
-                <MaintenanceTableRow key={tk.id} ticket={tk} />
-              ))}
+              {filteredTickets.map((tk) => {
+                const canManage =
+                  canManageAll || (Boolean(currentUserId) && tk.reporter_id === currentUserId);
+                return (
+                  <MaintenanceTableRow
+                    key={tk.id}
+                    ticket={tk}
+                    locations={locations}
+                    canManage={canManage}
+                  />
+                );
+              })}
             </TableBody>
           </Table>
         </div>

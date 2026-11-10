@@ -3,3 +3,4 @@ export { assignMaintenanceAction } from "./assignMaintenanceAction";
 export { updateMaintenanceStatusAction } from "./updateMaintenanceStatusAction";
 export { addMaintenanceNoteAction } from "./addMaintenanceNoteAction";
 export { deleteMaintenanceRequestAction } from "./deleteMaintenanceRequestAction";
+export { updateMaintenanceRequestAction } from "./updateMaintenanceRequestAction";

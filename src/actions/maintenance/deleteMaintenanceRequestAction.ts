@@ -3,11 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseAdminClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
-import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
-import { hasPermission } from "@/lib/rbac/hasPermission";
+import { getMaintenanceRequestById } from "@/lib/maintenance/getMaintenanceRequestById";
+import { assertCanManageMaintenanceRequest } from "@/lib/maintenance/assertCanManageMaintenanceRequest";
 import { deleteMaintenanceRequestRecord } from "@/lib/maintenance/deleteMaintenanceRequestRecord";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
-import { ForbiddenError } from "@/lib/errors/ForbiddenError";
+import { NotFoundError } from "@/lib/errors/NotFoundError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { sanitizeError } from "@/lib/errors/sanitizeError";
 import { formatActionErrorResult, type ActionResult } from "@/lib/errors/formatActionErrorResult";
@@ -19,18 +19,12 @@ export async function deleteMaintenanceRequestAction(requestId: string): Promise
       throw new AuthenticationError("Authentication required");
     }
 
-    const isOwner = await isPlatformOwner(profile.id);
-    if (!isOwner) {
-      if (!profile.school_id) {
-        throw new AuthenticationError("No school associated with profile");
-      }
-      const canDelete =
-        (await hasPermission("maintenance.close", profile.school_id, profile.department_id)) ||
-        (await hasPermission("users.manage", profile.school_id, profile.department_id));
-      if (!canDelete) {
-        throw new ForbiddenError("Unauthorized to delete maintenance request");
-      }
+    const ticket = await getMaintenanceRequestById(requestId);
+    if (!ticket) {
+      throw new NotFoundError("Maintenance request not found");
     }
+
+    await assertCanManageMaintenanceRequest(profile, ticket, "delete");
 
     const supabase = createSupabaseAdminClient({
       actorId: profile.id,

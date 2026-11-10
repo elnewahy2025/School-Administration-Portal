@@ -1,16 +1,23 @@
 "use client";
 
-import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { EyeIcon } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { MaintenancePriorityBadge } from "./MaintenancePriorityBadge";
 import { MaintenanceStatusBadge } from "./MaintenanceStatusBadge";
+import { MaintenanceTableRowActions } from "./MaintenanceTableRowActions";
 import { formatLocation } from "@/lib/maintenance/formatLocation";
 import type { MaintenanceRequestRow } from "@/lib/maintenance/types";
+import type { LocationRow } from "@/lib/school/getSchoolLocations";
 
-export function MaintenanceTableRow({ ticket }: { ticket: MaintenanceRequestRow }) {
+export function MaintenanceTableRow({
+  ticket,
+  locations = [],
+  canManage = false,
+}: {
+  ticket: MaintenanceRequestRow;
+  locations?: LocationRow[];
+  canManage?: boolean;
+}) {
   const locale = useLocale();
   const tCat = useTranslations("maintenance.categories");
   const categoryLabel = tCat.has(ticket.category)
@@ -41,14 +48,11 @@ export function MaintenanceTableRow({ ticket }: { ticket: MaintenanceRequestRow 
         {new Date(ticket.created_at).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US")}
       </TableCell>
       <TableCell className="text-end">
-        <Link
-          href={`/${locale}/maintenance/${ticket.id}`}
-          className="inline-flex items-center gap-1"
-        >
-          <Button variant="ghost" size="sm">
-            <EyeIcon className="size-4" />
-          </Button>
-        </Link>
+        <MaintenanceTableRowActions
+          ticket={ticket}
+          locations={locations}
+          canManage={canManage}
+        />
       </TableCell>
     </TableRow>
   );

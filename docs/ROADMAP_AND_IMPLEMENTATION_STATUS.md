@@ -72,6 +72,7 @@ The School Administration Portal is an enterprise-grade, multi-tenant capable, A
 2. **Maintenance & Service Requests (`/maintenance`):**
    - State-machine workflow: `pending` -> `assigned` -> `in_progress` -> `completed` / `cancelled` / `reopened`.
    - Operator assignment, status transition reason logs, note threads, and photo upload verification.
+   - Full Lifecycle Ticket Editing & Permanent DB Deletion: Direct inline and detail page modal editing (title, description, category, priority, location, area, asset reference) and physical database deletion cascading to assignments, status history, attachments, and storage bucket files; protected by accessible confirmation modals (D18).
 
 3. **School Achievements & Milestones (`/achievements` - Owner Only):**
    - Standalone module located at `/[locale]/achievements`, completely isolated as a premium add-on feature.
