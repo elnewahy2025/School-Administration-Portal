@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { FileTextIcon } from "lucide-react";
+import { UniversalDocumentViewer } from "@/components/documents/viewer/UniversalDocumentViewer";
+import { getAttachmentKind } from "@/lib/circulars/getAttachmentKind";
 import type { SchoolDocumentRow } from "@/lib/documents/types";
 
 export function SchoolDocumentPreviewContent({
@@ -12,7 +13,6 @@ export function SchoolDocumentPreviewContent({
 }) {
   const t = useTranslations("documents");
   const fileUrl = currentDoc?.file_url;
-  const isImage = currentDoc?.mime_type?.startsWith("image/");
 
   if (!currentDoc || !fileUrl) {
     return (
@@ -25,26 +25,11 @@ export function SchoolDocumentPreviewContent({
     );
   }
 
-  if (isImage) {
-    return (
-      <div className="flex w-full justify-center">
-        <Image
-          src={fileUrl}
-          alt={currentDoc.title}
-          width={1000}
-          height={800}
-          unoptimized
-          className="max-h-[68vh] w-auto max-w-full rounded-lg border border-border/80 object-contain shadow-md"
-        />
-      </div>
-    );
-  }
+  const kind = getAttachmentKind(currentDoc.file_name || currentDoc.title, currentDoc.mime_type);
 
   return (
-    <iframe
-      src={fileUrl}
-      title={currentDoc.title}
-      className="h-[68vh] w-full rounded-lg border border-border/80 bg-white"
-    />
+    <div className="size-full h-[68vh] overflow-hidden rounded-lg border border-border/80 bg-background">
+      <UniversalDocumentViewer url={fileUrl} fileName={currentDoc.title} kind={kind} />
+    </div>
   );
 }

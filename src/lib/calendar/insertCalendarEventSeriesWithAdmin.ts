@@ -18,4 +18,3 @@ export async function insertCalendarEventSeriesWithAdmin(
   const eventIds = data.map((row) => row.id as string);
   return { eventIds, firstEventId: eventIds[0] };
 }
-

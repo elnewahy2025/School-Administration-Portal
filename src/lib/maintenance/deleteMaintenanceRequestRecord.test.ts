@@ -54,4 +54,3 @@ describe("deleteMaintenanceRequestRecord", () => {
     expect(removeMock).toHaveBeenCalledWith(["p1", "p2"]);
   });
 });
-

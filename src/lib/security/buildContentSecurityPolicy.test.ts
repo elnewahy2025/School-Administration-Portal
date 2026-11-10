@@ -27,11 +27,13 @@ describe("buildContentSecurityPolicy", () => {
     expect(headerValue).toContain("upgrade-insecure-requests");
   });
 
-  it("includes supabase origins in connect-src and img-src", () => {
+  it("includes supabase origins in connect-src, img-src, and frame-src", () => {
     const { headerValue } = buildContentSecurityPolicy("test-nonce", {
       supabaseUrl: "http://127.0.0.1:54321",
     });
     expect(headerValue).toContain("http://127.0.0.1:54321");
+    expect(headerValue).toContain("frame-src");
+    expect(headerValue).toContain("worker-src 'self' blob:");
   });
 
   it("includes error reporting origin in connect-src", () => {

@@ -31,4 +31,3 @@ export async function verifyTargetDeletable(
     await assertNotLastActiveSchoolAdmin(admin, userId);
   }
 }
-

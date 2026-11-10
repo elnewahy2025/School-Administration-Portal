@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ZoomInIcon } from "lucide-react";
+import { UniversalDocumentViewer } from "@/components/documents/viewer/UniversalDocumentViewer";
 import type { AttachmentKind } from "@/lib/circulars/getAttachmentKind";
 
 export function CircularAttachmentEmbeddedView({
@@ -19,37 +19,19 @@ export function CircularAttachmentEmbeddedView({
   const t = useTranslations("circulars");
   if (!publicUrl) return null;
 
-  if (kind === "image") {
-    return (
-      <div
-        onClick={onExpand}
-        className="group relative flex cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-border bg-muted/20 p-2 transition-colors hover:border-primary/50"
-      >
-        <Image
-          src={publicUrl}
-          alt={fileName}
-          width={800}
-          height={600}
-          unoptimized
-          className="max-h-[550px] w-auto max-w-full rounded-md object-contain transition-transform duration-200 group-hover:scale-[1.005]"
-        />
-        <div className="absolute inset-0 flex items-center justify-center bg-scrim/25 opacity-0 transition-opacity group-hover:opacity-100">
-          <span className="flex items-center gap-1.5 rounded-full bg-background/90 px-3 py-1.5 text-xs font-medium text-foreground shadow-sm">
-            <ZoomInIcon className="size-3.5" />
-            {t("expandAttachment")}
-          </span>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="overflow-hidden rounded-lg border border-border bg-background">
-      <iframe
-        src={publicUrl}
-        title={fileName}
-        className="h-[600px] w-full border-0 bg-background"
-      />
+    <div className="group relative overflow-hidden rounded-lg border border-border bg-background">
+      <div className="h-[480px] w-full">
+        <UniversalDocumentViewer url={publicUrl} fileName={fileName} kind={kind} />
+      </div>
+      <button
+        type="button"
+        onClick={onExpand}
+        className="absolute top-2 left-2 z-20 flex items-center gap-1.5 rounded-md border border-border bg-background/90 px-2.5 py-1 text-xs font-medium text-foreground shadow-xs backdrop-blur-xs transition-colors hover:bg-accent hover:text-accent-foreground"
+      >
+        <ZoomInIcon className="size-3.5" />
+        <span>{t("expandAttachment")}</span>
+      </button>
     </div>
   );
 }

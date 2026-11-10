@@ -22,10 +22,7 @@ export async function executeUserDissociationFallback(
     .eq("assigned_operator_id", userId);
 
   // 3. Delete from public.profiles
-  const { error: profileDeleteError } = await admin
-    .from("profiles")
-    .delete()
-    .eq("id", userId);
+  const { error: profileDeleteError } = await admin.from("profiles").delete().eq("id", userId);
 
   if (profileDeleteError) {
     throw mapDatabaseError(profileDeleteError);

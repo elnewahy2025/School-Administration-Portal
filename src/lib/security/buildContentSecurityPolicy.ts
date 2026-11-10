@@ -49,6 +49,14 @@ export function buildContentSecurityPolicy(
     ),
   ).join(" ");
 
+  const frameSources = Array.from(
+    new Set(
+      ["'self'", "blob:", "data:", "https://*.supabase.co", supabaseOrigin].filter(
+        (s): s is string => Boolean(s),
+      ),
+    ),
+  ).join(" ");
+
   const scriptDirectives = [
     "'self'",
     `'nonce-${nonce}'`,
@@ -63,6 +71,8 @@ export function buildContentSecurityPolicy(
     `script-src ${scriptDirectives}`,
     "style-src 'self' 'unsafe-inline'",
     `img-src ${imageSources}`,
+    `frame-src ${frameSources}`,
+    "worker-src 'self' blob:",
     "font-src 'self' data:",
     `connect-src ${connectSources}`,
     "object-src 'none'",

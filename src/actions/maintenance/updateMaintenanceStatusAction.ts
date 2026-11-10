@@ -35,8 +35,16 @@ export async function updateMaintenanceStatusAction(formData: FormData): Promise
       throw new ValidationError(`Illegal transition from ${ticket.status} to ${targetStatus}`);
     }
 
-    const canAssign = await hasPermission("maintenance.assign", profile.school_id, profile.department_id);
-    const canClose = await hasPermission("maintenance.close", profile.school_id, profile.department_id);
+    const canAssign = await hasPermission(
+      "maintenance.assign",
+      profile.school_id,
+      profile.department_id,
+    );
+    const canClose = await hasPermission(
+      "maintenance.close",
+      profile.school_id,
+      profile.department_id,
+    );
     const authCheck = assertCanTransitionStatus({
       targetStatus,
       isReporter: ticket.reporter_id === profile.id,

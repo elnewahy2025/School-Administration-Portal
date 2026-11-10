@@ -51,7 +51,10 @@ describe("generateDocumentReferenceNumber", () => {
     const mockSupabase = {
       rpc: vi.fn().mockResolvedValue({
         data: null,
-        error: { code: "42501", message: "An active account is required to allocate a document number" },
+        error: {
+          code: "42501",
+          message: "An active account is required to allocate a document number",
+        },
       }),
     } as unknown as SupabaseClient;
 

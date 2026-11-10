@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { XIcon, DownloadIcon, PrinterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDrawerEscape } from "@/components/layout/useDrawerEscape";
 import { printAttachment } from "@/lib/circulars/printAttachment";
 import { downloadAttachmentFile } from "@/lib/circulars/downloadAttachmentFile";
+import { UniversalDocumentViewer } from "@/components/documents/viewer/UniversalDocumentViewer";
 import type { AttachmentKind } from "@/lib/circulars/getAttachmentKind";
 
 export function AttachmentPreviewModal({
@@ -68,23 +68,10 @@ export function AttachmentPreviewModal({
         </div>
       </div>
 
-      <div className="flex flex-1 items-center justify-center overflow-auto rounded-xl bg-background/5 p-2">
-        {kind === "image" ? (
-          <Image
-            src={publicUrl}
-            alt={fileName}
-            width={1200}
-            height={800}
-            unoptimized
-            className="max-h-[80vh] w-auto max-w-full rounded-lg object-contain shadow-2xl"
-          />
-        ) : (
-          <iframe
-            src={publicUrl}
-            title={fileName}
-            className="h-[80vh] w-full max-w-5xl rounded-lg border border-border bg-background shadow-2xl"
-          />
-        )}
+      <div className="flex flex-1 items-center justify-center overflow-hidden rounded-xl bg-background/5 p-1 sm:p-2">
+        <div className="size-full h-[82vh] max-w-5xl overflow-hidden rounded-lg border border-border bg-background shadow-2xl">
+          <UniversalDocumentViewer url={publicUrl} fileName={fileName} kind={kind} />
+        </div>
       </div>
     </div>
   );

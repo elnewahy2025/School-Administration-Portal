@@ -76,7 +76,7 @@ export function CircularFileUpload({
       <Label htmlFor="circular-file-picker">{t("uploadDocuments")}</Label>
       <div
         className={`flex flex-col items-center justify-center rounded-lg border border-dashed border-border p-6 text-center transition-colors ${
-          disabled ? "opacity-60 cursor-not-allowed" : "hover:border-primary/50"
+          disabled ? "cursor-not-allowed opacity-60" : "hover:border-primary/50"
         }`}
       >
         <UploadCloudIcon className="mb-2 size-8 text-muted-foreground" />

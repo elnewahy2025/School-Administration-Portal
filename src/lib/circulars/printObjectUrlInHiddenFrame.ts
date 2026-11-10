@@ -27,13 +27,10 @@ export function printObjectUrlInHiddenFrame(objectUrl: string, onBlocked: () => 
       reportClientError(error, "error");
       onBlocked();
     } finally {
-      setTimeout(
-        () => {
-          URL.revokeObjectURL(objectUrl);
-          iframe.remove();
-        },
-        60_000,
-      );
+      setTimeout(() => {
+        URL.revokeObjectURL(objectUrl);
+        iframe.remove();
+      }, 60_000);
     }
   };
 

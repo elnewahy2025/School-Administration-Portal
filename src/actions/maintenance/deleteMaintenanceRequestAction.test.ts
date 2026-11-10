@@ -1,17 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { deleteMaintenanceRequestAction } from "./deleteMaintenanceRequestAction";
 
-const {
-  mockGetCurrentProfile,
-  mockIsPlatformOwner,
-  mockHasPermission,
-  mockDeleteRecord,
-} = vi.hoisted(() => ({
-  mockGetCurrentProfile: vi.fn(),
-  mockIsPlatformOwner: vi.fn(),
-  mockHasPermission: vi.fn(),
-  mockDeleteRecord: vi.fn(),
-}));
+const { mockGetCurrentProfile, mockIsPlatformOwner, mockHasPermission, mockDeleteRecord } =
+  vi.hoisted(() => ({
+    mockGetCurrentProfile: vi.fn(),
+    mockIsPlatformOwner: vi.fn(),
+    mockHasPermission: vi.fn(),
+    mockDeleteRecord: vi.fn(),
+  }));
 
 vi.mock("@/lib/auth/getCurrentProfile", () => ({
   getCurrentProfile: () => mockGetCurrentProfile(),

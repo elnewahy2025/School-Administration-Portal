@@ -24,6 +24,9 @@ export function CircularAttachmentItem({
   const fileName = formatAttachmentFileName(attachment.path);
   const kind = getAttachmentKind(attachment.path, attachment.mime);
   const sizeKb = attachment.size_bytes ? (attachment.size_bytes / 1024).toFixed(1) : null;
+  const fileUrl = attachment.id
+    ? `/api/circulars/attachments/${attachment.id}/preview`
+    : attachment.public_url;
 
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-xs">
@@ -45,7 +48,7 @@ export function CircularAttachmentItem({
         </div>
 
         <CircularAttachmentActions
-          publicUrl={attachment.public_url}
+          publicUrl={fileUrl}
           fileName={fileName}
           attachmentId={attachment.id}
           canManage={canManage}
@@ -56,7 +59,7 @@ export function CircularAttachmentItem({
       </div>
 
       <CircularAttachmentEmbeddedView
-        publicUrl={attachment.public_url}
+        publicUrl={fileUrl}
         fileName={fileName}
         kind={kind}
         onExpand={() => setModalOpen(true)}
@@ -65,7 +68,7 @@ export function CircularAttachmentItem({
       <AttachmentPreviewModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        publicUrl={attachment.public_url}
+        publicUrl={fileUrl}
         fileName={fileName}
         kind={kind}
       />

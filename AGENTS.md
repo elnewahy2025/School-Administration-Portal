@@ -11,6 +11,7 @@ They apply to ALL activities: implementation, debugging, refactoring, testing, c
 <!-- BEGIN:modularity-rule -->
 
 ## RULE #1 (NON-NEGOTIABLE): ONE FUNCTION PER FILE, NO BIG FILES
+
 this
 This is the most important structural rule in this repository. Every agent MUST follow it.
 

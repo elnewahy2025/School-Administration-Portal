@@ -41,7 +41,9 @@ describe("printAttachment", () => {
   });
 
   it("opens the document in a tab when the attachment cannot be fetched", async () => {
-    globalThis.fetch = vi.fn().mockRejectedValue(new Error("network down")) as unknown as typeof fetch;
+    globalThis.fetch = vi
+      .fn()
+      .mockRejectedValue(new Error("network down")) as unknown as typeof fetch;
     const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
 
     await printAttachment("https://example.com/test.pdf");

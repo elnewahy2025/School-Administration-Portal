@@ -38,4 +38,3 @@ export async function deleteMaintenanceRequestRecord(
 
   return { success: true };
 }
-

@@ -50,4 +50,3 @@ export async function deleteMaintenanceRequestAction(requestId: string): Promise
     return formatActionErrorResult(appError);
   }
 }
-

@@ -13,10 +13,7 @@ export async function fetchAttachmentAsObjectUrl(url: string): Promise<string | 
     const res = await fetch(url);
 
     if (!res.ok) {
-      reportClientError(
-        new Error(`Attachment request failed with status ${res.status}`),
-        "error",
-      );
+      reportClientError(new Error(`Attachment request failed with status ${res.status}`), "error");
       return null;
     }
 

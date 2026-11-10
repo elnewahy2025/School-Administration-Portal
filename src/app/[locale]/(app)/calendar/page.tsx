@@ -14,7 +14,9 @@ export default async function CalendarPage({ params }: { params: Promise<{ local
   const schoolId = profile?.school_id;
 
   const [hasManagePerm, events, circulars, isOwner] = await Promise.all([
-    schoolId ? hasPermission("calendar.manage", schoolId, profile?.department_id).catch(() => false) : false,
+    schoolId
+      ? hasPermission("calendar.manage", schoolId, profile?.department_id).catch(() => false)
+      : false,
     getSchoolCalendarEvents(schoolId),
     getSchoolCirculars(schoolId).catch(() => []),
     isCurrentUserPlatformOwner(profile?.id),
