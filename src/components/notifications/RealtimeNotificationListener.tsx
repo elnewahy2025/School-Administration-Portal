@@ -19,6 +19,20 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
     const supabase = createSupabaseBrowserClient();
     const channelName = `realtime-notifications-${userId}`;
 
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.access_token) {
+        void supabase.realtime.setAuth(session.access_token);
+      }
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session?.access_token) {
+          void supabase.realtime.setAuth(session.access_token);
+        }
+      },
+    );
+
     const channel = supabase
       .channel(channelName)
       .on(
@@ -47,9 +61,14 @@ export function RealtimeNotificationListener({ userId }: { userId: string }) {
           router.refresh();
         },
       )
-      .subscribe();
+      .subscribe((status, err) => {
+        if (err) {
+          console.error("[realtime] subscription error:", err);
+        }
+      });
 
     return () => {
+      authListener?.subscription?.unsubscribe();
       void supabase.removeChannel(channel);
     };
   }, [userId, router, t]);

@@ -34,8 +34,24 @@ const mockChannel = {
   subscribe: vi.fn().mockReturnThis(),
 };
 
+const mockSetAuth = vi.fn().mockResolvedValue(undefined);
+const mockGetSession = vi.fn().mockResolvedValue({
+  data: { session: { access_token: "test-token" } },
+});
+const mockUnsubscribe = vi.fn();
+const mockOnAuthStateChange = vi.fn().mockReturnValue({
+  data: { subscription: { unsubscribe: mockUnsubscribe } },
+});
+
 vi.mock("@/lib/supabase/createSupabaseBrowserClient", () => ({
   createSupabaseBrowserClient: () => ({
+    auth: {
+      getSession: mockGetSession,
+      onAuthStateChange: mockOnAuthStateChange,
+    },
+    realtime: {
+      setAuth: mockSetAuth,
+    },
     channel: vi.fn().mockReturnValue(mockChannel),
     removeChannel: mockRemoveChannel,
   }),
@@ -64,6 +80,7 @@ describe("RealtimeNotificationListener", () => {
 
     unmount();
     expect(mockRemoveChannel).toHaveBeenCalledWith(mockChannel);
+    expect(mockUnsubscribe).toHaveBeenCalled();
   });
 
   it("triggers toast and router.refresh when notification payload is received", () => {
