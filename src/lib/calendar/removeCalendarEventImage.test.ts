@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 const mockAdminStorageRemove = vi.fn();
 vi.mock("@/lib/supabase", () => ({
@@ -19,14 +20,15 @@ describe("removeCalendarEventImage", () => {
   });
 
   it("does nothing if imagePath is empty", async () => {
+    const mockFrom = vi.fn();
     const mockSupabase = {
       storage: {
-        from: vi.fn(),
+        from: mockFrom,
       },
-    } as never;
+    } as unknown as SupabaseClient;
 
     await removeCalendarEventImage(mockSupabase, "", "usr-1");
-    expect(mockSupabase.storage.from).not.toHaveBeenCalled();
+    expect(mockFrom).not.toHaveBeenCalled();
     expect(mockAdminStorageRemove).not.toHaveBeenCalled();
   });
 
@@ -41,7 +43,7 @@ describe("removeCalendarEventImage", () => {
           remove: mockRemove,
         })),
       },
-    } as never;
+    } as unknown as SupabaseClient;
 
     await removeCalendarEventImage(mockSupabase, "sch-1/calendar/pic.png", "usr-1");
     expect(mockRemove).toHaveBeenCalledWith(["sch-1/calendar/pic.png"]);
@@ -64,7 +66,7 @@ describe("removeCalendarEventImage", () => {
           remove: mockRemove,
         })),
       },
-    } as never;
+    } as unknown as SupabaseClient;
 
     await removeCalendarEventImage(mockSupabase, "/public-assets/sch-1/calendar/pic.png", "usr-1");
     expect(mockRemove).toHaveBeenCalledWith(["sch-1/calendar/pic.png"]);
@@ -87,7 +89,7 @@ describe("removeCalendarEventImage", () => {
           remove: mockRemove,
         })),
       },
-    } as never;
+    } as unknown as SupabaseClient;
 
     await removeCalendarEventImage(mockSupabase, "sch-1/calendar/pic.png", "usr-1");
     expect(mockRemove).toHaveBeenCalledWith(["sch-1/calendar/pic.png"]);
