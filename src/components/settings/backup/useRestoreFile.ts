@@ -7,13 +7,17 @@ import { toast } from "sonner";
 import { restoreBackupAction } from "@/actions/backup";
 import { parseBackupFile } from "./parseBackupFile";
 import { useRestorePreview } from "./useRestorePreview";
+import { uploadRestoredStorageFiles } from "./uploadRestoredStorageFiles";
+import { buildRestoreSuccessToast } from "./buildRestoreSuccessToast";
 import type { DatabaseBackupPayload } from "@/lib/backup/types";
+import type { ExtractedStorageFile } from "./extractStorageFilesFromZip";
 
 export function useRestoreFile() {
   const router = useRouter();
   const t = useTranslations("backup");
   const { diff, isPreviewing, preview, reset: resetPreview } = useRestorePreview();
   const [previewPayload, setPreviewPayload] = useState<DatabaseBackupPayload | null>(null);
+  const [storageFiles, setStorageFiles] = useState<ExtractedStorageFile[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,6 +38,7 @@ export function useRestoreFile() {
     }
 
     setPreviewPayload(result.payload);
+    setStorageFiles(result.storageFiles || []);
     setIsDialogOpen(true);
     await preview(result.payload);
   };
@@ -48,17 +53,8 @@ export function useRestoreFile() {
         return;
       }
 
-      const message = res.summary.snapshotId
-        ? t("restoreSuccessWithSnapshot", {
-            count: res.summary.totalRecords,
-            tables: Object.keys(res.summary.tableCounts).length,
-            id: res.summary.snapshotId,
-          })
-        : t("restoreSuccess", {
-            count: res.summary.totalRecords,
-            tables: Object.keys(res.summary.tableCounts).length,
-          });
-      toast.success(message);
+      const uploadedCount = await uploadRestoredStorageFiles(storageFiles);
+      toast.success(buildRestoreSuccessToast(t, res.summary, uploadedCount));
       closeDialog();
       router.refresh();
     } catch {
@@ -71,12 +67,14 @@ export function useRestoreFile() {
   const closeDialog = () => {
     setIsDialogOpen(false);
     setPreviewPayload(null);
+    setStorageFiles([]);
     resetPreview();
     resetInput();
   };
 
   return {
     previewPayload,
+    storageFilesCount: storageFiles.length,
     restoreDiff: diff,
     isPreviewing,
     isDialogOpen,

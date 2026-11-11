@@ -1,17 +1,44 @@
+import JSZip from "jszip";
 import { MAX_BACKUP_BYTES } from "@/lib/backup/maxBackupBytes";
+import { MAX_BACKUP_ZIP_BYTES } from "@/lib/backup/maxBackupZipBytes";
 import type { DatabaseBackupPayload } from "@/lib/backup/types";
+import { extractPayloadFromZip } from "./extractPayloadFromZip";
+import {
+  extractStorageFilesFromZip,
+  type ExtractedStorageFile,
+} from "./extractStorageFilesFromZip";
+
+export type { ExtractedStorageFile } from "./extractStorageFilesFromZip";
 
 export type BackupFileResult =
-  { ok: true; payload: DatabaseBackupPayload } | { ok: false; reason: "too-large" | "invalid" };
+  | { ok: true; payload: DatabaseBackupPayload; storageFiles?: ExtractedStorageFile[] }
+  | { ok: false; reason: "too-large" | "invalid" };
 
-/**
- * Reads a selected file, refusing anything the Server Action could not carry
- * and anything that is not shaped like a backup envelope.
- *
- * The size check runs before reading: a 2 GB file should never be loaded into
- * the tab just to fail at the transport.
- */
+async function parseZipBackup(file: File): Promise<BackupFileResult> {
+  if (file.size > MAX_BACKUP_ZIP_BYTES) {
+    return { ok: false, reason: "too-large" };
+  }
+
+  try {
+    const zip = await JSZip.loadAsync(file);
+    const payload = await extractPayloadFromZip(zip);
+    if (!payload) {
+      return { ok: false, reason: "invalid" };
+    }
+
+    const storageFiles = await extractStorageFilesFromZip(zip);
+    return { ok: true, payload, storageFiles };
+  } catch {
+    return { ok: false, reason: "invalid" };
+  }
+}
+
 export async function parseBackupFile(file: File): Promise<BackupFileResult> {
+  const isZip = file.name.toLowerCase().endsWith(".zip") || file.type.includes("zip");
+  if (isZip) {
+    return parseZipBackup(file);
+  }
+
   if (file.size > MAX_BACKUP_BYTES) {
     return { ok: false, reason: "too-large" };
   }

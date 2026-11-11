@@ -5,3 +5,4 @@ export {
   getSchoolStorageFilesAction,
   type GetSchoolStorageFilesResult,
 } from "./getSchoolStorageFilesAction";
+export { restoreStorageFileAction } from "./restoreStorageFileAction";

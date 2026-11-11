@@ -9,6 +9,7 @@ export function RestoreUploadCard() {
   const t = useTranslations("backup");
   const {
     previewPayload,
+    storageFilesCount,
     restoreDiff,
     isPreviewing,
     isDialogOpen,
@@ -36,7 +37,7 @@ export function RestoreUploadCard() {
           <input
             ref={fileInputRef}
             type="file"
-            accept=".json,application/json"
+            accept=".zip,.json,application/zip,application/json,application/x-zip-compressed"
             onChange={handleFileChange}
             className="hidden"
             id="backup-file-input"
@@ -57,6 +58,7 @@ export function RestoreUploadCard() {
         isRestoring={isRestoring}
         isPreviewing={isPreviewing}
         payload={previewPayload}
+        storageFilesCount={storageFilesCount}
         diff={restoreDiff}
         onClose={closeDialog}
         onConfirm={handleConfirmRestore}

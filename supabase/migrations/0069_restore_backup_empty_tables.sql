@@ -209,3 +209,4 @@ $$;
 
 revoke all on function public.restore_backup(jsonb, text, uuid, uuid) from public, anon, authenticated;
 grant execute on function public.restore_backup(jsonb, text, uuid, uuid) to service_role;
+
