@@ -1,14 +1,13 @@
+import { parseCalendarDateTime } from "./parseCalendarDateTime";
+
 export function parseRecurrenceDates(
   startsAt: string,
   endsAt: string,
+  timeZone = "Asia/Kuwait",
 ): { start: Date; end: Date; durationMs: number } | null {
-  const start = new Date(startsAt);
-  const end = new Date(endsAt);
-  if (
-    Number.isNaN(start.getTime()) ||
-    Number.isNaN(end.getTime()) ||
-    end.getTime() < start.getTime()
-  ) {
+  const start = parseCalendarDateTime(startsAt, timeZone);
+  const end = parseCalendarDateTime(endsAt, timeZone);
+  if (!start || !end || end.getTime() < start.getTime()) {
     return null;
   }
   return { start, end, durationMs: end.getTime() - start.getTime() };

@@ -10,7 +10,9 @@ export function CalendarEventMetaGrid({ event }: { event: CalendarEventRow }) {
 
   const startDate = new Date(event.starts_at);
   const endDate = new Date(event.ends_at);
-  const formattedDate = startDate.toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
+  const intlLocale = locale === "ar" ? "ar-EG" : "en-US";
+  const formattedDate = startDate.toLocaleDateString(intlLocale, {
+    timeZone: "Asia/Kuwait",
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -18,7 +20,7 @@ export function CalendarEventMetaGrid({ event }: { event: CalendarEventRow }) {
   });
   const timeRange = event.all_day
     ? t("allDayBadge")
-    : `${startDate.toLocaleTimeString(locale === "ar" ? "ar-EG" : "en-US", { hour: "2-digit", minute: "2-digit" })} – ${endDate.toLocaleTimeString(locale === "ar" ? "ar-EG" : "en-US", { hour: "2-digit", minute: "2-digit" })}`;
+    : `${startDate.toLocaleTimeString(intlLocale, { timeZone: "Asia/Kuwait", hour: "2-digit", minute: "2-digit" })} – ${endDate.toLocaleTimeString(intlLocale, { timeZone: "Asia/Kuwait", hour: "2-digit", minute: "2-digit" })}`;
 
   return (
     <>

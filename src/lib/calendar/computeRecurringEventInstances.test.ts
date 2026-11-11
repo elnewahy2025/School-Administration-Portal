@@ -2,16 +2,17 @@ import { describe, it, expect } from "vitest";
 import { computeRecurringEventInstances } from "./computeRecurringEventInstances";
 
 describe("computeRecurringEventInstances", () => {
-  it("returns single instance when frequency is none", () => {
+  it("converts naive HTML datetime input to ISO UTC string in school timezone", () => {
     const res = computeRecurringEventInstances({
-      startsAt: "2026-11-01T09:00:00.000Z",
-      endsAt: "2026-11-01T10:00:00.000Z",
+      startsAt: "2026-11-12T09:00",
+      endsAt: "2026-11-12T10:00",
       frequency: "none",
     });
 
     expect(res).toHaveLength(1);
-    expect(res[0].startsAt).toBe("2026-11-01T09:00:00.000Z");
-    expect(res[0].endsAt).toBe("2026-11-01T10:00:00.000Z");
+    // 09:00 in Asia/Kuwait is 06:00 UTC
+    expect(res[0].startsAt).toBe("2026-11-12T06:00:00.000Z");
+    expect(res[0].endsAt).toBe("2026-11-12T07:00:00.000Z");
   });
 
   it("returns empty array for invalid or inverted dates", () => {

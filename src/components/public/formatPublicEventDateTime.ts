@@ -10,6 +10,7 @@ export function formatPublicEventDateTime(
   const endDate = new Date(event.ends_at);
 
   const formattedDate = startDate.toLocaleDateString(intlLocale, {
+    timeZone: "Asia/Kuwait",
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -18,7 +19,7 @@ export function formatPublicEventDateTime(
 
   const timeRange = event.all_day
     ? allDayLabel
-    : `${startDate.toLocaleTimeString(intlLocale, { hour: "2-digit", minute: "2-digit" })} – ${endDate.toLocaleTimeString(intlLocale, { hour: "2-digit", minute: "2-digit" })}`;
+    : `${startDate.toLocaleTimeString(intlLocale, { timeZone: "Asia/Kuwait", hour: "2-digit", minute: "2-digit" })} – ${endDate.toLocaleTimeString(intlLocale, { timeZone: "Asia/Kuwait", hour: "2-digit", minute: "2-digit" })}`;
 
   return { formattedDate, timeRange };
 }

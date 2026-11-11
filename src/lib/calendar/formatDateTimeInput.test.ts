@@ -12,8 +12,14 @@ describe("formatDateTimeInput", () => {
     expect(formatDateTimeInput("invalid-date")).toBe("");
   });
 
-  it("formats a valid date into YYYY-MM-DDTHH:mm pattern", () => {
-    const formatted = formatDateTimeInput("2026-10-25T14:30:00Z");
-    expect(formatted).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);
+  it("formats a valid UTC date into expected school timezone (Asia/Kuwait UTC+3) pattern", () => {
+    // 06:00 UTC is 09:00 in Kuwait
+    const formatted = formatDateTimeInput("2026-11-12T06:00:00.000Z", "Asia/Kuwait");
+    expect(formatted).toBe("2026-11-12T09:00");
+  });
+
+  it("produces consistent output regardless of host local timezone", () => {
+    const formattedCairo = formatDateTimeInput("2026-11-12T06:00:00.000Z", "Asia/Kuwait");
+    expect(formattedCairo).toBe("2026-11-12T09:00");
   });
 });

@@ -22,13 +22,13 @@ export function computeRecurringEventInstances(
   const { freq, untilTimestamp, countLimit } = resolveRecurrenceLimits(params);
   if (freq === "none") {
     if (isWeekendDay(dates.start, params.workingDays)) return [];
-    return [{ startsAt: params.startsAt, endsAt: params.endsAt }];
+    return [{ startsAt: dates.start.toISOString(), endsAt: dates.end.toISOString() }];
   }
 
   const instances: Array<{ startsAt: string; endsAt: string }> = [];
   let currentStart = new Date(dates.start);
   let iterations = 0;
-  const maxIterations = countLimit * 3;
+  const maxIterations = Math.max(countLimit * 7, 365);
 
   while (instances.length < countLimit && iterations < maxIterations) {
     iterations++;
