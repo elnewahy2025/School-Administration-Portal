@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { toProfileRow, type RawProfileResult } from "./toProfileRow";
@@ -15,7 +16,7 @@ export type ProfileRow = {
   is_active: boolean;
 };
 
-export async function getCurrentProfile(): Promise<ProfileRow | null> {
+export const getCurrentProfile = cache(async function getCurrentProfile(): Promise<ProfileRow | null> {
   const supabase = await createSupabaseServerClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
   if (userError || !userData?.user) return null;
@@ -34,4 +35,4 @@ export async function getCurrentProfile(): Promise<ProfileRow | null> {
 
   if (!data) return null;
   return toProfileRow(data as unknown as RawProfileResult);
-}
+});

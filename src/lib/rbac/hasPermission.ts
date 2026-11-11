@@ -1,9 +1,10 @@
+import { cache } from "react";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { logError } from "@/lib/logger";
 import { getEffectivePermissions } from "./getEffectivePermissions";
 
-export async function hasPermission(
+export const hasPermission = cache(async function hasPermission(
   key: string,
   schoolId?: string | null,
   departmentId?: string | null,
@@ -38,4 +39,4 @@ export async function hasPermission(
 
   if (error) throw mapDatabaseError(error, "Permission check failed");
   return Boolean(data);
-}
+});

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 import { getFirstActiveSchoolId } from "./getFirstActiveSchoolId";
@@ -33,7 +34,7 @@ const SCHOOL_FIELDS =
 const LEGACY_SCHOOL_FIELDS =
   "id, name_ar, name_en, slug, timezone, logo_path, is_active, phone, email, manager_name_ar, manager_name_en, assistant_manager_ar, assistant_manager_en, assistant_manager_2_ar, assistant_manager_2_en, address_ar, address_en, updated_at";
 
-export async function getCurrentSchool(schoolId?: string | null): Promise<SchoolRow | null> {
+export const getCurrentSchool = cache(async function getCurrentSchool(schoolId?: string | null): Promise<SchoolRow | null> {
   const supabase = await createSupabaseServerClient();
   let targetId = schoolId;
 
@@ -80,4 +81,4 @@ export async function getCurrentSchool(schoolId?: string | null): Promise<School
   }
 
   return school;
-}
+});

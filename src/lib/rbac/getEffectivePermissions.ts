@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
@@ -9,7 +10,7 @@ import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
  * returns everything the caller holds anywhere, which is only appropriate for
  * platform-level checks.
  */
-export async function getEffectivePermissions(schoolId?: string | null): Promise<string[]> {
+export const getEffectivePermissions = cache(async function getEffectivePermissions(schoolId?: string | null): Promise<string[]> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.rpc(
     "effective_permission_keys",
@@ -23,4 +24,4 @@ export async function getEffectivePermissions(schoolId?: string | null): Promise
     throw mapDatabaseError(error, "Failed to load permissions");
   }
   return (data ?? []) as string[];
-}
+});

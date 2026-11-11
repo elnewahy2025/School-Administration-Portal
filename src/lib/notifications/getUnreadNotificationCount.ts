@@ -1,7 +1,8 @@
+import { cache } from "react";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
 
-export async function getUnreadNotificationCount(): Promise<number> {
+export const getUnreadNotificationCount = cache(async function getUnreadNotificationCount(): Promise<number> {
   const supabase = await createSupabaseServerClient();
   const { data: userRes, error: userError } = await supabase.auth.getUser();
   if (userError || !userRes?.user) return 0;
@@ -18,4 +19,4 @@ export async function getUnreadNotificationCount(): Promise<number> {
 
   if (typeof count !== "number") return 0;
   return count;
-}
+});
