@@ -21,10 +21,7 @@ export default async function EditCircularPage({
   const profile = await getCurrentProfile();
   if (!profile) redirect(`/${locale}/login`);
 
-  const [circular, isOwner] = await Promise.all([
-    getCircularById(id),
-    isPlatformOwner(profile.id),
-  ]);
+  const [circular, isOwner] = await Promise.all([getCircularById(id), isPlatformOwner(profile.id)]);
 
   if (!circular) notFound();
 

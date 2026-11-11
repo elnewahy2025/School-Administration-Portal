@@ -28,11 +28,7 @@ export default async function NewMaintenancePage({
   const isOwner = await isPlatformOwner(profile.id);
   const canCreate =
     isOwner ||
-    (await hasPermission(
-      "maintenance.create",
-      schoolId,
-      profile.department_id,
-    ).catch(() => false));
+    (await hasPermission("maintenance.create", schoolId, profile.department_id).catch(() => false));
   if (!canCreate) {
     redirect(`/${locale}/maintenance`);
   }

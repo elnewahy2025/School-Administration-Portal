@@ -20,9 +20,7 @@ export default async function DepartmentsSettingsPage({
   const profile = await getCurrentProfile();
   const schoolId = await resolveSchoolForCaller(profile);
   const [hasPerm, isOwner] = await Promise.all([
-    schoolId
-      ? hasPermission("settings.school.update", schoolId).catch(() => false)
-      : false,
+    schoolId ? hasPermission("settings.school.update", schoolId).catch(() => false) : false,
     isCurrentUserPlatformOwner(profile?.id),
   ]);
 

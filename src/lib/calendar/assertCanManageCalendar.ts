@@ -28,4 +28,3 @@ export async function assertCanManageCalendar(): Promise<{
 
   return { schoolId, profileId: profile.id };
 }
-

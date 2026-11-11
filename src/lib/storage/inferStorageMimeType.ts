@@ -27,4 +27,3 @@ export function inferStorageMimeType(filePath: string, declaredType?: string | n
 
   return "application/octet-stream";
 }
-

@@ -26,7 +26,9 @@ function makeProfile(partial: Partial<ProfileRow> & { id: string }): ProfileRow 
   };
 }
 
-function makeTicket(partial: Partial<MaintenanceRequestRow> & { id: string }): MaintenanceRequestRow {
+function makeTicket(
+  partial: Partial<MaintenanceRequestRow> & { id: string },
+): MaintenanceRequestRow {
   return {
     school_id: "school-1",
     ticket_number: "T-100",

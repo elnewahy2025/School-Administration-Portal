@@ -5,6 +5,7 @@ This guide details the exact architecture, components, and HTTP security headers
 ---
 
 ## Table of Contents
+
 1. [Core Design Philosophy: Why Native PDF Viewer Over Third-Party Bundles](#1-core-design-philosophy)
 2. [Component Architecture (`PdfDocumentViewer.tsx`)](#2-component-architecture)
 3. [The Critical HTTP Headers (Why Most PDF Viewers Fail)](#3-the-critical-http-headers)
@@ -18,13 +19,16 @@ This guide details the exact architecture, components, and HTTP security headers
 ## 1. Core Design Philosophy
 
 Many developers immediately install heavy client packages like `react-pdf` or `pdfjs-dist`. In production web applications, this frequently causes:
+
 - **Massive bundle bloat:** `pdf.js` worker adds 2MB–4MB to frontend bundles.
 - **Worker & CORS errors:** Next.js bundlers (Turbopack/Webpack) frequently struggle with PDF.js web workers and canvas rendering fonts.
 - **Poor mobile performance:** Rendering multi-page PDFs to HTML5 canvases consumes huge memory and causes mobile browser tabs to crash.
 
 ### The Modern Production Solution: Native Browser Engine
+
 Every modern browser (Chrome, Edge, Safari, Firefox, Opera, Brave) ships with an optimized, hardware-accelerated C++ / Rust PDF rendering engine (PDFium / Mozilla PDF.js).
 By embedding the PDF in an optimized `<iframe src={`${url}#toolbar=1&navpanes=0`} />` with the correct **`Content-Disposition: inline`** headers:
+
 - Rendering is instant and hardware-accelerated.
 - Bundle size overhead is **0 KB**.
 - Users get native pinch-to-zoom, search (`Ctrl+F`), text selection, and native printing out of the box.
@@ -62,7 +66,9 @@ export function PdfDocumentViewer({
   const iframeSrc = `${url}#toolbar=1&navpanes=0`;
 
   return (
-    <div className={`relative flex size-full flex-col overflow-hidden rounded-lg border bg-background ${className}`}>
+    <div
+      className={`relative flex size-full flex-col overflow-hidden rounded-lg border bg-background ${className}`}
+    >
       {/* 1. Header Toolbar */}
       <div className="flex shrink-0 items-center justify-between border-b bg-muted/40 px-3 py-2 text-xs">
         <span className="truncate font-medium text-foreground">{fileName}</span>
@@ -110,7 +116,9 @@ export function PdfDocumentViewer({
         {loadFailed && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background p-6 text-center">
             <p className="text-sm font-medium text-foreground">{fileName}</p>
-            <p className="text-xs text-muted-foreground">Unable to display PDF inline on this device.</p>
+            <p className="text-xs text-muted-foreground">
+              Unable to display PDF inline on this device.
+            </p>
             <div className="flex items-center gap-2">
               <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
                 Open in Browser
@@ -134,13 +142,14 @@ export function PdfDocumentViewer({
 90% of PDF preview issues occur because the backend API or storage server sends incorrect HTTP headers.
 
 ### Required Header Configuration
+
 When serving PDFs through an authenticated Next.js Route Handler (`/api/documents/[id]/preview`):
 
 ```typescript
 return new Response(fileBuffer, {
   headers: {
     // 1. MUST be inline: 'attachment' forces download and breaks iframes
-    "Content-Disposition": "inline; filename=\"document.pdf\"",
+    "Content-Disposition": 'inline; filename="document.pdf"',
 
     // 2. Exact MIME type: 'application/octet-stream' prevents native preview
     "Content-Type": "application/pdf",
@@ -193,6 +202,7 @@ export function UniversalDocumentViewer({ url, fileName, mimeType, onExpand }) {
 ```
 
 ### Dependencies Used
+
 - **PDFs:** 0 external libraries (Native browser PDFium via iframe).
 - **Word (.docx):** `npm install docx-preview` (renders DOCX into formatted HTML DOM elements client-side).
 - **Excel (.xlsx):** `npm install xlsx` (SheetJS renders workbook sheets into interactive HTML tables).
@@ -205,7 +215,9 @@ export function UniversalDocumentViewer({ url, fileName, mimeType, onExpand }) {
 Because your new web application uses **Cloudinary**, take advantage of Cloudinary's specialized PDF capabilities:
 
 ### Strategy A: Direct Inline PDF Delivery
+
 By default, Cloudinary delivers `raw` files as downloads. To force inline PDF viewing:
+
 1. Deliver with resource type `image` or `raw` with the `fl_inline` flag:
    ```
    https://res.cloudinary.com/<cloud_name>/image/upload/fl_inline/v12345/tenants/school_1/document.pdf
@@ -213,14 +225,19 @@ By default, Cloudinary delivers `raw` files as downloads. To force inline PDF vi
 2. Or in Cloudinary settings, set **PDF and ZIP files delivery** to `inline` rather than `attachment`.
 
 ### Strategy B: Instant First-Page Image Thumbnail
+
 Cloudinary can automatically rasterize page 1 of any PDF into an optimized JPEG image without running any server code:
+
 ```
 https://res.cloudinary.com/<cloud_name>/image/upload/w_600,h_800,c_fill,pg_1/v12345/tenants/school_1/document.jpg
 ```
+
 Use this to display high-speed document preview cards before the user clicks to view the full PDF!
 
 ### Strategy C: Multi-Page Image Carousel (Ideal for Mobile Safari)
+
 On mobile devices where PDF iframes have scrolling limitations, convert PDF pages to an image gallery using Cloudinary:
+
 ```
 Page 1: .../image/upload/pg_1/document.png
 Page 2: .../image/upload/pg_2/document.png
@@ -232,11 +249,14 @@ Page 3: .../image/upload/pg_3/document.png
 ## 6. Mobile / iOS Safari Compatibility & Fallbacks
 
 ### iOS Safari Nested Iframe Behavior
+
 Historically, iOS Safari treats iframes containing PDFs differently than desktop browsers:
+
 - It renders only page 1 or expands the iframe height indefinitely.
 - Pinch-to-zoom inside a nested iframe can zoom the entire page rather than just the PDF.
 
 ### Production Solution:
+
 1. On desktop (`window.innerWidth >= 768px`), render the interactive iframe.
 2. Provide prominent header buttons:
    - **Maximize / Dialog:** Opens the document in a full-screen modal.
@@ -259,4 +279,3 @@ Historically, iOS Safari treats iframes containing PDFs differently than desktop
    Always append `#toolbar=1&navpanes=0` to the iframe `src`.
 5. **Verify Security Headers in `next.config.mjs`:**
    Ensure `X-Frame-Options` is set to `SAMEORIGIN` (not `DENY`) so your own application can frame its preview API route.
-

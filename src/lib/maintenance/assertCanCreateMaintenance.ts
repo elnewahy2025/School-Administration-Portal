@@ -22,8 +22,7 @@ export async function assertCanCreateMaintenance(): Promise<{
 
   const isOwner = await isPlatformOwner(profile.id);
   const allowed =
-    isOwner ||
-    (await hasPermission("maintenance.create", schoolId, profile.department_id));
+    isOwner || (await hasPermission("maintenance.create", schoolId, profile.department_id));
   if (!allowed) {
     throw new ForbiddenError("Unauthorized");
   }
@@ -34,4 +33,3 @@ export async function assertCanCreateMaintenance(): Promise<{
     departmentId: profile.department_id,
   };
 }
-

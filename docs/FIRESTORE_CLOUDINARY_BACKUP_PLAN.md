@@ -5,6 +5,7 @@ This implementation guide adapts the proven multi-tenant backup & restore archit
 ---
 
 ## Table of Contents
+
 1. [Core Architectural Adaptations (Firestore vs PostgreSQL, Cloudinary vs Supabase)](#1-core-architectural-adaptations)
 2. [Vercel 4.5 MB Serverless Limit & Cloudinary Direct Signed Uploads](#2-vercel-45-mb-serverless-limit--cloudinary-direct-signed-uploads)
 3. [Phase 1: Multi-Tenant Firestore Export & Serialization](#3-phase-1-multi-tenant-firestore-export--serialization)
@@ -20,14 +21,14 @@ This implementation guide adapts the proven multi-tenant backup & restore archit
 
 ## 1. Core Architectural Adaptations
 
-| Feature | School App (Supabase Stack) | New Web App (Firestore + Cloudinary Stack) |
-| :--- | :--- | :--- |
-| **Database** | PostgreSQL (Relational tables, foreign keys) | Firestore (Collections, documents, subcollections) |
+| Feature                | School App (Supabase Stack)                         | New Web App (Firestore + Cloudinary Stack)                          |
+| :--------------------- | :-------------------------------------------------- | :------------------------------------------------------------------ |
+| **Database**           | PostgreSQL (Relational tables, foreign keys)        | Firestore (Collections, documents, subcollections)                  |
 | **Transaction Method** | PostgreSQL PL/pgSQL Function (`restore_backup` RPC) | Firestore Batched Writes (500 ops per chunk) with `{ merge: true }` |
-| **File Storage** | Supabase Storage (S3-compatible buckets) | Cloudinary (`image`, `raw` for PDFs/DOCX, `video`) |
-| **Direct Uploads** | Supabase `createSignedUploadUrl` | Cloudinary Signed Direct Uploads (`api.cloudinary.com/.../upload`) |
-| **Hosting Limit** | Vercel 4.5 MB Serverless Payload Limit | **Vercel 4.5 MB Serverless Payload Limit** (Must bypass for media!) |
-| **Cloud Backup** | GitHub Actions + Supabase Admin Client | GitHub Actions + Firebase Admin SDK + Cloudinary API |
+| **File Storage**       | Supabase Storage (S3-compatible buckets)            | Cloudinary (`image`, `raw` for PDFs/DOCX, `video`)                  |
+| **Direct Uploads**     | Supabase `createSignedUploadUrl`                    | Cloudinary Signed Direct Uploads (`api.cloudinary.com/.../upload`)  |
+| **Hosting Limit**      | Vercel 4.5 MB Serverless Payload Limit              | **Vercel 4.5 MB Serverless Payload Limit** (Must bypass for media!) |
+| **Cloud Backup**       | GitHub Actions + Supabase Admin Client              | GitHub Actions + Firebase Admin SDK + Cloudinary API                |
 
 ```mermaid
 flowchart TD
@@ -59,13 +60,17 @@ flowchart TD
 ## 2. Vercel 4.5 MB Serverless Limit & Cloudinary Direct Signed Uploads
 
 ### The Bottleneck
+
 On Vercel (both Hobby and Pro plans), requests sent to Serverless Functions and Next.js Server Actions have a **strict 4.5 MB request body limit**.
+
 - If a user attempts to upload a **10 MB PDF**, a **25 MB video**, or a **50 MB ZIP** through a Next.js Server Action (`"use server"`), Vercel's edge proxy immediately rejects the request with **HTTP 413 `FUNCTION_PAYLOAD_TOO_LARGE`**.
 - This throws an uncatchable network error on the frontend, completely breaking restore.
 
 ### The Solution: Cloudinary Direct Signed Uploads
+
 **Never send file binaries through Next.js Server Actions on Vercel.**
 Instead:
+
 1. The client asks a Next.js Server Action for an upload signature (passes only lightweight metadata: `public_id`, `folder`, `timestamp`).
 2. The Server Action uses the Cloudinary API secret to sign the parameters (`cloudinary.utils.api_sign_request`).
 3. The browser uploads the binary **directly** to `https://api.cloudinary.com/v1_1/<cloud_name>/<resource_type>/upload`.
@@ -76,6 +81,7 @@ Instead:
 ## 3. Phase 1: Multi-Tenant Firestore Export & Serialization
 
 ### 3.1 Firestore Data Types Serialization
+
 Firestore contains non-standard JSON types: `Timestamp`, `DocumentReference`, `GeoPoint`, and `Bytes`. You must serialize these consistently:
 
 ```typescript
@@ -108,6 +114,7 @@ export function serializeFirestoreValue(value: unknown): unknown {
 ```
 
 ### 3.2 Tenant-Scoped Export
+
 Export each collection filtered by `tenantId` (e.g. `organizationId` or `schoolId`):
 
 ```typescript
@@ -171,6 +178,7 @@ export async function exportFirestoreBackup(tenantId: string) {
 ## 4. Phase 2: Cloudinary Asset Export & ZIP Packaging
 
 ### 4.1 Discovering Tenant Cloudinary Assets
+
 In Cloudinary, tag every asset with `tenant_${tenantId}` or place them in a folder `tenants/${tenantId}/*`.
 Use the Cloudinary Search API to fetch asset download URLs:
 
@@ -196,7 +204,9 @@ export async function listTenantCloudinaryAssets(tenantId: string) {
 ```
 
 ### 4.2 Browser ZIP Packaging (JSZip)
+
 Bundle the Firestore JSON + all Cloudinary media files into a single `.zip` file:
+
 ```typescript
 import JSZip from "jszip";
 
@@ -221,9 +231,16 @@ export async function buildCloudinaryBackupZip(payload, assets) {
   }
 
   // 3. Manifest
-  zip.file("README.txt", `Backup Manifest\nTenant: ${payload.metadata.tenantId}\nRecords: ${payload.metadata.totalRows}\nAssets: ${assets.length}`);
+  zip.file(
+    "README.txt",
+    `Backup Manifest\nTenant: ${payload.metadata.tenantId}\nRecords: ${payload.metadata.totalRows}\nAssets: ${assets.length}`,
+  );
 
-  return zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
+  return zip.generateAsync({
+    type: "blob",
+    compression: "DEFLATE",
+    compressionOptions: { level: 6 },
+  });
 }
 ```
 
@@ -234,11 +251,13 @@ export async function buildCloudinaryBackupZip(payload, assets) {
 A standalone runner script that runs on GitHub Actions every Sunday at 02:00 UTC with zero machine dependencies.
 
 ### 5.1 GitHub Secrets Required
+
 - `FIREBASE_SERVICE_ACCOUNT_KEY`: The JSON string of your Firebase Admin private key.
 - `CLOUDINARY_URL`: `cloudinary://<api_key>:<api_secret>@<cloud_name>`.
 - `GDRIVE_TOKEN_JSON`: Google Drive OAuth refresh token JSON (`client_id`, `client_secret`, `refresh_token`).
 
 ### 5.2 Standalone Backup Script (`scripts/backupToGoogleDrive.mjs`)
+
 1. Initializes Firebase Admin (`cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY))`).
 2. Configures Cloudinary (`cloudinary.config(...)`).
 3. Exports all Firestore collections for each tenant.
@@ -247,6 +266,7 @@ A standalone runner script that runs on GitHub Actions every Sunday at 02:00 UTC
 6. Uploads the `.zip` archive to Google Drive under a dated folder (`Backup_YYYY-MM-DD`).
 
 ### 5.3 GitHub Actions Workflow (`.github/workflows/weekly-backup.yml`)
+
 ```yaml
 name: Weekly Cloud Backup to Google Drive
 
@@ -287,6 +307,7 @@ jobs:
 Firestore does not have SQL tables or PostgreSQL RPCs. Restoring requires **Batched Writes** (`writeBatch()`) which commit up to 500 documents per batch atomically.
 
 ### 6.1 Deserializing Custom Types
+
 Convert `{ _type: "timestamp", value: "..." }` back to `Timestamp.fromDate(new Date(...))`:
 
 ```typescript
@@ -307,13 +328,17 @@ export function deserializeFirestoreValue(val: any): any {
 ```
 
 ### 6.2 Chunked Batched Writes (500 Limit Protection)
+
 Crucial rule learned from the PostgreSQL empty tables bug: **Always guard against empty arrays!**
 
 ```typescript
 // src/lib/backup/restoreFirestoreBackup.ts
 import { getFirestore } from "firebase-admin/firestore";
 
-export async function restoreFirestoreBackup(payload: DatabaseBackupPayload, activeOperatorId: string) {
+export async function restoreFirestoreBackup(
+  payload: DatabaseBackupPayload,
+  activeOperatorId: string,
+) {
   const db = getFirestore();
   let totalRestored = 0;
   const tableCounts: Record<string, number> = {};
@@ -391,6 +416,7 @@ export async function savePreRestoreSnapshot(tenantId: string, operatorId: strin
 To completely bypass Vercel's **4.5 MB request limit**, media files (videos, images, PDFs, DOCX) must be uploaded directly from the client browser to Cloudinary via signed uploads.
 
 ### 8.1 Server Action: Sign Cloudinary Upload Request
+
 A lightweight Server Action that passes only a signature back to the client:
 
 ```typescript
@@ -418,7 +444,10 @@ export async function getCloudinaryUploadSignatureAction(params: {
     overwrite: true,
   };
 
-  const signature = cloudinary.utils.api_sign_request(signParams, process.env.CLOUDINARY_API_SECRET!);
+  const signature = cloudinary.utils.api_sign_request(
+    signParams,
+    process.env.CLOUDINARY_API_SECRET!,
+  );
 
   return {
     success: true,
@@ -431,6 +460,7 @@ export async function getCloudinaryUploadSignatureAction(params: {
 ```
 
 ### 8.2 Client-Side Direct Upload to Cloudinary API
+
 The client iterates through the extracted ZIP files and performs a direct `POST` to Cloudinary:
 
 ```typescript
@@ -482,6 +512,7 @@ export async function uploadRestoredCloudinaryFiles(extractedFiles: ExtractedMed
 ## 9. Phase 7: Frontend UI, Diff Calculator & Progress Reporting
 
 ### 9.1 Decoupled Execution in `useRestoreFile.ts`
+
 Do not wrap database restore and Cloudinary uploads in a single unshielded catch block. If the database restore completes, always celebrate database success even if an individual video or image is slow or fails:
 
 ```typescript
@@ -507,7 +538,9 @@ const handleConfirmRestore = async () => {
     }
 
     // 3. Success toast
-    toast.success(`Restored ${res.summary.totalRecords} records and ${uploadedCount} media files. Snapshot: ${res.summary.snapshotId}`);
+    toast.success(
+      `Restored ${res.summary.totalRecords} records and ${uploadedCount} media files. Snapshot: ${res.summary.snapshotId}`,
+    );
     closeDialog();
     router.refresh();
   } catch (err) {
@@ -523,6 +556,7 @@ const handleConfirmRestore = async () => {
 ## 10. Phase 8: Critical Pitfalls & Checklist for the New App
 
 ### Critical Pitfalls to Avoid
+
 1. **Never send videos or large files through Server Actions:** Vercel's 4.5 MB limit will cause immediate HTTP 413 failures. Always use Cloudinary direct signed uploads.
 2. **Handle Empty Collections:** If an array in the backup JSON is empty (`[]`), do not attempt to write an empty batch; skip it and record `0`.
 3. **Respect Firestore 500-Batch Limit:** Chunk documents into slices of 450 items to ensure you never exceed Firestore's 500 batch operation limit.
@@ -530,6 +564,7 @@ const handleConfirmRestore = async () => {
 5. **Always Set `merge: true`:** When setting Firestore documents, use `batch.set(docRef, data, { merge: true })` so newly created schema fields in production are not accidentally deleted by older backup files.
 
 ### Step-by-Step Implementation Checklist
+
 - [ ] **Step 1: Firebase Admin & Cloudinary Setup**
   - Install `firebase-admin` and `cloudinary`.
   - Add service account key and Cloudinary environment variables.
@@ -553,4 +588,3 @@ const handleConfirmRestore = async () => {
 - [ ] **Step 7: Verification**
   - Export a complete `.zip` backup containing Firestore collections, videos, PDFs, and images.
   - Restore the `.zip` archive on a test tenant and verify records in Firestore and assets in Cloudinary.
-

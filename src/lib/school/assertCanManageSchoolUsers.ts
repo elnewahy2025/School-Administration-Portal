@@ -27,4 +27,3 @@ export async function assertCanManageSchoolUsers(): Promise<{
 
   return { schoolId, profileId: profile.id };
 }
-

@@ -18,8 +18,7 @@ export function getPwaInitialState(): PwaInitialState {
 
   try {
     installed = window.localStorage?.getItem(pwaStorageKeys.installed) === "true";
-    sessionDismissed =
-      window.sessionStorage?.getItem(pwaStorageKeys.dismissedSession) === "true";
+    sessionDismissed = window.sessionStorage?.getItem(pwaStorageKeys.dismissedSession) === "true";
   } catch {
     // Storage access can throw in restrictive sandboxes
   }

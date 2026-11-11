@@ -22,7 +22,9 @@ describe("CalendarEventImageBanner", () => {
   });
 
   it("renders image with resolved public storage URL and becomes visible on load", () => {
-    render(<CalendarEventImageBanner imagePath="school-1/calendar/pic.jpg" altText="Event title" />);
+    render(
+      <CalendarEventImageBanner imagePath="school-1/calendar/pic.jpg" altText="Event title" />,
+    );
     const img = screen.getByRole("img", { name: "Event title" });
     expect(img).toBeInTheDocument();
     expect(img.getAttribute("src")).toBe(

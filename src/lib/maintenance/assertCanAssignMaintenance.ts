@@ -20,16 +20,10 @@ export async function assertCanAssignMaintenance(): Promise<{
   }
 
   const isOwner = await isPlatformOwner(profile.id);
-  const allowed =
-    isOwner ||
-    (await hasPermission(
-      "maintenance.assign",
-      schoolId,
-    ));
+  const allowed = isOwner || (await hasPermission("maintenance.assign", schoolId));
   if (!allowed) {
     throw new ForbiddenError("Unauthorized");
   }
 
   return { schoolId, profileId: profile.id };
 }
-

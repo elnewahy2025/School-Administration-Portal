@@ -22,9 +22,7 @@ export default async function CircularsPage({ params }: { params: Promise<{ loca
     getSchoolCirculars(schoolId),
     getSchoolDepartments(schoolId),
     isCurrentUserPlatformOwner(profile?.id),
-    schoolId
-      ? hasPermission("circular.create", schoolId).catch(() => false)
-      : false,
+    schoolId ? hasPermission("circular.create", schoolId).catch(() => false) : false,
   ]);
   const canCreate = isOwner || hasPerm;
 

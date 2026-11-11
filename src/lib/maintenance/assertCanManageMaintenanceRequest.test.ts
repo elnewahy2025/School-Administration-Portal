@@ -27,7 +27,9 @@ function makeProfile(partial: Partial<ProfileRow> & { id: string }): ProfileRow 
   };
 }
 
-function makeTicket(partial: Partial<MaintenanceRequestRow> & { id: string }): MaintenanceRequestRow {
+function makeTicket(
+  partial: Partial<MaintenanceRequestRow> & { id: string },
+): MaintenanceRequestRow {
   return {
     school_id: "school-1",
     ticket_number: "T-100",
@@ -71,7 +73,9 @@ describe("assertCanManageMaintenanceRequest", () => {
     const profile = makeProfile({ id: "user-1", school_id: "school-1" });
     const ticket = makeTicket({ id: "t-1", school_id: "school-2" });
 
-    await expect(assertCanManageMaintenanceRequest(profile, ticket)).rejects.toThrow(ForbiddenError);
+    await expect(assertCanManageMaintenanceRequest(profile, ticket)).rejects.toThrow(
+      ForbiddenError,
+    );
   });
 
   it("allows ticket reporter to manage their own ticket", async () => {
@@ -90,10 +94,20 @@ describe("assertCanManageMaintenanceRequest", () => {
       return dept === "dept-math";
     });
 
-    const profile = makeProfile({ id: "user-1", school_id: "school-1", department_id: "dept-math" });
-    const ticket = makeTicket({ id: "t-1", reporter_id: "other-user", reporter_department_id: "dept-science" });
+    const profile = makeProfile({
+      id: "user-1",
+      school_id: "school-1",
+      department_id: "dept-math",
+    });
+    const ticket = makeTicket({
+      id: "t-1",
+      reporter_id: "other-user",
+      reporter_department_id: "dept-science",
+    });
 
-    await expect(assertCanManageMaintenanceRequest(profile, ticket)).rejects.toThrow(ForbiddenError);
+    await expect(assertCanManageMaintenanceRequest(profile, ticket)).rejects.toThrow(
+      ForbiddenError,
+    );
     expect(hasPermission).toHaveBeenCalledWith("maintenance.close", "school-1", "dept-science");
   });
 
@@ -104,7 +118,11 @@ describe("assertCanManageMaintenanceRequest", () => {
     });
 
     const profile = makeProfile({ id: "mgr-1", school_id: "school-1", department_id: "dept-math" });
-    const ticket = makeTicket({ id: "t-1", reporter_id: "other-user", reporter_department_id: "dept-math" });
+    const ticket = makeTicket({
+      id: "t-1",
+      reporter_id: "other-user",
+      reporter_department_id: "dept-math",
+    });
 
     await expect(assertCanManageMaintenanceRequest(profile, ticket)).resolves.toBeUndefined();
   });

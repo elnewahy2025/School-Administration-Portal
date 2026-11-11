@@ -5,6 +5,7 @@ This document is an exhaustive, production-tested implementation blueprint for r
 ---
 
 ## Table of Contents
+
 1. [Architecture Overview & Core Principles](#1-architecture-overview--core-principles)
 2. [Phase 1: Database Export & Manifest Schema](#2-phase-1-database-export--manifest-schema)
 3. [Phase 2: Storage Bucket Integration & ZIP Packaging](#3-phase-2-storage-bucket-integration--zip-packaging)
@@ -21,6 +22,7 @@ This document is an exhaustive, production-tested implementation blueprint for r
 ## 1. Architecture Overview & Core Principles
 
 A truly reliable enterprise backup and restore system must satisfy four non-negotiable rules:
+
 1. **Holistic Coverage:** Backing up database tables alone is insufficient. All physical files (PDFs, images, documents) stored in cloud buckets must be preserved alongside database records.
 2. **Strict Atomicity:** A database restore must happen within a **single PostgreSQL transaction**. If any table fails or foreign key conflict occurs, the database is rolled back 100% untouched.
 3. **No Downtime or Session Disruption:** Restoring must not delete or drop tables. It must use `ON CONFLICT DO UPDATE` (upsert), and must never overwrite the currently active operator credentials.
@@ -53,18 +55,19 @@ flowchart TD
 ## 2. Phase 1: Database Export & Manifest Schema
 
 ### 2.1 The Backup Envelope Format
+
 The database backup must be wrapped in a verifiable JSON envelope containing integrity hashes and table row counts:
 
 ```typescript
 export type DatabaseBackupPayload = {
   version: 1;
   metadata: {
-    exportedAt: string;          // ISO 8601 timestamp
-    exportedBy: string;          // User ID or "system"
+    exportedAt: string; // ISO 8601 timestamp
+    exportedBy: string; // User ID or "system"
     scope: "platform" | "tenant";
-    tenantId: string | null;     // Filtered tenant ID if tenant-scoped
-    totalRows: number;           // Total rows across all tables
-    checksum: string;            // SHA-256 hash of tables object
+    tenantId: string | null; // Filtered tenant ID if tenant-scoped
+    totalRows: number; // Total rows across all tables
+    checksum: string; // SHA-256 hash of tables object
     tableCounts: Record<string, number>;
   };
   tables: Record<string, Array<Record<string, unknown>>>;
@@ -72,6 +75,7 @@ export type DatabaseBackupPayload = {
 ```
 
 ### 2.2 Foreign Key Table Hierarchy Order
+
 When exporting and restoring, tables must strictly respect foreign-key dependency order (parents first, children last):
 
 1. `tenants` (Root entity / Schools / Organizations)
@@ -88,7 +92,9 @@ When exporting and restoring, tables must strictly respect foreign-key dependenc
 12. `calendar_events`
 
 ### 2.3 Checksum Calculation
+
 To prevent file tampering or partial uploads, calculate a deterministic SHA-256 hash:
+
 ```typescript
 import crypto from "crypto";
 
@@ -104,7 +110,9 @@ export function computeBackupChecksum(tables: Record<string, unknown[]>): string
 ```
 
 ### 2.4 Sensitive Data Exclusion
+
 Never export sensitive credentials:
+
 - Exclude `auth.users` passwords and secrets.
 - Exclude or mask session tokens and internal payment keys.
 - Preserve the active operator ID so that restoring an old backup does not lock out the administrator performing the restore.
@@ -114,11 +122,13 @@ Never export sensitive credentials:
 ## 3. Phase 2: Storage Bucket Integration & ZIP Packaging
 
 A complete backup archive is a standard `.zip` file containing:
+
 1. `database_backup.json`: The complete database payload.
 2. `storage/{bucket_name}/{file_path}`: Every attached file from cloud storage.
 3. `README.txt`: Plaintext manifest summarizing metadata and file counts.
 
 ### 3.1 Listing & Signing Storage Files
+
 Use Supabase Storage admin client to recursively list all files for the tenant:
 
 ```typescript
@@ -141,6 +151,7 @@ export async function listTenantStorageFiles(admin: SupabaseClient, tenantId: st
 ```
 
 ### 3.2 Packaging in the Browser (JSZip)
+
 Bundle the files on client-side into a downloadable `.zip` blob without placing memory load on the backend server:
 
 ```typescript
@@ -166,9 +177,16 @@ export async function buildBackupZipArchive(payload, storageFiles) {
   }
 
   // 3. Add human-readable manifest
-  zip.file("README.txt", `System Backup\nTotal Records: ${payload.metadata.totalRows}\nFiles: ${storageFiles.length}`);
+  zip.file(
+    "README.txt",
+    `System Backup\nTotal Records: ${payload.metadata.totalRows}\nFiles: ${storageFiles.length}`,
+  );
 
-  return zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } });
+  return zip.generateAsync({
+    type: "blob",
+    compression: "DEFLATE",
+    compressionOptions: { level: 6 },
+  });
 }
 ```
 
@@ -179,6 +197,7 @@ export async function buildBackupZipArchive(payload, storageFiles) {
 To ensure safety against catastrophic server loss without requiring an open browser or local PC, set up automated weekly/nightly cloud backups directly to Google Drive using GitHub Actions.
 
 ### 4.1 Google Cloud Setup & OAuth Refresh Token
+
 1. In [Google Cloud Console](https://console.cloud.google.com):
    - Create a project: `App-Cloud-Backup`.
    - Enable **Google Drive API**.
@@ -200,7 +219,9 @@ To ensure safety against catastrophic server loss without requiring an open brow
    - `SUPABASE_SERVICE_ROLE_KEY`
 
 ### 4.2 Automated Drive Upload Script (`scripts/backupToGoogleDrive.mjs`)
+
 The script runs in Node.js on GitHub Actions runner:
+
 1. Queries Supabase DB tables in dependency order.
 2. Lists and downloads all storage files.
 3. Packages a `.zip` archive using `jszip`.
@@ -209,6 +230,7 @@ The script runs in Node.js on GitHub Actions runner:
 6. Uploads the `.zip` archive via Google Drive API multipart upload (`https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`).
 
 ### 4.3 GitHub Actions Workflow (`.github/workflows/weekly-backup.yml`)
+
 ```yaml
 name: Weekly Cloud Backup to Google Drive
 
@@ -250,6 +272,7 @@ jobs:
 The database restore must execute as a **single atomic transaction** inside PostgreSQL.
 
 ### 5.1 Crucial SQL Stored Procedure Design (`restore_backup`)
+
 Create a `SECURITY DEFINER` plpgsql function with search path secured:
 
 ```sql
@@ -349,10 +372,12 @@ If anything unexpected happens, the exact pre-restore state is archived and can 
 ## 7. Phase 6: Client-Direct Storage Restore (Bypassing Serverless Limits)
 
 ### 7.1 The Serverless Payload Bottleneck
+
 - On Vercel / AWS Lambda, HTTP requests sent to Server Actions have a **hard 4.5 MB request limit**.
 - Uploading 5MB–50MB files (e.g. PDF attachments, videos) via Server Actions fails with **HTTP 413 Payload Too Large**, causing client fetch to crash.
 
 ### 7.2 The Solution: Pre-Signed Upload URLs
+
 1. Create a lightweight Server Action that returns a signed upload URL:
 
 ```typescript
@@ -406,7 +431,8 @@ export async function uploadRestoredStorageFiles(storageFiles) {
    Files extracted from JSZip do not carry declared MIME types (`blob.type = ""`). Buckets reject `application/octet-stream` with HTTP 415. Use `inferStorageMimeType`:
    ```typescript
    export function inferStorageMimeType(filePath: string, declared?: string | null): string {
-     if (declared && declared !== "application/octet-stream" && declared.includes("/")) return declared;
+     if (declared && declared !== "application/octet-stream" && declared.includes("/"))
+       return declared;
      const ext = filePath.split(".").pop()?.toLowerCase();
      const map = {
        pdf: "application/pdf",
@@ -427,17 +453,22 @@ export async function uploadRestoredStorageFiles(storageFiles) {
 ## 8. Phase 7: Frontend UI & Interactive Diff Preview
 
 ### 8.1 File Upload & Client Parsing
+
 The restore upload card accepts both `.json` (database only) and `.zip` (database + storage):
+
 - Unpack ZIP with `JSZip.loadAsync(file)`.
 - Extract `database_backup.json` and storage files.
 
 ### 8.2 Diff Preview Calculator
+
 Before touching the database, compute differences by querying existing primary keys:
+
 - **New records:** Primary key does not exist in target database.
 - **Overwritten records:** Primary key exists and will be updated.
 - **Untouched records:** Exist in DB but not present in backup file.
 
 ### 8.3 Decoupled Execution Flow in `useRestoreFile.ts`
+
 Never wrap database restore and storage upload in a single unshielded catch block. If database succeeds, celebrate database success even if an individual storage file has a network hiccup:
 
 ```typescript
@@ -478,20 +509,20 @@ const handleConfirmRestore = async () => {
 ## 9. Phase 8: Critical Pitfalls & Hard-Earned Lessons Learned
 
 1. **PostgreSQL Empty Tables Bug:**
-   - *Problem:* In PL/pgSQL, calling `jsonb_array_elements(p_tables -> 'empty_table')` returns 0 rows. Attempting to extract dynamic column names from an empty array leaves column variables `NULL`, throwing an exception.
-   - *Solution:* Check `jsonb_array_length(...) = 0` at the start of each iteration; if 0, append `0` to counts and `CONTINUE`.
+   - _Problem:_ In PL/pgSQL, calling `jsonb_array_elements(p_tables -> 'empty_table')` returns 0 rows. Attempting to extract dynamic column names from an empty array leaves column variables `NULL`, throwing an exception.
+   - _Solution:_ Check `jsonb_array_length(...) = 0` at the start of each iteration; if 0, append `0` to counts and `CONTINUE`.
 2. **Vercel Serverless Function 4.5MB Payload Limit:**
-   - *Problem:* Uploading ZIP or large media files through Server Actions causes Vercel to return HTTP 413, throwing client-side uncaught exceptions.
-   - *Solution:* Always use **Supabase Signed Upload URLs** (`createSignedUploadUrl`) and upload directly from the client browser.
+   - _Problem:_ Uploading ZIP or large media files through Server Actions causes Vercel to return HTTP 413, throwing client-side uncaught exceptions.
+   - _Solution:_ Always use **Supabase Signed Upload URLs** (`createSignedUploadUrl`) and upload directly from the client browser.
 3. **JSZip MIME Type Stripping:**
-   - *Problem:* `zipEntry.async("blob")` yields `blob.type = ""`. Falling back to `application/octet-stream` causes Supabase storage buckets to reject the upload with HTTP 415 `InvalidMimeType`.
-   - *Solution:* Always infer MIME type from file extension before calling `uploadToSignedUrl`.
+   - _Problem:_ `zipEntry.async("blob")` yields `blob.type = ""`. Falling back to `application/octet-stream` causes Supabase storage buckets to reject the upload with HTTP 415 `InvalidMimeType`.
+   - _Solution:_ Always infer MIME type from file extension before calling `uploadToSignedUrl`.
 4. **Active Admin Operator Lockout:**
-   - *Problem:* Overwriting the `profiles` table can accidentally overwrite the active administrator's role or status, invalidating their session mid-restore.
-   - *Solution:* Exclude the active operator's profile row from being modified during restore.
+   - _Problem:_ Overwriting the `profiles` table can accidentally overwrite the active administrator's role or status, invalidating their session mid-restore.
+   - _Solution:_ Exclude the active operator's profile row from being modified during restore.
 5. **Never Swallow Exceptions:**
-   - *Problem:* A bare `catch { toast.error("Error"); }` hides the real issue.
-   - *Solution:* Always surface `err.message` in error dialogs so issues are immediately diagnosable.
+   - _Problem:_ A bare `catch { toast.error("Error"); }` hides the real issue.
+   - _Solution:_ Always surface `err.message` in error dialogs so issues are immediately diagnosable.
 
 ---
 
@@ -532,4 +563,3 @@ Follow this checklist sequentially in your new web application:
   - Test exporting `.zip` file with database records and storage files.
   - Test restoring `.zip` file on remote database.
   - Inspect `audit_logs` and storage bucket timestamps to confirm 100% verified restoration.
-

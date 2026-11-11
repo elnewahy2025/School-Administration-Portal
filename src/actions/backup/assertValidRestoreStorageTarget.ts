@@ -28,4 +28,3 @@ export function assertValidRestoreStorageTarget(
 
   return { bucket, path };
 }
-

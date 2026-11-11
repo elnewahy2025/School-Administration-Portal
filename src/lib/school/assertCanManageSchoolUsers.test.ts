@@ -50,7 +50,9 @@ describe("assertCanManageSchoolUsers", () => {
   });
 
   it("throws ForbiddenError if caller lacks permission and is not owner", async () => {
-    vi.mocked(getCurrentProfile).mockResolvedValue(makeProfile({ id: "staff-1", school_id: "school-1" }));
+    vi.mocked(getCurrentProfile).mockResolvedValue(
+      makeProfile({ id: "staff-1", school_id: "school-1" }),
+    );
     vi.mocked(resolveSchoolForCaller).mockResolvedValue("school-1");
     vi.mocked(isPlatformOwner).mockResolvedValue(false);
     vi.mocked(hasPermission).mockResolvedValue(false);
@@ -59,7 +61,9 @@ describe("assertCanManageSchoolUsers", () => {
   });
 
   it("allows regular user with users.manage permission", async () => {
-    vi.mocked(getCurrentProfile).mockResolvedValue(makeProfile({ id: "admin-1", school_id: "school-1" }));
+    vi.mocked(getCurrentProfile).mockResolvedValue(
+      makeProfile({ id: "admin-1", school_id: "school-1" }),
+    );
     vi.mocked(resolveSchoolForCaller).mockResolvedValue("school-1");
     vi.mocked(isPlatformOwner).mockResolvedValue(false);
     vi.mocked(hasPermission).mockResolvedValue(true);
