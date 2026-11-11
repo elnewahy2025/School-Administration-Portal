@@ -34,10 +34,28 @@ describe("CalendarEventImageBanner", () => {
     expect(img.closest("div")).toHaveClass("opacity-100");
   });
 
-  it("gracefully hides image if it fails to load", () => {
+  it("gracefully hides image if it fails to load and shows fallback placeholder", () => {
     render(<CalendarEventImageBanner imagePath="school-1/calendar/missing.jpg" altText="Event" />);
     const img = screen.getByRole("img", { name: "Event" });
     fireEvent.error(img);
     expect(screen.queryByRole("img", { name: "Event" })).toBeNull();
+    expect(screen.getByText("Event")).toBeInTheDocument();
+  });
+
+  it("resets error state when imagePath changes to a new image", () => {
+    const { rerender } = render(
+      <CalendarEventImageBanner imagePath="school-1/calendar/broken.jpg" altText="First" />,
+    );
+    const brokenImg = screen.getByRole("img", { name: "First" });
+    fireEvent.error(brokenImg);
+    expect(screen.queryByRole("img", { name: "First" })).toBeNull();
+
+    // Rerender with a new valid image path
+    rerender(<CalendarEventImageBanner imagePath="school-1/calendar/valid.jpg" altText="Second" />);
+    const newImg = screen.getByRole("img", { name: "Second" });
+    expect(newImg).toBeInTheDocument();
+    expect(newImg.getAttribute("src")).toBe(
+      "https://school.supabase.co/storage/v1/object/public/public-assets/school-1/calendar/valid.jpg",
+    );
   });
 });

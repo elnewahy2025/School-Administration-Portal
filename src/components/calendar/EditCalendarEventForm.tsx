@@ -5,18 +5,18 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ArrowLeftIcon, UploadIcon } from "lucide-react";
+import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PANEL } from "@/components/ui/diamond-card-styles";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { CalendarCoreFields } from "./CalendarCoreFields";
 import { CalendarDateTimeFields } from "./CalendarDateTimeFields";
+import { CalendarImageField } from "./CalendarImageField";
 import { formatDateTimeInput } from "@/lib/calendar/formatDateTimeInput";
 import { isWeekendDay } from "@/lib/calendar/isWeekendDay";
 import { updateCalendarEventAction } from "@/actions/calendar/updateCalendarEventAction";
 import { calendarImageRules } from "@/lib/calendar/calendarImageRules";
 import { validateClientFile } from "@/lib/storage/validateClientFile";
+import { getCalendarImageUrl } from "@/lib/calendar/getCalendarImageUrl";
 import type { CalendarEventRow } from "@/lib/calendar/types";
 
 type EditCalendarEventFormProps = {
@@ -30,6 +30,8 @@ export function EditCalendarEventForm({ event, workingDays }: EditCalendarEventF
   const locale = useLocale();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const currentImageUrl = getCalendarImageUrl(event.image_path);
 
   const handleSubmit = (formData: FormData) => {
     const startsAt = String(formData.get("starts_at") || "");
@@ -88,15 +90,7 @@ export function EditCalendarEventForm({ event, workingDays }: EditCalendarEventF
           defaultVisibility={event.visibility}
           workingDays={workingDays}
         />
-
-        <div className="space-y-2 border-t border-border pt-4">
-          <Label htmlFor="image" className="flex items-center gap-2">
-            <UploadIcon className="size-4 text-muted-foreground" />
-            <span>{t("bannerImage")}</span>
-          </Label>
-          <Input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" />
-          <p className="text-xs text-muted-foreground">{t("bannerHelp")}</p>
-        </div>
+        <CalendarImageField initialImageUrl={currentImageUrl} disabled={isPending} />
       </div>
 
       <div className="flex justify-end gap-3">
