@@ -28,16 +28,16 @@ export function SchoolDocumentPreviewDialog({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         showCloseButton={false}
-        className="flex max-w-4xl flex-col overflow-hidden p-0 sm:max-h-[92vh]"
+        className="flex max-h-[92vh] w-[96vw] max-w-4xl flex-col overflow-hidden p-0 sm:w-full"
       >
-        <DialogHeader className="border-b border-border/80 bg-muted/30 p-4 sm:p-5">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <DialogTitle className="text-base font-bold text-foreground sm:text-lg">
+        <DialogHeader className="border-b border-border/80 bg-muted/30 p-3 sm:p-5">
+          <div className="flex items-center justify-between gap-3 sm:gap-4">
+            <div className="min-w-0 flex-1">
+              <DialogTitle className="truncate text-base font-bold text-foreground sm:text-lg">
                 {categoryTitle}
               </DialogTitle>
               {currentDoc ? (
-                <p className="mt-0.5 max-w-lg truncate text-xs text-muted-foreground">
+                <p className="mt-0.5 truncate text-xs text-muted-foreground">
                   {currentDoc.title} {currentDoc.description ? `— ${currentDoc.description}` : ""}
                 </p>
               ) : null}

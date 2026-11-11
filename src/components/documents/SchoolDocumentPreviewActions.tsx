@@ -17,18 +17,19 @@ export function SchoolDocumentPreviewActions({
   const fileUrl = currentDoc?.file_url;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
       {fileUrl ? (
         <>
           <Button
             variant="outline"
             size="sm"
             onClick={() => printDocumentFile(fileUrl)}
-            className="gap-1.5 text-xs"
+            className="gap-1.5 px-2.5 text-xs sm:px-3"
             aria-label={t("print")}
+            title={t("print")}
           >
             <PrinterIcon className="size-3.5 text-primary" />
-            <span>{t("print")}</span>
+            <span className="hidden sm:inline">{t("print")}</span>
           </Button>
 
           <a
@@ -36,16 +37,23 @@ export function SchoolDocumentPreviewActions({
             target="_blank"
             rel="noopener noreferrer"
             download={currentDoc?.file_name}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-primary shadow-2xs transition-colors hover:bg-card hover:text-foreground"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-semibold text-primary shadow-2xs transition-colors hover:bg-card hover:text-foreground sm:px-3"
             aria-label={t("download")}
+            title={t("download")}
           >
             <DownloadIcon className="size-3.5 text-primary" />
-            <span>{t("download")}</span>
+            <span className="hidden sm:inline">{t("download")}</span>
           </a>
         </>
       ) : null}
 
-      <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label={t("close")}>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={onClose}
+        className="size-8 rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
+        aria-label={t("close")}
+      >
         <XIcon className="size-4" />
       </Button>
     </div>

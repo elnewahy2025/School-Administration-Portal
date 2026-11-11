@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import { useLocale, useTranslations } from "next-intl";
 import { CalendarIcon, XIcon, FileTextIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,20 +28,21 @@ export function CalendarItemDetailDialog({
   useDrawerEscape(onClose, isOpen && Boolean(item));
 
   if (!isOpen || !item) return null;
+  if (typeof document === "undefined") return null;
 
   const isEvent = item.kind === "event";
   const itemTitle = getCalendarItemTitle(item, locale);
 
-  return (
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4"
     >
       <div className="fixed inset-0 bg-scrim/60 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-xl border border-border bg-card p-6 shadow-2xl">
+      <div className="relative z-10 max-h-[85vh] w-full max-w-xl overflow-y-auto overscroll-contain rounded-xl border border-border bg-card p-5 shadow-2xl sm:max-h-[90vh] sm:p-6">
         <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
-          <div className="space-y-1">
+          <div className="min-w-0 flex-1 space-y-1">
             <div className="flex items-center gap-2">
               {isEvent ? (
                 <CalendarIcon className="size-5 text-primary" />
@@ -51,9 +53,9 @@ export function CalendarItemDetailDialog({
                 {isEvent ? tCal("title") : tCirc("title")}
               </span>
             </div>
-            <h2 className="text-xl font-bold text-foreground">{itemTitle}</h2>
+            <h2 className="text-xl font-bold break-words text-foreground">{itemTitle}</h2>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full">
+          <Button variant="ghost" size="icon" onClick={onClose} className="shrink-0 rounded-full">
             <XIcon className="size-5" />
           </Button>
         </div>
@@ -64,6 +66,7 @@ export function CalendarItemDetailDialog({
           <CalendarCircularDetailContent circular={item.circular} onClose={onClose} />
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
