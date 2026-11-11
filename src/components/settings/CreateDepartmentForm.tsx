@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { PlusIcon } from "lucide-react";
@@ -13,6 +13,8 @@ import { createDepartmentAction } from "@/actions/settings/createDepartmentActio
 export function CreateDepartmentForm() {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
@@ -40,10 +42,12 @@ export function CreateDepartmentForm() {
         <Label htmlFor="name_ar">{t("deptNameAr")}</Label>
         <Input id="name_ar" name="name_ar" required placeholder="مثال: قسم شؤون الطلاب" />
       </div>
-      <div className="flex-1 space-y-1.5">
-        <Label htmlFor="name_en">{t("deptNameEn")}</Label>
-        <Input id="name_en" name="name_en" required placeholder="e.g. Student Affairs" />
-      </div>
+      {!isArabic && (
+        <div className="flex-1 space-y-1.5">
+          <Label htmlFor="name_en">{t("deptNameEn")}</Label>
+          <Input id="name_en" name="name_en" required placeholder="e.g. Student Affairs" />
+        </div>
+      )}
       <Button type="submit" disabled={isPending} className="shrink-0 gap-1.5">
         <PlusIcon className="size-4" />
         <span>{tCommon("create")}</span>

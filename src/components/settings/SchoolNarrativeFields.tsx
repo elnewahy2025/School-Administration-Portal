@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -16,6 +16,8 @@ export function SchoolNarrativeFields({
   disabled: boolean;
 }) {
   const t = useTranslations("settings");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
 
   return (
     <>
@@ -34,16 +36,20 @@ export function SchoolNarrativeFields({
           rows={3}
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="vision_en">{t("visionEn")}</Label>
-        <Textarea
-          id="vision_en"
-          name="vision_en"
-          defaultValue={visionEn ?? undefined}
-          disabled={disabled}
-          rows={3}
-        />
-      </div>
+      {isArabic ? (
+        <input type="hidden" id="vision_en" name="vision_en" value={visionEn ?? ""} />
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="vision_en">{t("visionEn")}</Label>
+          <Textarea
+            id="vision_en"
+            name="vision_en"
+            defaultValue={visionEn ?? undefined}
+            disabled={disabled}
+            rows={3}
+          />
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="mission_ar">{t("missionAr")}</Label>
         <Textarea
@@ -54,16 +60,20 @@ export function SchoolNarrativeFields({
           rows={3}
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="mission_en">{t("missionEn")}</Label>
-        <Textarea
-          id="mission_en"
-          name="mission_en"
-          defaultValue={missionEn ?? undefined}
-          disabled={disabled}
-          rows={3}
-        />
-      </div>
+      {isArabic ? (
+        <input type="hidden" id="mission_en" name="mission_en" value={missionEn ?? ""} />
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="mission_en">{t("missionEn")}</Label>
+          <Textarea
+            id="mission_en"
+            name="mission_en"
+            defaultValue={missionEn ?? undefined}
+            disabled={disabled}
+            rows={3}
+          />
+        </div>
+      )}
     </>
   );
 }

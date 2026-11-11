@@ -5,6 +5,7 @@ import { SchoolProfileForm } from "./SchoolProfileForm";
 import type { SchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 
 vi.mock("next-intl", () => ({
+  useLocale: () => "ar",
   useTranslations: () => (key: string) => {
     const map: Record<string, string> = {
       identity: "Basic Identity",

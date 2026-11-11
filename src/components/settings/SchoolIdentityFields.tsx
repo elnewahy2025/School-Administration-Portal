@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,8 @@ export function SchoolIdentityFields({
   canManage: boolean;
 }) {
   const t = useTranslations("settings");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
 
   return (
     <>
@@ -26,17 +28,21 @@ export function SchoolIdentityFields({
           disabled={!canManage}
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="name_en">{t("nameEn")}</Label>
-        <Textarea
-          id="name_en"
-          name="name_en"
-          defaultValue={school.name_en}
-          required
-          rows={2}
-          disabled={!canManage}
-        />
-      </div>
+      {isArabic ? (
+        <input type="hidden" id="name_en" name="name_en" value={school.name_en} />
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="name_en">{t("nameEn")}</Label>
+          <Textarea
+            id="name_en"
+            name="name_en"
+            defaultValue={school.name_en}
+            required
+            rows={2}
+            disabled={!canManage}
+          />
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="slug">{t("slug")}</Label>
         <Input

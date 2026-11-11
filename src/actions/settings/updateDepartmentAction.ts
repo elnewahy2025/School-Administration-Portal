@@ -29,7 +29,7 @@ export async function updateDepartmentAction(
     }
 
     const trimmedAr = nameAr.trim();
-    const trimmedEn = nameEn.trim();
+    const trimmedEn = (nameEn || nameAr).trim();
     const parsed = departmentSchema.safeParse({ nameAr: trimmedAr, nameEn: trimmedEn });
     if (!parsed.success) {
       throw formatZodError(parsed.error);

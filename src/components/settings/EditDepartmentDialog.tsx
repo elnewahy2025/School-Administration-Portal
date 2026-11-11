@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,8 @@ export function EditDepartmentDialog({
 }) {
   const t = useTranslations("settings");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
   const router = useRouter();
   const [nameAr, setNameAr] = useState(department.name_ar);
   const [nameEn, setNameEn] = useState(department.name_en);
@@ -30,7 +32,7 @@ export function EditDepartmentDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      const res = await updateDepartmentAction(department.id, nameAr, nameEn);
+      const res = await updateDepartmentAction(department.id, nameAr, nameEn || nameAr);
       if (res.success) {
         toast.success(tCommon("saved"));
         onClose();
@@ -58,16 +60,18 @@ export function EditDepartmentDialog({
               disabled={isPending}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="edit_dept_en">{t("deptNameEn")}</Label>
-            <Input
-              id="edit_dept_en"
-              value={nameEn}
-              onChange={(e) => setNameEn(e.target.value)}
-              required
-              disabled={isPending}
-            />
-          </div>
+          {!isArabic && (
+            <div className="space-y-2">
+              <Label htmlFor="edit_dept_en">{t("deptNameEn")}</Label>
+              <Input
+                id="edit_dept_en"
+                value={nameEn}
+                onChange={(e) => setNameEn(e.target.value)}
+                required
+                disabled={isPending}
+              />
+            </div>
+          )}
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
               {tCommon("cancel")}

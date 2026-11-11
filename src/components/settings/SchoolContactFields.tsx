@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { SchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
@@ -11,6 +11,8 @@ export function SchoolContactFields({
   canManage: boolean;
 }) {
   const t = useTranslations("settings");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
 
   return (
     <>
@@ -50,15 +52,24 @@ export function SchoolContactFields({
           disabled={!canManage}
         />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="address_en">{t("addressEn")}</Label>
-        <Input
+      {isArabic ? (
+        <input
+          type="hidden"
           id="address_en"
           name="address_en"
-          defaultValue={school.address_en ?? ""}
-          disabled={!canManage}
+          value={school.address_en ?? ""}
         />
-      </div>
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="address_en">{t("addressEn")}</Label>
+          <Input
+            id="address_en"
+            name="address_en"
+            defaultValue={school.address_en ?? ""}
+            disabled={!canManage}
+          />
+        </div>
+      )}
     </>
   );
 }

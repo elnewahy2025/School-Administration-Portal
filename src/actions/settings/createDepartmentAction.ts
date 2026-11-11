@@ -24,7 +24,8 @@ export async function createDepartmentAction(formData: FormData): Promise<Action
     }
 
     const nameAr = (formData.get("name_ar") as string)?.trim();
-    const nameEn = (formData.get("name_en") as string)?.trim();
+    const rawEn = (formData.get("name_en") as string)?.trim();
+    const nameEn = rawEn || nameAr;
 
     const parsed = departmentSchema.safeParse({ nameAr, nameEn });
     if (!parsed.success) {
