@@ -17,9 +17,9 @@ export async function resolveMaintenanceListPermissions(profile: ProfileRow | nu
   const deptId = profile.department_id;
   const [canCreatePerm, canAssignPerm, canClosePerm, canManageUsersPerm] = await Promise.all([
     hasPermission("maintenance.create", schoolId, deptId).catch(() => false),
-    hasPermission("maintenance.assign", schoolId, deptId).catch(() => false),
-    hasPermission("maintenance.close", schoolId, deptId).catch(() => false),
-    hasPermission("users.manage", schoolId, deptId).catch(() => false),
+    hasPermission("maintenance.assign", schoolId).catch(() => false),
+    hasPermission("maintenance.close", schoolId).catch(() => false),
+    hasPermission("users.manage", schoolId).catch(() => false),
   ]);
 
   return {

@@ -19,11 +19,11 @@ export async function assertCanManageMaintenanceRequest(
   if (ticket.reporter_id === profile.id) return;
 
   const schoolId = profile.school_id;
-  const deptId = profile.department_id;
+  const ticketDeptId = ticket.reporter_department_id;
   const [canClose, canAssign, canManageUsers] = await Promise.all([
-    hasPermission("maintenance.close", schoolId, deptId),
-    hasPermission("maintenance.assign", schoolId, deptId),
-    hasPermission("users.manage", schoolId, deptId),
+    hasPermission("maintenance.close", schoolId, ticketDeptId),
+    hasPermission("maintenance.assign", schoolId, ticketDeptId),
+    hasPermission("users.manage", schoolId, ticketDeptId),
   ]);
 
   if (!canClose && !canAssign && !canManageUsers) {

@@ -30,11 +30,11 @@ export async function resolveMaintenanceDetailPermissions(
   }
 
   const schoolId = profile.school_id;
-  const deptId = profile.department_id;
+  const ticketDeptId = ticket.reporter_department_id;
   const [canAssign, canClose, canManageUsers] = await Promise.all([
-    hasPermission("maintenance.assign", schoolId, deptId).catch(() => false),
-    hasPermission("maintenance.close", schoolId, deptId).catch(() => false),
-    hasPermission("users.manage", schoolId, deptId).catch(() => false),
+    hasPermission("maintenance.assign", schoolId, ticketDeptId).catch(() => false),
+    hasPermission("maintenance.close", schoolId, ticketDeptId).catch(() => false),
+    hasPermission("users.manage", schoolId, ticketDeptId).catch(() => false),
   ]);
 
   const isParticipant = isReporter || isOperator || canAssign;

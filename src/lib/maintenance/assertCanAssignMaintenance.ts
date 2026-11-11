@@ -25,7 +25,6 @@ export async function assertCanAssignMaintenance(): Promise<{
     (await hasPermission(
       "maintenance.assign",
       schoolId,
-      profile.department_id,
     ));
   if (!allowed) {
     throw new ForbiddenError("Unauthorized");
