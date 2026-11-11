@@ -20,6 +20,7 @@ export function readLocalSupabaseEnv() {
     );
   }
 
+  /** @type {Record<string, string>} */
   const env = {};
   for (const line of status.split(/\r?\n/)) {
     const match = line.match(/^([A-Z0-9_]+)="?([^"]*)"?$/);
