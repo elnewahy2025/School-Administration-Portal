@@ -6,6 +6,7 @@ import { CalendarEventCategoryBadge } from "./CalendarEventCategoryBadge";
 import { CalendarEventStatusBadge } from "./CalendarEventStatusBadge";
 import { CalendarVisibilityBadge } from "./CalendarVisibilityBadge";
 import { CalendarActionButtons } from "./CalendarActionButtons";
+import { CalendarEventImageBanner } from "./CalendarEventImageBanner";
 import { CalendarEventMetaGrid } from "./CalendarEventMetaGrid";
 import type { CalendarEventRow } from "@/lib/calendar/types";
 
@@ -38,6 +39,8 @@ export function CalendarEventDetailCard({
           <CalendarEventStatusBadge status={event.status} />
         </div>
       </div>
+
+      <CalendarEventImageBanner imagePath={event.image_path} altText={event.title_ar} />
 
       {event.description && (
         <div className="space-y-1.5">

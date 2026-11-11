@@ -6,4 +6,5 @@ export { updateCalendarEventRecord } from "./updateCalendarEventRecord";
 export { getSchoolCalendarEvents } from "./getSchoolCalendarEvents";
 export { getPublicCalendarEvents } from "./getPublicCalendarEvents";
 export { getCalendarEventById } from "./getCalendarEventById";
+export { getCalendarImageUrl } from "./getCalendarImageUrl";
 export { isWeekendDay } from "./isWeekendDay";
