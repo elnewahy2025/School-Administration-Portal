@@ -110,6 +110,12 @@ begin
         using errcode = '22023';
     end if;
 
+    -- If the table is empty in the payload, record 0 and continue to next table.
+    if jsonb_array_length(p_tables -> v_table) = 0 then
+      v_counts := v_counts || jsonb_build_object(v_table, 0);
+      continue;
+    end if;
+
     -- Tenant validation: for a school-scoped file every row must belong to
     -- that school. Only `role_permissions` has no school_id; it is validated
     -- through the role it grants.
