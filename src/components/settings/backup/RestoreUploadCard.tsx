@@ -49,7 +49,6 @@ export function RestoreUploadCard() {
             <UploadCloud className="h-4 w-4 text-primary" />
             <span>{t("selectFile")}</span>
           </label>
-          <p className="mt-2 text-center text-[11px] text-muted-foreground">{t("maxFileSize")}</p>
         </div>
       </div>
 

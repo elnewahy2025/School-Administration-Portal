@@ -32,7 +32,7 @@ export function useRestoreFile() {
 
     const result = await parseBackupFile(file);
     if (!result.ok) {
-      toast.error(t(result.reason === "too-large" ? "fileTooLarge" : "invalidFile"));
+      toast.error(t("invalidFile"));
       resetInput();
       return;
     }

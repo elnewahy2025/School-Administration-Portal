@@ -1,6 +1,4 @@
 import JSZip from "jszip";
-import { MAX_BACKUP_BYTES } from "@/lib/backup/maxBackupBytes";
-import { MAX_BACKUP_ZIP_BYTES } from "@/lib/backup/maxBackupZipBytes";
 import type { DatabaseBackupPayload } from "@/lib/backup/types";
 import { extractPayloadFromZip } from "./extractPayloadFromZip";
 import {
@@ -12,13 +10,9 @@ export type { ExtractedStorageFile } from "./extractStorageFilesFromZip";
 
 export type BackupFileResult =
   | { ok: true; payload: DatabaseBackupPayload; storageFiles?: ExtractedStorageFile[] }
-  | { ok: false; reason: "too-large" | "invalid" };
+  | { ok: false; reason: "invalid" };
 
 async function parseZipBackup(file: File): Promise<BackupFileResult> {
-  if (file.size > MAX_BACKUP_ZIP_BYTES) {
-    return { ok: false, reason: "too-large" };
-  }
-
   try {
     const zip = await JSZip.loadAsync(file);
     const payload = await extractPayloadFromZip(zip);
@@ -37,10 +31,6 @@ export async function parseBackupFile(file: File): Promise<BackupFileResult> {
   const isZip = file.name.toLowerCase().endsWith(".zip") || file.type.includes("zip");
   if (isZip) {
     return parseZipBackup(file);
-  }
-
-  if (file.size > MAX_BACKUP_BYTES) {
-    return { ok: false, reason: "too-large" };
   }
 
   try {

@@ -34,10 +34,8 @@ const nextConfig = {
   devIndicators: false,
   experimental: {
     serverActions: {
-      // Restore uploads carry a whole backup in one action call. The client
-      // refuses files above MAX_BACKUP_BYTES (10 MB, src/lib/backup/maxBackupBytes.ts);
-      // this leaves room for the action envelope around that file.
-      bodySizeLimit: "12mb",
+      // Support large database payloads and file restores in server actions
+      bodySizeLimit: "250mb",
     },
   },
   // The E2E gate builds with its own output directory so it never overwrites
