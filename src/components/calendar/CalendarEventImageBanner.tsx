@@ -32,7 +32,7 @@ export function CalendarEventImageBanner({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-lg border border-border bg-muted/20 transition-opacity duration-200 ${
+      className={`relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-border bg-muted/20 transition-opacity duration-200 ${
         isLoaded ? "opacity-100" : "opacity-90"
       }`}
     >
@@ -42,7 +42,7 @@ export function CalendarEventImageBanner({
         alt={altText}
         onLoad={() => setLoadedUrl(resolvedUrl)}
         onError={() => setFailedUrl(resolvedUrl)}
-        className="max-h-48 w-full object-cover"
+        className="h-auto max-h-[32rem] w-full object-contain"
       />
     </div>
   );

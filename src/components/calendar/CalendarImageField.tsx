@@ -34,9 +34,13 @@ export function CalendarImageField({
         <span>{t("bannerImage")}</span>
       </Label>
       {displayUrl && (
-        <div className="relative max-h-48 overflow-hidden rounded-lg border border-border bg-muted/20">
+        <div className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-border bg-muted/20">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={displayUrl} alt="Banner preview" className="max-h-48 w-full object-cover" />
+          <img
+            src={displayUrl}
+            alt="Banner preview"
+            className="h-auto max-h-[32rem] w-full object-contain"
+          />
         </div>
       )}
       <Input
