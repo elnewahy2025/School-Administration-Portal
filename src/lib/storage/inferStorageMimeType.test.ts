@@ -26,3 +26,4 @@ describe("inferStorageMimeType", () => {
     expect(inferStorageMimeType("no_extension")).toBe("application/octet-stream");
   });
 });
+
