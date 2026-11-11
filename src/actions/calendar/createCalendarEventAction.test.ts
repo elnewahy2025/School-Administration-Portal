@@ -61,6 +61,38 @@ describe("createCalendarEventAction", () => {
     expect(result.eventId).toBe("evt-1");
   });
 
+  it("passes status 'published' when publish_immediately is checked", async () => {
+    mockAssertCanManageCalendar.mockResolvedValue({
+      schoolId: "sch-1",
+      profileId: "usr-1",
+    });
+
+    mockGetSchoolFullDetails.mockResolvedValue({
+      working_days: [0, 1, 2, 3, 4],
+    });
+
+    mockCreateCalendarEventSeries.mockResolvedValue({
+      firstEventId: "evt-pub-1",
+      error: null,
+    });
+
+    const formData = new FormData();
+    formData.append("title_ar", "حفل التكريم");
+    formData.append("starts_at", "2026-11-22T09:00:00");
+    formData.append("ends_at", "2026-11-22T11:00:00");
+    formData.append("publish_immediately", "on");
+
+    const result = await createCalendarEventAction(formData);
+
+    expect(result.success).toBe(true);
+    expect(mockCreateCalendarEventSeries).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        status: "published",
+      }),
+    );
+  });
+
   it("fails if scheduled on a non-working day", async () => {
     mockAssertCanManageCalendar.mockResolvedValue({
       schoolId: "sch-1",

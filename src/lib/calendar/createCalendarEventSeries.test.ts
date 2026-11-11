@@ -56,6 +56,42 @@ describe("createCalendarEventSeries", () => {
     expect(res.firstEventId).toBe("ev-1");
   });
 
+  it("sets status to published and adds published_at when requested", async () => {
+    let insertedRows: Record<string, unknown>[] = [];
+    const mockSelect = vi.fn().mockImplementation(() => {
+      return Promise.resolve({
+        data: [{ id: "ev-pub" }],
+        error: null,
+      });
+    });
+    const mockInsert = vi.fn().mockImplementation((rows) => {
+      insertedRows = rows;
+      return { select: mockSelect };
+    });
+    const mockFrom = vi.fn().mockReturnValue({ insert: mockInsert });
+    const mockSupabase = { from: mockFrom } as never;
+
+    const res = await createCalendarEventSeries(mockSupabase, {
+      schoolId: "sch-1",
+      titleAr: "حفل تخرج",
+      titleEn: "Graduation",
+      description: null,
+      category: "event",
+      allDay: true,
+      visibility: "public",
+      status: "published",
+      location: "Main Hall",
+      imagePath: null,
+      createdBy: "usr-1",
+      instances: [{ startsAt: "2026-11-20T08:00:00Z", endsAt: "2026-11-20T12:00:00Z" }],
+    });
+
+    expect(res.firstEventId).toBe("ev-pub");
+    expect(insertedRows).toHaveLength(1);
+    expect(insertedRows[0].status).toBe("published");
+    expect(typeof insertedRows[0].published_at).toBe("string");
+  });
+
   it("returns database error message on insert failure", async () => {
     const mockSelect = vi.fn().mockResolvedValue({
       data: null,

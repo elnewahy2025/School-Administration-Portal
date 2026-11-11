@@ -12,6 +12,7 @@ import { CalendarCoreFields } from "./CalendarCoreFields";
 import { CalendarDateTimeFields } from "./CalendarDateTimeFields";
 import { CalendarRecurrenceFields } from "./CalendarRecurrenceFields";
 import { CalendarImageField } from "./CalendarImageField";
+import { CalendarPublishField } from "./CalendarPublishField";
 import { isWeekendDay } from "@/lib/calendar/isWeekendDay";
 import { createCalendarEventAction } from "@/actions/calendar/createCalendarEventAction";
 import { calendarImageRules } from "@/lib/calendar/calendarImageRules";
@@ -73,6 +74,7 @@ export function CreateCalendarEventForm({
         <CalendarDateTimeFields workingDays={workingDays} />
         <CalendarRecurrenceFields />
         <CalendarImageField disabled={isPending} />
+        <CalendarPublishField />
       </div>
 
       <div className="flex justify-end gap-3">

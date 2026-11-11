@@ -1,5 +1,6 @@
-import type { CalendarCategory, CalendarVisibility } from "@/lib/calendar/types";
+import type { CalendarCategory, CalendarStatus, CalendarVisibility } from "@/lib/calendar/types";
 import { parseCalendarRecurrenceInput } from "./parseCalendarRecurrenceInput";
+import { parseFormCheckbox } from "./parseFormCheckbox";
 import { calendarSchema } from "./calendarSchema";
 import { formatZodError } from "./formatZodError";
 
@@ -11,7 +12,8 @@ export function parseCalendarFormData(formData: FormData) {
 
   const imageEntry = formData.get("image");
   const image = imageEntry instanceof File && imageEntry.size > 0 ? imageEntry : null;
-  const isAllDay = formData.get("all_day") === "true" || formData.get("all_day") === "on";
+  const isAllDay = parseFormCheckbox(formData, "all_day");
+  const isPublishImmediately = parseFormCheckbox(formData, "publish_immediately");
   const recurrence = parseCalendarRecurrenceInput(formData);
 
   const rawInput = {
@@ -30,11 +32,15 @@ export function parseCalendarFormData(formData: FormData) {
     throw formatZodError(parsed.error);
   }
 
+  const status: CalendarStatus = isPublishImmediately ? "published" : "draft";
+
   return {
     ...parsed.data,
     category: parsed.data.category as CalendarCategory,
     visibility: parsed.data.visibility as CalendarVisibility,
+    status,
     allDay: isAllDay,
+    publishImmediately: isPublishImmediately,
     image,
     ...recurrence,
   };

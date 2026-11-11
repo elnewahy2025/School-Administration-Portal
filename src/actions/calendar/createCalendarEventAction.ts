@@ -55,6 +55,7 @@ export async function createCalendarEventAction(
       category: data.category,
       allDay: data.allDay,
       visibility: data.visibility,
+      status: data.status,
       location: data.location,
       imagePath,
       createdBy: auth.profileId,

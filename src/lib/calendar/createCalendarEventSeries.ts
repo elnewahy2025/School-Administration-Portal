@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CalendarCategory, CalendarVisibility } from "./types";
+import type { CalendarCategory, CalendarStatus, CalendarVisibility } from "./types";
 import { insertCalendarEventSeriesWithAdmin } from "./insertCalendarEventSeriesWithAdmin";
 
 export interface CreateCalendarSeriesParams {
@@ -10,6 +10,7 @@ export interface CreateCalendarSeriesParams {
   category: CalendarCategory;
   allDay: boolean;
   visibility: CalendarVisibility;
+  status?: CalendarStatus;
   location: string | null;
   imagePath: string | null;
   createdBy: string;
@@ -24,6 +25,9 @@ export async function createCalendarEventSeries(
     return { error: "No event occurrences specified" };
   }
 
+  const status = params.status ?? "draft";
+  const nowIso = new Date().toISOString();
+
   const rows = params.instances.map((inst) => ({
     school_id: params.schoolId,
     title_ar: params.titleAr,
@@ -34,7 +38,8 @@ export async function createCalendarEventSeries(
     ends_at: inst.endsAt,
     all_day: params.allDay,
     visibility: params.visibility,
-    status: "draft",
+    status,
+    published_at: status === "published" ? nowIso : null,
     location: params.location,
     image_path: params.imagePath,
     created_by: params.createdBy,

@@ -10,9 +10,21 @@ describe("parseCalendarFormData", () => {
 
     const parsed = parseCalendarFormData(formData);
     expect(parsed.titleAr).toBe("حفل التخرج");
+    expect(parsed.publishImmediately).toBe(false);
     expect(parsed.recurrenceFreq).toBe("none");
     expect(parsed.recurrenceUntil).toBeNull();
     expect(parsed.recurrenceCount).toBeUndefined();
+  });
+
+  it("parses publish_immediately correctly when checked", () => {
+    const formData = new FormData();
+    formData.append("title_ar", "حفل التخرج");
+    formData.append("starts_at", "2026-11-01T10:00");
+    formData.append("ends_at", "2026-11-01T12:00");
+    formData.append("publish_immediately", "on");
+
+    const parsed = parseCalendarFormData(formData);
+    expect(parsed.publishImmediately).toBe(true);
   });
 
   it("parses recurrence fields correctly", () => {

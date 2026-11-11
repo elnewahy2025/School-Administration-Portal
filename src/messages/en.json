@@ -560,6 +560,8 @@
       "confirmDelete": "Are you sure you want to permanently delete this event?",
       "deletedSuccess": "Event deleted successfully"
     },
+    "publishImmediately": "Publish immediately",
+    "publishImmediatelyHelp": "Make this event active and visible immediately according to its visibility setting.",
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
     "locationPlaceholder": "Auditorium / Hall A",

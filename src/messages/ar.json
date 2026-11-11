@@ -560,6 +560,8 @@
       "confirmDelete": "هل أنت متأكد من حذف هذه الفعالية نهائياً؟",
       "deletedSuccess": "تم حذف الفعالية بنجاح"
     },
+    "publishImmediately": "نشر الفعالية فوراً",
+    "publishImmediatelyHelp": "تفعيل الفعالية ونشرها مباشرة وفق نطاق الظهور المحدد.",
     "previousMonth": "الشهر السابق",
     "nextMonth": "الشهر التالي",
     "locationPlaceholder": "المسرح المدرسي / القاعة الرئيسية",
