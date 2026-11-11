@@ -15,6 +15,15 @@ export function getCalendarImageUrl(imagePath?: string | null): string | null {
   }
 
   const baseUrl = rawBaseUrl.replace(/\/+$/, "");
-  const normalizedPath = trimmed.replace(/^\/+/, "");
-  return `${baseUrl}/storage/v1/object/public/public-assets/${normalizedPath}`;
+  let normalized = trimmed.replace(/^\/+/, "");
+
+  if (normalized.startsWith("storage/v1/object/public/")) {
+    return `${baseUrl}/${normalized}`;
+  }
+
+  if (normalized.startsWith("public-assets/")) {
+    normalized = normalized.replace(/^public-assets\//, "");
+  }
+
+  return `${baseUrl}/storage/v1/object/public/public-assets/${normalized}`;
 }

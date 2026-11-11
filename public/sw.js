@@ -8,7 +8,7 @@
  * - Network-Only for Supabase API calls, auth endpoints, mutations, and storage assets
  */
 
-const CACHE_NAME = "school-portal-cache-v4";
+const CACHE_NAME = "school-portal-cache-v5";
 const OFFLINE_URL = "/offline.html";
 
 // Only responses the server marks as immutable (content-addressed production

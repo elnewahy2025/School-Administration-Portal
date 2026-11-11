@@ -33,8 +33,24 @@ describe("getCalendarImageUrl", () => {
     );
   });
 
-  it("strips leading slashes from relative path", () => {
+  it("handles paths with leading slashes", () => {
     const result = getCalendarImageUrl("///school-1/calendar/123_pic.jpg");
+    expect(result).toBe(
+      "https://school.supabase.co/storage/v1/object/public/public-assets/school-1/calendar/123_pic.jpg",
+    );
+  });
+
+  it("handles paths that already include public-assets prefix", () => {
+    const result = getCalendarImageUrl("public-assets/school-1/calendar/123_pic.jpg");
+    expect(result).toBe(
+      "https://school.supabase.co/storage/v1/object/public/public-assets/school-1/calendar/123_pic.jpg",
+    );
+  });
+
+  it("handles paths that include storage/v1/object/public", () => {
+    const result = getCalendarImageUrl(
+      "storage/v1/object/public/public-assets/school-1/calendar/123_pic.jpg",
+    );
     expect(result).toBe(
       "https://school.supabase.co/storage/v1/object/public/public-assets/school-1/calendar/123_pic.jpg",
     );
