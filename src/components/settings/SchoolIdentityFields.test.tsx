@@ -52,4 +52,3 @@ describe("SchoolIdentityFields", () => {
     expect(slugInput).toHaveValue("al-amal");
   });
 });
-

@@ -55,4 +55,3 @@ describe("SchoolNarrativeFields", () => {
     expect(screen.getByLabelText("missionEn")).toBeInTheDocument();
   });
 });
-

@@ -1,7 +1,9 @@
 import { cache } from "react";
 import { createSupabaseAdminClient } from "@/lib/supabase";
 
-export const isPlatformOwner = cache(async function isPlatformOwner(userId?: string | null): Promise<boolean> {
+export const isPlatformOwner = cache(async function isPlatformOwner(
+  userId?: string | null,
+): Promise<boolean> {
   if (!userId) return false;
 
   const admin = createSupabaseAdminClient();

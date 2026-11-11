@@ -39,4 +39,3 @@ describe("CreateDepartmentForm", () => {
     expect(screen.getByLabelText("deptNameEn")).toBeInTheDocument();
   });
 });
-

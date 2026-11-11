@@ -21,4 +21,3 @@ describe("parseFormCheckbox", () => {
     expect(parseFormCheckbox(fdFalse, "test_key")).toBe(false);
   });
 });
-

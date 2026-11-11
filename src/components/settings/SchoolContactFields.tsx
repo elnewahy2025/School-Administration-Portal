@@ -53,12 +53,7 @@ export function SchoolContactFields({
         />
       </div>
       {isArabic ? (
-        <input
-          type="hidden"
-          id="address_en"
-          name="address_en"
-          value={school.address_en ?? ""}
-        />
+        <input type="hidden" id="address_en" name="address_en" value={school.address_en ?? ""} />
       ) : (
         <div className="space-y-2">
           <Label htmlFor="address_en">{t("addressEn")}</Label>

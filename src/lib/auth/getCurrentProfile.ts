@@ -16,23 +16,25 @@ export type ProfileRow = {
   is_active: boolean;
 };
 
-export const getCurrentProfile = cache(async function getCurrentProfile(): Promise<ProfileRow | null> {
-  const supabase = await createSupabaseServerClient();
-  const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData?.user) return null;
+export const getCurrentProfile = cache(
+  async function getCurrentProfile(): Promise<ProfileRow | null> {
+    const supabase = await createSupabaseServerClient();
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    if (userError || !userData?.user) return null;
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .select(
-      "id, full_name, email, job_title, school_id, department_id, is_active, departments!profiles_department_id_fkey(id, name_ar, name_en)",
-    )
-    .eq("id", userData.user.id)
-    .maybeSingle();
+    const { data, error } = await supabase
+      .from("profiles")
+      .select(
+        "id, full_name, email, job_title, school_id, department_id, is_active, departments!profiles_department_id_fkey(id, name_ar, name_en)",
+      )
+      .eq("id", userData.user.id)
+      .maybeSingle();
 
-  if (error) {
-    throw mapDatabaseError(error);
-  }
+    if (error) {
+      throw mapDatabaseError(error);
+    }
 
-  if (!data) return null;
-  return toProfileRow(data as unknown as RawProfileResult);
-});
+    if (!data) return null;
+    return toProfileRow(data as unknown as RawProfileResult);
+  },
+);

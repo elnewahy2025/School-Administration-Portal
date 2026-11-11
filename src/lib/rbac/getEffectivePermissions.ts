@@ -10,7 +10,9 @@ import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
  * returns everything the caller holds anywhere, which is only appropriate for
  * platform-level checks.
  */
-export const getEffectivePermissions = cache(async function getEffectivePermissions(schoolId?: string | null): Promise<string[]> {
+export const getEffectivePermissions = cache(async function getEffectivePermissions(
+  schoolId?: string | null,
+): Promise<string[]> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.rpc(
     "effective_permission_keys",
