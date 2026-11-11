@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getSchoolLocations } from "@/lib/school/getSchoolLocations";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { LocationList } from "@/components/settings/LocationList";
@@ -17,9 +18,10 @@ export default async function LocationsSettingsPage({
   const t = await getTranslations("settings");
 
   const profile = await getCurrentProfile();
+  const schoolId = await resolveSchoolForCaller(profile);
   const [hasPerm, isOwner] = await Promise.all([
-    profile?.school_id
-      ? hasPermission("settings.school.update", profile.school_id).catch(() => false)
+    schoolId
+      ? hasPermission("settings.school.update", schoolId).catch(() => false)
       : false,
     isCurrentUserPlatformOwner(profile?.id),
   ]);
@@ -30,7 +32,7 @@ export default async function LocationsSettingsPage({
     redirect({ href: "/settings", locale });
   }
 
-  const locations = await getSchoolLocations(profile?.school_id);
+  const locations = await getSchoolLocations(schoolId);
 
   return (
     <div className="flex flex-col gap-6">

@@ -38,7 +38,6 @@ export function CalendarEventImageBanner({
         ref={imgRef}
         src={resolvedUrl}
         alt={altText}
-        loading="lazy"
         onLoad={() => setIsLoaded(true)}
         onError={() => setHasError(true)}
         className="max-h-48 w-full object-cover"

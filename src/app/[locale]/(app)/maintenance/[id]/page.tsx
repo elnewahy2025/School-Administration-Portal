@@ -4,6 +4,8 @@ import { setRequestLocale } from "next-intl/server";
 import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getMaintenanceRequestById } from "@/lib/maintenance/getMaintenanceRequestById";
 import { getMaintenanceUpdates } from "@/lib/maintenance/getMaintenanceUpdates";
 import { getMaintenanceAttachments } from "@/lib/maintenance/getMaintenanceAttachments";
@@ -27,20 +29,27 @@ export default async function MaintenanceDetailPage({
   setRequestLocale(locale);
 
   const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
+  if (!profile) {
     redirect(`/${locale}/login`);
   }
 
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!schoolId) {
+    redirect(`/${locale}/login`);
+  }
+
+  const isOwner = await isPlatformOwner(profile.id);
   const ticket = await getMaintenanceRequestById(id);
-  if (!ticket || ticket.school_id !== profile.school_id) {
+  if (!ticket || (!isOwner && ticket.school_id !== schoolId)) {
     notFound();
   }
 
+  const targetSchoolId = ticket.school_id;
   const [updates, attachments, operators, locations, perms] = await Promise.all([
     getMaintenanceUpdates(id),
     getMaintenanceAttachments(id),
-    getMaintenanceOperators(profile.school_id),
-    getSchoolLocations(profile.school_id),
+    getMaintenanceOperators(targetSchoolId),
+    getSchoolLocations(targetSchoolId),
     resolveMaintenanceDetailPermissions(profile, ticket),
   ]);
 

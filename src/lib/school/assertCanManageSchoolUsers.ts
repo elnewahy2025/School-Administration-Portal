@@ -1,4 +1,6 @@
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
@@ -8,14 +10,21 @@ export async function assertCanManageSchoolUsers(): Promise<{
   profileId: string;
 }> {
   const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
+  if (!profile) {
+    throw new AuthenticationError("Unauthorized");
+  }
+
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!schoolId) {
     throw new AuthenticationError("No school associated with profile");
   }
 
-  const allowed = await hasPermission("users.manage", profile.school_id);
+  const isOwner = await isPlatformOwner(profile.id);
+  const allowed = isOwner || (await hasPermission("users.manage", schoolId));
   if (!allowed) {
     throw new ForbiddenError("Unauthorized");
   }
 
-  return { schoolId: profile.school_id, profileId: profile.id };
+  return { schoolId, profileId: profile.id };
 }
+

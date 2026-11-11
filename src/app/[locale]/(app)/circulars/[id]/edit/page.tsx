@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PageHeader } from "@/components/ui/page-header";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getCircularById } from "@/lib/circulars/getCircularById";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
@@ -20,14 +21,23 @@ export default async function EditCircularPage({
   const profile = await getCurrentProfile();
   if (!profile) redirect(`/${locale}/login`);
 
-  const [circular, departments, perms, isOwner] = await Promise.all([
+  const [circular, isOwner] = await Promise.all([
     getCircularById(id),
-    getSchoolDepartments(profile.school_id),
-    getEffectivePermissions(profile.school_id).catch((): string[] => []),
     isPlatformOwner(profile.id),
   ]);
 
   if (!circular) notFound();
+
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!isOwner && (!schoolId || circular.school_id !== schoolId)) {
+    notFound();
+  }
+
+  const targetSchoolId = circular.school_id;
+  const [departments, perms] = await Promise.all([
+    getSchoolDepartments(targetSchoolId),
+    getEffectivePermissions(targetSchoolId).catch((): string[] => []),
+  ]);
 
   const canEdit =
     isOwner || perms.includes("circular.create") || perms.includes("circular.publish");

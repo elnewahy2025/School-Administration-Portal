@@ -1,4 +1,6 @@
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
@@ -9,22 +11,27 @@ export async function assertCanCreateMaintenance(): Promise<{
   departmentId: string | null;
 }> {
   const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
+  if (!profile) {
+    throw new AuthenticationError("Unauthorized");
+  }
+
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!schoolId) {
     throw new AuthenticationError("No school associated with profile");
   }
 
-  const allowed = await hasPermission(
-    "maintenance.create",
-    profile.school_id,
-    profile.department_id,
-  );
+  const isOwner = await isPlatformOwner(profile.id);
+  const allowed =
+    isOwner ||
+    (await hasPermission("maintenance.create", schoolId, profile.department_id));
   if (!allowed) {
     throw new ForbiddenError("Unauthorized");
   }
 
   return {
-    schoolId: profile.school_id,
+    schoolId,
     profileId: profile.id,
     departmentId: profile.department_id,
   };
 }
+

@@ -5,6 +5,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { getCalendarEventById } from "@/lib/calendar/getCalendarEventById";
 import { CalendarEventDetailCard } from "@/components/calendar/CalendarEventDetailCard";
@@ -18,19 +19,24 @@ export default async function CalendarEventDetailPage({
   setRequestLocale(locale);
 
   const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
+  if (!profile) {
     redirect(`/${locale}/login`);
   }
 
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!schoolId) {
+    redirect(`/${locale}/login`);
+  }
+
+  const isOwner = await isPlatformOwner(profile.id);
   const event = await getCalendarEventById(id);
-  if (!event || event.school_id !== profile.school_id) {
+  if (!event || (!isOwner && event.school_id !== schoolId)) {
     notFound();
   }
 
-  const [hasManagePerm, isOwner] = await Promise.all([
-    hasPermission("calendar.manage", profile.school_id, profile.department_id).catch(() => false),
-    isPlatformOwner(profile.id),
-  ]);
+  const hasManagePerm = isOwner
+    ? true
+    : await hasPermission("calendar.manage", schoolId, profile.department_id).catch(() => false);
 
   const canManage = isOwner || hasManagePerm;
 

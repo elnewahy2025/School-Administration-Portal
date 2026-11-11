@@ -1,6 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PageHeader } from "@/components/ui/page-header";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { CreateCircularForm } from "@/components/circulars";
@@ -11,9 +13,12 @@ export default async function NewCircularPage({ params }: { params: Promise<{ lo
   const t = await getTranslations("circulars");
 
   const profile = await getCurrentProfile();
-  const canCreate = profile?.school_id
-    ? await hasPermission("circular.create", profile.school_id).catch(() => false)
+  const schoolId = await resolveSchoolForCaller(profile);
+  const isOwner = profile ? await isPlatformOwner(profile.id) : false;
+  const hasPerm = schoolId
+    ? await hasPermission("circular.create", schoolId).catch(() => false)
     : false;
+  const canCreate = isOwner || hasPerm;
 
   if (!canCreate) {
     return (
@@ -23,7 +28,7 @@ export default async function NewCircularPage({ params }: { params: Promise<{ lo
     );
   }
 
-  const departments = await getSchoolDepartments(profile?.school_id);
+  const departments = await getSchoolDepartments(schoolId);
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">

@@ -2,6 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getSessionUser } from "@/lib/auth/getSessionUser";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
@@ -34,7 +35,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     return null;
   }
 
-  const schoolId = profile.school_id;
+  const schoolId = await resolveSchoolForCaller(profile);
   const [perms, circulars, maintenance, events, isOwner] = await Promise.all([
     getEffectivePermissions(schoolId).catch((): string[] => []),
     getSchoolCirculars(schoolId),

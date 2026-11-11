@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { isPlatformOwner } from "@/lib/auth/isPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getSchoolLocations } from "@/lib/school/getSchoolLocations";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { CreateMaintenanceForm } from "@/components/maintenance/CreateMaintenanceForm";
@@ -14,20 +16,28 @@ export default async function NewMaintenancePage({
   setRequestLocale(locale);
 
   const profile = await getCurrentProfile();
-  if (!profile?.school_id) {
+  if (!profile) {
     redirect(`/${locale}/login`);
   }
 
-  const canCreate = await hasPermission(
-    "maintenance.create",
-    profile.school_id,
-    profile.department_id,
-  ).catch(() => false);
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!schoolId) {
+    redirect(`/${locale}/login`);
+  }
+
+  const isOwner = await isPlatformOwner(profile.id);
+  const canCreate =
+    isOwner ||
+    (await hasPermission(
+      "maintenance.create",
+      schoolId,
+      profile.department_id,
+    ).catch(() => false));
   if (!canCreate) {
     redirect(`/${locale}/maintenance`);
   }
 
-  const allLocations = await getSchoolLocations(profile.school_id);
+  const allLocations = await getSchoolLocations(schoolId);
   const activeLocations = allLocations.filter((l) => l.is_active);
 
   return (

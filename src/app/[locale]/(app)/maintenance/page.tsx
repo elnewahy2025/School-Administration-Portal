@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getSchoolMaintenanceRequests } from "@/lib/maintenance/getSchoolMaintenanceRequests";
 import { resolveMaintenanceListPermissions } from "@/lib/maintenance/resolveMaintenanceListPermissions";
 import { getSchoolLocations } from "@/lib/school";
@@ -10,10 +11,11 @@ export default async function MaintenancePage({ params }: { params: Promise<{ lo
   setRequestLocale(locale);
 
   const profile = await getCurrentProfile();
+  const schoolId = await resolveSchoolForCaller(profile);
   const [tickets, permissions, locations] = await Promise.all([
-    getSchoolMaintenanceRequests(profile?.school_id),
+    getSchoolMaintenanceRequests(schoolId),
     resolveMaintenanceListPermissions(profile),
-    getSchoolLocations(profile?.school_id),
+    getSchoolLocations(schoolId),
   ]);
 
   return (

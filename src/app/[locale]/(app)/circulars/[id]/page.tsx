@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getCircularById } from "@/lib/circulars/getCircularById";
 import { getCircularResponses } from "@/lib/circulars/getCircularResponses";
 import { canRespondToCircular } from "@/lib/circulars/canRespondToCircular";
@@ -30,17 +31,26 @@ export default async function CircularDetailPage({
   const t = await getTranslations("circulars");
 
   const profile = await getCurrentProfile();
-  const [circular, responses, perms, departments, isOwner] = await Promise.all([
+  const [circular, isOwner] = await Promise.all([
     getCircularById(id),
-    getCircularResponses(id).catch(() => []),
-    getEffectivePermissions(profile?.school_id).catch((): string[] => []),
-    getSchoolDepartments(profile?.school_id).catch(() => []),
     isCurrentUserPlatformOwner(profile?.id),
   ]);
 
   if (!circular) {
     notFound();
   }
+
+  const schoolId = await resolveSchoolForCaller(profile);
+  if (!isOwner && (!schoolId || circular.school_id !== schoolId)) {
+    notFound();
+  }
+
+  const targetSchoolId = circular.school_id;
+  const [responses, perms, departments] = await Promise.all([
+    getCircularResponses(id).catch(() => []),
+    getEffectivePermissions(targetSchoolId).catch((): string[] => []),
+    getSchoolDepartments(targetSchoolId).catch(() => []),
+  ]);
 
   const { canPublish, canManage, canViewResponses } = getCircularPermissions(perms, isOwner);
   const canRespond = canRespondToCircular(circular, profile);

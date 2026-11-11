@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getSchoolCirculars } from "@/lib/circulars/getSchoolCirculars";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
@@ -16,12 +17,13 @@ export default async function CircularsPage({ params }: { params: Promise<{ loca
   const t = await getTranslations("circulars");
 
   const profile = await getCurrentProfile();
+  const schoolId = await resolveSchoolForCaller(profile);
   const [circulars, departments, isOwner, hasPerm] = await Promise.all([
-    getSchoolCirculars(profile?.school_id),
-    getSchoolDepartments(profile?.school_id),
+    getSchoolCirculars(schoolId),
+    getSchoolDepartments(schoolId),
     isCurrentUserPlatformOwner(profile?.id),
-    profile?.school_id
-      ? hasPermission("circular.create", profile.school_id).catch(() => false)
+    schoolId
+      ? hasPermission("circular.create", schoolId).catch(() => false)
       : false,
   ]);
   const canCreate = isOwner || hasPerm;

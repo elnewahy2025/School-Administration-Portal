@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect } from "@/i18n";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { isCurrentUserPlatformOwner } from "@/lib/auth/isCurrentUserPlatformOwner";
+import { resolveSchoolForCaller } from "@/lib/school/resolveSchoolForCaller";
 import { getSchoolFullDetails } from "@/lib/school/getSchoolFullDetails";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { SchoolProfileForm } from "@/components/settings/SchoolProfileForm";
@@ -17,9 +18,10 @@ export default async function SchoolSettingsPage({
   const tCommon = await getTranslations("common");
 
   const profile = await getCurrentProfile();
+  const schoolId = await resolveSchoolForCaller(profile);
   const [hasPerm, isOwner] = await Promise.all([
-    profile?.school_id
-      ? hasPermission("settings.school.update", profile.school_id).catch(() => false)
+    schoolId
+      ? hasPermission("settings.school.update", schoolId).catch(() => false)
       : false,
     isCurrentUserPlatformOwner(profile?.id),
   ]);
@@ -30,7 +32,7 @@ export default async function SchoolSettingsPage({
     redirect({ href: "/settings", locale });
   }
 
-  const school = await getSchoolFullDetails(profile?.school_id);
+  const school = await getSchoolFullDetails(schoolId);
 
   if (!school) {
     return (
