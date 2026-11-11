@@ -6,6 +6,13 @@ import type { E2eUser } from "./seedE2eFixture";
  * action and cookie handling a person does (no hand-forged session cookies).
  */
 export async function loginAs(page: Page, user: E2eUser): Promise<void> {
+  await page.addInitScript(() => {
+    try {
+      window.sessionStorage.setItem("pwa_install_dismissed_session", "true");
+    } catch {
+      // Ignore in restrictive sandboxes
+    }
+  });
   await page.goto("/en/login");
   await page.getByLabel("Email").fill(user.email);
   await page.getByLabel("Password").fill(user.password);
