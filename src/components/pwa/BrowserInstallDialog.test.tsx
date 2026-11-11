@@ -24,3 +24,4 @@ describe("BrowserInstallDialog", () => {
     expect(onClose).toHaveBeenCalled();
   });
 });
+
