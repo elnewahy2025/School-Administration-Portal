@@ -5,18 +5,17 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PANEL } from "@/components/ui/diamond-card-styles";
 import { CalendarCoreFields } from "./CalendarCoreFields";
 import { CalendarDateTimeFields } from "./CalendarDateTimeFields";
 import { CalendarImageField } from "./CalendarImageField";
 import { formatDateTimeInput } from "@/lib/calendar/formatDateTimeInput";
-import { isWeekendDay } from "@/lib/calendar/isWeekendDay";
 import { updateCalendarEventAction } from "@/actions/calendar/updateCalendarEventAction";
-import { calendarImageRules } from "@/lib/calendar/calendarImageRules";
-import { validateClientFile } from "@/lib/storage/validateClientFile";
 import { getCalendarImageUrl } from "@/lib/calendar/getCalendarImageUrl";
+import { validateCalendarEventFormSubmission } from "@/lib/calendar/validateCalendarEventFormSubmission";
+import { useDeleteCalendarEvent } from "./useDeleteCalendarEvent";
 import type { CalendarEventRow } from "@/lib/calendar/types";
 
 type EditCalendarEventFormProps = {
@@ -30,27 +29,20 @@ export function EditCalendarEventForm({ event, workingDays }: EditCalendarEventF
   const locale = useLocale();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const { confirmAndDelete, isDeleting } = useDeleteCalendarEvent({
+    eventId: event.id,
+    redirectTo: `/${locale}/calendar`,
+  });
 
   const currentImageUrl = getCalendarImageUrl(event.image_path);
 
   const handleSubmit = (formData: FormData) => {
-    const startsAt = String(formData.get("starts_at") || "");
-    const endsAt = String(formData.get("ends_at") || "");
-    if (isWeekendDay(startsAt, workingDays) || isWeekendDay(endsAt, workingDays)) {
-      toast.error(t("weekendNotAllowed"));
+    const validation = validateCalendarEventFormSubmission(formData, workingDays);
+    if (!validation.valid) {
+      toast.error(
+        validation.error === "weekendNotAllowed" ? t("weekendNotAllowed") : validation.error,
+      );
       return;
-    }
-
-    const imageFile = formData.get("image") as File | null;
-    if (imageFile && imageFile.size > 0) {
-      const validation = validateClientFile(imageFile, {
-        allowedMimes: calendarImageRules.allowedMime,
-        maxBytes: calendarImageRules.maxBytes,
-      });
-      if (!validation.valid) {
-        toast.error(validation.error);
-        return;
-      }
     }
 
     startTransition(async () => {
@@ -93,13 +85,25 @@ export function EditCalendarEventForm({ event, workingDays }: EditCalendarEventF
         <CalendarImageField initialImageUrl={currentImageUrl} disabled={isPending} />
       </div>
 
-      <div className="flex justify-end gap-3">
-        <Link href={`/${locale}/calendar/${event.id}`}>
-          <Button variant="outline">{tCommon("cancel")}</Button>
-        </Link>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? tCommon("loading") : tCommon("save")}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Button
+          type="button"
+          variant="outline"
+          disabled={isPending || isDeleting}
+          onClick={confirmAndDelete}
+          className="gap-1.5 text-destructive hover:bg-destructive/10"
+        >
+          <Trash2Icon className="size-4" />
+          <span>{t("actions.delete")}</span>
         </Button>
+        <div className="flex items-center gap-3">
+          <Link href={`/${locale}/calendar/${event.id}`}>
+            <Button variant="outline">{tCommon("cancel")}</Button>
+          </Link>
+          <Button type="submit" disabled={isPending || isDeleting}>
+            {isPending ? tCommon("loading") : tCommon("save")}
+          </Button>
+        </div>
       </div>
     </form>
   );

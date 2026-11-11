@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { GoldDots } from "@/components/ui/gold-dots";
 import { CalendarEventCategoryBadge } from "./CalendarEventCategoryBadge";
 import { CalendarEventStatusBadge } from "./CalendarEventStatusBadge";
@@ -18,6 +18,7 @@ export function CalendarEventDetailCard({
   canManage: boolean;
 }) {
   const t = useTranslations("calendar");
+  const locale = useLocale();
 
   return (
     <div className="relative space-y-6 overflow-hidden rounded-xl border border-border bg-card p-6 pt-8 shadow-[0_12px_30px_rgba(20,37,74,.10)]">
@@ -58,7 +59,12 @@ export function CalendarEventDetailCard({
 
       {canManage && (
         <div className="flex justify-end border-t border-border pt-4">
-          <CalendarActionButtons eventId={event.id} status={event.status} canManage={canManage} />
+          <CalendarActionButtons
+            eventId={event.id}
+            status={event.status}
+            canManage={canManage}
+            redirectToOnDelete={`/${locale}/calendar`}
+          />
         </div>
       )}
     </div>

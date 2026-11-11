@@ -19,6 +19,16 @@ vi.mock("@/actions/calendar/updateCalendarEventAction", () => ({
   updateCalendarEventAction: (formData: FormData) => mockUpdateAction(formData),
 }));
 
+const mockDeleteAction = vi.fn();
+vi.mock("@/actions/calendar/deleteCalendarEventAction", () => ({
+  deleteCalendarEventAction: (id: string) => mockDeleteAction(id),
+}));
+
+const mockShowConfirmBox = vi.fn();
+vi.mock("@/lib/feedback/showConfirmBox", () => ({
+  showConfirmBox: (options: unknown) => mockShowConfirmBox(options),
+}));
+
 describe("EditCalendarEventForm", () => {
   afterEach(() => {
     cleanup();
@@ -76,6 +86,22 @@ describe("EditCalendarEventForm", () => {
     await waitFor(() => {
       expect(mockUpdateAction).toHaveBeenCalled();
       expect(mockPush).toHaveBeenCalledWith("/en/calendar/evt-123");
+    });
+  });
+
+  it("calls deleteCalendarEventAction when delete button is clicked and confirmed", async () => {
+    mockShowConfirmBox.mockResolvedValueOnce(true);
+    mockDeleteAction.mockResolvedValueOnce({ success: true });
+
+    render(<EditCalendarEventForm event={mockEvent} />);
+
+    const deleteBtn = screen.getByRole("button", { name: "actions.delete" });
+    fireEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(mockShowConfirmBox).toHaveBeenCalled();
+      expect(mockDeleteAction).toHaveBeenCalledWith("evt-123");
+      expect(mockPush).toHaveBeenCalledWith("/en/calendar");
     });
   });
 });

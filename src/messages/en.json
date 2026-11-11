@@ -555,7 +555,10 @@
       "cancel": "Cancel Event",
       "archive": "Archive",
       "edit": "Edit Event",
-      "viewFull": "View Full Event"
+      "viewFull": "View Full Event",
+      "delete": "Delete Event",
+      "confirmDelete": "Are you sure you want to permanently delete this event?",
+      "deletedSuccess": "Event deleted successfully"
     },
     "previousMonth": "Previous month",
     "nextMonth": "Next month",

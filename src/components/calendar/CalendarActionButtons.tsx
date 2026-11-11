@@ -4,26 +4,34 @@ import { useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { toast } from "sonner";
-import { SendIcon, BanIcon, ArchiveIcon, PencilIcon } from "lucide-react";
+import { PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { publishCalendarEventAction } from "@/actions/calendar/publishCalendarEventAction";
 import { cancelCalendarEventAction } from "@/actions/calendar/cancelCalendarEventAction";
 import { archiveCalendarEventAction } from "@/actions/calendar/archiveCalendarEventAction";
+import { CalendarStatusTransitionButtons } from "./CalendarStatusTransitionButtons";
+import { useDeleteCalendarEvent } from "./useDeleteCalendarEvent";
 import type { CalendarStatus } from "@/lib/calendar/types";
 
 export function CalendarActionButtons({
   eventId,
   status,
   canManage,
+  redirectToOnDelete,
 }: {
   eventId: string;
   status: CalendarStatus;
   canManage: boolean;
+  redirectToOnDelete?: string;
 }) {
   const t = useTranslations("calendar.actions");
   const tCommon = useTranslations("common");
   const locale = useLocale();
   const [isPending, startTransition] = useTransition();
+  const { confirmAndDelete, isDeleting } = useDeleteCalendarEvent({
+    eventId,
+    redirectTo: redirectToOnDelete,
+  });
 
   if (!canManage) return null;
 
@@ -46,42 +54,24 @@ export function CalendarActionButtons({
         </Link>
       )}
 
-      {status === "draft" && (
-        <Button
-          size="sm"
-          disabled={isPending}
-          onClick={() => executeAction(publishCalendarEventAction)}
-          className="gap-1.5 bg-success text-success-foreground"
-        >
-          <SendIcon className="size-3.5 rtl:rotate-180" />
-          <span>{t("publish")}</span>
-        </Button>
-      )}
+      <CalendarStatusTransitionButtons
+        status={status}
+        isPending={isPending}
+        onPublish={() => executeAction(publishCalendarEventAction)}
+        onCancel={() => executeAction(cancelCalendarEventAction)}
+        onArchive={() => executeAction(archiveCalendarEventAction)}
+      />
 
-      {status === "published" && (
-        <>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={isPending}
-            onClick={() => executeAction(cancelCalendarEventAction)}
-            className="gap-1.5 text-destructive"
-          >
-            <BanIcon className="size-3.5" />
-            <span>{t("cancel")}</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            disabled={isPending}
-            onClick={() => executeAction(archiveCalendarEventAction)}
-            className="gap-1.5 text-muted-foreground"
-          >
-            <ArchiveIcon className="size-3.5" />
-            <span>{t("archive")}</span>
-          </Button>
-        </>
-      )}
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={isDeleting}
+        onClick={confirmAndDelete}
+        className="gap-1.5 text-destructive hover:bg-destructive/10"
+      >
+        <Trash2Icon className="size-3.5" />
+        <span>{t("delete")}</span>
+      </Button>
     </div>
   );
 }

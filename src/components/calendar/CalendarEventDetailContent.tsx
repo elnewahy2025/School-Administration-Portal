@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { ExternalLinkIcon, PencilIcon } from "lucide-react";
+import { ExternalLinkIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CalendarEventCategoryBadge } from "./CalendarEventCategoryBadge";
 import { CalendarEventStatusBadge } from "./CalendarEventStatusBadge";
 import { CalendarVisibilityBadge } from "./CalendarVisibilityBadge";
 import { CalendarEventImageBanner } from "./CalendarEventImageBanner";
 import { CalendarEventMetaGrid } from "./CalendarEventMetaGrid";
+import { useDeleteCalendarEvent } from "./useDeleteCalendarEvent";
 import type { CalendarEventRow } from "@/lib/calendar/types";
 
 export function CalendarEventDetailContent({
@@ -23,6 +24,10 @@ export function CalendarEventDetailContent({
   const locale = useLocale();
   const tCal = useTranslations("calendar");
   const tCommon = useTranslations("common");
+  const { confirmAndDelete, isDeleting } = useDeleteCalendarEvent({
+    eventId: event.id,
+    onDeleted: onClose,
+  });
 
   return (
     <div className="mt-5 space-y-5">
@@ -46,17 +51,28 @@ export function CalendarEventDetailContent({
         </div>
       )}
 
-      <div className="flex justify-end gap-2 border-t border-border pt-2">
+      <div className="flex flex-wrap justify-end gap-2 border-t border-border pt-2">
         <Button variant="outline" onClick={onClose}>
           {tCommon("cancel")}
         </Button>
         {canManage && (
-          <Link href={`/${locale}/calendar/${event.id}/edit`}>
-            <Button variant="outline" className="gap-1.5">
-              <PencilIcon className="size-4" />
-              <span>{tCal("actions.edit")}</span>
+          <>
+            <Button
+              variant="outline"
+              disabled={isDeleting}
+              onClick={confirmAndDelete}
+              className="gap-1.5 text-destructive hover:bg-destructive/10"
+            >
+              <Trash2Icon className="size-4" />
+              <span>{tCal("actions.delete")}</span>
             </Button>
-          </Link>
+            <Link href={`/${locale}/calendar/${event.id}/edit`}>
+              <Button variant="outline" className="gap-1.5">
+                <PencilIcon className="size-4" />
+                <span>{tCal("actions.edit")}</span>
+              </Button>
+            </Link>
+          </>
         )}
         <Link href={`/${locale}/calendar/${event.id}`}>
           <Button className="gap-2">
