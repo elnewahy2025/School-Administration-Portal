@@ -21,13 +21,15 @@ describe("CalendarEventImageBanner", () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it("renders image with resolved public storage URL", () => {
+  it("renders image with resolved public storage URL and becomes visible on load", () => {
     render(<CalendarEventImageBanner imagePath="school-1/calendar/pic.jpg" altText="Event title" />);
     const img = screen.getByRole("img", { name: "Event title" });
     expect(img).toBeInTheDocument();
     expect(img.getAttribute("src")).toBe(
       "https://school.supabase.co/storage/v1/object/public/public-assets/school-1/calendar/pic.jpg",
     );
+    fireEvent.load(img);
+    expect(img.closest("div")).toHaveClass("opacity-100");
   });
 
   it("gracefully hides image if it fails to load", () => {
