@@ -43,16 +43,20 @@ export function SchoolIdentityFields({
           />
         </div>
       )}
-      <div className="space-y-2">
-        <Label htmlFor="slug">{t("slug")}</Label>
-        <Input
-          id="slug"
-          name="slug"
-          defaultValue={school.slug}
-          disabled={!canManage}
-          className="font-mono"
-        />
-      </div>
+      {isArabic ? (
+        <input type="hidden" id="slug" name="slug" value={school.slug} />
+      ) : (
+        <div className="space-y-2">
+          <Label htmlFor="slug">{t("slug")}</Label>
+          <Input
+            id="slug"
+            name="slug"
+            defaultValue={school.slug}
+            disabled={!canManage}
+            className="font-mono"
+          />
+        </div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="academic_year">{t("academicYear")}</Label>
         <Input

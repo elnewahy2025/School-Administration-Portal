@@ -24,22 +24,32 @@ describe("SchoolIdentityFields", () => {
     academic_year: "2026/2027",
   } as unknown as SchoolFullDetails;
 
-  it("hides English name input in Arabic locale and provides a hidden input", () => {
+  it("hides English name and slug input in Arabic locale and provides hidden inputs", () => {
     mockLocale = "ar";
     const { container } = render(<SchoolIdentityFields school={mockSchool} canManage={true} />);
 
     expect(screen.queryByLabelText("nameEn")).toBeNull();
-    const hiddenInput = container.querySelector('input[type="hidden"][name="name_en"]');
-    expect(hiddenInput).toBeInTheDocument();
-    expect(hiddenInput).toHaveValue("Al-Amal School");
+    const hiddenNameEn = container.querySelector('input[type="hidden"][name="name_en"]');
+    expect(hiddenNameEn).toBeInTheDocument();
+    expect(hiddenNameEn).toHaveValue("Al-Amal School");
+
+    expect(screen.queryByLabelText("slug")).toBeNull();
+    const hiddenSlug = container.querySelector('input[type="hidden"][name="slug"]');
+    expect(hiddenSlug).toBeInTheDocument();
+    expect(hiddenSlug).toHaveValue("al-amal");
   });
 
-  it("shows visible English name textarea in English locale", () => {
+  it("shows visible English name and slug in English locale", () => {
     mockLocale = "en";
     render(<SchoolIdentityFields school={mockSchool} canManage={true} />);
 
     const textarea = screen.getByLabelText("nameEn");
     expect(textarea).toBeInTheDocument();
     expect(textarea).toHaveValue("Al-Amal School");
+
+    const slugInput = screen.getByLabelText("slug");
+    expect(slugInput).toBeInTheDocument();
+    expect(slugInput).toHaveValue("al-amal");
   });
 });
+

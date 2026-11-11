@@ -43,3 +43,4 @@ describe("SchoolContactFields", () => {
     expect(input).toHaveValue("Hope Street");
   });
 });
+
