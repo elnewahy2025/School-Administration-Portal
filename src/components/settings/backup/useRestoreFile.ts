@@ -53,12 +53,22 @@ export function useRestoreFile() {
         return;
       }
 
-      const uploadedCount = await uploadRestoredStorageFiles(storageFiles);
+      let uploadedCount = 0;
+      if (storageFiles.length > 0) {
+        try {
+          uploadedCount = await uploadRestoredStorageFiles(storageFiles);
+        } catch (storageErr) {
+          console.warn("Storage files upload encountered an issue:", storageErr);
+        }
+      }
+
       toast.success(buildRestoreSuccessToast(t, res.summary, uploadedCount));
       closeDialog();
       router.refresh();
-    } catch {
-      toast.error(t("restoreError"));
+    } catch (err: unknown) {
+      console.error("Restore failed:", err);
+      const message = err instanceof Error ? err.message : t("restoreError");
+      toast.error(message);
     } finally {
       setIsRestoring(false);
     }

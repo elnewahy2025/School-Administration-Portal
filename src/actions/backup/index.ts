@@ -6,3 +6,7 @@ export {
   type GetSchoolStorageFilesResult,
 } from "./getSchoolStorageFilesAction";
 export { restoreStorageFileAction } from "./restoreStorageFileAction";
+export {
+  createStorageUploadUrlAction,
+  type CreateStorageUploadUrlResult,
+} from "./createStorageUploadUrlAction";

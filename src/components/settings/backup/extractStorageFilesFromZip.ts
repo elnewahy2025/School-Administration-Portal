@@ -1,4 +1,5 @@
 import type JSZip from "jszip";
+import { inferStorageMimeType } from "@/lib/storage/inferStorageMimeType";
 
 export type ExtractedStorageFile = {
   bucket: string;
@@ -20,8 +21,9 @@ export async function extractStorageFilesFromZip(zip: JSZip): Promise<ExtractedS
     const bucket = match[1];
     const filePath = match[2];
     const blob = await zipEntry.async("blob");
+    const mimeType = inferStorageMimeType(filePath, blob.type);
     const extractedFile = new File([blob], filePath.split("/").pop() || "file", {
-      type: blob.type,
+      type: mimeType,
     });
 
     storageFiles.push({
