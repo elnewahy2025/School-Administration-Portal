@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { detectIosDevice } from "./detectIosDevice";
-import { isStandaloneMode } from "./isStandaloneMode";
+import { getPwaInitialState } from "./getPwaInitialState";
+import { pwaStorageKeys } from "./pwaStorageKeys";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -10,23 +10,27 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function usePwaInstall() {
+  const [initial] = useState(() => getPwaInitialState());
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [hasPrompt, setHasPrompt] = useState(false);
-  const [isIos] = useState(() => detectIosDevice());
-  const [isStandalone] = useState(() => isStandaloneMode());
+  const [isStandalone, setIsStandalone] = useState(initial.isStandalone);
+  const [isDismissed, setIsDismissed] = useState(initial.isDismissed);
   const [isIosGuideOpen, setIsIosGuideOpen] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isBrowserGuideOpen, setIsBrowserGuideOpen] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setHasPrompt(true);
     };
 
     const handleAppInstalled = () => {
       setDeferredPrompt(null);
-      setHasPrompt(false);
+      setIsStandalone(true);
+      try {
+        window.localStorage?.setItem(pwaStorageKeys.installed, "true");
+      } catch {
+        // Ignore storage errors
+      }
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
@@ -40,34 +44,54 @@ export function usePwaInstall() {
 
   const openIosGuide = useCallback(() => setIsIosGuideOpen(true), []);
   const closeIosGuide = useCallback(() => setIsIosGuideOpen(false), []);
+  const openBrowserGuide = useCallback(() => setIsBrowserGuideOpen(true), []);
+  const closeBrowserGuide = useCallback(() => setIsBrowserGuideOpen(false), []);
 
   const promptInstall = useCallback(async () => {
     if (deferredPrompt) {
       await deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      setHasPrompt(false);
+      try {
+        const choice = await deferredPrompt.userChoice;
+        if (choice.outcome === "accepted") {
+          setIsStandalone(true);
+          window.localStorage?.setItem(pwaStorageKeys.installed, "true");
+        }
+      } catch {
+        // Ignore userChoice errors
+      }
       setDeferredPrompt(null);
       return;
     }
 
-    if (isIos) {
+    if (initial.isIos) {
       setIsIosGuideOpen(true);
+      return;
     }
-  }, [deferredPrompt, isIos]);
+
+    setIsBrowserGuideOpen(true);
+  }, [deferredPrompt, initial.isIos]);
 
   const dismiss = useCallback(() => {
     setIsDismissed(true);
+    try {
+      window.sessionStorage?.setItem(pwaStorageKeys.dismissedSession, "true");
+    } catch {
+      // Ignore storage errors
+    }
   }, []);
 
-  const isInstallable = (hasPrompt || isIos) && !isStandalone && !isDismissed;
+  const isInstallable = !isStandalone && !isDismissed;
 
   return {
     isInstallable,
-    isIos,
+    isIos: initial.isIos,
     isStandalone,
     isIosGuideOpen,
+    isBrowserGuideOpen,
     openIosGuide,
     closeIosGuide,
+    openBrowserGuide,
+    closeBrowserGuide,
     promptInstall,
     dismiss,
   };

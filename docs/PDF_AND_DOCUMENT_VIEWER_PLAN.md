@@ -259,3 +259,4 @@ Historically, iOS Safari treats iframes containing PDFs differently than desktop
    Always append `#toolbar=1&navpanes=0` to the iframe `src`.
 5. **Verify Security Headers in `next.config.mjs`:**
    Ensure `X-Frame-Options` is set to `SAMEORIGIN` (not `DENY`) so your own application can frame its preview API route.
+

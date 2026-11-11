@@ -553,3 +553,4 @@ const handleConfirmRestore = async () => {
 - [ ] **Step 7: Verification**
   - Export a complete `.zip` backup containing Firestore collections, videos, PDFs, and images.
   - Restore the `.zip` archive on a test tenant and verify records in Firestore and assets in Cloudinary.
+

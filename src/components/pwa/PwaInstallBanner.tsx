@@ -5,13 +5,21 @@ import { useTranslations } from "next-intl";
 import { useDrawerEscape } from "@/components/layout/useDrawerEscape";
 import { usePwaInstall } from "./usePwaInstall";
 import { IosInstallDialog } from "./IosInstallDialog";
+import { BrowserInstallDialog } from "./BrowserInstallDialog";
 
 export function PwaInstallBanner() {
-  const { isInstallable, isIos, isIosGuideOpen, closeIosGuide, promptInstall, dismiss } =
-    usePwaInstall();
+  const {
+    isInstallable,
+    isIosGuideOpen,
+    isBrowserGuideOpen,
+    closeIosGuide,
+    closeBrowserGuide,
+    promptInstall,
+    dismiss,
+  } = usePwaInstall();
   const t = useTranslations("pwa");
 
-  const isPromptOpen = isInstallable && !isIosGuideOpen;
+  const isPromptOpen = isInstallable && !isIosGuideOpen && !isBrowserGuideOpen;
 
   useDrawerEscape(dismiss, isPromptOpen);
 
@@ -25,30 +33,30 @@ export function PwaInstallBanner() {
           aria-describedby="pwa-install-desc"
           className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-scrim/60 p-4 backdrop-blur-sm duration-200 fade-in"
         >
-          <div className="w-full max-w-sm animate-in rounded-2xl border border-border bg-card p-6 text-center text-card-foreground shadow-2xl duration-200 zoom-in-95">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-              <Download className="h-6 w-6" />
+          <div className="w-full max-w-sm animate-in rounded-3xl border border-border bg-card p-6 text-center text-card-foreground shadow-2xl duration-200 zoom-in-95 sm:p-7">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md">
+              <Download className="h-8 w-8" />
             </div>
 
-            <h2 id="pwa-install-title" className="mt-4 text-lg font-semibold">
+            <h2 id="pwa-install-title" className="mt-5 text-lg font-bold sm:text-xl">
               {t("bannerTitle")}
             </h2>
-            <p id="pwa-install-desc" className="mt-2 text-sm text-muted-foreground">
-              {isIos ? t("bannerSubtitleIos") : t("bannerSubtitle")}
+            <p id="pwa-install-desc" className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              {t("bannerSubtitle")}
             </p>
 
-            <div className="mt-6 flex flex-col gap-2">
+            <div className="mt-6 flex flex-col gap-2.5">
               <button
                 type="button"
                 onClick={promptInstall}
-                className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow transition hover:opacity-90 active:scale-95"
+                className="w-full rounded-2xl bg-primary px-4 py-3 text-base font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 active:scale-95"
               >
-                {isIos ? t("iosGuideButton") : t("installButton")}
+                {t("installButton")}
               </button>
               <button
                 type="button"
                 onClick={dismiss}
-                className="w-full rounded-xl px-4 py-2.5 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                className="w-full rounded-xl py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground"
               >
                 {t("skipForNow")}
               </button>
@@ -58,6 +66,7 @@ export function PwaInstallBanner() {
       ) : null}
 
       <IosInstallDialog isOpen={isIosGuideOpen} onClose={closeIosGuide} />
+      <BrowserInstallDialog isOpen={isBrowserGuideOpen} onClose={closeBrowserGuide} />
     </>
   );
 }

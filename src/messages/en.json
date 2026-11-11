@@ -838,7 +838,16 @@
     "step3Title": "Confirm and Add",
     "step3Desc": "Tap 'Add' in the top right corner. The portal icon will now appear on your home screen.",
     "gotIt": "Got it",
-    "closeGuide": "Close guide"
+    "closeGuide": "Close guide",
+    "browserGuideTitle": "How to Install the App",
+    "browserGuideSubtitle": "Follow these steps to add the app to your device",
+    "browserNotice": "You can install this app directly from the browser menu or address bar.",
+    "browserStep1Title": "Open the browser menu",
+    "browserStep1Desc": "Tap the menu button (three dots ⋮) in your browser toolbar, or the install icon in the address bar.",
+    "browserStep2Title": "Select 'Install app' or 'Add to Home screen'",
+    "browserStep2Desc": "Choose 'Install app' or 'Add to Home screen' from the menu options.",
+    "browserStep3Title": "Confirm Installation",
+    "browserStep3Desc": "Click 'Install' or 'Add' to place the app on your home screen or desktop."
   },
   "backup": {
     "title": "Database Backup & Restore",
