@@ -3,6 +3,7 @@ import type {
   CircularResponseType,
   CircularVisibility,
 } from "@/lib/circulars/types";
+import { parseFormCheckbox } from "@/lib/validation/parseFormCheckbox";
 import { circularSchema } from "./circularSchema";
 import { formatZodError } from "./formatZodError";
 
@@ -13,6 +14,7 @@ export function parseCircularFormData(formData: FormData) {
   };
 
   const departmentIds = formData.getAll("department_ids").map(String).filter(Boolean);
+  const publishImmediately = parseFormCheckbox(formData, "publish_immediately");
 
   const rawInput = {
     title: get("title"),
@@ -35,6 +37,7 @@ export function parseCircularFormData(formData: FormData) {
     priority: parsed.data.priority as CircularPriority,
     visibility: parsed.data.visibility as CircularVisibility,
     responseType: parsed.data.responseType as CircularResponseType,
-    status: get("status") || undefined,
+    status: get("status") || (publishImmediately ? "published" : undefined),
+    publishImmediately,
   };
 }

@@ -18,6 +18,8 @@ export { downloadAttachmentFile } from "./downloadAttachmentFile";
 export { printAttachment } from "./printAttachment";
 export { assertCanManageCirculars } from "./assertCanManageCirculars";
 export { canRespondToCircular } from "./canRespondToCircular";
+export { getCircularPublishRecipients } from "./getCircularPublishRecipients";
+export { dispatchCircularNotification } from "./dispatchCircularNotification";
 export { sortCirculars, type CircularSortField } from "./sortCirculars";
 export { filterCirculars, type CircularFilterOptions } from "./filterCirculars";
 export type {

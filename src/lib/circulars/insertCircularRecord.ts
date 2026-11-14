@@ -26,7 +26,9 @@ export async function insertCircularRecord(
       body: params.body,
       priority: params.priority,
       visibility: params.visibility ?? "internal",
-      status: "draft",
+      status: params.status ?? "draft",
+      publish_at:
+        params.publishAt ?? (params.status === "published" ? new Date().toISOString() : null),
       response_type: params.responseType,
       due_at: params.dueAt,
       created_by: params.createdBy,

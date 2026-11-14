@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
-import { dispatchModuleNotification } from "@/lib/notifications/dispatchModuleNotification";
+import { dispatchCircularNotification } from "@/lib/circulars/dispatchCircularNotification";
 import { AuthenticationError } from "@/lib/errors/AuthenticationError";
 import { ForbiddenError } from "@/lib/errors/ForbiddenError";
 import { mapDatabaseError } from "@/lib/errors/mapDatabaseError";
@@ -37,31 +37,11 @@ export async function publishCircularAction(circularId: string): Promise<ActionR
       throw mapDatabaseError(error);
     }
 
-    const { data: targets, error: targetsError } = await supabase
-      .from("circular_targets")
-      .select("department:departments(head_profile_id)")
-      .eq("circular_id", circularId);
-
-    if (targetsError) {
-      throw mapDatabaseError(targetsError);
-    }
-
-    type TargetHead = { department: { head_profile_id: string | null } | null };
-    const headIds = ((targets ?? []) as unknown as TargetHead[])
-      .map((t) => t.department?.head_profile_id)
-      .filter((id): id is string => Boolean(id) && id !== profile.id);
-
-    if (headIds.length > 0) {
-      void dispatchModuleNotification({
-        recipientUserIds: headIds,
-        schoolId: profile.school_id,
-        type: "circular",
-        title: "circular_published",
-        body: "circular_published",
-        entityType: "circular",
-        entityId: circularId,
-      });
-    }
+    void dispatchCircularNotification(supabase, {
+      schoolId: profile.school_id,
+      circularId,
+      publisherId: profile.id,
+    });
 
     revalidatePath("/[locale]/circulars", "page");
     revalidatePath(`/[locale]/circulars/${circularId}`, "page");

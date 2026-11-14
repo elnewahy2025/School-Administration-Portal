@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { PANEL } from "@/components/ui/diamond-card-styles";
 import { DepartmentTargetPicker } from "./DepartmentTargetPicker";
 import { CircularMetaFields } from "./CircularMetaFields";
+import { CircularPublishField } from "./CircularPublishField";
 import { CircularFileUpload } from "./CircularFileUpload";
 import { useCreateCircularForm } from "./useCreateCircularForm";
 import type { DepartmentRow } from "@/lib/school/getSchoolDepartments";
@@ -25,6 +26,8 @@ export function CreateCircularForm({ departments }: { departments: DepartmentRow
       </div>
 
       <CircularMetaFields />
+
+      <CircularPublishField defaultChecked={true} />
 
       <div className="space-y-2">
         <Label htmlFor="body">{t("circularBody")}</Label>

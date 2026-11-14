@@ -309,6 +309,8 @@
     "visibilityInternal": "خاص / داخلي (للأقسام المعنية فقط)",
     "visibilityBadgePublic": "عام",
     "visibilityBadgeInternal": "داخلي",
+    "publishImmediately": "نشر التعميم فوراً",
+    "publishImmediatelyHelp": "تفعيل التعميم ونشره فوراً وإرسال الإشعارات إلى المستهدفين.",
     "status": "حالة التعميم",
     "statusDraft": "مسودة",
     "statusPublished": "منشور",

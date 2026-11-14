@@ -22,6 +22,7 @@ export { CircularSortSelect } from "./CircularSortSelect";
 export { EditCircularFieldsGrid } from "./EditCircularFieldsGrid";
 export { EditCircularForm } from "./EditCircularForm";
 export { CircularMetaFields } from "./CircularMetaFields";
+export { CircularPublishField } from "./CircularPublishField";
 export { CircularPriorityBadge } from "./CircularPriorityBadge";
 export { CircularVisibilityBadge } from "./CircularVisibilityBadge";
 export { CircularPublishButton } from "./CircularPublishButton";

@@ -309,6 +309,8 @@
     "visibilityInternal": "Internal / Private (Targeted departments only)",
     "visibilityBadgePublic": "Public",
     "visibilityBadgeInternal": "Internal",
+    "publishImmediately": "Publish circular immediately",
+    "publishImmediatelyHelp": "Activate and publish the circular immediately and dispatch notifications to targets.",
     "status": "Status",
     "statusDraft": "Draft",
     "statusPublished": "Published",

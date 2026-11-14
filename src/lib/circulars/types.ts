@@ -74,6 +74,8 @@ export type CircularInsertParams = {
   body: string;
   priority: CircularPriority;
   visibility?: CircularVisibility;
+  status?: CircularStatus;
+  publishAt?: string | null;
   responseType: CircularResponseType;
   dueAt: string | null;
   createdBy: string;
