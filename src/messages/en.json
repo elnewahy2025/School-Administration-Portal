@@ -664,6 +664,18 @@
       "maintenance_assigned": {
         "title": "New Maintenance Request Assigned to You",
         "body": "A maintenance request has been assigned to you for follow-up and completion"
+      },
+      "circular_response_received": {
+        "title": "New Circular Response",
+        "body": "A department has submitted a response to the circular"
+      },
+      "circular_all_responded": {
+        "title": "All Departments Responded",
+        "body": "All targeted departments have submitted their responses to the circular"
+      },
+      "maintenance_submitted": {
+        "title": "New Maintenance Request",
+        "body": "A new maintenance request has been submitted and is pending review"
       }
     }
   },

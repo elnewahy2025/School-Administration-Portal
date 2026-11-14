@@ -12,6 +12,8 @@ import { getMaintenanceAttachments } from "@/lib/maintenance/getMaintenanceAttac
 import { getMaintenanceOperators } from "@/lib/maintenance/getMaintenanceOperators";
 import { resolveMaintenanceDetailPermissions } from "@/lib/maintenance/resolveMaintenanceDetailPermissions";
 import { getSchoolLocations } from "@/lib/school";
+import { createSupabaseServerClient } from "@/lib/supabase";
+import { markEntityNotificationsRead } from "@/lib/notifications/markEntityNotificationsRead";
 import { MaintenanceDetailCard } from "@/components/maintenance/MaintenanceDetailCard";
 import { MaintenanceAttachmentsList } from "@/components/maintenance/MaintenanceAttachmentsList";
 import { MaintenanceStatusActions } from "@/components/maintenance/MaintenanceStatusActions";
@@ -43,6 +45,13 @@ export default async function MaintenanceDetailPage({
   if (!ticket || (!isOwner && ticket.school_id !== schoolId)) {
     notFound();
   }
+
+  const supabase = await createSupabaseServerClient();
+  await markEntityNotificationsRead(supabase, {
+    userId: profile.id,
+    entityType: "maintenance_request",
+    entityId: id,
+  });
 
   const targetSchoolId = ticket.school_id;
   const [updates, attachments, operators, locations, perms] = await Promise.all([

@@ -5,6 +5,8 @@ import { createSupabaseServerClient } from "@/lib/supabase";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { assertCanRespondToCircular } from "@/lib/circulars/assertCanRespondToCircular";
 import { executeSubmitCircularResponse } from "@/lib/circulars/executeSubmitCircularResponse";
+import { markEntityNotificationsRead } from "@/lib/notifications/markEntityNotificationsRead";
+import { notifyCircularResponseSubmission } from "@/lib/circulars/notifyCircularResponseSubmission";
 import { validateCircularResponse } from "@/lib/validation/validateCircularResponse";
 import type { CircularResponseStatus, CircularResponseType } from "@/lib/circulars/types";
 import { ValidationError } from "@/lib/errors/ValidationError";
@@ -42,8 +44,21 @@ export async function submitCircularResponseAction({
       reason,
     });
 
+    await markEntityNotificationsRead(supabase, {
+      userId: profile!.id,
+      entityType: "circular",
+      entityId: circularId,
+    });
+
+    void notifyCircularResponseSubmission(supabase, {
+      circularId,
+      schoolId,
+      responderId: profile!.id,
+    });
+
     revalidatePath("/[locale]/circulars", "page");
     revalidatePath(`/[locale]/circulars/${circularId}`, "page");
+    revalidatePath("/[locale]/notifications", "page");
     return { success: true };
   } catch (err: unknown) {
     const appError = sanitizeError(err);

@@ -9,6 +9,8 @@ import { submitCircularResponseAction } from "./submitCircularResponseAction";
 import { getCurrentProfile } from "@/lib/auth/getCurrentProfile";
 import { hasPermission } from "@/lib/rbac/hasPermission";
 import { createSupabaseServerClient } from "@/lib/supabase";
+import { markEntityNotificationsRead } from "@/lib/notifications/markEntityNotificationsRead";
+import { notifyCircularResponseSubmission } from "@/lib/circulars/notifyCircularResponseSubmission";
 
 vi.mock("@/lib/auth/getCurrentProfile", () => ({
   getCurrentProfile: vi.fn(),
@@ -20,6 +22,14 @@ vi.mock("@/lib/rbac/hasPermission", () => ({
 
 vi.mock("@/lib/supabase", () => ({
   createSupabaseServerClient: vi.fn(),
+}));
+
+vi.mock("@/lib/notifications/markEntityNotificationsRead", () => ({
+  markEntityNotificationsRead: vi.fn().mockResolvedValue(undefined),
+}));
+
+vi.mock("@/lib/circulars/notifyCircularResponseSubmission", () => ({
+  notifyCircularResponseSubmission: vi.fn().mockResolvedValue({ delivered: 1 }),
 }));
 
 describe("submitCircularResponseAction", () => {
@@ -53,6 +63,22 @@ describe("submitCircularResponseAction", () => {
     });
 
     expect(result).toEqual({ success: true });
+    expect(markEntityNotificationsRead).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        userId: "usr-1",
+        entityType: "circular",
+        entityId: "circ-1",
+      }),
+    );
+    expect(notifyCircularResponseSubmission).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        circularId: "circ-1",
+        schoolId: "sch-1",
+        responderId: "usr-1",
+      }),
+    );
     expect(rpcMock).toHaveBeenCalledWith("submit_circular_response", {
       p_circular_id: "circ-1",
       p_school_id: "sch-1",

@@ -14,6 +14,9 @@ import { getEffectivePermissions } from "@/lib/rbac/getEffectivePermissions";
 import { getSchoolDepartments } from "@/lib/school/getSchoolDepartments";
 import { getCircularDepartmentStatuses, getCircularPermissions } from "@/lib/circulars";
 import { shouldShowCircularReminder } from "@/lib/circulars/shouldShowCircularReminder";
+import { canAccessCircular } from "@/lib/circulars/canAccessCircular";
+import { markCircularNotificationReadIfPresent } from "@/lib/circulars/markCircularNotificationReadIfPresent";
+import { createSupabaseServerClient } from "@/lib/supabase";
 import {
   CircularDetailCard,
   CircularResponseBox,
@@ -41,9 +44,12 @@ export default async function CircularDetailPage({
   }
 
   const schoolId = await resolveSchoolForCaller(profile);
-  if (!isOwner && (!schoolId || circular.school_id !== schoolId)) {
+  if (!canAccessCircular(circular.school_id, schoolId, isOwner)) {
     notFound();
   }
+
+  const supabase = await createSupabaseServerClient();
+  await markCircularNotificationReadIfPresent(supabase, profile?.id, id);
 
   const targetSchoolId = circular.school_id;
   const [responses, perms, departments] = await Promise.all([

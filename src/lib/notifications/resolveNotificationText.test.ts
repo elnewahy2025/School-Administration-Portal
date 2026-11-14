@@ -9,6 +9,12 @@ describe("resolveNotificationText", () => {
     "templates.circular_reminder.bodyDefault": "Pending circulars need response",
     "templates.maintenance_assigned.title": "New Maintenance Request",
     "templates.maintenance_assigned.body": "A request has been assigned to you",
+    "templates.circular_response_received.title": "New Circular Response",
+    "templates.circular_response_received.body": "A department has submitted a response",
+    "templates.circular_all_responded.title": "All Departments Responded",
+    "templates.circular_all_responded.body": "All targeted departments have submitted responses",
+    "templates.maintenance_submitted.title": "New Maintenance Ticket",
+    "templates.maintenance_submitted.body": "A new ticket has been submitted",
   };
 
   const mockT = (key: string, values?: Record<string, string | number>) => {
@@ -58,6 +64,33 @@ describe("resolveNotificationText", () => {
     );
     expect(res.title).toBe("New Maintenance Request");
     expect(res.body).toBe("A request has been assigned to you");
+  });
+
+  it("translates circular response received notification", () => {
+    const res = resolveNotificationText(
+      { title: "circular_response_received", body: "circular_response_received" },
+      mockT,
+    );
+    expect(res.title).toBe("New Circular Response");
+    expect(res.body).toBe("A department has submitted a response");
+  });
+
+  it("translates circular all responded notification", () => {
+    const res = resolveNotificationText(
+      { title: "circular_all_responded", body: "circular_all_responded" },
+      mockT,
+    );
+    expect(res.title).toBe("All Departments Responded");
+    expect(res.body).toBe("All targeted departments have submitted responses");
+  });
+
+  it("translates maintenance submitted notification", () => {
+    const res = resolveNotificationText(
+      { title: "maintenance_submitted", body: "maintenance_submitted" },
+      mockT,
+    );
+    expect(res.title).toBe("New Maintenance Ticket");
+    expect(res.body).toBe("A new ticket has been submitted");
   });
 
   it("preserves unmapped custom titles and bodies as fallback", () => {
